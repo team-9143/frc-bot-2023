@@ -21,12 +21,12 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  public final static Spark sparkL = new Spark(0);
-  public final static Spark sparkR = new Spark(1);
-  static DifferentialDrive m_robotDrive = new DifferentialDrive(sparkL, sparkR);
-
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  public final static Spark rSpark = new Spark(0);
+  public final static Spark lSpark = new Spark(1);
+  public final static DifferentialDrive m_robotDrive = new DifferentialDrive(rSpark, lSpark);
+
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =

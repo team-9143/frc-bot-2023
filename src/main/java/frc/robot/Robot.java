@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.Drivetrain;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -15,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * project.
  */
 public class Robot extends TimedRobot {
+  public static Drivetrain drivetrain = new Drivetrain();
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
@@ -82,8 +84,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    RobotContainer.m_robotDrive.arcadeDrive(-OI.m_stick.getY(), OI.m_stick.getX());
-
+    CommandScheduler.getInstance().run();
   }
 
   @Override
@@ -94,10 +95,7 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {
-    RobotContainer.m_robotDrive.arcadeDrive(-OI.m_stick.getY(), OI.m_stick.getX());
-  }
-
+  public void testPeriodic() {}
 
   /** This function is called once when the robot is first started up. */
   @Override
