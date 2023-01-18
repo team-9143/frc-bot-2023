@@ -84,9 +84,8 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    CommandScheduler.getInstance().run();
+    drivetrain.drive(1);
   }
-
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.

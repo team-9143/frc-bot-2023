@@ -2,7 +2,6 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.OI;
 import frc.robot.RobotContainer;
@@ -21,8 +20,11 @@ public class Drivetrain extends SubsystemBase {
           // TODO Auto-generated method stub
           super.setDefaultCommand(new archadedrive());
       }
+
+
+
     public void drive(double speed) {
-      RobotContainer.m_robotDrive.arcadeDrive(-speed*OI.m_stick.getY(), speed*OI.m_stick.getX());
+      RobotContainer.m_robotDrive.arcadeDrive(-speed*OI.m_stick.getX(), -speed*OI.m_stick.getY());
     }
   }
   

@@ -11,33 +11,29 @@ import frc.robot.Robot;
 public class archadedrive extends CommandBase {
     public archadedrive() {
       // Use requires() here to declare subsystem dependencies
-      hasRequirement(Robot.drivetrain);
+      addRequirements(Robot.drivetrain);
     }
   
     // Called just before this Command runs the first time
-    @Override
-    public void initialize() {
-      return;
-    }
-  
-    // Called repeatedly when this Command is scheduled to run
-    @Override
-    public void execute() {
-      Robot.drivetrain.drive(1);
-    }
-  
-    // Make this return true when this Command no longer needs to run execute()
-    @Override
-    public boolean isFinished() {
-      return false;
-    }
-  
-    // Called once after isFinished returns true
-    @Override
-    public void end(boolean interrupted) {
-        // TODO Auto-generated method stub
-        super.end(interrupted);
-    }
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize() {}
+
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
+    Robot.drivetrain.drive(1);
+  }
+
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {}
+
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    return false;
+  }
   
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
@@ -46,4 +42,4 @@ public class archadedrive extends CommandBase {
       return super.until(condition);
 }
     
-  }
+}

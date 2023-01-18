@@ -23,8 +23,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  public final static Spark rSpark = new Spark(0);
-  public final static Spark lSpark = new Spark(1);
+  public final static Spark rSpark = new Spark(1);
+  public final static Spark lSpark = new Spark(0);
   public final static DifferentialDrive m_robotDrive = new DifferentialDrive(rSpark, lSpark);
 
 
