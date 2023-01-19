@@ -24,7 +24,11 @@ public class Drivetrain extends SubsystemBase {
 
 
     public void drive(double speed) {
-      RobotContainer.m_robotDrive.arcadeDrive(-speed*OI.m_stick.getX(), -speed*OI.m_stick.getY());
-    }
+      //if (OI.m_stick.getZ() > -0.1 && OI.m_stick.getZ() < 0.1) {
+        //RobotContainer.m_robotDrive.arcadeDrive(speed*OI.m_stick.getZ(), -speed*OI.m_stick.getY());
+      //} else {
+        RobotContainer.m_robotDrive.arcadeDrive(speed*OI.m_stick.getX(), -speed*OI.m_stick.getY());
+      //}
+      }
   }
   
