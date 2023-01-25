@@ -84,7 +84,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    drivetrain.drive((OI.m_stick.getThrottle() + 1) / -2);
+    drivetrain.drive(1);
   }
   @Override
   public void testInit() {

@@ -28,8 +28,9 @@ public class Drivetrain extends SubsystemBase {
       //if (OI.m_stick.getZ() > -0.1 && OI.m_stick.getZ() < 0.1) {
         //RobotContainer.m_robotDrive.arcadeDrive(speed*OI.m_stick.getZ(), -speed*OI.m_stick.getY());
       //} else {
-        RobotContainer.m_robotDrive.arcadeDrive(speed*OI.m_stick.getX(), -speed*OI.m_stick.getY());
+        RobotContainer.m_robotDrive.arcadeDrive(speed*OI.m_controller.getLeftStick().y, -speed*OI.m_controller.getLeftStick().x, true);
       //}
+      //RobotContainer.m_robotDrive.curvatureDrive(speed*OI.m_controller.getRightStick().y, speed*OI.m_controller.getLeftStick().y, false);
   }
 }
   
