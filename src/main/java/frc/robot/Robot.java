@@ -84,7 +84,9 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+    double joystickAngle = new OI().joystickAngle;
     drivetrain.drive((OI.m_stick.getThrottle() + 1) / -2);
+    RobotContainer.m_robotDrive.tankDrive(0.05* (joystickAngle - OI.gyro.getAngle()), -0.05 * (joystickAngle - OI.gyro.getAngle()));
   }
   @Override
   public void testInit() {
