@@ -25,12 +25,11 @@ public class Drivetrain extends SubsystemBase {
 
     // arcadedrive(rotation, speed) takes in parameters in the inverse way
     public void drive(double speed) {
-      //if (OI.m_stick.getZ() > -0.1 && OI.m_stick.getZ() < 0.1) {
-        //RobotContainer.m_robotDrive.arcadeDrive(speed*OI.m_stick.getZ(), -speed*OI.m_stick.getY());
-      //} else {
-        RobotContainer.m_robotDrive.arcadeDrive(speed*OI.m_stick.getX(), -speed*OI.m_stick.getY());
-      //}
+    double trigger = OI.logitechController.getTriggerButtons();
+    if (trigger < -0.1 || trigger > 0.1) {
+      RobotContainer.m_robotDrive.arcadeDrive(speed*OI.logitechController.getTriggerButtons(), 0, true);
+    } else {
+      RobotContainer.m_robotDrive.arcadeDrive(speed*OI.logitechController.getLeftStick()[0], speed*OI.logitechController.getLeftStick()[1], true);
+    }
   }
 }
-  
-  
