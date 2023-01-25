@@ -34,17 +34,17 @@ public class LogitechController extends Joystick {
 	 * @return The trigger value.
 	 */
 	public double getTriggerButtons() {
-		return getRawAxis(3);
+		return getRawAxis(3) - getRawAxis(2);
 	}
 	
 	// Axis 3 is the RT and LT.. but they're on the same Axis...
 
 	public double[] getLeftStick() {
-		return new double[] {getRawAxis(1), getRawAxis(0)};
+		return new double[] {getRawAxis(0), -getRawAxis(1)};
 	}
 
 	public double[] getRightStick() {
-		return new double[] {getRawAxis(3), getRawAxis(4)};
+		return new double[] {getRawAxis(4), -getRawAxis(5)};
 	}
 
 	public boolean getButton(int button) {
