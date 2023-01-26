@@ -70,6 +70,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {}
 
+
   @Override
   public void teleopInit() {
     // This makes sure that the autonomous stops running when
@@ -84,10 +85,9 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    double joystickAngle = new OI().joystickAngle;
-    drivetrain.drive((OI.m_stick.getThrottle() + 1) / -2);
-    RobotContainer.m_robotDrive.tankDrive(0.05* (joystickAngle - OI.gyro.getAngle()), -0.05 * (joystickAngle - OI.gyro.getAngle()));
+    drivetrain.drive(1);
   }
+  
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
