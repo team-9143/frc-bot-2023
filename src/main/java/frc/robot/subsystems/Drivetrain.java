@@ -15,9 +15,10 @@ public class Drivetrain extends SubsystemBase {
   //   setDefaultCommand(new archadedrive()); 
   // }
 
+  private static double heading;
+
   @Override
   public void setDefaultCommand(Command defaultCommand) {
-    // TODO Auto-generated method stub
     super.setDefaultCommand(new archadedrive());
   }
 
@@ -32,14 +33,24 @@ public class Drivetrain extends SubsystemBase {
       RobotContainer.m_robotDrive.arcadeDrive(speed*OI.m_controller.getLeftStick()[0], speed*OI.m_controller.getLeftStick()[1], true);
     }
     
-    double stickX = OI.m_controller.getRightStick()[0], stickY = OI.m_controller.getRightStick()[1];
-    if (stickX*stickX + stickY*stickY < 0.0001) {
-      stickX = 0;
-      stickY = 0;
+    double rs_X = OI.m_controller.getRightStick()[0], rs_Y = OI.m_controller.getRightStick()[1];
+    rs_X = (rs_X < 0.1) ? 0 : rs_X;
+    rs_Y = (rs_Y < 0.1) ? 0 : rs_Y;
+
+    if (OI.m_controller.getPOV() != -1) {
+      heading = Math.round((float) OI.m_controller.getPOV() / 45);
+      heading = (heading == 8) ? 0 : heading;
+    } else {
+      heading = Math.toDegrees(Math.atan2(rs_Y, rs_X));
     }
 
-    double joystickAngle = Math.atan2(stickY, stickX) * 180 / Math.PI;
-    System.out.println(joystickAngle + " " + stickX + " " + stickY);
+    System.out.println(heading + " " + rs_X + " " + rs_Y);
+
+    if (OI.gyro.getAngle() > heading) {
+
+    } else if (OI.gyro.getAngle() < heading) {
+
+    }
     //RobotContainer.m_robotDrive.tankDrive(0.05*(joystickAngle - OI.gyro.getAngle()), -0.05*(joystickAngle - OI.gyro.getAngle()));
   }
 }
