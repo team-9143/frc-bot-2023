@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.Joystick;
  */
 public class LogitechController extends Joystick {
 
-	public static final int 
+	public static final byte
 		BTN_A = 1, 
 		BTN_B = 2,
 		BTN_X = 3,
@@ -36,8 +36,6 @@ public class LogitechController extends Joystick {
 	public double getTriggerButtons() {
 		return getRawAxis(3) - getRawAxis(2);
 	}
-	
-	// Axis 3 is the RT and LT.. but they're on the same Axis...
 
 	public double[] getLeftStick() {
 		return new double[] {getRawAxis(0), -getRawAxis(1)};
