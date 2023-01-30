@@ -48,17 +48,20 @@ public class Drivetrain extends SubsystemBase {
       heading = 45 * Math.round((float) OI.m_controller.getPOV() / 45);
       heading = (heading == 360) ? 0 : heading;
 
-      System.out.println(heading + " from d-pad " + OI.m_controller.getPOV());
-    } else {
+      System.out.println(heading + " from d-pad: " + OI.m_controller.getPOV());
+    } else if (!(rs_X == 0 && rs_Y == 0)){
       // Find specific angle, input from right stick
       heading = (int) Math.toDegrees(Math.atan2(rs_Y, rs_X));
       
-      System.out.println(heading + " from stick " + (float) rs_X + " " + (float) rs_Y);
+      System.out.println(heading + " from stick: " + (float) rs_X + " " + (float) rs_Y);
     }
 
     // Turning to a heading
+    double robotAngle = OI.gyro.getAngle() % 360;
+    System.out.println("gyro angle: " + robotAngle);
+    
     if (OI.gyro.getAngle() > heading) {
-
+      
     } else if (OI.gyro.getAngle() < heading) {
 
     }
