@@ -8,7 +8,7 @@ import frc.robot.RobotContainer;
 //import frc.robot.commands.archadedrive;
 public class Drivetrain extends SubsystemBase {
   
-  private static int heading;
+  private static int heading = 0;
 
   /*
    * (what is this ???)
@@ -49,7 +49,7 @@ public class Drivetrain extends SubsystemBase {
       heading = (heading == 360) ? 0 : heading;
 
       System.out.println(heading + " from d-pad: " + OI.m_controller.getPOV());
-    } else if (!(rs_X == 0 && rs_Y == 0)){
+    } else if (rs_X != 0 || rs_Y != 0){
       // Find specific angle, input from right stick
       heading = (int) Math.toDegrees(Math.atan2(rs_Y, rs_X));
       
@@ -57,14 +57,11 @@ public class Drivetrain extends SubsystemBase {
     }
 
     // Turning to a heading
-    double robotAngle = OI.gyro.getAngle() % 360;
-    System.out.println("gyro angle: " + robotAngle);
+    double turnAngle = OI.gyro.getAngle() % 360 - heading;
+    turnAngle += (turnAngle < -180) ? 360 : (turnAngle > 180) ? -360 : 0;
     
-    if (OI.gyro.getAngle() > heading) {
-      
-    } else if (OI.gyro.getAngle() < heading) {
-
-    }
+    System.out.println("gyro angle: " + OI.gyro.getAngle()%360 + " turn angle: " + turnAngle);
+    
     //RobotContainer.m_robotDrive.tankDrive(0.05*(joystickAngle - OI.gyro.getAngle()), -0.05*(joystickAngle - OI.gyro.getAngle()));
   }
 }
