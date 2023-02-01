@@ -10,7 +10,7 @@ public class Drivetrain extends SubsystemBase {
   
   private static int heading = 0;
   private static boolean is_turning = false;
-  private static final int turn_deadspot = 18;
+  private static final int turn_deadspot = 15;
   public static final double
     turnSpeed = 1,
     slowTurnSpeed = 0.5;
@@ -73,6 +73,7 @@ public class Drivetrain extends SubsystemBase {
         RobotContainer.m_robotDrive.arcadeDrive(-speed*((turnAngle < turn_deadspot*2) ? turnSpeed : slowTurnSpeed), 0);
       } else {
         is_turning = false;
+        RobotContainer.m_robotDrive.arcadeDrive(0, 0);
       }
     }
   }
