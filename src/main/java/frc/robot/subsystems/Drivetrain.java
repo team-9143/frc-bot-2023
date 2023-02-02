@@ -10,9 +10,9 @@ public class Drivetrain extends SubsystemBase {
   
   private static int heading = 0;
   private static boolean is_turning = false;
-  private static final int turn_deadspot = 15;
+  private static final int turn_deadspot = 2;
   public static final double
-    turnSpeed = 1,
+    turnSpeed = 0.8,
     slowTurnSpeed = 0.5;
 
   /*
@@ -35,7 +35,7 @@ public class Drivetrain extends SubsystemBase {
   // arcadedrive(rotation, speed) takes in parameters in the way shown here
   public void drive(double speed) {
     double trigger = OI.m_controller.getTriggerButtons();
-    if (trigger < -0.1 || trigger > 0.1) {
+    if ((trigger < -0.1) || (trigger > 0.1)) {
       // Turn in place, input from trigger
       RobotContainer.m_robotDrive.arcadeDrive(speed*OI.m_controller.getTriggerButtons(), 0, true);
     } else {
@@ -45,8 +45,10 @@ public class Drivetrain extends SubsystemBase {
     
     // Adjust and round right stick input
     double rs_X = OI.m_controller.getRightStick()[0], rs_Y = OI.m_controller.getRightStick()[1];
-    rs_X = (Math.abs(rs_X) < 0.1) ? 0 : rs_X;
-    rs_Y = (Math.abs(rs_Y) < 0.1) ? 0 : rs_Y;
+    if (Math.abs(rs_X) < 0.3 && Math.abs(rs_Y) < 0.3) {
+      rs_X = 0;
+      rs_Y = 0;
+    }
 
     if (OI.m_controller.getPOV() != -1) {
       // Snap heading to 45 degrees, input from d-pad
@@ -61,16 +63,18 @@ public class Drivetrain extends SubsystemBase {
     }
 
     // Turning to a heading
-    double turnAngle = heading - OI.gyro.getAngle() % 360;
-    turnAngle += (turnAngle < -180) ? 360 : (turnAngle > 180) ? -360 : 0;
-    
-    System.out.println("gyro angle: " + OI.gyro.getAngle()%360 + " turn angle: " + turnAngle);
-    
     if (is_turning) {
+      int turnAngle = (int) Math.round(heading - (OI.gyro.getAngle() % 360));
+      turnAngle += (turnAngle < -180) ? 360 : (turnAngle > 180) ? -360 : 0;
+      
+      System.out.println("gyro angle: " + OI.gyro.getAngle()%360 + " turn angle: " + turnAngle);
+      
       if (turnAngle > turn_deadspot) {
-        RobotContainer.m_robotDrive.arcadeDrive(speed*((turnAngle > turn_deadspot*2) ? turnSpeed : slowTurnSpeed), 0);
+        //RobotContainer.m_robotDrive.arcadeDrive(speed*((turnAngle > turn_deadspot*2) ? turnSpeed : slowTurnSpeed), 0);
+        RobotContainer.m_robotDrive.arcadeDrive(slowTurnSpeed, 0);
       } else if (turnAngle < turn_deadspot) {
-        RobotContainer.m_robotDrive.arcadeDrive(-speed*((turnAngle < turn_deadspot*2) ? turnSpeed : slowTurnSpeed), 0);
+        //RobotContainer.m_robotDrive.arcadeDrive(-speed*((turnAngle < turn_deadspot*2) ? turnSpeed : slowTurnSpeed), 0);
+        RobotContainer.m_robotDrive.arcadeDrive(-slowTurnSpeed, 0);
       } else {
         is_turning = false;
         RobotContainer.m_robotDrive.arcadeDrive(0, 0);

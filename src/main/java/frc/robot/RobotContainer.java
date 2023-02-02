@@ -9,6 +9,7 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -23,9 +24,10 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  public final static Spark rSpark = new Spark(0);
-  public final static Spark lSpark = new Spark(2);
-  public final static DifferentialDrive m_robotDrive = new DifferentialDrive(rSpark, lSpark);
+
+  public final static MotorControllerGroup l_sparks = new MotorControllerGroup(new Spark(0), new Spark(1));
+  public final static MotorControllerGroup r_sparks = new MotorControllerGroup(new Spark(3), new Spark(4));
+  public final static DifferentialDrive m_robotDrive = new DifferentialDrive(r_sparks, l_sparks);
 
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
