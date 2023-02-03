@@ -7,7 +7,6 @@ import frc.robot.OI;
 import frc.robot.RobotContainer;
 //import frc.robot.commands.archadedrive;
 public class Drivetrain extends SubsystemBase {
-  
   private static int heading = 0;
   private static boolean is_turning = false;
   private static final int turn_deadspot = 2;
@@ -42,7 +41,7 @@ public class Drivetrain extends SubsystemBase {
       // Regular drive, input from left stick
       RobotContainer.m_robotDrive.arcadeDrive(speed*OI.m_controller.getLeftStick()[0], speed*OI.m_controller.getLeftStick()[1], true);
     }
-    
+
     // Adjust and round right stick input
     double rs_X = OI.m_controller.getRightStick()[0], rs_Y = OI.m_controller.getRightStick()[1];
     if (Math.abs(rs_X) < 0.3 && Math.abs(rs_Y) < 0.3) {
@@ -64,17 +63,14 @@ public class Drivetrain extends SubsystemBase {
 
     // Turning to a heading
     if (is_turning) {
-      int turnAngle = (int) Math.round(heading - (OI.gyro.getAngle() % 360));
+      double turnAngle = heading - (OI.gyro.getAngle() % 360);
       turnAngle += (turnAngle < -180) ? 360 : (turnAngle > 180) ? -360 : 0;
+      float turnAngleMult = (float) turnAngle / 180;
       
-      System.out.println("gyro angle: " + OI.gyro.getAngle()%360 + " turn angle: " + turnAngle);
+      System.out.println("gyro angle: " + OI.gyro.getAngle()%360 + " turn angle: " + turnAngleMult);
       
-      if (turnAngle > turn_deadspot) {
-        //RobotContainer.m_robotDrive.arcadeDrive(speed*((turnAngle > turn_deadspot*2) ? turnSpeed : slowTurnSpeed), 0);
-        RobotContainer.m_robotDrive.arcadeDrive(slowTurnSpeed, 0);
-      } else if (turnAngle < turn_deadspot) {
-        //RobotContainer.m_robotDrive.arcadeDrive(-speed*((turnAngle < turn_deadspot*2) ? turnSpeed : slowTurnSpeed), 0);
-        RobotContainer.m_robotDrive.arcadeDrive(-slowTurnSpeed, 0);
+      if (Math.abs(turnAngle) > turn_deadspot) {
+        RobotContainer.m_robotDrive.arcadeDrive((Math.copySign((4*turnAngleMult*turnAngleMult) + 1, turnAngleMult)) / 5, 0, false);
       } else {
         is_turning = false;
         RobotContainer.m_robotDrive.arcadeDrive(0, 0);
