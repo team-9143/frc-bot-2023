@@ -56,8 +56,9 @@ public class TurnToAngle extends CommandBase {
       heading += (heading < 0) ? 360 : 0;
       is_turning = true;
     }
-    // override the turn to angle with B button
-    if(OI.m_controller.getRawButton(2) == true){
+    // override the turn to angle command with B button
+    if(OI.m_controller.getRawButton(2) == true)
+    {
       is_turning = false;
     }
 
