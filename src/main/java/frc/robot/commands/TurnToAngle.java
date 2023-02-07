@@ -12,16 +12,16 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
 public class TurnToAngle extends CommandBase {
-  @SuppressWarnings({"unused"})
-  private final Drivetrain drivetrain;
-
+  private final static int turn_deadspot = 2;
+  private static int heading;
+  private static boolean is_turning = false;
+  
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public TurnToAngle(Drivetrain subsystem) {
-    drivetrain = subsystem;
+  public TurnToAngle() {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(new Drivetrain());
   }
@@ -34,10 +34,6 @@ public class TurnToAngle extends CommandBase {
   @Override
   public void execute() 
   {
-    int heading = 0;
-    boolean is_turning = false;
-    int turn_deadspot = 2;
-
     // Adjust and round right stick input
     double rs_X = OI.m_controller.getRightStick()[0], rs_Y = OI.m_controller.getRightStick()[1];
     if (Math.abs(rs_X) < 0.3 && Math.abs(rs_Y) < 0.3) {
@@ -56,22 +52,17 @@ public class TurnToAngle extends CommandBase {
       heading += (heading < 0) ? 360 : 0;
       is_turning = true;
     }
-    // override the turn to angle command with B button
-    if(OI.m_controller.getRawButton(2) == true)
-    {
-      is_turning = false;
-    }
 
     // Turning to a heading
     if (is_turning) {
       double turnAngle = heading - (OI.gyro.getAngle() % 360);
       turnAngle += (turnAngle < -180) ? 360 : (turnAngle > 180) ? -360 : 0;
-      float turnAngleMult = (float) turnAngle / 180;
+      double turnAngleMult = (double) turnAngle / 180;
       
       System.out.println("gyro angle: " + OI.gyro.getAngle()%360 + " turn angle: " + turnAngleMult);
       
       if (Math.abs(turnAngle) > turn_deadspot) {
-        RobotContainer.m_robotDrive.arcadeDrive((Math.copySign((4*turnAngleMult*turnAngleMult) + 1, turnAngleMult)) / 5, 0, false);
+        RobotContainer.m_robotDrive.arcadeDrive((Math.copySign((0.8*turnAngleMult*turnAngleMult) + 0.2, turnAngleMult)), 0, false);
       } else {
         is_turning = false;
         RobotContainer.m_robotDrive.arcadeDrive(0, 0);
