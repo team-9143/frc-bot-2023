@@ -11,18 +11,16 @@ public class OI {
   private final static JoystickButton b_button = new JoystickButton(m_controller, LogitechController.BTN_B);
 
   public OI() {
-    b_button.onTrue(new ResetGyro());
-  }
+    b_button.onTrue(new CommandBase() {
+      @Override
+      public void initialize() {
+        gyro.reset();
+      }
 
-  private class ResetGyro extends CommandBase {
-    @Override
-    public void initialize() {
-      gyro.reset();
-    }
-
-    @Override
-    public boolean isFinished() {
-      return true;
-    }
+      @Override
+      public boolean isFinished() {
+        return true;
+      }
+    });
   }
 }
