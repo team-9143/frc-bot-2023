@@ -29,7 +29,7 @@ public class TurnToAngle extends CommandBase {
   @Override
   public void execute() 
   {
-    // Adjust and round right stick input
+    // Apply deadspot to input
     double rs_X = OI.m_controller.getRightStick()[0], rs_Y = OI.m_controller.getRightStick()[1];
     if (Math.abs(rs_X) < 0.3 && Math.abs(rs_Y) < 0.3) {
       rs_X = 0;
@@ -57,7 +57,7 @@ public class TurnToAngle extends CommandBase {
       System.out.println("gyro angle: " + OI.gyro.getAngle()%360 + " turn angle: " + turnAngleMult);
       
       if (Math.abs(turnAngle) > turn_deadspot) {
-        RobotContainer.m_robotDrive.arcadeDrive((Math.copySign((0.8*turnAngleMult*turnAngleMult) + 0.2, turnAngleMult)), 0, false);
+        RobotContainer.m_robotDrive.arcadeDrive((Math.copySign((turnAngleMult*turnAngleMult*0.5) + 0.5, turnAngleMult)), 0, false);
       } else {
         is_turning = false;
         RobotContainer.m_robotDrive.arcadeDrive(0, 0);
@@ -72,6 +72,7 @@ public class TurnToAngle extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    // TODO: end command when turning is finished
     return false;
   }
 }

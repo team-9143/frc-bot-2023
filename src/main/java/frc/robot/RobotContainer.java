@@ -24,6 +24,7 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final Drivetrain sDrivetrain = new Drivetrain();
   
+  // Create differential drive
   public final static MotorControllerGroup l_motors = new MotorControllerGroup(new Spark(0), new Spark(1));
   public final static MotorControllerGroup r_motors = new MotorControllerGroup(new Spark(3), new Spark(4));
   public final static DifferentialDrive m_robotDrive = new DifferentialDrive(r_motors, l_motors);
@@ -44,8 +45,10 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    // Button 'B' will reset gyro
     new JoystickButton(OI.m_controller, LogitechController.BTN_B)
       .onTrue(new InstantCommand(() -> OI.gyro.reset()));
+    // TODO: Button 'X' will stop turning
   }
 
   /**
