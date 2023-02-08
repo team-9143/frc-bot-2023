@@ -9,11 +9,10 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-
 /** An example command that uses an example subsystem. */
 public class TurnToAngle extends CommandBase {
   private final static int turn_deadspot = 2;
-  private static int heading;
+  private static double heading;
   private static boolean is_turning = false;
   
   /**
@@ -21,9 +20,9 @@ public class TurnToAngle extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public TurnToAngle() {
+  public TurnToAngle(Drivetrain drivetrain) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(new Drivetrain());
+    addRequirements(drivetrain);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -44,7 +43,7 @@ public class TurnToAngle extends CommandBase {
       is_turning = true;  
     } else if (rs_X != 0 || rs_Y != 0){
       // Find specific angle, input from right stick
-      heading = (int) Math.toDegrees(Math.atan2(rs_X, rs_Y));
+      heading = Math.toDegrees(Math.atan2(rs_X, rs_Y));
       heading += (heading < 0) ? 360 : 0;
       is_turning = true;
     }
@@ -64,6 +63,10 @@ public class TurnToAngle extends CommandBase {
         RobotContainer.m_robotDrive.arcadeDrive(0, 0);
       } 
     } 
+  }
+
+  public void setHeading(double fHeading) {
+    heading = fHeading;
   }
 
   // Returns true when the command should end.
