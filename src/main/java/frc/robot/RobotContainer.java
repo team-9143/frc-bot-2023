@@ -6,7 +6,6 @@ package frc.robot;
 
 import frc.robot.subsystems.*;
 import frc.robot.commands.Autos;
-import frc.robot.commands.TurnToAngle;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
@@ -25,8 +24,6 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final Drivetrain sDrivetrain = new Drivetrain();
-
-  private final TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain);
   
   public final static MotorControllerGroup l_motors = new MotorControllerGroup(new Spark(0), new Spark(1));
   public final static MotorControllerGroup r_motors = new MotorControllerGroup(new Spark(3), new Spark(4));
