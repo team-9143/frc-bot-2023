@@ -21,9 +21,9 @@ public class Drive extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public Drive() {
+  public Drive(Drivetrain drivetrain) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(new Drivetrain());
+    addRequirements(drivetrain);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
