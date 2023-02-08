@@ -1,23 +1,17 @@
-
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
+import frc.robot.commands.Drive;
 
 public class Drivetrain extends SubsystemBase {
-  /*
-   * (what is this ???)
-   * 
-   * // Put methods for controlling this subsystem here. Call these from Commands.
-   * @Override
-   * public void initDefaultCommand() {
-   *   // Set the default command for a subsystem here.
-   *   // setDefaultCommand(new MySpecialCommand());
-   *   setDefaultCommand(new archadedrive()); 
-   * }
-   * 
-   * @Override
-   * public void setDefaultCommand(Command defaultCommand) {
-   *   super.setDefaultCommand(new archadedrive());
-   * }
-   */
+  public Drivetrain() {
+    // Set the default command for a subsystem here.
+    setDefaultCommand(new Drive(this));
+  }
+
+  @Override
+  public void periodic() {
+    // TODO: handle logic to schedule RobotContainer.TurnToAngle here
+  }
 }
