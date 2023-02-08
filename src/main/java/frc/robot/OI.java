@@ -13,6 +13,7 @@ public class OI {
   public OI() {
     b_button.onTrue(new InstantCommand(new Runnable() {
       public void run() {
+        System.out.println("gyro reset");
         gyro.reset();
       }
     }));
