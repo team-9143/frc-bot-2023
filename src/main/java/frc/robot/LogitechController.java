@@ -6,10 +6,9 @@ import edu.wpi.first.wpilibj.Joystick;
  * Logitech game controller wrapper class
  * 
  * @author Shuhao
- * 
+ * @author Sid
  */
 public class LogitechController extends Joystick {
-
   public static final byte
     BTN_A = 1, 
     BTN_B = 2,
@@ -44,9 +43,4 @@ public class LogitechController extends Joystick {
   public double[] getRightStick() {
     return new double[] {getRawAxis(4), -getRawAxis(5)};
   }
-
-  public boolean getButton(int button) {
-    return getRawButton(button);
-  }
-
 }
