@@ -5,7 +5,7 @@
 package frc.robot;
 
 import frc.robot.subsystems.*;
-import frc.robot.commands.Autos;
+import frc.robot.commands.*;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
@@ -48,7 +48,12 @@ public class RobotContainer {
     // Button 'B' will reset gyro
     new JoystickButton(OI.m_controller, LogitechController.BTN_B)
       .onTrue(new InstantCommand(() -> OI.gyro.reset()));
-    // TODO: Button 'X' will stop turning
+    // Button 'X' will stop robot turning
+    new JoystickButton(OI.m_controller, LogitechController.BTN_X)
+      .onTrue(new InstantCommand(() -> {
+        m_robotDrive.stopMotor();
+        sDrivetrain.cTurnToAngle.cancel();
+      }));
   }
 
   /**

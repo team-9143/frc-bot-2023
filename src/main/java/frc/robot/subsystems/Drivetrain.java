@@ -7,7 +7,7 @@ import frc.robot.commands.TurnToAngle;
 
 public class Drivetrain extends SubsystemBase {
   private static double heading;
-  private TurnToAngle cTurnToAngle = new TurnToAngle(this);
+  public final TurnToAngle cTurnToAngle = new TurnToAngle(this);
   
   public Drivetrain() {
     // Set the default command for a subsystem here.
