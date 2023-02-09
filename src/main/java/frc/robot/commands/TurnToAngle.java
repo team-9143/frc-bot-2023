@@ -37,13 +37,18 @@ public class TurnToAngle extends CommandBase {
     if (Math.abs(turnAngle) > turn_deadspot) {
       RobotContainer.m_robotDrive.arcadeDrive((Math.copySign((turnAngleMult*turnAngleMult*0.5) + 0.5, turnAngleMult)), 0, false);
     } else {
-      // Stop motors and cancel command when within turning deadspot
-      RobotContainer.m_robotDrive.stopMotor();
+      // Stop command when within turning deadspot
       this.cancel();
     }
   }
 
   public void setHeading(double fHeading) {
     heading = fHeading;
+  }
+
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {
+    RobotContainer.m_robotDrive.stopMotor();
   }
 }
