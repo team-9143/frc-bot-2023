@@ -11,7 +11,8 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
 public class TurnToAngle extends CommandBase {
-  private final static double turn_deadspot = 1.5;
+  private final static double kturnDeadspot = 1.5,
+    kturnPower = 0.3;
   private static double heading;
   
   /**
@@ -34,8 +35,8 @@ public class TurnToAngle extends CommandBase {
     
     System.out.println("gyro angle: " + OI.gyro.getAngle()%360 + " turn angle: " + turnAngleMult);
     
-    if (Math.abs(turnAngle) > turn_deadspot) {
-      RobotContainer.m_robotDrive.arcadeDrive((Math.copySign((turnAngleMult*turnAngleMult*0.5) + 0.5, turnAngleMult)), 0, false);
+    if (Math.abs(turnAngle) > kturnDeadspot) {
+      RobotContainer.m_robotDrive.arcadeDrive((Math.copySign((turnAngleMult*turnAngleMult*(1-kturnPower)) + kturnPower, turnAngleMult)), 0, false);
     } else {
       // Stop command when within turning deadspot
       this.cancel();
