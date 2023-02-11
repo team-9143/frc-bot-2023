@@ -68,7 +68,11 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    // Provides operator with notice that robot is still active
+    System.out.println("Robot is still active!");
+  }
+
 
   @Override
   public void teleopInit() {
@@ -83,9 +87,8 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {
-    drivetrain.drive(1);
-  }
+  public void teleopPeriodic() {}
+  
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
