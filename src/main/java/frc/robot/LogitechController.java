@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.Joystick;
  * Logitech game controller wrapper class
  * 
  * @author Shuhao
- * @author Sid
+ * @author Siddharth Thomas '2025
  */
 public class LogitechController extends Joystick {
   public static final byte
