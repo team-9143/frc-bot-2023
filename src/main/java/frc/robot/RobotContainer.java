@@ -23,6 +23,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final Drivetrain sDrivetrain = new Drivetrain();
+  private final Limelight sLimelight = new Limelight();
   
   // Create differential drive
   public final static MotorControllerGroup l_motors = new MotorControllerGroup(new Spark(0), new Spark(1));
