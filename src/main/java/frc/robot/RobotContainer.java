@@ -51,7 +51,7 @@ public class RobotContainer {
       .onTrue(new InstantCommand(() -> OI.gyro.reset()));
     // Button 'X' will stop robot turning
     new JoystickButton(OI.m_controller, LogitechController.BTN_X)
-      .onTrue(new InstantCommand(() -> sDrivetrain.cTurnToAngle.cancel()));
+      .onTrue(new InstantCommand(() -> sDrivetrain.stop()));
   }
 
   /**

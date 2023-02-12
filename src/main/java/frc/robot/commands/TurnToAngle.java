@@ -29,7 +29,7 @@ public class TurnToAngle extends CommandBase {
   @Override
   public void execute() 
   {
-    double turnAngle = heading - (OI.gyro.getAngle() % 360);
+    double turnAngle = (heading - OI.gyro.getAngle()) % 360;
     turnAngle += (turnAngle < -180) ? 360 : (turnAngle > 180) ? -360 : 0;
     double turnAngleMult = (double) turnAngle / 180;
     
@@ -39,17 +39,13 @@ public class TurnToAngle extends CommandBase {
       RobotContainer.m_robotDrive.arcadeDrive((Math.copySign((turnAngleMult*turnAngleMult*(1-kturnPower)) + kturnPower, turnAngleMult)), 0, false);
     } else {
       // Stop command when within turning deadspot
-      this.cancel();
+      RobotContainer.m_robotDrive.stopMotor();
+      cancel();
     }
   }
 
-  public void setHeading(double fHeading) {
-    heading = fHeading;
-  }
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-    RobotContainer.m_robotDrive.stopMotor();
+  public void setHeading(double fheading) {
+    heading = fheading;
+    schedule();
   }
 }
