@@ -4,12 +4,13 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.OI;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import frc.robot.commands.TargetTape;
 
 public class Limelight extends SubsystemBase {
-  private final static NetworkTableEntry
+  private static final NetworkTableEntry
     tv = OI.limelight.getEntry("tv"),
     tx = OI.limelight.getEntry("tx"),
     ty = OI.limelight.getEntry("ty"),
@@ -29,6 +30,7 @@ public class Limelight extends SubsystemBase {
     x = tx.getDouble(0);
     y = ty.getDouble(0);
     area = ta.getDouble(0);
+    // TODO: Add AprilTag and 3D space related variables
   }
 
   /**
