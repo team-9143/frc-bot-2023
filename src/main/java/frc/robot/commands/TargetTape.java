@@ -4,15 +4,19 @@
 
 package frc.robot.commands;
 
-import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class TargetTape extends CommandBase {
+  private final Drivetrain drivetrain;
+  private final Limelight limelight;
+  
   /** Creates a new TargetTape. */
   public TargetTape(Limelight limelight, Drivetrain drivetrain) {
+    this.drivetrain = drivetrain;
+    this.limelight = limelight;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(limelight, drivetrain);
   }
@@ -20,7 +24,8 @@ public class TargetTape extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
+    // Turns to calibration angle
+    drivetrain.turnDegrees(limelight.getTx());
   }
 
   // Called once the command ends or is interrupted.
