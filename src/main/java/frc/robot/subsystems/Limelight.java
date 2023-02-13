@@ -48,4 +48,8 @@ public class Limelight extends SubsystemBase {
   public void setLedMode(int mode) {
     ledMode.setNumber(mode);
   }
+
+  public int getLedMode() {
+    return (int) ledMode.getInteger(0);
+  }
 }
