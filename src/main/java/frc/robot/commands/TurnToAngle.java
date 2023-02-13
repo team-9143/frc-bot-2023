@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.OI;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drivetrain;
@@ -11,8 +12,6 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
 public class TurnToAngle extends CommandBase {
-  private final static double kturnDeadspot = 1.5,
-    kturnPower = 0.3;
   private static double heading;
   
   /**
@@ -35,8 +34,8 @@ public class TurnToAngle extends CommandBase {
     
     System.out.println("gyro angle: " + OI.gyro.getAngle()%360 + " turn angle: " + turnAngleMult);
     
-    if (Math.abs(turnAngle) > kturnDeadspot) {
-      RobotContainer.m_robotDrive.arcadeDrive((Math.copySign((turnAngleMult*turnAngleMult*(1-kturnPower)) + kturnPower, turnAngleMult)), 0, false);
+    if (Math.abs(turnAngle) > DrivetrainConstants.kTurnDeadspot) {
+      RobotContainer.m_robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult*Math.copySign((turnAngleMult*turnAngleMult*(1-DrivetrainConstants.kTurnPower)) + DrivetrainConstants.kTurnPower, turnAngleMult), 0, false);
     } else {
       // Stop command when within turning deadspot
       RobotContainer.m_robotDrive.stopMotor();
