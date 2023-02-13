@@ -18,16 +18,16 @@ public class Drivetrain extends SubsystemBase {
   @Override
   public void periodic() {
     // Adjust and round right stick input
-    double rs_X = OI.m_controller.getRightStick()[0], rs_Y = OI.m_controller.getRightStick()[1];
+    double rs_X = OI.driver_cntlr.getRightStick()[0], rs_Y = OI.driver_cntlr.getRightStick()[1];
     if (Math.abs(rs_X) < 0.3 && Math.abs(rs_Y) < 0.3) {
       rs_X = 0;
       rs_Y = 0;
     }
 
     // Find angle and schedule TurnToAngle command
-    if (OI.m_controller.getPOV() != -1) {
+    if (OI.driver_cntlr.getPOV() != -1) {
       // Snap heading to 45 degrees, input from d-pad
-      heading = 45 * Math.round((float) OI.m_controller.getPOV() / 45);
+      heading = 45 * Math.round((float) OI.driver_cntlr.getPOV() / 45);
       heading = (heading == 360) ? 0 : heading;
       cTurnToAngle.setHeading(heading);
     } else if (rs_X != 0 || rs_Y != 0) {

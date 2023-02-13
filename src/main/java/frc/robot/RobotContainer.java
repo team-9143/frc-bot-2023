@@ -48,18 +48,18 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Button 'X' will reset gyro
-    new JoystickButton(OI.m_controller, LogitechController.BTN_X)
+    new JoystickButton(OI.driver_cntlr, LogitechController.BTN_X)
       .onTrue(new InstantCommand(() -> OI.gyro.reset()));
     // Button 'B' will stop robot turning
-    new JoystickButton(OI.m_controller, LogitechController.BTN_B)
+    new JoystickButton(OI.driver_cntlr, LogitechController.BTN_B)
       .onTrue(new InstantCommand(() -> sDrivetrain.stop()));
     // Button 'A' will cause robot to target nearest retroreflective tape
-    new JoystickButton(OI.m_controller, LogitechController.BTN_A)
+    new JoystickButton(OI.driver_cntlr, LogitechController.BTN_A)
       .whileTrue(cTargetTape);
     // Button 'Y' will toggle through limelight LED
-    new JoystickButton(OI.m_controller, LogitechController.BTN_Y)
+    new JoystickButton(OI.driver_cntlr, LogitechController.BTN_Y)
       .onTrue(new InstantCommand(() -> sLimelight.setLedMode(
-        (sLimelight.getLedMode() == 1) ? 3 : sLimelight.getLedMode()-1
+        (sLimelight.getLedMode() <= 1) ? 3 : sLimelight.getLedMode()-1
       )));
   }
 
