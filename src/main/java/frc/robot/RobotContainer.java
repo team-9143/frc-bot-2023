@@ -24,6 +24,7 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final Drivetrain sDrivetrain = new Drivetrain();
   private final Limelight sLimelight = new Limelight();
+  private final TargetTape cTargetTape = new TargetTape(sLimelight, sDrivetrain);
   
   // Create differential drive
   public final static MotorControllerGroup l_motors = new MotorControllerGroup(new Spark(0), new Spark(1));
@@ -52,6 +53,9 @@ public class RobotContainer {
     // Button 'X' will stop robot turning
     new JoystickButton(OI.m_controller, LogitechController.BTN_X)
       .onTrue(new InstantCommand(() -> sDrivetrain.stop()));
+    // Button 'A' will cause robot to target nearest retroreflective tape
+    new JoystickButton(OI.m_controller, LogitechController.BTN_A)
+      .whileTrue(cTargetTape);
   }
 
   /**
