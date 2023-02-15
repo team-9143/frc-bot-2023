@@ -53,8 +53,9 @@ public class RobotContainer {
     // Button 'B' will stop robot turning
     new JoystickButton(OI.driver_cntlr, LogitechController.BTN_B)
       .onTrue(new InstantCommand(() -> sDrivetrain.stop()));
-    // Button 'A' will cause robot to target nearest retroreflective tape
+    // Button 'A' will cause robot to target nearest retroreflective tape, if target is close
     new JoystickButton(OI.driver_cntlr, LogitechController.BTN_A)
+      .or(() -> sLimelight.getArea() > 10)
       .whileTrue(cTargetTape);
     // Button 'Y' will toggle through limelight LED
     new JoystickButton(OI.driver_cntlr, LogitechController.BTN_Y)
