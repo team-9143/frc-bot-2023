@@ -6,12 +6,15 @@ package frc.robot;
 
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import frc.robot.Constants.DrivetrainConstants;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -26,10 +29,15 @@ public class RobotContainer {
   private final Limelight sLimelight = new Limelight();
   private final TargetTape cTargetTape = new TargetTape(sLimelight, sDrivetrain);
   
-  // Create differential drive
-  public final static MotorControllerGroup l_motors = new MotorControllerGroup(new Spark(0), new Spark(1));
-  public final static MotorControllerGroup r_motors = new MotorControllerGroup(new Spark(3), new Spark(4));
-  public final static DifferentialDrive m_robotDrive = new DifferentialDrive(r_motors, l_motors);
+  // Initialize motors and differential drive
+  public static final CANSparkMax
+    fl_motor = new CANSparkMax(DrivetrainConstants.kFrontLeftDeviceID, MotorType.kBrushless),
+    bl_motor = new CANSparkMax(DrivetrainConstants.kBackLeftDeviceID, MotorType.kBrushless),
+    fr_motor = new CANSparkMax(DrivetrainConstants.kFrontRightDeviceID, MotorType.kBrushless),
+    br_motor = new CANSparkMax(DrivetrainConstants.kBackRightDeviceID, MotorType.kBrushless);
+  private static final MotorControllerGroup l_motors = new MotorControllerGroup(fl_motor, bl_motor);
+  private static final MotorControllerGroup r_motors = new MotorControllerGroup(fr_motor, br_motor);
+  public static final DifferentialDrive m_robotDrive = new DifferentialDrive(r_motors, l_motors);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {

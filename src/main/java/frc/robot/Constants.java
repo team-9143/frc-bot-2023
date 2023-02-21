@@ -22,5 +22,11 @@ public final class Constants {
       kTurnDeadspot = 1.5,
       kTurnPower = 0.3,
       kSpeedMult = 1;
+
+    public static final byte
+      kFrontLeftDeviceID = 0,
+      kBackLeftDeviceID = 1,
+      kFrontRightDeviceID = 2,
+      kBackRightDeviceID = 3;
   }
 }
