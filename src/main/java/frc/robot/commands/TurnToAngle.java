@@ -9,11 +9,9 @@ import frc.robot.OI;
 import frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-/** An example command that uses an example subsystem. */
 public class TurnToAngle extends CommandBase {
   private static double heading;
   
-  /** Creates a new Drive. */
   public TurnToAngle(Drivetrain drivetrain) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
@@ -30,17 +28,18 @@ public class TurnToAngle extends CommandBase {
     if (Math.abs(turnAngle) > DrivetrainConstants.kTurnDeadspot) {
       Drivetrain.robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult * Math.copySign((turnAngleMult*turnAngleMult * (1-DrivetrainConstants.kTurnPower)) + DrivetrainConstants.kTurnPower, turnAngleMult), 0, false);
     } else {
-      // Stop command when within turning deadspot
       Drivetrain.robotDrive.stopMotor();
       cancel();
     }
   }
 
+  // Main way to schedule command
   public void setHeading(double fheading) {
     heading = fheading;
     schedule();
   }
 
+  // Called when a trigger shows sufficient input
   public void findHeading() {
     if (OI.driver_cntlr.getPOV() != -1) {
       // Round heading to 45 degrees, input from d-pad

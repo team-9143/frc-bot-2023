@@ -14,11 +14,11 @@ public class TargetTape extends CommandBase {
   private final Drivetrain drivetrain;
   private final TurnToAngle turnToAngle;
   
-  /** Creates a new TargetTape. */
   public TargetTape(Limelight limelight, Drivetrain drivetrain, TurnToAngle turnToAngle) {
     this.limelight = limelight;
     this.drivetrain = drivetrain;
     this.turnToAngle = turnToAngle;
+    
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(limelight);
   }
