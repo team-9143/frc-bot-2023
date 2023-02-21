@@ -6,7 +6,6 @@ package frc.robot.commands;
 
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.OI;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -14,11 +13,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class TurnToAngle extends CommandBase {
   private static double heading;
   
-  /**
-   * Creates a new ExampleCommand.
-   *
-   * @param subsystem The subsystem used by this command.
-   */
+  /** Creates a new Drive. */
   public TurnToAngle(Drivetrain drivetrain) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
@@ -33,10 +28,10 @@ public class TurnToAngle extends CommandBase {
     double turnAngleMult = (double) turnAngle / 180;
     
     if (Math.abs(turnAngle) > DrivetrainConstants.kTurnDeadspot) {
-      RobotContainer.m_robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult*Math.copySign((turnAngleMult*turnAngleMult*(1-DrivetrainConstants.kTurnPower)) + DrivetrainConstants.kTurnPower, turnAngleMult), 0, false);
+      Drivetrain.robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult * Math.copySign((turnAngleMult*turnAngleMult * (1-DrivetrainConstants.kTurnPower)) + DrivetrainConstants.kTurnPower, turnAngleMult), 0, false);
     } else {
       // Stop command when within turning deadspot
-      RobotContainer.m_robotDrive.stopMotor();
+      Drivetrain.robotDrive.stopMotor();
       cancel();
     }
   }
@@ -44,5 +39,18 @@ public class TurnToAngle extends CommandBase {
   public void setHeading(double fheading) {
     heading = fheading;
     schedule();
+  }
+
+  public void findHeading() {
+    if (OI.driver_cntlr.getPOV() != -1) {
+      // Round heading to 45 degrees, input from d-pad
+      setHeading(45 * Math.round((float) OI.driver_cntlr.getPOV() / 45));
+    } else {
+      // Find specific angle, input from right stick
+      setHeading(Math.toDegrees(Math.atan2(
+        OI.driver_cntlr.getRightStick()[0],
+        OI.driver_cntlr.getRightStick()[1]
+      )));
+    }
   }
 }
