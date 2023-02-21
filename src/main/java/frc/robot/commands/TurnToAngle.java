@@ -10,9 +10,12 @@ import frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class TurnToAngle extends CommandBase {
+  private Drivetrain drivetrain;
   private static double heading;
   
   public TurnToAngle(Drivetrain drivetrain) {
+    this.drivetrain = drivetrain;
+    
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
   }
@@ -28,8 +31,8 @@ public class TurnToAngle extends CommandBase {
     if (Math.abs(turnAngle) > DrivetrainConstants.kTurnDeadspot) {
       Drivetrain.robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult * Math.copySign((turnAngleMult*turnAngleMult * (1-DrivetrainConstants.kTurnPower)) + DrivetrainConstants.kTurnPower, turnAngleMult), 0, false);
     } else {
-      Drivetrain.robotDrive.stopMotor();
-      cancel();
+      // Stop when within turning deadspot
+      drivetrain.stop();
     }
   }
 
