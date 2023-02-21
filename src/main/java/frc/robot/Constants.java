@@ -18,10 +18,9 @@ public final class Constants {
   }
   
   public static class DrivetrainConstants {
-    public static final double
-      kTurnDeadspot = 1.5,
-      kTurnPower = 0.3,
-      kSpeedMult = 1;
+    public static final double kTurnDeadspot = 1.5;
+    public static final double kTurnPower = 0.3;
+    public static final double kSpeedMult = 1;
 
     public static final byte
       kFrontLeftDeviceID = 1,
