@@ -32,8 +32,6 @@ public class TurnToAngle extends CommandBase {
     turnAngle += (turnAngle < -180) ? 360 : (turnAngle > 180) ? -360 : 0;
     double turnAngleMult = (double) turnAngle / 180;
     
-    System.out.println("gyro angle: " + OI.gyro.getAngle()%360 + " turn angle: " + turnAngleMult);
-    
     if (Math.abs(turnAngle) > DrivetrainConstants.kTurnDeadspot) {
       RobotContainer.m_robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult*Math.copySign((turnAngleMult*turnAngleMult*(1-DrivetrainConstants.kTurnPower)) + DrivetrainConstants.kTurnPower, turnAngleMult), 0, false);
     } else {
