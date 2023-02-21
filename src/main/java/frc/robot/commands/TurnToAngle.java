@@ -29,7 +29,7 @@ public class TurnToAngle extends CommandBase {
     double turnAngleMult = (double) turnAngle / 180;
     
     if (Math.abs(turnAngle) > DrivetrainConstants.kTurnDeadspot) {
-      Drivetrain.robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult * Math.copySign((turnAngleMult*turnAngleMult * (1-DrivetrainConstants.kTurnPower)) + DrivetrainConstants.kTurnPower, turnAngleMult), 0, false);
+      drivetrain.robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult * Math.copySign((turnAngleMult*turnAngleMult * (1-DrivetrainConstants.kTurnPower)) + DrivetrainConstants.kTurnPower, turnAngleMult), 0, false);
     } else {
       // Stop when within turning deadspot
       drivetrain.stop();
