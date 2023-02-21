@@ -28,7 +28,7 @@ public class Drive extends CommandBase {
       RobotContainer.m_robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult*OI.driver_cntlr.getTriggerButtons(), 0, true);
     } else {
       // Regular drive, input from left stick
-      RobotContainer.m_robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult*OI.driver_cntlr.getLeftStick()[0], DrivetrainConstants.kSpeedMult*OI.driver_cntlr.getLeftStick()[1], true);
+      RobotContainer.m_robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult*OI.driver_cntlr.getLeftStick()[0], -DrivetrainConstants.kSpeedMult*OI.driver_cntlr.getLeftStick()[1], true);
     }
   }
 }

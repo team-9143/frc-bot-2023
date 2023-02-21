@@ -24,9 +24,9 @@ public final class Constants {
       kSpeedMult = 1;
 
     public static final byte
-      kFrontLeftDeviceID = 0,
-      kBackLeftDeviceID = 1,
-      kFrontRightDeviceID = 2,
-      kBackRightDeviceID = 3;
+      kFrontLeftDeviceID = 1,
+      kBackLeftDeviceID = 2,
+      kFrontRightDeviceID = 3,
+      kBackRightDeviceID = 4;
   }
 }
