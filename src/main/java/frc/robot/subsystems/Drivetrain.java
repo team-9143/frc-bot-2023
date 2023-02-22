@@ -18,11 +18,12 @@ public class Drivetrain extends SubsystemBase {
     fr_motor = new CANSparkMax(DrivetrainConstants.kFrontRightDeviceID, MotorType.kBrushless),
     br_motor = new CANSparkMax(DrivetrainConstants.kBackRightDeviceID, MotorType.kBrushless);
   
-  public final RelativeEncoder
-    fl_encoder = fl_motor.getEncoder(),
-    bl_encoder = bl_motor.getEncoder(),
-    fr_encoder = fr_motor.getEncoder(),
-    br_encoder = br_motor.getEncoder();
+  public final RelativeEncoder[] encoders = {
+    fl_motor.getEncoder(),
+    bl_motor.getEncoder(),
+    fr_motor.getEncoder(),
+    br_motor.getEncoder()
+  };
   
   public final DifferentialDrive robotDrive = new DifferentialDrive(
     new MotorControllerGroup(fl_motor, bl_motor),
@@ -32,6 +33,11 @@ public class Drivetrain extends SubsystemBase {
   public Drivetrain() {
     // Set the default command for a subsystem here.
     setDefaultCommand(new Drive(this));
+
+    for (RelativeEncoder encoder : encoders) {
+      // Sets encoders to measure position in feet
+      encoder.setPositionConversionFactor(Math.PI * DrivetrainConstants.kWheelDiameter / DrivetrainConstants.kGearboxRatio);
+    }
   }
 
   // Stops drivetrain motors and resets to default command
