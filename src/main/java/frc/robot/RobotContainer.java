@@ -10,8 +10,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RepeatCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -25,7 +26,6 @@ public class RobotContainer {
   private final Drivetrain sDrivetrain = new Drivetrain();
   private final Limelight sLimelight = new Limelight();
   private final TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain);
-  private final TargetTape cTargetTape = new TargetTape(sLimelight, sDrivetrain, cTurnToAngle);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -49,9 +49,9 @@ public class RobotContainer {
       || Math.abs(OI.driver_cntlr.getRightStick()[0]) > 0.3
       || Math.abs(OI.driver_cntlr.getRightStick()[1]) > 0.3
     )
-      .whileTrue(new RepeatCommand(new InstantCommand(() ->
+      .whileTrue(new RunCommand(() ->
         cTurnToAngle.findHeading()
-      )));
+      ));
     
     // Button 'X' will reset gyro
     new JoystickButton(OI.driver_cntlr, LogitechController.BTN_X)
@@ -65,10 +65,16 @@ public class RobotContainer {
         sDrivetrain.stop()
       ));
     
-    // Button 'A' will cause robot to target nearest retroreflective tape, if target is close
+    // Button 'A' will cause robot to target nearest retroreflective tape, if target is nearby
     new JoystickButton(OI.driver_cntlr, LogitechController.BTN_A)
       .and(() -> sLimelight.getArea() > 10)
-      .whileTrue(cTargetTape);
+      .whileTrue(new FunctionalCommand(
+        () -> {},
+        () -> cTurnToAngle.setHeading(OI.gyro.getAngle() + sLimelight.getTx()),
+        interrupted -> sDrivetrain.stop(),
+        () -> false,
+        sLimelight
+      ));
     
     // Button 'Y' will toggle through limelight LED
     new JoystickButton(OI.driver_cntlr, LogitechController.BTN_Y)
