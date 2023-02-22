@@ -17,7 +17,14 @@ public class Limelight extends SubsystemBase {
     
     // Visual testing purposes
     ledMode = OI.limelight.getEntry("ledMode");
-
+  
+  public double getTx() {return tx.getDouble(0);}
+  public double getTy() {return ty.getDouble(0);}
+  public double getArea() {return ta.getDouble(0);}
+  public boolean getValid() {return (tv.getInteger(0) == 1) ? true : false;}
+  // TODO: Add AprilTag and 3D space related variables
+  
+  // Visual testing purposes
   /**
    * Sets the limelight's LED mode.
    * 
@@ -30,14 +37,7 @@ public class Limelight extends SubsystemBase {
    * 
    * @param mode
    */
-  public void setLedMode(int mode) {ledMode.setNumber(mode);}
-
-  public double getTx() {return tx.getDouble(0);}
-  public double getTy() {return ty.getDouble(0);}
-  public double getArea() {return ta.getDouble(0);}
-  public boolean getValid() {return (tv.getInteger(0) == 1) ? true : false;}
-  // TODO: Add AprilTag and 3D space related variables
-  
-  // Visual testing purposes
+  public void setLedMode(int mode) {ledMode.setInteger(mode);}
+    
   public int getLedMode() {return (int) ledMode.getInteger(0);}
 }
