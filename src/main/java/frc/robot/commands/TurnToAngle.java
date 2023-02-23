@@ -24,9 +24,10 @@ public class TurnToAngle extends CommandBase {
   @Override
   public void execute() 
   {
-    double turnAngle = (heading - OI.gyro.getAngle()) % 360;
+    // double turnAngle = (heading - OI.gyro.getAngle()) % 360;
+    double turnAngle = (heading - OI.pigeon.getYaw()) % 360;
     turnAngle += (turnAngle < -180) ? 360 : (turnAngle > 180) ? -360 : 0;
-    double turnAngleMult = (double) turnAngle / 180;
+    double turnAngleMult = turnAngle / 180;
     
     if (Math.abs(turnAngle) > DrivetrainConstants.kTurnDeadspot) {
       drivetrain.robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult * Math.copySign((turnAngleMult*turnAngleMult * (1-DrivetrainConstants.kTurnPower)) + DrivetrainConstants.kTurnPower, turnAngleMult), 0, false);

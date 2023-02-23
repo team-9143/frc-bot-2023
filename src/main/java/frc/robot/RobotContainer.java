@@ -28,6 +28,8 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    // TODO: Configure Pigeon mount position and rotation error
+
     // Configure the trigger bindings
     configureBindings();
   }
@@ -55,7 +57,8 @@ public class RobotContainer {
     // Button 'X' will reset gyro
     new JoystickButton(OI.driver_cntlr, LogitechController.BTN_X)
       .onTrue(new InstantCommand(() -> 
-        OI.gyro.reset()
+        // OI.gyro.reset()
+        OI.pigeon.setYaw(0)
       ));
     
     // Button 'B' will stop robot turning
@@ -69,7 +72,8 @@ public class RobotContainer {
       .and(() -> sLimelight.getArea() > 10)
       .whileTrue(new FunctionalCommand(
         () -> {},
-        () -> cTurnToAngle.setHeading(OI.gyro.getAngle() + sLimelight.getTx()),
+        // () -> cTurnToAngle.setHeading(OI.gyro.getAngle() + sLimelight.getTx()),
+        () -> cTurnToAngle.setHeading(OI.pigeon.getYaw() + sLimelight.getTx()),
         interrupted -> sDrivetrain.stop(),
         () -> false,
         sLimelight

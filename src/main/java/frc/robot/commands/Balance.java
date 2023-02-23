@@ -9,10 +9,10 @@ import frc.robot.OI;
 import frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class Drive extends CommandBase {
-  private Drivetrain drivetrain;
-
-  public Drive(Drivetrain drivetrain) {
+public class Balance extends CommandBase {
+  private final Drivetrain drivetrain;
+  
+  public Balance(Drivetrain drivetrain) {
     this.drivetrain = drivetrain;
     
     // Use addRequirements() here to declare subsystem dependencies.
@@ -22,13 +22,12 @@ public class Drive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double trigger = OI.driver_cntlr.getTriggerButtons();
-    if ((trigger < -0.1) || (trigger > 0.1)) {
-      // Turn in place, input from trigger
-      drivetrain.robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult*OI.driver_cntlr.getTriggerButtons(), 0, true);
-    } else {
-      // Regular drive, input from left stick
-      drivetrain.robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult*OI.driver_cntlr.getLeftStick()[0], -DrivetrainConstants.kSpeedMult*OI.driver_cntlr.getLeftStick()[1], true);
-    }
+    
+  }
+
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {
+    drivetrain.stop();
   }
 }
