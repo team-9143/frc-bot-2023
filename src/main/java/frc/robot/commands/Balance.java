@@ -30,10 +30,8 @@ public class Balance extends CommandBase {
       if (Math.abs(pitch - previousPitch) > 1) {
         drivetrain.stop();
       } else {
-        drivetrain.robotDrive.arcadeDrive(0, DrivetrainConstants.kSpeedMult * 0.2, false);
+        drivetrain.robotDrive.arcadeDrive(0, Math.copySign(DrivetrainConstants.kSpeedMult * 0.25, pitch), false);
       }
-    } else {
-      cancel();
     }
   }
 
