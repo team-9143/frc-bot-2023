@@ -22,13 +22,13 @@ public class Drive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double trigger = OI.driver_cntlr.getTriggerButtons();
-    if ((trigger < -0.1) || (trigger > 0.1)) {
+    double triggers = OI.driver_cntlr.getTriggerButtons();
+    if ((triggers < -0.1) || (triggers > 0.1)) {
       // Turn in place, input from trigger
-      drivetrain.robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult*OI.driver_cntlr.getTriggerButtons(), 0, true);
+      drivetrain.robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult*DrivetrainConstants.kTurnMult * triggers, 0, true);
     } else {
       // Regular drive, input from left stick
-      drivetrain.robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult*OI.driver_cntlr.getLeftStick()[0], -DrivetrainConstants.kSpeedMult*OI.driver_cntlr.getLeftStick()[1], true);
+      drivetrain.robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult*DrivetrainConstants.kTurnMult * OI.driver_cntlr.getLeftStick()[0], DrivetrainConstants.kSpeedMult*OI.driver_cntlr.getLeftStick()[1], true);
     }
   }
 }

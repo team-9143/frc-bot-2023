@@ -27,8 +27,12 @@ public final class Constants {
     public static final double kWheelDiameter = 0.5; // In feet
     public static final double kGearboxRatio = 12.761;
     
-    public static final double kTurnDeadspot = 1.5;
-    public static final double kTurnPower = 0.3;
+    // General driving
     public static final double kSpeedMult = 1;
+    public static final double kTurnMult = 0.7; // For normal turning
+    
+    // TurnToAngle
+    public static final double kTurnDeadspot = 1.5;
+    public static final double kDirectedTurnPower = 0.2;
   }
 }
