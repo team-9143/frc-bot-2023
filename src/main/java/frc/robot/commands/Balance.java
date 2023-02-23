@@ -22,7 +22,7 @@ public class Balance extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
+    // TODO: move forward while pitch is positive, backward while pitch is negative; remember that pitch changes very quickly and the robot should stop at any small change
   }
 
   // Called once the command ends or is interrupted.

@@ -24,7 +24,9 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Drivetrain sDrivetrain = new Drivetrain();
   private final Limelight sLimelight = new Limelight();
+  
   private final TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain);
+  private final Balance cBalance = new Balance(sDrivetrain);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -67,7 +69,11 @@ public class RobotContainer {
         sDrivetrain.stop()
       ));
     
-    // Button 'A' will cause robot to target nearest retroreflective tape, if target is nearby
+    // Right bumper (hold) will cause robot to balance on a charge station
+    new JoystickButton(OI.driver_cntlr, LogitechController.BTN_RB)
+      .whileTrue(cBalance);
+    
+    // Button 'A' (hold) will cause robot to target nearest retroreflective tape, if target is nearby
     new JoystickButton(OI.driver_cntlr, LogitechController.BTN_A)
       .and(() -> sLimelight.getArea() > 10)
       .whileTrue(new FunctionalCommand(
