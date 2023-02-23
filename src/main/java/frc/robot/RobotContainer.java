@@ -22,7 +22,6 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final Drivetrain sDrivetrain = new Drivetrain();
   private final Limelight sLimelight = new Limelight();
   private final TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain);
@@ -90,6 +89,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
+    // TODO: Autonomous command chooser and commands in Autos class
+    return new InstantCommand();
   }
 }
