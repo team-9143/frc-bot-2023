@@ -6,20 +6,16 @@ package frc.robot.commands;
 
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.OI;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-/** An example command that uses an example subsystem. */
 public class TurnToAngle extends CommandBase {
+  private Drivetrain drivetrain;
   private static double heading;
   
-  /**
-   * Creates a new ExampleCommand.
-   *
-   * @param subsystem The subsystem used by this command.
-   */
   public TurnToAngle(Drivetrain drivetrain) {
+    this.drivetrain = drivetrain;
+    
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
   }
@@ -33,16 +29,30 @@ public class TurnToAngle extends CommandBase {
     double turnAngleMult = (double) turnAngle / 180;
     
     if (Math.abs(turnAngle) > DrivetrainConstants.kTurnDeadspot) {
-      RobotContainer.m_robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult*Math.copySign((turnAngleMult*turnAngleMult*(1-DrivetrainConstants.kTurnPower)) + DrivetrainConstants.kTurnPower, turnAngleMult), 0, false);
+      drivetrain.robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult * Math.copySign((turnAngleMult*turnAngleMult * (1-DrivetrainConstants.kTurnPower)) + DrivetrainConstants.kTurnPower, turnAngleMult), 0, false);
     } else {
-      // Stop command when within turning deadspot
-      RobotContainer.m_robotDrive.stopMotor();
-      cancel();
+      // Stop when within turning deadspot
+      drivetrain.stop();
     }
   }
 
+  // Main way to schedule command
   public void setHeading(double fheading) {
     heading = fheading;
     schedule();
+  }
+
+  // Called when a trigger shows sufficient input
+  public void findHeading() {
+    if (OI.driver_cntlr.getPOV() != -1) {
+      // Round heading to 45 degrees, input from d-pad
+      setHeading(45 * Math.round((float) OI.driver_cntlr.getPOV() / 45));
+    } else {
+      // Find specific angle, input from right stick
+      setHeading(Math.toDegrees(Math.atan2(
+        OI.driver_cntlr.getRightStick()[0],
+        OI.driver_cntlr.getRightStick()[1]
+      )));
+    }
   }
 }

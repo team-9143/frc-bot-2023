@@ -18,6 +18,9 @@ public final class Constants {
   }
   
   public static class DrivetrainConstants {
+    public static final double kWheelDiameter = 0.5; // In feet
+    public static final double kGearboxRatio = 12.761;
+    
     public static final double kTurnDeadspot = 1.5;
     public static final double kTurnPower = 0.3;
     public static final double kSpeedMult = 1;

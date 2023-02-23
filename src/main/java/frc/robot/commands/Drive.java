@@ -6,15 +6,16 @@ package frc.robot.commands;
 
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.OI;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
 public class Drive extends CommandBase {
+  private Drivetrain drivetrain;
 
-  /** Creates a new Drive. */
   public Drive(Drivetrain drivetrain) {
+    this.drivetrain = drivetrain;
+    
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
   }
@@ -25,10 +26,10 @@ public class Drive extends CommandBase {
     double trigger = OI.driver_cntlr.getTriggerButtons();
     if ((trigger < -0.1) || (trigger > 0.1)) {
       // Turn in place, input from trigger
-      RobotContainer.m_robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult*OI.driver_cntlr.getTriggerButtons(), 0, true);
+      drivetrain.robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult*OI.driver_cntlr.getTriggerButtons(), 0, true);
     } else {
       // Regular drive, input from left stick
-      RobotContainer.m_robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult*OI.driver_cntlr.getLeftStick()[0], -DrivetrainConstants.kSpeedMult*OI.driver_cntlr.getLeftStick()[1], true);
+      drivetrain.robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult*OI.driver_cntlr.getLeftStick()[0], -DrivetrainConstants.kSpeedMult*OI.driver_cntlr.getLeftStick()[1], true);
     }
   }
 }
