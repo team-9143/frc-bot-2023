@@ -33,6 +33,7 @@ public class Balance extends CommandBase {
         drivetrain.robotDrive.arcadeDrive(0, Math.copySign(DrivetrainConstants.kSpeedMult * 0.25, pitch), false);
       }
     }
+    previousPitch = pitch;
   }
 
   // Called once the command ends or is interrupted.
