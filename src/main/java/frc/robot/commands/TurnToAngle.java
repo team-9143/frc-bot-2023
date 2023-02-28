@@ -25,7 +25,7 @@ public class TurnToAngle extends CommandBase {
   public void execute() 
   {
     // double turnAngle = (heading - OI.gyro.getAngle()) % 360;
-    double turnAngle = (heading - OI.pigeon.getYaw()) % 360;
+    double turnAngle = (heading + OI.pigeon.getYaw()) % 360;
     turnAngle += (turnAngle < -180) ? 360 : (turnAngle > 180) ? -360 : 0;
     double turnAngleMult = turnAngle / 180;
     
