@@ -9,6 +9,7 @@ import frc.robot.OI;
 import frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
+// TODO: Fix stutter problem with ~180 degree turns
 public class TurnToAngle extends CommandBase {
   private Drivetrain drivetrain;
   private static double heading;
@@ -24,12 +25,13 @@ public class TurnToAngle extends CommandBase {
   @Override
   public void execute() 
   {
-    double turnAngle = (heading - OI.gyro.getAngle()) % 360;
+    // double turnAngle = (heading - OI.gyro.getAngle()) % 360;
+    double turnAngle = (heading + OI.pigeon.getYaw()) % 360;
     turnAngle += (turnAngle < -180) ? 360 : (turnAngle > 180) ? -360 : 0;
-    double turnAngleMult = (double) turnAngle / 180;
+    double turnAngleMult = turnAngle / 180;
     
     if (Math.abs(turnAngle) > DrivetrainConstants.kTurnDeadspot) {
-      drivetrain.robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult * Math.copySign((turnAngleMult*turnAngleMult * (1-DrivetrainConstants.kTurnPower)) + DrivetrainConstants.kTurnPower, turnAngleMult), 0, false);
+      drivetrain.robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult * Math.copySign((turnAngleMult*turnAngleMult * (1-DrivetrainConstants.kDirectedTurnPower)) + DrivetrainConstants.kDirectedTurnPower, turnAngleMult), 0, false);
     } else {
       // Stop when within turning deadspot
       drivetrain.stop();

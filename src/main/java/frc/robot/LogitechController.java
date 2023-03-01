@@ -2,13 +2,14 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 
+// TODO: Move to subclass under OI
 /**
  * Logitech game controller wrapper class
  * 
  * @author Shuhao
  * @author Siddharth Thomas '2025
  */
-public class LogitechController extends Joystick {
+ public class LogitechController extends Joystick {
   public static final byte
     BTN_A = 1, 
     BTN_B = 2,

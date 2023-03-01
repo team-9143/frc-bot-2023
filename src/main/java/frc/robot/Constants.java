@@ -13,22 +13,29 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  public static class OperatorConstants {
+  public static class DeviceConstants {
     public static final byte kDriverControllerPort = 0;
+    public static final byte
+      kPigeonCANid = 5,
+      kFrontLeftCANid = 1,
+      kBackLeftCANid = 2,
+      kFrontRightCANid = 3,
+      kBackRightCANid = 4;
   }
   
   public static class DrivetrainConstants {
     public static final double kWheelDiameter = 0.5; // In feet
     public static final double kGearboxRatio = 12.761;
     
-    public static final double kTurnDeadspot = 1.5;
-    public static final double kTurnPower = 0.3;
+    // General driving
     public static final double kSpeedMult = 1;
+    public static final double kTurnMult = 0.7; // For normal turning
+    
+    // TurnToAngle
+    public static final double kTurnDeadspot = 1.5;
+    public static final double kDirectedTurnPower = 0.2;
 
-    public static final byte
-      kFrontLeftDeviceID = 1,
-      kBackLeftDeviceID = 2,
-      kFrontRightDeviceID = 3,
-      kBackRightDeviceID = 4;
+    // Charge station balancing
+    public static final double kPitchDeadspot = 2;
   }
 }

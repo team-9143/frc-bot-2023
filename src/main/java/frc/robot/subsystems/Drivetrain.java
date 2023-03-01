@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import frc.robot.Constants.DrivetrainConstants;
+import frc.robot.Constants.DeviceConstants;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.Drive;
@@ -13,10 +14,10 @@ import frc.robot.commands.Drive;
 public class Drivetrain extends SubsystemBase {  
   // Initialize motors, encoders, and differential drive
   private static final CANSparkMax
-    fl_motor = new CANSparkMax(DrivetrainConstants.kFrontLeftDeviceID, MotorType.kBrushless),
-    bl_motor = new CANSparkMax(DrivetrainConstants.kBackLeftDeviceID, MotorType.kBrushless),
-    fr_motor = new CANSparkMax(DrivetrainConstants.kFrontRightDeviceID, MotorType.kBrushless),
-    br_motor = new CANSparkMax(DrivetrainConstants.kBackRightDeviceID, MotorType.kBrushless);
+    fl_motor = new CANSparkMax(DeviceConstants.kFrontLeftCANid, MotorType.kBrushless),
+    bl_motor = new CANSparkMax(DeviceConstants.kBackLeftCANid, MotorType.kBrushless),
+    fr_motor = new CANSparkMax(DeviceConstants.kFrontRightCANid, MotorType.kBrushless),
+    br_motor = new CANSparkMax(DeviceConstants.kBackRightCANid, MotorType.kBrushless);
   
   public final RelativeEncoder[] encoders = {
     fl_motor.getEncoder(),

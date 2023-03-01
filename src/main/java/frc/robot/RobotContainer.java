@@ -6,10 +6,10 @@ package frc.robot;
 
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
-import edu.wpi.first.wpilibj2.command.Command;
 
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -24,10 +24,16 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Drivetrain sDrivetrain = new Drivetrain();
   private final Limelight sLimelight = new Limelight();
+  
   private final TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain);
+  private final Balance cBalance = new Balance(sDrivetrain);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    // Configure Pigeon - make sure to continuously update pitch and roll offsets
+    OI.pigeon.configMountPose(0, 0, 0);
+    OI.pigeon.setYaw(0);
+
     // Configure the trigger bindings
     configureBindings();
   }
@@ -55,7 +61,8 @@ public class RobotContainer {
     // Button 'X' will reset gyro
     new JoystickButton(OI.driver_cntlr, LogitechController.BTN_X)
       .onTrue(new InstantCommand(() -> 
-        OI.gyro.reset()
+        // OI.gyro.reset()
+        OI.pigeon.setYaw(0)
       ));
     
     // Button 'B' will stop robot turning
@@ -64,12 +71,17 @@ public class RobotContainer {
         sDrivetrain.stop()
       ));
     
-    // Button 'A' will cause robot to target nearest retroreflective tape, if target is nearby
+    // Right bumper (hold) will cause robot to balance on a charge station
+    new JoystickButton(OI.driver_cntlr, LogitechController.BTN_RB)
+      .whileTrue(cBalance);
+    
+    // Button 'A' (hold) will cause robot to target nearest retroreflective tape, if target is nearby
     new JoystickButton(OI.driver_cntlr, LogitechController.BTN_A)
       .and(() -> sLimelight.getArea() > 10)
       .whileTrue(new FunctionalCommand(
         () -> {},
-        () -> cTurnToAngle.setHeading(OI.gyro.getAngle() + sLimelight.getTx()),
+        // () -> cTurnToAngle.setHeading(OI.gyro.getAngle() + sLimelight.getTx()),
+        () -> cTurnToAngle.setHeading(OI.pigeon.getYaw() + sLimelight.getTx()),
         interrupted -> sDrivetrain.stop(),
         () -> false,
         sLimelight
