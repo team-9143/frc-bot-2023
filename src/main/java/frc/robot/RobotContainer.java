@@ -30,8 +30,7 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    // TODO: Configure Pigeon mount position and rotation error
-    // Config pigeon
+    // Configure Pigeon - make sure to continuously update pitch and roll offsets
     OI.pigeon.configMountPose(0, 0, 0);
     OI.pigeon.setYaw(0);
 
