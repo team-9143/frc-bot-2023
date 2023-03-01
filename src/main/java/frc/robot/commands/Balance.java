@@ -25,12 +25,11 @@ public class Balance extends CommandBase {
   @Override
   public void execute() {
     double pitch = -OI.pigeon.getPitch();
-    // TODO: move forward while pitch is positive, backward while pitch is negative; remember that pitch changes very quickly and the robot should stop at any small change
     if (Math.abs(pitch) > DrivetrainConstants.kPitchDeadspot) {
-      if (Math.abs(pitch - previousPitch) > 1) {
+      if (Math.abs(pitch - previousPitch) > 3) {
         drivetrain.stop();
       } else {
-        drivetrain.robotDrive.arcadeDrive(0, Math.copySign(DrivetrainConstants.kSpeedMult * 0.25, pitch), false);
+        drivetrain.robotDrive.arcadeDrive(0, Math.copySign(DrivetrainConstants.kSpeedMult * 0.075, pitch), false);
       }
     }
     previousPitch = pitch;
