@@ -41,9 +41,9 @@ public class Drivetrain extends SubsystemBase {
     }
   }
 
-  // Stops drivetrain motors and resets to default command
+  // Stops drivetrain motors and cancels current command
   public void stop() {
     robotDrive.stopMotor();
-    getDefaultCommand().schedule();
+    getCurrentCommand().cancel();
   }
 }

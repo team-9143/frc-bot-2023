@@ -16,11 +16,13 @@ public final class Constants {
   public static class DeviceConstants {
     public static final byte kDriverControllerPort = 0;
     public static final byte
-      kPigeonCANid = 5,
       kFrontLeftCANid = 1,
       kBackLeftCANid = 2,
       kFrontRightCANid = 3,
-      kBackRightCANid = 4;
+      kBackRightCANid = 4,
+      kPigeonCANid = 5,
+      kIntakeCANid = 6,
+      kIntakePositionCANid = 7;
   }
   
   public static class DrivetrainConstants {
