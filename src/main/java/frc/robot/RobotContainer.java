@@ -88,7 +88,7 @@ public class RobotContainer {
       .whileTrue(new FunctionalCommand(
         () -> {},
         () -> sIntake.intakeMotor.set((OI.driver_cntlr.getRawButton(LogitechController.BTN_RB)) ? -1 : 1),
-        (interrupted) -> sIntake.intakeMotor.stopMotor(),
+        (interrupted) -> sIntake.stop(),
         () -> false,
         sIntake
       ));

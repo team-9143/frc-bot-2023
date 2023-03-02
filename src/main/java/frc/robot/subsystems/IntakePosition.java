@@ -8,14 +8,17 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
 import frc.robot.Constants.DeviceConstants;
 
-public class Intake extends SubsystemBase {
-  public final CANSparkMax intakeMotor = new CANSparkMax(DeviceConstants.kIntakeCANid, MotorType.kBrushless);
+public class IntakePosition extends SubsystemBase {
+  public final CANSparkMax positionMotor = new CANSparkMax(DeviceConstants.kIntakePositionCANid, MotorType.kBrushless);
+
+  public final RelativeEncoder positionEncoder = positionMotor.getEncoder();
 
   // Stops all motors and cancels current command
   public void stop() {
-    intakeMotor.stopMotor();
+    positionMotor.stopMotor();
     getCurrentCommand().cancel();
   }
 }
