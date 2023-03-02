@@ -24,6 +24,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Drivetrain sDrivetrain = new Drivetrain();
   private final Limelight sLimelight = new Limelight();
+  private final Intake sIntake = new Intake();
   
   private final TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain);
   private final Balance cBalance = new Balance(sDrivetrain);
@@ -71,26 +72,25 @@ public class RobotContainer {
         sDrivetrain.stop()
       ));
     
-    // Right bumper (hold) will cause robot to balance on a charge station
-    new JoystickButton(OI.driver_cntlr, LogitechController.BTN_RB)
-      .whileTrue(cBalance);
-    
-    // Button 'A' (hold) will cause robot to target nearest retroreflective tape, if target is nearby
+    // Button 'A' (hold) will cause robot to balance on a charge station
     new JoystickButton(OI.driver_cntlr, LogitechController.BTN_A)
-      .and(() -> sLimelight.getArea() > 10)
-      .whileTrue(new FunctionalCommand(
-        () -> {},
-        // () -> cTurnToAngle.setHeading(OI.gyro.getAngle() + sLimelight.getTx()),
-        () -> cTurnToAngle.setHeading(OI.pigeon.getYaw() + sLimelight.getTx()),
-        interrupted -> sDrivetrain.stop(),
-        () -> false,
-        sLimelight
-      ));
+      .whileTrue(cBalance);
     
     // Button 'Y' will toggle through limelight LED
     new JoystickButton(OI.driver_cntlr, LogitechController.BTN_Y)
       .onTrue(new InstantCommand(() -> 
         sLimelight.setLedMode((sLimelight.getLedMode() <= 1) ? 3 : sLimelight.getLedMode()-1)
+      ));
+    
+    // Buttons 'RB' and 'LB' will intake and spit cubes, respectively
+    new JoystickButton(OI.driver_cntlr, LogitechController.BTN_RB)
+    .or(new JoystickButton(OI.driver_cntlr, LogitechController.BTN_LB))
+      .whileTrue(new FunctionalCommand(
+        () -> {},
+        () -> sIntake.intakeMotor.set((OI.driver_cntlr.getRawButton(LogitechController.BTN_RB)) ? -1 : 1),
+        (interrupted) -> sIntake.intakeMotor.stopMotor(),
+        () -> false,
+        sIntake
       ));
   }
 
