@@ -35,7 +35,7 @@ public final class Constants {
     
     // TurnToAngle
     public static final double kTurnDeadspot = 1.5;
-    public static final double kDirectedTurnPower = 0.2;
+    public static final double kTurnPower = 0.2;
 
     // Charge station balancing
     public static final double kPitchDeadspot = 2;
