@@ -22,7 +22,7 @@ public final class Constants {
       kBackRightCANid = 4,
       kPigeonCANid = 5,
       kIntakeCANid = 6,
-      kIntakePositionCANid = 7;
+      kIntakePositionCANid = 17;
   }
   
   public static class DrivetrainConstants {
@@ -39,5 +39,10 @@ public final class Constants {
 
     // Charge station balancing
     public static final double kPitchDeadspot = 2;
+  }
+
+  public static class IntakeConstants {
+    public static final double kIntakeSpeed = 1;
+    public static final double kPositionalSpeed = 0.5;
   }
 }

@@ -87,7 +87,7 @@ public class RobotContainer {
     .or(new JoystickButton(OI.driver_cntlr, LogitechController.BTN_LB))
       .whileTrue(new FunctionalCommand(
         () -> {},
-        () -> sIntake.intakeMotor.set((OI.driver_cntlr.getRawButton(LogitechController.BTN_RB)) ? -1 : 1),
+        () -> sIntake.intakeMotor.set((OI.driver_cntlr.getRawButton(LogitechController.BTN_RB)) ? -Constants.IntakeConstants.kIntakeSpeed : Constants.IntakeConstants.kIntakeSpeed),
         (interrupted) -> sIntake.stop(),
         () -> false,
         sIntake
