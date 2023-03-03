@@ -43,6 +43,6 @@ public final class Constants {
 
   public static class IntakeConstants {
     public static final double kIntakeSpeed = 1;
-    public static final double kPositionalSpeed = 0.5;
+    public static final double kPositionalSpeed = 0.75;
   }
 }

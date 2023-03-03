@@ -25,7 +25,8 @@ public class Drive extends CommandBase {
     double triggers = OI.driver_cntlr.getTriggerButtons();
     if ((triggers < -0.1) || (triggers > 0.1)) {
       // Turn in place, input from trigger
-      drivetrain.robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult*DrivetrainConstants.kTurnMult * triggers, 0, true);
+      // drivetrain.robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult*DrivetrainConstants.kTurnMult * triggers, 0, true);
+      drivetrain.robotDrive.arcadeDrive(0, 0, true);
     } else {
       // Regular drive, input from left stick
       drivetrain.robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult*DrivetrainConstants.kTurnMult * OI.driver_cntlr.getLeftStick()[0], DrivetrainConstants.kSpeedMult*OI.driver_cntlr.getLeftStick()[1], true);
