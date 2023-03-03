@@ -16,9 +16,8 @@ public class IntakePosition extends SubsystemBase {
 
   public final RelativeEncoder positionEncoder = positionMotor.getEncoder();
 
-  // Stops all motors and cancels current command
+  // Stops all motors
   public void stop() {
     positionMotor.stopMotor();
-    getCurrentCommand().cancel();
   }
 }

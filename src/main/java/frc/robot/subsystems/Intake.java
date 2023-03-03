@@ -13,9 +13,8 @@ import frc.robot.Constants.DeviceConstants;
 public class Intake extends SubsystemBase {
   public final CANSparkMax intakeMotor = new CANSparkMax(DeviceConstants.kIntakeCANid, MotorType.kBrushless);
 
-  // Stops all motors and cancels current command
+  // Stops all motors
   public void stop() {
     intakeMotor.stopMotor();
-    getCurrentCommand().cancel();
   }
 }
