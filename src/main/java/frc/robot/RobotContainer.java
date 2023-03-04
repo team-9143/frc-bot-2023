@@ -31,7 +31,7 @@ public class RobotContainer {
   private final Balance cBalance = new Balance(sDrivetrain);
   private final Command cIntake = new FunctionalCommand(
     () -> {},
-    () -> sIntake.intakeMotor.set((OI.driver_cntlr.getRawButton(LogitechController.BTN_RB)) ? -Constants.IntakeConstants.kIntakeSpeed : Constants.IntakeConstants.kIntakeSpeed),
+    () -> sIntake.intakeMotor.set((OI.driver_cntlr.getRawButton(LogitechController.BTN_RB)) ? Constants.IntakeConstants.kOuttakeSpeed : Constants.IntakeConstants.kIntakeSpeed),
     (interrupted) -> sIntake.stop(),
     () -> false,
     sIntake
