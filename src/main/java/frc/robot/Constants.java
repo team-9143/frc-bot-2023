@@ -44,6 +44,10 @@ public final class Constants {
   public static class IntakeConstants {
     public static final double kIntakeSpeed = 1;
     public static final double kOuttakeSpeed = -1;
-    public static final double kPositionalSpeed = 0.75;
+    public static final double kPositionalSpeed = 0.25;
+
+    public static final double kUpPos = 0;
+    public static final double kDownPos = 0.25;
+    public static final double kPositionDeadspot = 0.05;
   }
 }

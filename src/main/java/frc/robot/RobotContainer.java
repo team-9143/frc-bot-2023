@@ -25,23 +25,17 @@ public class RobotContainer {
   private final Drivetrain sDrivetrain = new Drivetrain();
   private final Limelight sLimelight = new Limelight();
   private final Intake sIntake = new Intake();
-  private final IntakePosition sIntakePosition = new IntakePosition();
+  private final IntakePositional sIntakePosition = new IntakePositional();
   
   private final TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain);
   private final Balance cBalance = new Balance(sDrivetrain);
+  private final IntakeAngle cIntakeAngle = new IntakeAngle(sIntakePosition);
   private final Command cIntake = new FunctionalCommand(
     () -> {},
     () -> sIntake.intakeMotor.set((OI.driver_cntlr.getRawButton(LogitechController.BTN_RB)) ? Constants.IntakeConstants.kOuttakeSpeed : Constants.IntakeConstants.kIntakeSpeed),
     (interrupted) -> sIntake.stop(),
     () -> false,
     sIntake
-  );
-  private final Command cIntakePositional = new FunctionalCommand(
-    () -> {},
-    () -> sIntakePosition.positionMotor.set(Math.copySign(OI.driver_cntlr.getTriggerButtons() * Constants.IntakeConstants.kPositionalSpeed, OI.driver_cntlr.getTriggerButtons())),
-    (interrupted) -> sIntakePosition.stop(),
-    () -> false,
-    sIntakePosition
   );
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -104,7 +98,7 @@ public class RobotContainer {
     
     // Triggers will move intake positional motor
     new Trigger(() -> Math.abs(OI.driver_cntlr.getTriggerButtons()) > 0.1)
-      .whileTrue(cIntakePositional);
+      .whileTrue(cIntakeAngle);
   }
 
   /**

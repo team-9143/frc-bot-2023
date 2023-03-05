@@ -11,7 +11,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import frc.robot.Constants.DeviceConstants;
 
-public class IntakePosition extends SubsystemBase {
+public class IntakePositional extends SubsystemBase {
   public final CANSparkMax positionMotor = new CANSparkMax(DeviceConstants.kIntakePositionCANid, MotorType.kBrushless);
 
   public final RelativeEncoder positionEncoder = positionMotor.getEncoder();
