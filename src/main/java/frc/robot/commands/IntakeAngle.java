@@ -30,5 +30,6 @@ public class IntakeAngle extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     intakePositional.disable();
+    intakePositional.stop();
   }
 }

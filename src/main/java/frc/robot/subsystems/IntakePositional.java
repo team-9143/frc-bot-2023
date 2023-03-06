@@ -36,4 +36,8 @@ public class IntakePositional extends PIDSubsystem {
     // Return the process variable measurement here
     return positionalEncoder.getPosition();
   }
+
+  public void stop() {
+    positionalMotor.stopMotor();
+  }
 }
