@@ -1,6 +1,6 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.GenericHID;
 
 // TODO: Move to subclass under OI
 /**
@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.Joystick;
  * @author Shuhao
  * @author Siddharth Thomas '2025
  */
- public class LogitechController extends Joystick {
+ public class LogitechController extends GenericHID {
   public static final byte
     BTN_A = 1,
     BTN_B = 2,

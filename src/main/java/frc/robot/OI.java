@@ -1,9 +1,10 @@
 package frc.robot;
 
-import com.ctre.phoenix.sensors.Pigeon2;
+import frc.robot.Constants.DeviceConstants;
+
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import frc.robot.Constants.DeviceConstants;
+import com.ctre.phoenix.sensors.Pigeon2;
 
 public class OI {
   public final static LogitechController driver_cntlr = new LogitechController(DeviceConstants.kDriverControllerPort);
