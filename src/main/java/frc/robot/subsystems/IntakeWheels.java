@@ -10,7 +10,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import frc.robot.Constants.DeviceConstants;
 
-public class Intake extends SubsystemBase {
+public class IntakeWheels extends SubsystemBase {
   public final CANSparkMax intakeMotor = new CANSparkMax(DeviceConstants.kIntakeCANid, MotorType.kBrushless);
 
   // Stops all motors

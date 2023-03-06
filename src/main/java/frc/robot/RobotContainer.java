@@ -24,18 +24,18 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Drivetrain sDrivetrain = new Drivetrain();
   private final Limelight sLimelight = new Limelight();
-  private final Intake sIntake = new Intake();
+  private final IntakeWheels sIntakeWheels = new IntakeWheels();
   private final IntakePositional sIntakePosition = new IntakePositional();
   
   private final TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain);
   private final Balance cBalance = new Balance(sDrivetrain);
-  private final IntakeAngle cIntakeAngle = new IntakeAngle(sIntakePosition);
-  private final Command cIntake = new FunctionalCommand(
+  private final Intake cIntake = new Intake(sIntakePosition, sIntakeWheels);
+  private final Command cOuttake = new FunctionalCommand(
+    () -> sIntakeWheels.intakeMotor.set(Constants.IntakeConstants.kOuttakeSpeed),
     () -> {},
-    () -> sIntake.intakeMotor.set((OI.driver_cntlr.getTriggerButtons() > 0.1) ? Constants.IntakeConstants.kIntakeSpeed : Constants.IntakeConstants.kOuttakeSpeed),
-    (interrupted) -> sIntake.stop(),
+    (interrupted) -> sIntakeWheels.stop(),
     () -> false,
-    sIntake
+    sIntakeWheels
   );
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -77,12 +77,12 @@ public class RobotContainer {
         OI.pigeon.setYaw(0)
       ));
     
-    // Button 'B' will continuously stop all movement
+    // Button 'B' (hold) will continuously stop all movement
     new JoystickButton(OI.driver_cntlr, LogitechController.BTN_B)
       .whileTrue(new RunCommand(() -> {
         sDrivetrain.stop();
         sIntakePosition.stop();
-        sIntake.stop();
+        sIntakeWheels.stop();
       }));
     
     // Button 'A' (hold) will cause robot to balance on a charge station
@@ -95,14 +95,13 @@ public class RobotContainer {
         sLimelight.setLedMode((sLimelight.getLedMode() <= 1) ? 3 : sLimelight.getLedMode()-1)
       ));
     
-    // Triggers will intake and spit cubes, respectively
-    new Trigger(() -> Math.abs(OI.driver_cntlr.getTriggerButtons()) > 0.1)
-      .whileTrue(cIntake);
-    
-    // Buttons 'RB' and 'LB' will move intake positional motor
+    // Button 'RB' (hold) will spit cubes
     new JoystickButton(OI.driver_cntlr, LogitechController.BTN_RB)
-    .or(new JoystickButton(OI.driver_cntlr, LogitechController.BTN_LB))
-      .whileTrue(cIntakeAngle);
+      .whileTrue(cOuttake);
+    
+    // Button 'LB' (hold) will turn on intake
+    new JoystickButton(OI.driver_cntlr, LogitechController.BTN_LB)
+      .whileTrue(cIntake);
   }
 
   /**
