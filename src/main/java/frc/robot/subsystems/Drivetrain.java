@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import frc.robot.OI;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
@@ -14,6 +15,8 @@ import frc.robot.Constants.DeviceConstants;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.Drive;
+
+import edu.wpi.first.wpilibj2.command.RunCommand;
 
 public class Drivetrain extends SubsystemBase {
   // Initialize motors, encoders, and differential drive
@@ -37,7 +40,16 @@ public class Drivetrain extends SubsystemBase {
 
   public Drivetrain() {
     // Set the default command for a subsystem here.
-    setDefaultCommand(new Drive(this));
+    setDefaultCommand(new RunCommand(
+      () -> {
+        if (Math.abs(OI.driver_cntlr.getTriggerButtons()) > 0.1) {
+          // Turn in place, input from trigger
+          this.robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult*DrivetrainConstants.kTurnMult * OI.driver_cntlr.getTriggerButtons(), 0, true);
+        } else {
+          // Regular drive, input from left stick
+          this.robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult*DrivetrainConstants.kTurnMult * OI.driver_cntlr.getLeftStick()[0], DrivetrainConstants.kSpeedMult*OI.driver_cntlr.getLeftStick()[1], true);
+        }
+      }, this));
 
     for (RelativeEncoder encoder : encoders) {
       // Sets encoders to measure position in feet
@@ -45,9 +57,8 @@ public class Drivetrain extends SubsystemBase {
     }
   }
 
-  // Stops drivetrain motors and cancels current command
+  // Stops drivetrain motors
   public void stop() {
     robotDrive.stopMotor();
-    getCurrentCommand().cancel();
   }
 }
