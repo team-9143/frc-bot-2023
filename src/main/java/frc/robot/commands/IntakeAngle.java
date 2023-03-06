@@ -20,17 +20,28 @@ public class IntakeAngle extends CommandBase {
     addRequirements(intakePositional);
   }
 
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize() {
+    // Sets setpoint: up position if RB is pressed, otherwise up
+    intakePositional.setSetpoint((OI.driver_cntlr.getRawButton(LogitechController.BTN_RB)) ? IntakeConstants.kUpPos : IntakeConstants.kDownPos);
+    intakePositional.enable();
+    
+    OI.driver_cntlr.getRawButtonPressed(LogitechController.BTN_RB);
+    OI.driver_cntlr.getRawButtonPressed(LogitechController.BTN_LB);
+  }
+
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intakePositional.setSetpoint((OI.driver_cntlr.getRawButton(LogitechController.BTN_RB)) ? IntakeConstants.kUpPos : IntakeConstants.kDownPos);
-    intakePositional.enable();
+    if (OI.driver_cntlr.getRawButtonPressed(LogitechController.BTN_RB)) {
+      intakePositional.setSetpoint(IntakeConstants.kUpPos);
+    } else if (OI.driver_cntlr.getRawButtonPressed(LogitechController.BTN_LB)) {
+      intakePositional.setSetpoint(IntakeConstants.kDownPos);
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    intakePositional.disable();
-    intakePositional.stop();
-  }
+  public void end(boolean interrupted) {intakePositional.stop();}
 }

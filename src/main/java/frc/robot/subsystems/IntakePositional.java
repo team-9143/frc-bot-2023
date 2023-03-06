@@ -38,6 +38,7 @@ public class IntakePositional extends PIDSubsystem {
   }
 
   public void stop() {
+    disable();
     positionalMotor.stopMotor();
   }
 }
