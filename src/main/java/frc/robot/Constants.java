@@ -16,10 +16,10 @@ public final class Constants {
   public static class DeviceConstants {
     public static final byte kDriverControllerPort = 0;
     public static final byte
-      kFrontLeftCANid = 1,
-      kBackLeftCANid = 2,
-      kFrontRightCANid = 3,
-      kBackRightCANid = 4,
+      kFrontLeftCANid = 3,
+      kBackLeftCANid = 4,
+      kFrontRightCANid = 2,
+      kBackRightCANid = 1,
       kPigeonCANid = 5,
       kIntakeCANid = 6,
       kIntakePositionCANid = 17;
