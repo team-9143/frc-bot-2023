@@ -77,11 +77,13 @@ public class RobotContainer {
         OI.pigeon.setYaw(0)
       ));
     
-    // Button 'B' will stop robot turning
+    // Button 'B' will continuously stop all movement
     new JoystickButton(OI.driver_cntlr, LogitechController.BTN_B)
-      .onTrue(new InstantCommand(() -> 
-        sDrivetrain.stop()
-      ));
+      .whileTrue(new RunCommand(() -> {
+        sDrivetrain.stop();
+        sIntakePosition.stop();
+        sIntake.stop();
+      }));
     
     // Button 'A' (hold) will cause robot to balance on a charge station
     new JoystickButton(OI.driver_cntlr, LogitechController.BTN_A)
