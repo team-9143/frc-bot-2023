@@ -13,23 +13,23 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class TurnToAngle extends CommandBase {
   private Drivetrain drivetrain;
   private static double heading;
-  
+
   public TurnToAngle(Drivetrain drivetrain) {
     this.drivetrain = drivetrain;
-    
+
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() 
+  public void execute()
   {
     // double turnAngle = (heading - OI.gyro.getAngle()) % 360;
     double turnAngle = (heading + OI.pigeon.getYaw()) % 360;
     turnAngle += (turnAngle < -180) ? 360 : (turnAngle > 180) ? -360 : 0;
     double turnAngleMult = turnAngle / 180;
-    
+
     if (Math.abs(turnAngle) > DrivetrainConstants.kTurnDeadspot) {
       drivetrain.robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult * Math.copySign((turnAngleMult*turnAngleMult * (1-DrivetrainConstants.kTurnPower)) + DrivetrainConstants.kTurnPower, turnAngleMult), 0, false);
     } else {

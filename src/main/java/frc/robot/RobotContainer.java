@@ -26,7 +26,7 @@ public class RobotContainer {
   private final Limelight sLimelight = new Limelight();
   private final IntakeWheels sIntakeWheels = new IntakeWheels();
   private final IntakePositional sIntakePosition = new IntakePositional();
-  
+
   private final TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain);
   private final Balance cBalance = new Balance(sDrivetrain);
   private final Intake cIntake = new Intake(sIntakePosition, sIntakeWheels);
@@ -72,11 +72,11 @@ public class RobotContainer {
 
     // Button 'X' will reset gyro
     new JoystickButton(OI.driver_cntlr, LogitechController.BTN_X)
-      .onTrue(new InstantCommand(() -> 
+      .onTrue(new InstantCommand(() ->
         // OI.gyro.reset()
         OI.pigeon.setYaw(0)
       ));
-    
+
     // Button 'B' (hold) will continuously stop all movement
     new JoystickButton(OI.driver_cntlr, LogitechController.BTN_B)
       .whileTrue(new RunCommand(() -> {
@@ -84,21 +84,21 @@ public class RobotContainer {
         sIntakePosition.stop();
         sIntakeWheels.stop();
       }));
-    
+
     // Button 'A' (hold) will cause robot to balance on a charge station
     new JoystickButton(OI.driver_cntlr, LogitechController.BTN_A)
       .whileTrue(cBalance);
-    
+
     // Button 'Y' will toggle through limelight LED
     new JoystickButton(OI.driver_cntlr, LogitechController.BTN_Y)
-      .onTrue(new InstantCommand(() -> 
+      .onTrue(new InstantCommand(() ->
         sLimelight.setLedMode((sLimelight.getLedMode() <= 1) ? 3 : sLimelight.getLedMode()-1)
       ));
-    
+
     // Button 'RB' (hold) will spit cubes
     new JoystickButton(OI.driver_cntlr, LogitechController.BTN_RB)
       .whileTrue(cOuttake);
-    
+
     // Button 'LB' (hold) will turn on intake
     new JoystickButton(OI.driver_cntlr, LogitechController.BTN_LB)
       .whileTrue(cIntake);

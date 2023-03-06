@@ -24,15 +24,15 @@ public final class Constants {
       kIntakeCANid = 6,
       kIntakePositionCANid = 17;
   }
-  
+
   public static class DrivetrainConstants {
     public static final double kWheelDiameter = 0.5; // In feet
     public static final double kGearboxRatio = 12.761;
-    
+
     // General driving
     public static final double kSpeedMult = 1;
     public static final double kTurnMult = 0.7; // For normal turning
-    
+
     // TurnToAngle
     public static final double kTurnDeadspot = 1.5;
     public static final double kTurnPower = 0.2;
@@ -43,7 +43,7 @@ public final class Constants {
 
   public static class IntakeConstants {
     public static final double kPositionalGearbox = (double) 1/27;
-    
+
     public static final double kIntakeSpeed = 1;
     public static final double kOuttakeSpeed = -1;
 

@@ -17,7 +17,7 @@ public class IntakePositional extends PIDSubsystem {
   public final CANSparkMax positionalMotor = new CANSparkMax(DeviceConstants.kIntakePositionCANid, MotorType.kBrushless);
 
   public final RelativeEncoder positionalEncoder = positionalMotor.getEncoder();
-  
+
   public IntakePositional() {
     super(new PIDController(IntakeConstants.kP, IntakeConstants.kI, IntakeConstants.kD));
     disable();

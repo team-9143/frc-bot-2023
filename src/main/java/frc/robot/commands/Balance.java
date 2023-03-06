@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class Balance extends CommandBase {
   private final Drivetrain drivetrain;
   private double previousPitch;
-  
+
   public Balance(Drivetrain drivetrain) {
     this.drivetrain = drivetrain;
     previousPitch = -OI.pigeon.getPitch();

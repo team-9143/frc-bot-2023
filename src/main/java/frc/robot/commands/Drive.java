@@ -14,7 +14,7 @@ public class Drive extends CommandBase {
 
   public Drive(Drivetrain drivetrain) {
     this.drivetrain = drivetrain;
-    
+
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
   }

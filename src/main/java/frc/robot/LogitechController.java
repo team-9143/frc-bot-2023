@@ -5,13 +5,13 @@ import edu.wpi.first.wpilibj.Joystick;
 // TODO: Move to subclass under OI
 /**
  * Logitech game controller wrapper class
- * 
+ *
  * @author Shuhao
  * @author Siddharth Thomas '2025
  */
  public class LogitechController extends Joystick {
   public static final byte
-    BTN_A = 1, 
+    BTN_A = 1,
     BTN_B = 2,
     BTN_X = 3,
     BTN_Y = 4,
@@ -30,7 +30,7 @@ import edu.wpi.first.wpilibj.Joystick;
    * Gets the trigger, which is left and right trigger. Left trigger is
    * negative and right trigger is positive. They range from 0 - 1 (absolute
    * values) and additive
-   * 
+   *
    * @return The trigger value.
    */
   public double getTriggerButtons() {

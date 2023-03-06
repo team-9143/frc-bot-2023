@@ -16,7 +16,7 @@ public class Intake extends CommandBase {
   public Intake(IntakePositional intakePositional, IntakeWheels intakeWheels) {
     this.intakePositional = intakePositional;
     this.intakeWheels = intakeWheels;
-    
+
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intakePositional);
   }
@@ -28,12 +28,12 @@ public class Intake extends CommandBase {
     intakePositional.setSetpoint(IntakeConstants.kDownPos);
     intakePositional.enable();
     intakeWheels.intakeMotor.set(IntakeConstants.kIntakeSpeed);
-    
+
     /*
     // Sets setpoint: up position if RB is pressed, otherwise down
     intakePositional.setSetpoint((OI.driver_cntlr.getRawButton(LogitechController.BTN_RB)) ? IntakeConstants.kUpPos : IntakeConstants.kDownPos);
     intakePositional.enable();
-    
+
     OI.driver_cntlr.getRawButtonPressed(LogitechController.BTN_RB);
     OI.driver_cntlr.getRawButtonPressed(LogitechController.BTN_LB);
     */
