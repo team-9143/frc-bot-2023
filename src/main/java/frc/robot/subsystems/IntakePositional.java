@@ -4,20 +4,36 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import frc.robot.Constants.DeviceConstants;
+import frc.robot.Constants.IntakeConstants;
 
-public class IntakePositional extends SubsystemBase {
-  public final CANSparkMax positionMotor = new CANSparkMax(DeviceConstants.kIntakePositionCANid, MotorType.kBrushless);
+public class IntakePositional extends PIDSubsystem {
+  public final CANSparkMax positionalMotor = new CANSparkMax(DeviceConstants.kIntakePositionCANid, MotorType.kBrushless);
 
-  public final RelativeEncoder positionEncoder = positionMotor.getEncoder();
+  public final RelativeEncoder positionalEncoder = positionalMotor.getEncoder();
+  
+  public IntakePositional() {
+    super(new PIDController(IntakeConstants.kP, IntakeConstants.kI, IntakeConstants.kD));
+    disable();
+    positionalEncoder.setPositionConversionFactor(IntakeConstants.kPositionalGearbox);
+  }
 
-  // Stops all motors
-  public void stop() {
-    positionMotor.stopMotor();
+  @Override
+  public void useOutput(double output, double setpoint) {
+    // Use the output here
+    System.out.println(output);
+    positionalMotor.set(output);
+  }
+
+  @Override
+  public double getMeasurement() {
+    // Return the process variable measurement here
+    return positionalEncoder.getPosition();
   }
 }
