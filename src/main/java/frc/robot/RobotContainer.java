@@ -32,7 +32,7 @@ public class RobotContainer {
   private final IntakeAngle cIntakeAngle = new IntakeAngle(sIntakePosition);
   private final Command cIntake = new FunctionalCommand(
     () -> {},
-    () -> sIntake.intakeMotor.set((OI.driver_cntlr.getRawButton(LogitechController.BTN_RB)) ? Constants.IntakeConstants.kOuttakeSpeed : Constants.IntakeConstants.kIntakeSpeed),
+    () -> sIntake.intakeMotor.set((OI.driver_cntlr.getTriggerButtons() > 0.1) ? Constants.IntakeConstants.kIntakeSpeed : Constants.IntakeConstants.kOuttakeSpeed),
     (interrupted) -> sIntake.stop(),
     () -> false,
     sIntake
@@ -58,6 +58,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    /*
     // D-pad or right stick input will turn to the given angle
     new Trigger(() ->
       OI.driver_cntlr.getPOV() != -1
@@ -67,7 +68,8 @@ public class RobotContainer {
       .whileTrue(new RunCommand(() ->
         cTurnToAngle.findHeading()
       ));
-    
+    */
+
     // Button 'X' will reset gyro
     new JoystickButton(OI.driver_cntlr, LogitechController.BTN_X)
       .onTrue(new InstantCommand(() -> 
@@ -91,13 +93,13 @@ public class RobotContainer {
         sLimelight.setLedMode((sLimelight.getLedMode() <= 1) ? 3 : sLimelight.getLedMode()-1)
       ));
     
-    // Buttons 'RB' and 'LB' will intake and spit cubes, respectively
-    new JoystickButton(OI.driver_cntlr, LogitechController.BTN_RB)
-    .or(new JoystickButton(OI.driver_cntlr, LogitechController.BTN_LB))
+    // Triggers will intake and spit cubes, respectively
+    new Trigger(() -> Math.abs(OI.driver_cntlr.getTriggerButtons()) > 0.1)
       .whileTrue(cIntake);
     
-    // Triggers will move intake positional motor
-    new Trigger(() -> Math.abs(OI.driver_cntlr.getTriggerButtons()) > 0.1)
+    // Buttons 'RB' and 'LB' will move intake positional motor
+    new JoystickButton(OI.driver_cntlr, LogitechController.BTN_RB)
+    .or(new JoystickButton(OI.driver_cntlr, LogitechController.BTN_LB))
       .whileTrue(cIntakeAngle);
   }
 

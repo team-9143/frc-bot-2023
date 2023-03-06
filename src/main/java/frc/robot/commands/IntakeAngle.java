@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.IntakePositional;
+import frc.robot.LogitechController;
 import frc.robot.OI;
 import frc.robot.Constants.IntakeConstants;
 
@@ -22,7 +23,7 @@ public class IntakeAngle extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intakePositional.setSetpoint((OI.driver_cntlr.getTriggerButtons() > 0) ? IntakeConstants.kUpPos : IntakeConstants.kDownPos);
+    intakePositional.setSetpoint((OI.driver_cntlr.getRawButton(LogitechController.BTN_RB)) ? IntakeConstants.kUpPos : IntakeConstants.kDownPos);
     intakePositional.enable();
   }
 

@@ -27,7 +27,7 @@ public class IntakePositional extends PIDSubsystem {
   @Override
   public void useOutput(double output, double setpoint) {
     // Use the output here
-    System.out.println(output);
+    System.out.println(getMeasurement());
     positionalMotor.set(output);
   }
 

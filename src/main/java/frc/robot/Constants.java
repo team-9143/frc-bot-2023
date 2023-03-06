@@ -48,11 +48,11 @@ public final class Constants {
     public static final double kOuttakeSpeed = -1;
 
     public static final double kUpPos = 0;
-    public static final double kDownPos = 0.25;
+    public static final double kDownPos = (double) 1/12;
 
     public static final double
-      kP = 0.5,
-      kI = 0,
-      kD = 0;
+      kP = 0.05,
+      kI = 0.025,
+      kD = 0.043;
   }
 }
