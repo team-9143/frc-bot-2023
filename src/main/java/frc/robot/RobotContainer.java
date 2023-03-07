@@ -75,7 +75,6 @@ public class RobotContainer {
     // Button 'X' will reset gyro
     new JoystickButton(OI.driver_cntlr, LogitechController.BTN_X)
       .onTrue(new InstantCommand(() ->
-        // OI.gyro.reset()
         OI.pigeon.setYaw(0)
       ));
 
@@ -91,11 +90,20 @@ public class RobotContainer {
     new JoystickButton(OI.driver_cntlr, LogitechController.BTN_A)
       .whileTrue(cBalance);
 
+    // Visual Testing purposes
     // Button 'Y' will toggle through limelight LED
     new JoystickButton(OI.driver_cntlr, LogitechController.BTN_Y)
       .onTrue(new InstantCommand(() ->
         sLimelight.setLedMode((sLimelight.getLedMode() <= 1) ? 3 : sLimelight.getLedMode()-1)
-      ));
+      ));    
+
+    // TODO: Operator controller: 
+    
+    // TODO: Button 'B' (hold) will continuously stop all movement
+
+    // TODO: Button 'Y' (hold) will stop automatic intake movement and on release, reset the base position of the intake encoder
+    
+    // TODO: Controller triggers will manually move intake up and down
 
     // Button 'LB' (hold) will spit cubes
     new JoystickButton(OI.driver_cntlr, LogitechController.BTN_LB)
