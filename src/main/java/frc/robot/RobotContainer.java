@@ -41,7 +41,7 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    // Configure Pigeon - make sure to continuously update pitch and roll offsets
+    // Configure Pigeon - make sure to update pitch and roll offsets
     OI.pigeon.configMountPose(0, 0, 0);
     OI.pigeon.setYaw(0);
 
@@ -59,6 +59,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    // TODO: Fix TurnToAngle stutter problem with ~180 degree turns, possible use PID control
     /*
     // D-pad or right stick input will turn to the given angle
     new Trigger(() ->
@@ -100,7 +101,7 @@ public class RobotContainer {
     new JoystickButton(OI.driver_cntlr, LogitechController.BTN_LB)
       .whileTrue(cOuttake);
 
-    // Button 'RB' (hold) will turn on intake
+    // Button 'RB' (hold) will lower and activate intake
     new JoystickButton(OI.driver_cntlr, LogitechController.BTN_RB)
       .whileTrue(cIntake);
   }

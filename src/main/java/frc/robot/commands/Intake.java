@@ -29,33 +29,12 @@ public class Intake extends CommandBase {
     intakePositional.setSetpoint(IntakeConstants.kDownPos);
     intakePositional.enable();
     intakeWheels.intake_motor.set(IntakeConstants.kIntakeSpeed);
-
-    /*
-    // Sets setpoint: up position if RB is pressed, otherwise down
-    intakePositional.setSetpoint((OI.driver_cntlr.getRawButton(LogitechController.BTN_RB)) ? IntakeConstants.kUpPos : IntakeConstants.kDownPos);
-    intakePositional.enable();
-
-    OI.driver_cntlr.getRawButtonPressed(LogitechController.BTN_RB);
-    OI.driver_cntlr.getRawButtonPressed(LogitechController.BTN_LB);
-    */
-  }
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    /*
-    if (OI.driver_cntlr.getRawButtonPressed(LogitechController.BTN_RB)) {
-      intakePositional.setSetpoint(IntakeConstants.kUpPos);
-    } else if (OI.driver_cntlr.getRawButtonPressed(LogitechController.BTN_LB)) {
-      intakePositional.setSetpoint(IntakeConstants.kDownPos);
-    }
-    */
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    // Sets setpoint up and stops intake
+    // Sets default setpoint and stops intake
     intakePositional.setSetpoint(IntakeConstants.kUpPos);
     intakeWheels.stop();
   }

@@ -10,7 +10,6 @@ import frc.robot.Constants.DrivetrainConstants;
 
 import frc.robot.subsystems.Drivetrain;
 
-// TODO: Fix stutter problem with ~180 degree turns
 public class TurnToAngle extends CommandBase {
   private Drivetrain drivetrain;
   private static double heading;

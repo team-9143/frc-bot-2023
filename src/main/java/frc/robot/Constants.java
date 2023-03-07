@@ -30,12 +30,12 @@ public final class Constants {
     public static final double kGearboxRatio = 12.761;
 
     // General driving
-    public static final double kSpeedMult = 1;
-    public static final double kTurnMult = 0.7; // For normal turning
+    public static final double kSpeedMult = 1; // Applies to all drivetrain movement
+    public static final double kTurnMult = 0.7; // For controller-based turning
 
     // TurnToAngle
-    public static final double kTurnDeadspot = 1.5;
-    public static final double kTurnPower = 0.2;
+    public static final double kTurnDeadspot = 1.5; // Deadspot for non-PID TurnToAngle
+    public static final double kTurnPower = 0.2; // Base power for non-PID TurnToAngle
 
     // Charge station balancing
     public static final double kPitchDeadspot = 2;
@@ -44,9 +44,11 @@ public final class Constants {
   public static class IntakeConstants {
     public static final double kPositionalGearbox = (double) 1/27;
 
+    // Cube intake/outtake wheel speed
     public static final double kIntakeSpeed = 0.25;
     public static final double kOuttakeSpeed = -1;
 
+    // In rotations, multiplied by gearbox ratio
     public static final double kUpPos = -0.02;
     public static final double kDownPos = -0.18 + kUpPos;
 

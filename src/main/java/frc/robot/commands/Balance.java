@@ -25,6 +25,7 @@ public class Balance extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    // Moves forward while tilting backward and vice versa, stopping movement on large pitch changes
     double pitch = -OI.pigeon.getPitch();
     if (Math.abs(pitch) > DrivetrainConstants.kPitchDeadspot) {
       if (Math.abs(pitch - previousPitch) > 3) {
