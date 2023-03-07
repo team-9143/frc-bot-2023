@@ -49,7 +49,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     // Disables intake positional PID controller and sets setpoint to default
-    m_robotContainer.sIntakePosition.disable();
+    m_robotContainer.sIntakePosition.stop();
     m_robotContainer.sIntakePosition.setSetpoint(Constants.IntakeConstants.kUpPos);
   }
 

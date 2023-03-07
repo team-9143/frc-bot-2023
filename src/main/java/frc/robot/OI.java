@@ -7,7 +7,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import com.ctre.phoenix.sensors.Pigeon2;
 
 public class OI {
-  public final static LogitechController driver_cntlr = new LogitechController(DeviceConstants.kDriverControllerPort);
+  public final static LogitechController driver_cntlr = new LogitechController(DeviceConstants.kDriverCntlrPort);
   public final static NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
 
   // In proper orientation, Pigeon is flat and facing so that X-axis is forward

@@ -11,10 +11,10 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class IntakeWheels extends SubsystemBase {
-  public final CANSparkMax intakeMotor = new CANSparkMax(DeviceConstants.kIntakeCANid, MotorType.kBrushless);
+  public final CANSparkMax intake_motor = new CANSparkMax(DeviceConstants.kIntakeWheelsCANid, MotorType.kBrushless);
 
   // Stops all motors
   public void stop() {
-    intakeMotor.stopMotor();
+    intake_motor.stopMotor();
   }
 }

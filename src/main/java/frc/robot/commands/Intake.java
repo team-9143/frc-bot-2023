@@ -28,7 +28,7 @@ public class Intake extends CommandBase {
     // Sets setpoint down and starts intake
     intakePositional.setSetpoint(IntakeConstants.kDownPos);
     intakePositional.enable();
-    intakeWheels.intakeMotor.set(IntakeConstants.kIntakeSpeed);
+    intakeWheels.intake_motor.set(IntakeConstants.kIntakeSpeed);
 
     /*
     // Sets setpoint: up position if RB is pressed, otherwise down

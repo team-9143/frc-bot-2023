@@ -14,13 +14,13 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 
 public class IntakePositional extends PIDSubsystem {
-  public final CANSparkMax positionalMotor = new CANSparkMax(DeviceConstants.kIntakePositionCANid, MotorType.kBrushless);
+  private final CANSparkMax positional_motor = new CANSparkMax(DeviceConstants.kIntakePositionalCANid, MotorType.kBrushless);
 
-  public final RelativeEncoder positionalEncoder = positionalMotor.getEncoder();
+  private final RelativeEncoder positional_encoder = positional_motor.getEncoder();
 
   public IntakePositional() {
     super(new PIDController(IntakeConstants.kP, IntakeConstants.kI, IntakeConstants.kD));
-    positionalEncoder.setPositionConversionFactor(IntakeConstants.kPositionalGearbox);
+    positional_encoder.setPositionConversionFactor(IntakeConstants.kPositionalGearbox);
     setSetpoint(IntakeConstants.kUpPos);
     enable();
   }
@@ -28,17 +28,17 @@ public class IntakePositional extends PIDSubsystem {
   @Override
   public void useOutput(double output, double setpoint) {
     // Use the output here
-    positionalMotor.set(output);
+    positional_motor.set(output);
   }
 
   @Override
   public double getMeasurement() {
     // Return the process variable measurement here
-    return positionalEncoder.getPosition();
+    return positional_encoder.getPosition();
   }
 
   public void stop() {
     disable();
-    positionalMotor.stopMotor();
+    positional_motor.stopMotor();
   }
 }
