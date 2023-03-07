@@ -44,15 +44,15 @@ public final class Constants {
   public static class IntakeConstants {
     public static final double kPositionalGearbox = (double) 1/27;
 
-    public static final double kIntakeSpeed = 1;
+    public static final double kIntakeSpeed = 0.25;
     public static final double kOuttakeSpeed = -1;
 
-    public static final double kUpPos = 0;
-    public static final double kDownPos = (double) 1/12;
+    public static final double kUpPos = -0.02;
+    public static final double kDownPos = -0.18 + kUpPos;
 
     public static final double
-      kP = 0.05,
-      kI = 0.025,
-      kD = 0.043;
+      kP = 0.3,
+      kI = 0.4,
+      kD = 0.2;
   }
 }

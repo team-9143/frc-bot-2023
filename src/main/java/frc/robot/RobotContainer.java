@@ -96,12 +96,12 @@ public class RobotContainer {
         sLimelight.setLedMode((sLimelight.getLedMode() <= 1) ? 3 : sLimelight.getLedMode()-1)
       ));
 
-    // Button 'RB' (hold) will spit cubes
-    new JoystickButton(OI.driver_cntlr, LogitechController.BTN_RB)
+    // Button 'LB' (hold) will spit cubes
+    new JoystickButton(OI.driver_cntlr, LogitechController.BTN_LB)
       .whileTrue(cOuttake);
 
-    // Button 'LB' (hold) will turn on intake
-    new JoystickButton(OI.driver_cntlr, LogitechController.BTN_LB)
+    // Button 'RB' (hold) will turn on intake
+    new JoystickButton(OI.driver_cntlr, LogitechController.BTN_RB)
       .whileTrue(cIntake);
   }
 

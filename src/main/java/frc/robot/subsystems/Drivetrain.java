@@ -47,7 +47,7 @@ public class Drivetrain extends SubsystemBase {
           this.robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult*DrivetrainConstants.kTurnMult * OI.driver_cntlr.getTriggerButtons(), 0, true);
         } else {
           // Regular drive, input from left stick
-          this.robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult*DrivetrainConstants.kTurnMult * OI.driver_cntlr.getLeftStick()[0], DrivetrainConstants.kSpeedMult*OI.driver_cntlr.getLeftStick()[1], true);
+          this.robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult*DrivetrainConstants.kTurnMult * OI.driver_cntlr.getLeftStick()[0], -DrivetrainConstants.kSpeedMult*OI.driver_cntlr.getLeftStick()[1], true);
         }
       }, this));
 
