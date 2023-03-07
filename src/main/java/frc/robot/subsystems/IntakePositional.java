@@ -23,7 +23,6 @@ public class IntakePositional extends PIDSubsystem {
     positionalEncoder.setPositionConversionFactor(IntakeConstants.kPositionalGearbox);
     setSetpoint(IntakeConstants.kUpPos);
     enable();
-    // TODO: Disable and set position up on teleop disable
   }
 
   @Override

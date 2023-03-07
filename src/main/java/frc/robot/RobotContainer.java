@@ -23,15 +23,15 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final Drivetrain sDrivetrain = new Drivetrain();
-  private final Limelight sLimelight = new Limelight();
-  private final IntakeWheels sIntakeWheels = new IntakeWheels();
-  private final IntakePositional sIntakePosition = new IntakePositional();
+  protected final Drivetrain sDrivetrain = new Drivetrain();
+  protected final Limelight sLimelight = new Limelight();
+  protected final IntakeWheels sIntakeWheels = new IntakeWheels();
+  protected final IntakePositional sIntakePosition = new IntakePositional();
 
-  private final TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain);
-  private final Balance cBalance = new Balance(sDrivetrain);
-  private final Intake cIntake = new Intake(sIntakePosition, sIntakeWheels);
-  private final Command cOuttake = new FunctionalCommand(
+  protected final TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain);
+  protected final Balance cBalance = new Balance(sDrivetrain);
+  protected final Intake cIntake = new Intake(sIntakePosition, sIntakeWheels);
+  protected final Command cOuttake = new FunctionalCommand(
     () -> sIntakeWheels.intakeMotor.set(Constants.IntakeConstants.kOuttakeSpeed),
     () -> {},
     (interrupted) -> sIntakeWheels.stop(),
