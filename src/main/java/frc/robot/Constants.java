@@ -45,16 +45,16 @@ public final class Constants {
     public static final double kPositionalGearbox = (double) 1/27;
 
     // Cube intake/outtake wheel speed
-    public static final double kIntakeSpeed = 0.25;
-    public static final double kOuttakeSpeed = -1;
+    public static final double kIntakeSpeed = 0.05;
+    public static final double kOuttakeSpeed = -0.25;
 
     // In rotations, multiplied by gearbox ratio
     public static final double kUpPos = -0.02;
-    public static final double kDownPos = -0.18 + kUpPos;
+    public static final double kDownPos = (double) -75/360;
 
     public static final double
-      kP = 0.3,
-      kI = 0.4,
-      kD = 0.2;
+      kP = 0.35,
+      kI = 0.35,
+      kD = 0.25;
   }
 }
