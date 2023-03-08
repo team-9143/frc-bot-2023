@@ -14,28 +14,48 @@ package frc.robot;
  */
 public final class Constants {
   public static class DeviceConstants {
-    public static final byte kDriverControllerPort = 0;
+    public static final byte kDriverCntlrPort = 0;
     public static final byte
+      kFrontLeftCANid = 3,
+      kBackLeftCANid = 4,
+      kFrontRightCANid = 2,
+      kBackRightCANid = 1,
       kPigeonCANid = 5,
-      kFrontLeftCANid = 1,
-      kBackLeftCANid = 2,
-      kFrontRightCANid = 3,
-      kBackRightCANid = 4;
+      kIntakeWheelsCANid = 6,
+      kIntakePositionalCANid = 17;
   }
-  
+
   public static class DrivetrainConstants {
     public static final double kWheelDiameter = 0.5; // In feet
     public static final double kGearboxRatio = 12.761;
-    
+
     // General driving
-    public static final double kSpeedMult = 1;
-    public static final double kTurnMult = 0.7; // For normal turning
-    
+    public static final double kSpeedMult = 1; // Applies to all drivetrain movement
+    public static final double kTurnMult = 0.7; // For controller-based turning
+
     // TurnToAngle
-    public static final double kTurnDeadspot = 1.5;
-    public static final double kDirectedTurnPower = 0.2;
+    public static final double kTurnDeadspot = 1.5; // Deadspot for non-PID TurnToAngle
+    public static final double kTurnPower = 0.2; // Base power for non-PID TurnToAngle
 
     // Charge station balancing
     public static final double kPitchDeadspot = 2;
+  }
+
+  public static class IntakeConstants {
+    public static final double kPositionalGearbox = (double) 1/27;
+
+    // Cube intake/outtake wheel speed
+    public static final double kIntakeSpeed = 0.05;
+    public static final double kOuttakeSpeed = -0.25;
+
+    // In rotations, multiplied by gearbox ratio
+    public static final double kUpPos = -0.02;
+    public static final double kDownPos = (double) -75/360;
+
+    // TODO: Gains should be changed for maximum efficiency as hardware becomes more stable
+    public static final double
+      kP = 0.35,
+      kI = 0.35,
+      kD = 0.25;
   }
 }

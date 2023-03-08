@@ -7,12 +7,13 @@ package frc.robot;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -22,15 +23,25 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final Drivetrain sDrivetrain = new Drivetrain();
-  private final Limelight sLimelight = new Limelight();
-  
-  private final TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain);
-  private final Balance cBalance = new Balance(sDrivetrain);
+  protected final Drivetrain sDrivetrain = new Drivetrain();
+  protected final Limelight sLimelight = new Limelight();
+  protected final IntakeWheels sIntakeWheels = new IntakeWheels();
+  protected final IntakePositional sIntakePosition = new IntakePositional();
+
+  protected final TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain);
+  protected final Balance cBalance = new Balance(sDrivetrain);
+  protected final Intake cIntake = new Intake(sIntakePosition, sIntakeWheels);
+  protected final Command cOuttake = new FunctionalCommand(
+    () -> sIntakeWheels.intake_motor.set(Constants.IntakeConstants.kOuttakeSpeed),
+    () -> {},
+    (interrupted) -> sIntakeWheels.stop(),
+    () -> false,
+    sIntakeWheels
+  );
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    // Configure Pigeon - make sure to continuously update pitch and roll offsets
+    // Configure Pigeon - make sure to update pitch and roll offsets
     OI.pigeon.configMountPose(0, 0, 0);
     OI.pigeon.setYaw(0);
 
@@ -48,6 +59,8 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    // TODO: Fix TurnToAngle stutter problem with ~180 degree turns, possible use PID control
+    /*
     // D-pad or right stick input will turn to the given angle
     new Trigger(() ->
       OI.driver_cntlr.getPOV() != -1
@@ -57,41 +70,48 @@ public class RobotContainer {
       .whileTrue(new RunCommand(() ->
         cTurnToAngle.findHeading()
       ));
-    
+    */
+
     // Button 'X' will reset gyro
     new JoystickButton(OI.driver_cntlr, LogitechController.BTN_X)
-      .onTrue(new InstantCommand(() -> 
-        // OI.gyro.reset()
+      .onTrue(new InstantCommand(() ->
         OI.pigeon.setYaw(0)
       ));
-    
-    // Button 'B' will stop robot turning
+
+    // Button 'B' (hold) will continuously stop all movement
     new JoystickButton(OI.driver_cntlr, LogitechController.BTN_B)
-      .onTrue(new InstantCommand(() -> 
-        sDrivetrain.stop()
-      ));
-    
-    // Right bumper (hold) will cause robot to balance on a charge station
-    new JoystickButton(OI.driver_cntlr, LogitechController.BTN_RB)
-      .whileTrue(cBalance);
-    
-    // Button 'A' (hold) will cause robot to target nearest retroreflective tape, if target is nearby
+      .whileTrue(new RunCommand(() -> {
+        sDrivetrain.stop();
+        sIntakePosition.stop();
+        sIntakeWheels.stop();
+      }));
+
+    // Button 'A' (hold) will cause robot to balance on a charge station
     new JoystickButton(OI.driver_cntlr, LogitechController.BTN_A)
-      .and(() -> sLimelight.getArea() > 10)
-      .whileTrue(new FunctionalCommand(
-        () -> {},
-        // () -> cTurnToAngle.setHeading(OI.gyro.getAngle() + sLimelight.getTx()),
-        () -> cTurnToAngle.setHeading(OI.pigeon.getYaw() + sLimelight.getTx()),
-        interrupted -> sDrivetrain.stop(),
-        () -> false,
-        sLimelight
-      ));
-    
+      .whileTrue(cBalance);
+
+    // Visual Testing purposes
     // Button 'Y' will toggle through limelight LED
     new JoystickButton(OI.driver_cntlr, LogitechController.BTN_Y)
-      .onTrue(new InstantCommand(() -> 
+      .onTrue(new InstantCommand(() ->
         sLimelight.setLedMode((sLimelight.getLedMode() <= 1) ? 3 : sLimelight.getLedMode()-1)
-      ));
+      ));    
+
+    // TODO: Operator controller: 
+    
+    // TODO: Button 'B' (hold) will continuously stop all movement
+
+    // TODO: Button 'Y' (hold) will stop automatic intake movement and on release, reset the base position of the intake encoder
+    
+    // TODO: Controller triggers will manually move intake up and down
+
+    // Button 'LB' (hold) will spit cubes
+    new JoystickButton(OI.driver_cntlr, LogitechController.BTN_LB)
+      .whileTrue(cOuttake);
+
+    // Button 'RB' (hold) will lower and activate intake
+    new JoystickButton(OI.driver_cntlr, LogitechController.BTN_RB)
+      .whileTrue(cIntake);
   }
 
   /**

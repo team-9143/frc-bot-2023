@@ -4,15 +4,16 @@
 
 package frc.robot.commands;
 
-import frc.robot.Constants.DrivetrainConstants;
-import frc.robot.OI;
-import frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.OI;
+import frc.robot.Constants.DrivetrainConstants;
+
+import frc.robot.subsystems.Drivetrain;
 
 public class Balance extends CommandBase {
   private final Drivetrain drivetrain;
   private double previousPitch;
-  
+
   public Balance(Drivetrain drivetrain) {
     this.drivetrain = drivetrain;
     previousPitch = -OI.pigeon.getPitch();
@@ -24,14 +25,19 @@ public class Balance extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    // Get pitch that increases to the back
     double pitch = -OI.pigeon.getPitch();
+    
     if (Math.abs(pitch) > DrivetrainConstants.kPitchDeadspot) {
       if (Math.abs(pitch - previousPitch) > 3) {
+        // Stop movement on a large pitch change (usually denoting a fall)
         drivetrain.stop();
       } else {
+        // Move forward while tilting backward and vice versa
         drivetrain.robotDrive.arcadeDrive(0, Math.copySign(DrivetrainConstants.kSpeedMult * 0.075, pitch), false);
       }
     }
+    
     previousPitch = pitch;
   }
 

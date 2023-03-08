@@ -4,34 +4,34 @@
 
 package frc.robot.commands;
 
-import frc.robot.Constants.DrivetrainConstants;
-import frc.robot.OI;
-import frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.OI;
+import frc.robot.Constants.DrivetrainConstants;
 
-// TODO: Fix stutter problem with ~180 degree turns
+import frc.robot.subsystems.Drivetrain;
+
 public class TurnToAngle extends CommandBase {
   private Drivetrain drivetrain;
   private static double heading;
-  
+
   public TurnToAngle(Drivetrain drivetrain) {
     this.drivetrain = drivetrain;
-    
+
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() 
+  public void execute()
   {
-    // double turnAngle = (heading - OI.gyro.getAngle()) % 360;
+    // Get turning angle within the range -180 to +180, then bind to -1 to 1
     double turnAngle = (heading + OI.pigeon.getYaw()) % 360;
     turnAngle += (turnAngle < -180) ? 360 : (turnAngle > 180) ? -360 : 0;
     double turnAngleMult = turnAngle / 180;
-    
+
     if (Math.abs(turnAngle) > DrivetrainConstants.kTurnDeadspot) {
-      drivetrain.robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult * Math.copySign((turnAngleMult*turnAngleMult * (1-DrivetrainConstants.kDirectedTurnPower)) + DrivetrainConstants.kDirectedTurnPower, turnAngleMult), 0, false);
+      drivetrain.robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult * Math.copySign((turnAngleMult*turnAngleMult * (1-DrivetrainConstants.kTurnPower)) + DrivetrainConstants.kTurnPower, turnAngleMult), 0, false);
     } else {
       // Stop when within turning deadspot
       drivetrain.stop();
