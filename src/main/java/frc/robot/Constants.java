@@ -52,6 +52,7 @@ public final class Constants {
     public static final double kUpPos = -0.02;
     public static final double kDownPos = (double) -75/360;
 
+    // TODO: Gains should be changed for maximum efficiency as hardware becomes more stable
     public static final double
       kP = 0.35,
       kI = 0.35,
