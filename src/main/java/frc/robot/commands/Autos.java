@@ -40,6 +40,8 @@ public final class Autos {
 
       new InstantCommand(() -> turnToAngle.setHeading(180)), turnToAngle,
 
+      new InstantCommand(() -> driveDistance.setDistance(24)), driveDistance,
+
       balance
     );
   }
