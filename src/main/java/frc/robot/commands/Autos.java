@@ -4,18 +4,23 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+
+import frc.robot.subsystems.*;
+import edu.wpi.first.wpilibj2.command.Command;
 
 public final class Autos {
-  /** Example static factory for an autonomous command. */
-  /*
-  public static CommandBase exampleAuto(ExampleSubsystem subsystem) {
-    return Commands.sequence(subsystem.exampleMethodCommand(), new ExampleCommand(subsystem));
-  }
-  */
+  // Auto to score a pre-loaded cube, then pick up and score a cube from in front of the community
+  public static final SequentialCommandGroup SideAuto(Drivetrain drivetrain, TurnToAngle turnToAngle, Intake intake, Command outtake) {
+    return new SequentialCommandGroup(
 
-  private Autos() {
-    throw new UnsupportedOperationException("This is a utility class!");
+    );
+  }
+
+  // Auto to score a pre-loaded cube, drive over the charge station, then drive back and balance
+  public static final SequentialCommandGroup CenterAuto(Drivetrain drivetrain, TurnToAngle turnToAngle, Balance balance, Command outtake) {
+    return new SequentialCommandGroup(
+
+    );
   }
 }

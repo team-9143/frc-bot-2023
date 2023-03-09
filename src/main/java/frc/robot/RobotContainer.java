@@ -8,12 +8,14 @@ import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.FunctionalCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -31,19 +33,24 @@ public class RobotContainer {
   protected final TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain);
   protected final Balance cBalance = new Balance(sDrivetrain);
   protected final Intake cIntake = new Intake(sIntakePosition, sIntakeWheels);
-  protected final Command cOuttake = new FunctionalCommand(
+  protected final Command cOuttake = new StartEndCommand(
     () -> sIntakeWheels.intake_motor.set(Constants.IntakeConstants.kOuttakeSpeed),
-    () -> {},
-    (interrupted) -> sIntakeWheels.stop(),
-    () -> false,
+    () -> sIntakeWheels.stop(),
     sIntakeWheels
   );
+
+  // Autonomous chooser declaration
+  protected final SendableChooser<Command> m_autonChooser = new SendableChooser<Command>();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure Pigeon - make sure to update pitch and roll offsets
     OI.pigeon.configMountPose(0, 0, 0);
     OI.pigeon.setYaw(0);
+
+    // Configure autonomous choices
+    m_autonChooser.addOption("Side Auto", Autos.SideAuto(sDrivetrain, cTurnToAngle, cIntake, cOuttake));
+    m_autonChooser.addOption("Center Auto", Autos.CenterAuto(sDrivetrain, cTurnToAngle, cBalance, cOuttake));
 
     // Configure the trigger bindings
     configureBindings();
@@ -95,14 +102,14 @@ public class RobotContainer {
     new JoystickButton(OI.driver_cntlr, LogitechController.BTN_Y)
       .onTrue(new InstantCommand(() ->
         sLimelight.setLedMode((sLimelight.getLedMode() <= 1) ? 3 : sLimelight.getLedMode()-1)
-      ));    
+      ));
 
-    // TODO: Operator controller: 
-    
+    // TODO: Operator controller:
+
     // TODO: Button 'B' (hold) will continuously stop all movement
 
     // TODO: Button 'Y' (hold) will stop automatic intake movement and on release, reset the base position of the intake encoder
-    
+
     // TODO: Controller triggers will manually move intake up and down
 
     // Button 'LB' (hold) will spit cubes
@@ -120,8 +127,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
     // TODO: Autonomous command chooser and commands in Autos class
-    return new InstantCommand();
+    return m_autonChooser.getSelected();
   }
 }
