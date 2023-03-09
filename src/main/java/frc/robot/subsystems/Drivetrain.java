@@ -26,7 +26,7 @@ public class Drivetrain extends SubsystemBase {
     fr_motor = new CANSparkMax(DeviceConstants.kFrontRightCANid, MotorType.kBrushless),
     br_motor = new CANSparkMax(DeviceConstants.kBackRightCANid, MotorType.kBrushless);
 
-  public final RelativeEncoder[] encoders = {
+  public static final RelativeEncoder[] encoders = {
     fl_motor.getEncoder(),
     bl_motor.getEncoder(),
     fr_motor.getEncoder(),
@@ -53,8 +53,13 @@ public class Drivetrain extends SubsystemBase {
 
     for (RelativeEncoder encoder : encoders) {
       // Sets encoders to measure position in feet
-      encoder.setPositionConversionFactor(Math.PI * DrivetrainConstants.kWheelDiameter / DrivetrainConstants.kGearboxRatio);
+      encoder.setPositionConversionFactor((Math.PI * DrivetrainConstants.kWheelDiameter) / DrivetrainConstants.kGearboxRatio);
     }
+  }
+
+  // Returns the average of the position of the front left and front right encoders (in inches)
+  public double getAvgPosition() {
+    return (encoders[0].getPosition() + encoders[2].getPosition())/2;
   }
 
   // Stops drivetrain motors

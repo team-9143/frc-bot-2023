@@ -26,7 +26,7 @@ public final class Constants {
   }
 
   public static class DrivetrainConstants {
-    public static final double kWheelDiameter = 0.5; // In feet
+    public static final double kWheelDiameter = 6; // In inches
     public static final double kGearboxRatio = 12.761;
 
     // General driving
@@ -40,7 +40,7 @@ public final class Constants {
       kTurnP = 0,
       kTurnI = 0,
       kTurnD = 0;
-    
+
     // DriveDistance
     public static final double kDistPosTolerance = 2; // Position tolerance (in inches)
     public static final double kDistVelTolerance = 2/50; // Velocity tolerance (in inches/20ms)
