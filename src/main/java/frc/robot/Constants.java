@@ -34,11 +34,23 @@ public final class Constants {
     public static final double kTurnMult = 0.7; // For controller-based turning
 
     // TurnToAngle
-    public static final double kTurnDeadspot = 1.5; // Deadspot for non-PID TurnToAngle
-    public static final double kTurnPower = 0.2; // Base power for non-PID TurnToAngle
+    public static final double kTurnPosTolerance = 1.5; // Position tolerance (in degrees)
+    public static final double kTurnVelTolerance = 3/50; // Velocity tolerance (in degrees/20ms)
+    public static final double
+      kTurnP = 0,
+      kTurnI = 0,
+      kTurnD = 0;
+    
+    // DriveDistance
+    public static final double kDistPosTolerance = 2; // Position tolerance (in inches)
+    public static final double kDistVelTolerance = 2/50; // Velocity tolerance (in inches/20ms)
+    public static final double
+      kDistP = 0,
+      kDistI = 0,
+      kDistD = 0;
 
     // Charge station balancing
-    public static final double kPitchDeadspot = 2;
+    public static final double kBalanceTolerance = 2; // In degrees
   }
 
   public static class IntakeConstants {
