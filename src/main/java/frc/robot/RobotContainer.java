@@ -30,8 +30,9 @@ public class RobotContainer {
   protected final IntakeWheels sIntakeWheels = new IntakeWheels();
   protected final IntakePositional sIntakePosition = new IntakePositional();
 
-  protected final TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain);
   protected final Balance cBalance = new Balance(sDrivetrain);
+  private final DriveDistance cDriveDistance = new DriveDistance(sDrivetrain);
+  protected final TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain);
   protected final Intake cIntake = new Intake(sIntakePosition, sIntakeWheels);
   protected final Command cOuttake = new StartEndCommand(
     () -> sIntakeWheels.intake_motor.set(Constants.IntakeConstants.kOuttakeSpeed),
@@ -49,8 +50,8 @@ public class RobotContainer {
     OI.pigeon.setYaw(0);
 
     // Configure autonomous choices
-    m_autonChooser.addOption("Side Auto", Autos.SideAuto(sDrivetrain, cTurnToAngle, cIntake, cOuttake));
-    m_autonChooser.addOption("Center Auto", Autos.CenterAuto(sDrivetrain, cTurnToAngle, cBalance, cOuttake));
+    m_autonChooser.addOption("Side Auto", Autos.SideAuto(cDriveDistance, cTurnToAngle, cIntake, cOuttake));
+    m_autonChooser.addOption("Center Auto", Autos.CenterAuto(cBalance, cDriveDistance, cTurnToAngle, cOuttake));
 
     // Configure the trigger bindings
     configureBindings();
@@ -75,7 +76,7 @@ public class RobotContainer {
       || Math.abs(OI.driver_cntlr.getRightStick()[1]) > 0.3
     )
       .whileTrue(new RunCommand(() ->
-        cTurnToAngle.findHeading()
+        cTurnToAngle.setHeading()
       ));
     */
 
