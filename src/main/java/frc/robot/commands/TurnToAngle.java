@@ -17,7 +17,7 @@ public class TurnToAngle extends PIDCommand {
   public TurnToAngle(Drivetrain drivetrain) {
     super(
       new PIDController(DrivetrainConstants.kTurnP, DrivetrainConstants.kTurnI, DrivetrainConstants.kTurnD),
-      () -> OI.pigeon.getYaw(),
+      () -> -OI.pigeon.getYaw(),
       () -> m_heading,
       output -> drivetrain.robotDrive.arcadeDrive(output, 0)
     );
@@ -26,6 +26,7 @@ public class TurnToAngle extends PIDCommand {
 
     // Configure additional PID options
     getController().setTolerance(DrivetrainConstants.kTurnPosTolerance, DrivetrainConstants.kTurnVelTolerance);
+    getController().enableContinuousInput(-180, 180 );
   }
 
   // Returns true when the command should end.
@@ -35,11 +36,12 @@ public class TurnToAngle extends PIDCommand {
   }
 
   /**
-   * Sets target heading
+   * Sets target heading and resets PID controller
    *
    * @param fheading Target heading (in degrees)
    */
   public void setHeading(double fheading) {
     m_heading = fheading;
+    getController().reset();
   }
 }
