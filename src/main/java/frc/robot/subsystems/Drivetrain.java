@@ -58,9 +58,14 @@ public class Drivetrain extends SubsystemBase {
     r_encoder.setVelocityConversionFactor((Math.PI * DrivetrainConstants.kWheelDiameter) / DrivetrainConstants.kGearboxRatio);
   }
 
-  // Returns the average of the position of the front left and front right encoders (in inches)
+  // Returns the average of the position of the encoders (in inches)
   public double getAvgPosition() {
-    return (encoders[0].getPosition() + encoders[2].getPosition())/2;
+    return (l_encoder.getPosition() + r_encoder.getPosition())/2;
+  }
+
+  public void resetEncoders() {
+    l_encoder.setPosition(0);
+    r_encoder.setPosition(0);
   }
 
   // Stops drivetrain motors

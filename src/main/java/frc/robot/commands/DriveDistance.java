@@ -11,6 +11,7 @@ import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.subsystems.Drivetrain;
 
 public class DriveDistance extends PIDCommand {
+  private final Drivetrain drivetrain;
   private static double m_distance = 0;
 
   public DriveDistance(Drivetrain drivetrain) {
@@ -21,10 +22,18 @@ public class DriveDistance extends PIDCommand {
       output -> drivetrain.robotDrive.arcadeDrive(0, output)
     );
 
+    this.drivetrain = drivetrain;
+
     addRequirements(drivetrain);
 
     // Configure additional PID options
     getController().setTolerance(DrivetrainConstants.kDistPosTolerance, DrivetrainConstants.kDistVelTolerance);
+  }
+
+  @Override
+  public void initialize() {
+    super.initialize();
+    drivetrain.resetEncoders();
   }
 
   // Returns true when the command should end.

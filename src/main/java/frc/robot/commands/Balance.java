@@ -12,7 +12,7 @@ import frc.robot.subsystems.Drivetrain;
 
 public class Balance extends CommandBase {
   private final Drivetrain drivetrain;
-  private double previousPitch;
+  private double previousPitch = 0;
 
   public Balance(Drivetrain drivetrain) {
     this.drivetrain = drivetrain;
