@@ -26,7 +26,7 @@ public class TurnToAngle extends PIDCommand {
 
     // Configure additional PID options
     getController().setTolerance(DrivetrainConstants.kTurnPosTolerance, DrivetrainConstants.kTurnVelTolerance);
-    getController().enableContinuousInput(-180, 180 );
+    getController().enableContinuousInput(-180, 180);
   }
 
   // Returns true when the command should end.
@@ -41,7 +41,8 @@ public class TurnToAngle extends PIDCommand {
    * @param fheading Target heading (in degrees)
    */
   public void setHeading(double fheading) {
+    // TODO: Ensure that heading changes do not mess with derivative/integral calculations, reset PID controller as necessary
     m_heading = fheading;
-    getController().reset();
+    schedule();
   }
 }

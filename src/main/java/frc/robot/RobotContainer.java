@@ -67,18 +67,21 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // TODO: Fix TurnToAngle stutter problem with ~180 degree turns, possible use PID control
-    /*
-    // D-pad or right stick input will turn to the given angle
+    // D-pad will turn to the specified angle, snapped to 45 degrees
+    new Trigger(() -> OI.driver_cntlr.getPOV() != -1)
+      .whileTrue(new RunCommand(() ->
+        cTurnToAngle.setHeading(Math.round((float) OI.driver_cntlr.getPOV() / 45) * 45)
+      ));
+
+    // Right stick will turn to the specified angle
     new Trigger(() ->
-      OI.driver_cntlr.getPOV() != -1
-      || Math.abs(OI.driver_cntlr.getRightStick()[0]) > 0.3
-      || Math.abs(OI.driver_cntlr.getRightStick()[1]) > 0.3
+      OI.driver_cntlr.getPOV() == -1
+      && (Math.abs(OI.driver_cntlr.getRightStick()[0]) > 0.3
+      || Math.abs(OI.driver_cntlr.getRightStick()[1]) > 0.3)
     )
       .whileTrue(new RunCommand(() ->
-        cTurnToAngle.setHeading()
+        cTurnToAngle.setHeading(Math.atan2(OI.driver_cntlr.getRightStick()[1], OI.driver_cntlr.getRightStick()[0]))
       ));
-    */
 
     // Button 'X' will reset gyro
     new JoystickButton(OI.driver_cntlr, LogitechController.BTN_X)
@@ -103,7 +106,7 @@ public class RobotContainer {
     new JoystickButton(OI.driver_cntlr, LogitechController.BTN_Y)
       .onTrue(new InstantCommand(() -> {
         // sLimelight.setLedMode((sLimelight.getLedMode() <= 1) ? 3 : sLimelight.getLedMode()-1)
-        
+
         // TODO: Test purposes
         cTurnToAngle.setHeading(450);
         cTurnToAngle.schedule();
