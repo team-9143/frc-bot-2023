@@ -21,10 +21,11 @@ public class IntakePositional extends PIDSubsystem {
   public IntakePositional() {
     super(new PIDController(IntakeConstants.kP, IntakeConstants.kI, IntakeConstants.kD));
     positional_encoder.setPositionConversionFactor(IntakeConstants.kPositionalGearbox);
+    positional_encoder.setVelocityConversionFactor(IntakeConstants.kPositionalGearbox);
+    disable();
     
     // Set default target
     setSetpoint(IntakeConstants.kUpPos);
-    enable();
   }
 
   @Override
@@ -39,8 +40,9 @@ public class IntakePositional extends PIDSubsystem {
     return positional_encoder.getPosition();
   }
 
-  // Disables PID control, stopping calculation and motors
+  // Disables PID control, stopping calculation and motors, and resets to default target
   public void stop() {
     disable();
+    setSetpoint(IntakeConstants.kUpPos);
   }
 }

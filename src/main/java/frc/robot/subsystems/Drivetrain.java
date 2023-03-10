@@ -26,12 +26,8 @@ public class Drivetrain extends SubsystemBase {
     fr_motor = new CANSparkMax(DeviceConstants.kFrontRightCANid, MotorType.kBrushless),
     br_motor = new CANSparkMax(DeviceConstants.kBackRightCANid, MotorType.kBrushless);
 
-  public static final RelativeEncoder[] encoders = {
-    fl_motor.getEncoder(),
-    bl_motor.getEncoder(),
-    fr_motor.getEncoder(),
-    br_motor.getEncoder()
-  };
+  private static final RelativeEncoder l_encoder = fl_motor.getEncoder();
+  private static final RelativeEncoder r_encoder = fr_motor.getEncoder();
 
   public final DifferentialDrive robotDrive = new DifferentialDrive(
     new MotorControllerGroup(fl_motor, bl_motor),
@@ -49,12 +45,17 @@ public class Drivetrain extends SubsystemBase {
           // Regular drive, input from left stick
           this.robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult*DrivetrainConstants.kTurnMult * OI.driver_cntlr.getLeftStick()[0], -DrivetrainConstants.kSpeedMult*OI.driver_cntlr.getLeftStick()[1], true);
         }
-      }, this));
+      },
+      this
+    ));
 
-    for (RelativeEncoder encoder : encoders) {
-      // Sets encoders to measure position in feet
-      encoder.setPositionConversionFactor((Math.PI * DrivetrainConstants.kWheelDiameter) / DrivetrainConstants.kGearboxRatio);
-    }
+    // TODO: Set encoder velocity conversion factors and measurement periods
+    // Sets encoders to measure position and velocity in inches
+    l_encoder.setPositionConversionFactor((Math.PI * DrivetrainConstants.kWheelDiameter) / DrivetrainConstants.kGearboxRatio);
+    r_encoder.setPositionConversionFactor((Math.PI * DrivetrainConstants.kWheelDiameter) / DrivetrainConstants.kGearboxRatio);
+    
+    l_encoder.setVelocityConversionFactor((Math.PI * DrivetrainConstants.kWheelDiameter) / DrivetrainConstants.kGearboxRatio);
+    r_encoder.setVelocityConversionFactor((Math.PI * DrivetrainConstants.kWheelDiameter) / DrivetrainConstants.kGearboxRatio);
   }
 
   // Returns the average of the position of the front left and front right encoders (in inches)
