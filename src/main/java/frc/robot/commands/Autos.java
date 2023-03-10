@@ -9,40 +9,39 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 public final class Autos {
   // Auto to score a pre-loaded cube, then pick up a cube from in front of the community and return
   public static final SequentialCommandGroup SideAuto(DriveDistance driveDistance, TurnToAngle turnToAngle, Intake intake, Command outtake) {
     return new SequentialCommandGroup(
-      // new ParallelDeadlineGroup(new WaitCommand(1), outtake),
+      new ParallelDeadlineGroup(new WaitCommand(1), outtake),
 
-      // new InstantCommand(() -> turnToAngle.setHeading(180)), turnToAngle,
+      turnToAngle.beforeStarting(() -> turnToAngle.setHeading(180)),
 
-      // new InstantCommand(() -> driveDistance.setDistance(48)), driveDistance,
+      driveDistance.beforeStarting(() -> driveDistance.setDistance(48)),
 
-      // new ParallelDeadlineGroup(new WaitCommand(1), intake),
+      new ParallelDeadlineGroup(new WaitCommand(1), intake),
 
-      // new InstantCommand(() -> turnToAngle.setHeading(180)), turnToAngle,
+      turnToAngle.beforeStarting(() -> turnToAngle.setHeading(180)),
 
-      // new InstantCommand(() -> driveDistance.setDistance(36)), driveDistance
+      driveDistance.beforeStarting(() -> driveDistance.setDistance(36))
     );
   }
 
   // Auto to score a pre-loaded cube, drive over the charge station, then drive back and balance
   public static final SequentialCommandGroup CenterAuto(Balance balance, DriveDistance driveDistance, TurnToAngle turnToAngle, Command outtake) {
     return new SequentialCommandGroup(
-      // new ParallelDeadlineGroup(new WaitCommand(1), outtake),
+      new ParallelDeadlineGroup(new WaitCommand(1), outtake),
 
-      // new InstantCommand(() -> turnToAngle.setHeading(180)), turnToAngle,
+      turnToAngle.beforeStarting(() -> turnToAngle.setHeading(180)),
 
-      // new InstantCommand(() -> driveDistance.setDistance(48)), driveDistance,
+      driveDistance.beforeStarting(() -> driveDistance.setDistance(48)),
 
-      // new InstantCommand(() -> turnToAngle.setHeading(180)), turnToAngle,
+      turnToAngle.beforeStarting(() -> turnToAngle.setHeading(180)),
 
-      // new InstantCommand(() -> driveDistance.setDistance(24)), driveDistance,
+      driveDistance.beforeStarting(() -> driveDistance.setDistance(24)),
 
-      // balance
+      balance
     );
   }
 }
