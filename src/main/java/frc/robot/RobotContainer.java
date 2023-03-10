@@ -25,16 +25,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  protected final Drivetrain sDrivetrain = new Drivetrain();
-  protected final Limelight sLimelight = new Limelight();
-  protected final IntakeWheels sIntakeWheels = new IntakeWheels();
-  protected final IntakePositional sIntakePosition = new IntakePositional();
+  private final Drivetrain sDrivetrain = new Drivetrain();
+  private final Limelight sLimelight = new Limelight();
+  private final IntakeWheels sIntakeWheels = new IntakeWheels();
+  private final IntakePositional sIntakePosition = new IntakePositional();
 
-  protected final Balance cBalance = new Balance(sDrivetrain);
+  private final Balance cBalance = new Balance(sDrivetrain);
   private final DriveDistance cDriveDistance = new DriveDistance(sDrivetrain);
-  protected final TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain);
-  protected final Intake cIntake = new Intake(sIntakePosition, sIntakeWheels);
-  protected final Command cOuttake = new StartEndCommand(
+  private final TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain);
+  private final Intake cIntake = new Intake(sIntakePosition, sIntakeWheels);
+  private final Command cOuttake = new StartEndCommand(
     () -> sIntakeWheels.intake_motor.set(Constants.IntakeConstants.kOuttakeSpeed),
     () -> sIntakeWheels.stop(),
     sIntakeWheels
@@ -127,6 +127,13 @@ public class RobotContainer {
     // Button 'RB' (hold) will lower and activate intake
     new JoystickButton(OI.driver_cntlr, LogitechController.BTN_RB)
       .whileTrue(cIntake);
+  }
+
+  /** Disables PID controllers */
+  public void stopPID() {
+    sIntakePosition.stop();
+    cDriveDistance.cancel();
+    cTurnToAngle.cancel();
   }
 
   /**

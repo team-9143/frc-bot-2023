@@ -53,9 +53,8 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-    // Disables intake positional PID controller and sets setpoint to default
-    m_robotContainer.sIntakePosition.stop();
-    m_robotContainer.sIntakePosition.setSetpoint(Constants.IntakeConstants.kUpPos);
+    // Disables PID controllers
+    m_robotContainer.stopPID();
   }
 
   @Override
