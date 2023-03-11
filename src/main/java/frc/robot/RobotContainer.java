@@ -50,8 +50,8 @@ public class RobotContainer {
     OI.pigeon.setYaw(0);
 
     // Configure autonomous choices
-    m_autonChooser.addOption("Side Auto", Autos.SideAuto(cDriveDistance, cTurnToAngle, cIntake, cOuttake));
-    m_autonChooser.addOption("Center Auto", Autos.CenterAuto(cBalance, cDriveDistance, cTurnToAngle, cOuttake));
+    m_autonChooser.addOption("Side Auto", Autos.SideAuto(sDrivetrain, cDriveDistance, cTurnToAngle, cIntake, cOuttake));
+    m_autonChooser.addOption("Center Auto", Autos.CenterAuto(sDrivetrain, cBalance, cDriveDistance, cTurnToAngle, cOuttake));
 
     // Configure the trigger bindings
     configureBindings();
