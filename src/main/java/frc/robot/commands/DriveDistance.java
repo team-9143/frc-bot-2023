@@ -28,8 +28,8 @@ public class DriveDistance extends PIDCommand {
     addRequirements(drivetrain);
 
     // Configure additional PID options
-    getController().setTolerance(DrivetrainConstants.kDistPosTolerance, DrivetrainConstants.kDistVelTolerance);
-    getController().setSetpoint(0);
+    m_controller.setTolerance(DrivetrainConstants.kDistPosTolerance, DrivetrainConstants.kDistVelTolerance);
+    m_controller.setSetpoint(0);
   }
 
   @Override
@@ -41,7 +41,7 @@ public class DriveDistance extends PIDCommand {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return getController().atSetpoint();
+    return m_controller.atSetpoint();
   }
 
   /**

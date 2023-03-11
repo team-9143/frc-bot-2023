@@ -27,9 +27,9 @@ public class TurnToAngle extends PIDCommand {
     addRequirements(drivetrain);
 
     // Configure additional PID options
-    getController().setTolerance(DrivetrainConstants.kTurnPosTolerance, DrivetrainConstants.kTurnVelTolerance);
-    getController().enableContinuousInput(-180, 180);
-    getController().setSetpoint(0);
+    m_controller.setTolerance(DrivetrainConstants.kTurnPosTolerance, DrivetrainConstants.kTurnVelTolerance);
+    m_controller.enableContinuousInput(-180, 180);
+    m_controller.setSetpoint(0);
   }
 
   // TODO: Testing purposes
@@ -37,15 +37,15 @@ public class TurnToAngle extends PIDCommand {
   public void execute() {
     super.execute();
     System.out.println(
-      getController().getPositionError() + " " + 
-      (getController().calculate(m_measurement.getAsDouble(), m_setpoint.getAsDouble()))
+      m_controller.getPositionError() + " " + 
+      (m_controller.calculate(m_measurement.getAsDouble(), m_setpoint.getAsDouble()))
     );
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return getController().atSetpoint();
+    return m_controller.atSetpoint();
   }
 
   /**
