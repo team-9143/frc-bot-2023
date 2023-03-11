@@ -28,6 +28,7 @@ public class DriveDistance extends PIDCommand {
 
     // Configure additional PID options
     getController().setTolerance(DrivetrainConstants.kDistPosTolerance, DrivetrainConstants.kDistVelTolerance);
+    getController().setSetpoint(0);
   }
 
   @Override

@@ -14,34 +14,34 @@ public final class Autos {
   // Auto to score a pre-loaded cube, then pick up a cube from in front of the community and return
   public static final SequentialCommandGroup SideAuto(DriveDistance driveDistance, TurnToAngle turnToAngle, Intake intake, Command outtake) {
     return new SequentialCommandGroup(
-      new ParallelDeadlineGroup(new WaitCommand(1), outtake),
+      // new ParallelDeadlineGroup(new WaitCommand(1), outtake),
 
-      turnToAngle.beforeStarting(() -> turnToAngle.setHeading(180)),
+      // turnToAngle.beforeStarting(() -> turnToAngle.setHeading(180)),
 
-      driveDistance.beforeStarting(() -> driveDistance.setDistance(48)),
+      // driveDistance.beforeStarting(() -> driveDistance.setDistance(48)),
 
-      new ParallelDeadlineGroup(new WaitCommand(1), intake),
+      // new ParallelDeadlineGroup(new WaitCommand(1), intake),
 
-      turnToAngle.beforeStarting(() -> turnToAngle.setHeading(180)),
+      // turnToAngle.beforeStarting(() -> turnToAngle.setHeading(180)),
 
-      driveDistance.beforeStarting(() -> driveDistance.setDistance(36))
+      // driveDistance.beforeStarting(() -> driveDistance.setDistance(36))
     );
   }
 
   // Auto to score a pre-loaded cube, drive over the charge station, then drive back and balance
   public static final SequentialCommandGroup CenterAuto(Balance balance, DriveDistance driveDistance, TurnToAngle turnToAngle, Command outtake) {
     return new SequentialCommandGroup(
-      new ParallelDeadlineGroup(new WaitCommand(1), outtake),
+      // new ParallelDeadlineGroup(new WaitCommand(1), outtake),
 
-      turnToAngle.beforeStarting(() -> turnToAngle.setHeading(180)),
+      // turnToAngle.beforeStarting(() -> turnToAngle.setHeading(180)),
 
-      driveDistance.beforeStarting(() -> driveDistance.setDistance(48)),
+      // driveDistance.beforeStarting(() -> driveDistance.setDistance(48)),
 
-      turnToAngle.beforeStarting(() -> turnToAngle.setHeading(180)),
+      // turnToAngle.beforeStarting(() -> turnToAngle.setHeading(180)),
 
-      driveDistance.beforeStarting(() -> driveDistance.setDistance(24)),
+      // driveDistance.beforeStarting(() -> driveDistance.setDistance(24)),
 
-      balance
+      // balance
     );
   }
 }

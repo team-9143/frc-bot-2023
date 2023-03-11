@@ -71,10 +71,13 @@ public class RobotContainer {
     new Trigger(() -> OI.driver_cntlr.getPOV() != -1)
       .whileTrue(new RunCommand(() ->
         cTurnToAngle.setHeading(Math.round((float) OI.driver_cntlr.getPOV() / 45) * 45)
-      ))
-    .negate().and(() ->
-      Math.abs(OI.driver_cntlr.getRightStick()[0]) > 0.3
-      || Math.abs(OI.driver_cntlr.getRightStick()[1]) > 0.3
+      ));
+
+    // TODO: Fix right stick heading setter
+    new Trigger(() ->
+      OI.driver_cntlr.getPOV() == -1 &&
+      (Math.abs(OI.driver_cntlr.getRightStick()[0]) > 0.3
+      || Math.abs(OI.driver_cntlr.getRightStick()[1]) > 0.3)
     )
     .whileTrue(new RunCommand(() ->
       cTurnToAngle.setHeading(Math.atan2(OI.driver_cntlr.getRightStick()[1], OI.driver_cntlr.getRightStick()[0]))
@@ -102,7 +105,7 @@ public class RobotContainer {
     // Button 'Y' will activate PID commands
     new JoystickButton(OI.driver_cntlr, LogitechController.BTN_Y)
       .onTrue(new InstantCommand(() -> {
-        cTurnToAngle.setHeading(450);
+        cTurnToAngle.setHeading(90);
         cTurnToAngle.schedule();
       }));
 

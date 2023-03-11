@@ -11,6 +11,7 @@ import frc.robot.Constants.DrivetrainConstants;
 
 import frc.robot.subsystems.Drivetrain;
 
+// TODO: Fix issue with large turns producing outputs greater than 1
 public class TurnToAngle extends PIDCommand {
   private static double m_heading = 0;
 
@@ -27,6 +28,17 @@ public class TurnToAngle extends PIDCommand {
     // Configure additional PID options
     getController().setTolerance(DrivetrainConstants.kTurnPosTolerance, DrivetrainConstants.kTurnVelTolerance);
     getController().enableContinuousInput(-180, 180);
+    getController().setSetpoint(0);
+  }
+
+  // TODO: Testing purposes
+  @Override
+  public void execute() {
+    super.execute();
+    System.out.println(
+      getController().getPositionError() + " " + 
+      (getController().calculate(m_measurement.getAsDouble(), m_setpoint.getAsDouble()))
+    );
   }
 
   // Returns true when the command should end.
