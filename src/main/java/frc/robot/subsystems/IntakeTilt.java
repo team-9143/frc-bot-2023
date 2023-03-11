@@ -13,15 +13,15 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 
-public class IntakePositional extends PIDSubsystem {
-  private final CANSparkMax positional_motor = new CANSparkMax(DeviceConstants.kIntakePositionalCANid, MotorType.kBrushless);
+public class IntakeTilt extends PIDSubsystem {
+  private final CANSparkMax tilt_motor = new CANSparkMax(DeviceConstants.kIntakePositionalCANid, MotorType.kBrushless);
 
-  private final RelativeEncoder positional_encoder = positional_motor.getEncoder();
+  private final RelativeEncoder tilt_encoder = tilt_motor.getEncoder();
 
-  public IntakePositional() {
+  public IntakeTilt() {
     super(new PIDController(IntakeConstants.kP, IntakeConstants.kI, IntakeConstants.kD));
-    positional_encoder.setPositionConversionFactor(IntakeConstants.kPositionalGearbox);
-    positional_encoder.setVelocityConversionFactor(IntakeConstants.kPositionalGearbox);
+    tilt_encoder.setPositionConversionFactor(IntakeConstants.kPositionalGearbox);
+    tilt_encoder.setVelocityConversionFactor(IntakeConstants.kPositionalGearbox);
     disable();
     
     // Set default target
@@ -31,13 +31,13 @@ public class IntakePositional extends PIDSubsystem {
   @Override
   public void useOutput(double output, double setpoint) {
     // Use the output here
-    positional_motor.set(output);
+    tilt_motor.set(output);
   }
 
   @Override
   public double getMeasurement() {
     // Return the process variable measurement here
-    return positional_encoder.getPosition();
+    return tilt_encoder.getPosition();
   }
 
   // Disables PID control, stopping calculation and motors, and resets to default target

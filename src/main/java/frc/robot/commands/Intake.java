@@ -7,27 +7,27 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.IntakeConstants;
 
-import frc.robot.subsystems.IntakePositional;
+import frc.robot.subsystems.IntakeTilt;
 import frc.robot.subsystems.IntakeWheels;
 
 public class Intake extends CommandBase {
-  private final IntakePositional intakePositional;
+  private final IntakeTilt intakeTilt;
   private final IntakeWheels intakeWheels;
 
-  public Intake(IntakePositional intakePositional, IntakeWheels intakeWheels) {
-    this.intakePositional = intakePositional;
+  public Intake(IntakeTilt intakeTilt, IntakeWheels intakeWheels) {
+    this.intakeTilt = intakeTilt;
     this.intakeWheels = intakeWheels;
 
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(intakePositional);
+    addRequirements(intakeTilt);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     // Sets setpoint down and starts intake
-    intakePositional.setSetpoint(IntakeConstants.kDownPos);
-    intakePositional.enable();
+    intakeTilt.setSetpoint(IntakeConstants.kDownPos);
+    intakeTilt.enable();
     intakeWheels.intake_motor.set(IntakeConstants.kIntakeSpeed);
   }
 
@@ -35,7 +35,7 @@ public class Intake extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     // Sets default setpoint and stops intake
-    intakePositional.setSetpoint(IntakeConstants.kUpPos);
+    intakeTilt.setSetpoint(IntakeConstants.kUpPos);
     intakeWheels.stop();
   }
 }

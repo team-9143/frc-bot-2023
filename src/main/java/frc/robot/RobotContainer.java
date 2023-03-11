@@ -28,12 +28,12 @@ public class RobotContainer {
   private final Drivetrain sDrivetrain = new Drivetrain();
   private final Limelight sLimelight = new Limelight();
   private final IntakeWheels sIntakeWheels = new IntakeWheels();
-  private final IntakePositional sIntakePosition = new IntakePositional();
+  private final IntakeTilt sIntakeTilt = new IntakeTilt();
 
   private final Balance cBalance = new Balance(sDrivetrain);
   private final DriveDistance cDriveDistance = new DriveDistance(sDrivetrain);
   private final TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain);
-  private final Intake cIntake = new Intake(sIntakePosition, sIntakeWheels);
+  private final Intake cIntake = new Intake(sIntakeTilt, sIntakeWheels);
   private final Command cOuttake = new StartEndCommand(
     () -> sIntakeWheels.intake_motor.set(Constants.IntakeConstants.kOuttakeSpeed),
     () -> sIntakeWheels.stop(),
@@ -95,7 +95,7 @@ public class RobotContainer {
     new JoystickButton(OI.driver_cntlr, LogitechController.BTN_B)
       .whileTrue(new RunCommand(() -> {
         sDrivetrain.stop();
-        sIntakePosition.stop();
+        sIntakeTilt.stop();
         sIntakeWheels.stop();
       }));
 
@@ -130,7 +130,7 @@ public class RobotContainer {
 
   /** Disables PID controllers */
   public void stopPID() {
-    sIntakePosition.stop();
+    sIntakeTilt.stop();
     cDriveDistance.cancel();
     cTurnToAngle.cancel();
   }
