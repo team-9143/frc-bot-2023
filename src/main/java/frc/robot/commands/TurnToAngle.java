@@ -53,9 +53,8 @@ public class TurnToAngle extends PIDCommand {
    *
    * @param fheading Target heading (in degrees)
    */
-  public void setHeading(double fheading) {
+  public static void setHeading(double fheading) {
     // TODO: Ensure that heading changes do not mess with derivative/integral calculations, reset PID controller as necessary
     m_heading = fheading;
-    schedule();
   }
 }

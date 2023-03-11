@@ -69,9 +69,10 @@ public class RobotContainer {
   private void configureBindings() {
     // D-pad and right stick will turn to the specified angle
     new Trigger(() -> OI.driver_cntlr.getPOV() != -1)
-      .whileTrue(new RunCommand(() ->
-        cTurnToAngle.setHeading(Math.round((float) OI.driver_cntlr.getPOV() / 45) * 45)
-      ));
+      .whileTrue(new RunCommand(() -> {
+        TurnToAngle.setHeading(Math.round((float) OI.driver_cntlr.getPOV() / 45) * 45);
+        cTurnToAngle.schedule();
+      }));
 
     // TODO: Fix right stick heading setter
     new Trigger(() ->
@@ -79,9 +80,10 @@ public class RobotContainer {
       (Math.abs(OI.driver_cntlr.getRightStick()[0]) > 0.3
       || Math.abs(OI.driver_cntlr.getRightStick()[1]) > 0.3)
     )
-    .whileTrue(new RunCommand(() ->
-      cTurnToAngle.setHeading(Math.atan2(OI.driver_cntlr.getRightStick()[1], OI.driver_cntlr.getRightStick()[0]))
-    ));
+    .whileTrue(new RunCommand(() -> {
+      TurnToAngle.setHeading(Math.atan2(OI.driver_cntlr.getRightStick()[1], OI.driver_cntlr.getRightStick()[0]));
+      cTurnToAngle.schedule();
+    }));
 
     // Button 'X' will reset gyro
     new JoystickButton(OI.driver_cntlr, LogitechController.BTN_X)
@@ -105,7 +107,7 @@ public class RobotContainer {
     // Button 'Y' will activate PID commands
     new JoystickButton(OI.driver_cntlr, LogitechController.BTN_Y)
       .onTrue(new InstantCommand(() -> {
-        cTurnToAngle.setHeading(90);
+        TurnToAngle.setHeading(90);
         cTurnToAngle.schedule();
       }));
 

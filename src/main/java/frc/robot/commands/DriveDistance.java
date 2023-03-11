@@ -49,7 +49,7 @@ public class DriveDistance extends PIDCommand {
    *
    * @param fdistance Target distance (in inches)
    */
-  public void setDistance(double fdistance) {
+  public static void setDistance(double fdistance) {
     m_distance = fdistance;
   }
 }
