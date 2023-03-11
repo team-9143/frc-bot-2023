@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+// TODO: DriveDistance, TurnToAngle, and Intake gains should be tuned
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -43,7 +44,7 @@ public final class Constants {
 
     // DriveDistance
     public static final double kDistPosTolerance = 2; // Position tolerance (in inches)
-    public static final double kDistVelTolerance = kDistPosTolerance*100; // Velocity tolerance (in inches/20ms)
+    public static final double kDistVelTolerance = kDistPosTolerance*100; // Velocity tolerance (in inches/s)
     public static final double
       kDistP = 0,
       kDistI = 0,
@@ -64,7 +65,7 @@ public final class Constants {
     public static final double kUpPos = -0.02;
     public static final double kDownPos = (double) -75/360;
 
-    // TODO: Gains should be changed for maximum efficiency as hardware becomes more stable
+    // Intake tilt gains
     public static final double
       kP = 0.35,
       kI = 0.35,

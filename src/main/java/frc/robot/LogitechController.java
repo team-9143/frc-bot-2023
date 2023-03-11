@@ -2,7 +2,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 
-// TODO: Move to subclass under OI
 /**
  * Logitech game controller wrapper class
  *
