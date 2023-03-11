@@ -11,18 +11,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public final class Autos {
-  // Auto to score a pre-loaded cube, then pick up a cube from in front of the community and return
+  // Score a pre-loaded cube, then drive out of the community and back in
   public static final SequentialCommandGroup SideAuto(DriveDistance driveDistance, TurnToAngle turnToAngle, Intake intake, Command outtake) {
     return new SequentialCommandGroup(
       // new ParallelDeadlineGroup(new WaitCommand(1), outtake),
 
-      // turnToAngle.beforeStarting(() -> turnToAngle.setHeading(180)),
-
-      // driveDistance.beforeStarting(() -> driveDistance.setDistance(48)),
-
-      // new ParallelDeadlineGroup(new WaitCommand(1), intake),
-
-      // turnToAngle.beforeStarting(() -> turnToAngle.setHeading(180)),
+      // driveDistance.beforeStarting(() -> driveDistance.setDistance(-48)),
 
       // driveDistance.beforeStarting(() -> driveDistance.setDistance(36))
     );
@@ -33,11 +27,7 @@ public final class Autos {
     return new SequentialCommandGroup(
       // new ParallelDeadlineGroup(new WaitCommand(1), outtake),
 
-      // turnToAngle.beforeStarting(() -> turnToAngle.setHeading(180)),
-
-      // driveDistance.beforeStarting(() -> driveDistance.setDistance(48)),
-
-      // turnToAngle.beforeStarting(() -> turnToAngle.setHeading(180)),
+      // driveDistance.beforeStarting(() -> driveDistance.setDistance(-48)),
 
       // driveDistance.beforeStarting(() -> driveDistance.setDistance(24)),
 
