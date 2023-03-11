@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.robot.OI;
+import edu.wpi.first.math.MathUtil;
 import frc.robot.Constants.DrivetrainConstants;
 
 import frc.robot.subsystems.Drivetrain;
@@ -20,7 +21,7 @@ public class TurnToAngle extends PIDCommand {
       new PIDController(DrivetrainConstants.kTurnP, DrivetrainConstants.kTurnI, DrivetrainConstants.kTurnD),
       () -> -OI.pigeon.getYaw(),
       () -> m_heading,
-      output -> drivetrain.robotDrive.arcadeDrive(output, 0)
+      output -> drivetrain.robotDrive.arcadeDrive(MathUtil.clamp(output, -1, 1), 0)
     );
 
     addRequirements(drivetrain);
