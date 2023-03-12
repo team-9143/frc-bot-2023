@@ -38,12 +38,12 @@ public class Drivetrain extends SubsystemBase {
     // Set the default command for a subsystem here.
     setDefaultCommand(new RunCommand(
       () -> {
-        if (Math.abs(OI.driver_cntlr.getTriggerButtons()) > 0.1) {
+        if (Math.abs(OI.driver_cntlr.getTriggers()) > 0.1) {
           // Turn in place, input from trigger
-          this.robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult*DrivetrainConstants.kTurnMult * OI.driver_cntlr.getTriggerButtons(), 0, true);
+          this.robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult*DrivetrainConstants.kTurnMult * OI.driver_cntlr.getTriggers(), 0, true);
         } else {
           // Regular drive, input from left stick
-          this.robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult*DrivetrainConstants.kTurnMult * OI.driver_cntlr.getLeftStick()[0], -DrivetrainConstants.kSpeedMult*OI.driver_cntlr.getLeftStick()[1], true);
+          this.robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult*DrivetrainConstants.kTurnMult * OI.driver_cntlr.getLeftX(), -DrivetrainConstants.kSpeedMult*OI.driver_cntlr.getLeftY(), true);
         }
       },
       this
@@ -53,7 +53,7 @@ public class Drivetrain extends SubsystemBase {
     // Sets encoders to measure position and velocity in inches
     l_encoder.setPositionConversionFactor((Math.PI * DrivetrainConstants.kWheelDiameter) / DrivetrainConstants.kGearboxRatio);
     r_encoder.setPositionConversionFactor((Math.PI * DrivetrainConstants.kWheelDiameter) / DrivetrainConstants.kGearboxRatio);
-    
+
     l_encoder.setVelocityConversionFactor((Math.PI * DrivetrainConstants.kWheelDiameter) / DrivetrainConstants.kGearboxRatio);
     r_encoder.setVelocityConversionFactor((Math.PI * DrivetrainConstants.kWheelDiameter) / DrivetrainConstants.kGearboxRatio);
   }

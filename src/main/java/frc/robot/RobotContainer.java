@@ -77,22 +77,22 @@ public class RobotContainer {
     // TODO: Fix right stick heading setter
     new Trigger(() ->
       OI.driver_cntlr.getPOV() == -1 &&
-      (Math.abs(OI.driver_cntlr.getRightStick()[0]) > 0.3
-      || Math.abs(OI.driver_cntlr.getRightStick()[1]) > 0.3)
+      (Math.abs(OI.driver_cntlr.getRightX()) > 0.3
+      || Math.abs(OI.driver_cntlr.getRightY()) > 0.3)
     )
     .whileTrue(new RunCommand(() -> {
-      TurnToAngle.setHeading(Math.atan2(OI.driver_cntlr.getRightStick()[1], OI.driver_cntlr.getRightStick()[0]));
+      TurnToAngle.setHeading(Math.atan2(OI.driver_cntlr.getRightY(), OI.driver_cntlr.getRightX()));
       cTurnToAngle.schedule();
     }));
 
     // Button 'X' will reset gyro
-    new JoystickButton(OI.driver_cntlr, LogitechController.BTN_X)
+    new JoystickButton(OI.driver_cntlr, OI.Controller.btn.X.val)
       .onTrue(new InstantCommand(() ->
         OI.pigeon.setYaw(0)
       ));
 
     // Button 'B' (hold) will continuously stop all movement
-    new JoystickButton(OI.driver_cntlr, LogitechController.BTN_B)
+    new JoystickButton(OI.driver_cntlr, OI.Controller.btn.B.val)
       .whileTrue(new RunCommand(() -> {
         sDrivetrain.stop();
         sIntakeTilt.stop();
@@ -100,12 +100,12 @@ public class RobotContainer {
       }));
 
     // Button 'A' (hold) will cause robot to balance on a charge station
-    new JoystickButton(OI.driver_cntlr, LogitechController.BTN_A)
+    new JoystickButton(OI.driver_cntlr, OI.Controller.btn.A.val)
       .whileTrue(cBalance);
 
     // TODO: Testing purposes
     // Button 'Y' will activate PID commands
-    new JoystickButton(OI.driver_cntlr, LogitechController.BTN_Y)
+    new JoystickButton(OI.driver_cntlr, OI.Controller.btn.Y.val)
       .onTrue(new InstantCommand(() -> {
         TurnToAngle.setHeading(90);
         cTurnToAngle.schedule();
@@ -120,11 +120,11 @@ public class RobotContainer {
     // TODO: Controller triggers will manually move intake up and down
 
     // Button 'LB' (hold) will spit cubes
-    new JoystickButton(OI.driver_cntlr, LogitechController.BTN_LB)
+    new JoystickButton(OI.driver_cntlr, OI.Controller.btn.LB.val)
       .whileTrue(cOuttake);
 
     // Button 'RB' (hold) will lower and activate intake
-    new JoystickButton(OI.driver_cntlr, LogitechController.BTN_RB)
+    new JoystickButton(OI.driver_cntlr, OI.Controller.btn.RB.val)
       .whileTrue(cIntake);
   }
 

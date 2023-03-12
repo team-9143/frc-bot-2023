@@ -8,7 +8,7 @@ import com.ctre.phoenix.sensors.Pigeon2;
 import edu.wpi.first.wpilibj.GenericHID;
 
 public class OI {
-  public final static LogitechController driver_cntlr = new LogitechController(DeviceConstants.kDriverCntlrPort);
+  public final static Controller driver_cntlr = new Controller(DeviceConstants.kDriverCntlrPort);
   public final static NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
 
   // In proper orientation, Pigeon is flat and facing so that X-axis is forward
@@ -58,7 +58,7 @@ public class OI {
     /**
      * @return The trigger value between -1 and 1, left being subtractive and right being additive
      */
-    public double getTriggerButtons() {
+    public double getTriggers() {
       return getRawAxis(axis.rightTrigger.val) - getRawAxis(axis.leftTrigger.val);
     }
 
