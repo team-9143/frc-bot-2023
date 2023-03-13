@@ -67,8 +67,8 @@ public final class Constants {
 
     // Intake tilt gains
     public static final double
-      kP = 0.35,
-      kI = 0.35,
-      kD = 0.25;
+      kP = 0.013 / kTiltGearbox,
+      kI = 0.015 / kTiltGearbox,
+      kD = 0.01 / kTiltGearbox;
   }
 }
