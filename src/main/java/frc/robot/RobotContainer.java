@@ -83,11 +83,10 @@ public class RobotContainer {
     // TODO: Fix right stick heading setter
     new Trigger(() ->
       OI.driver_cntlr.getPOV() == -1 &&
-      (Math.abs(OI.driver_cntlr.getRightX()) > 0.3
-      || Math.abs(OI.driver_cntlr.getRightY()) > 0.3)
+      (Math.abs(OI.driver_cntlr.getRightX()) > 0.3 || Math.abs(OI.driver_cntlr.getRightY()) > 0.3)
     )
     .whileTrue(new RunCommand(() -> {
-      TurnToAngle.setHeading(Math.atan2(OI.driver_cntlr.getRightY(), OI.driver_cntlr.getRightX()));
+      TurnToAngle.setHeading(Math.toDegrees(Math.atan2(OI.driver_cntlr.getRightY(), OI.driver_cntlr.getRightX())));
       cTurnToAngle.schedule();
     }));
 
