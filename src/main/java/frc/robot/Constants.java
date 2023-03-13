@@ -23,7 +23,7 @@ public final class Constants {
       kBackRightCANid = 1,
       kPigeonCANid = 5,
       kIntakeWheelsCANid = 6,
-      kIntakePositionalCANid = 17;
+      kIntakeTiltCANid = 17;
   }
 
   public static class DrivetrainConstants {
@@ -55,7 +55,7 @@ public final class Constants {
   }
 
   public static class IntakeConstants {
-    public static final double kPositionalGearbox = (double) 1/27;
+    public static final double kTiltGearbox = (double) 1/28;
 
     // Cube intake/outtake wheel speed
     public static final double kIntakeSpeed = 0.05;

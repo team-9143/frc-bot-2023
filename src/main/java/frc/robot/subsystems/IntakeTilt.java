@@ -14,14 +14,14 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 
 public class IntakeTilt extends PIDSubsystem {
-  private final CANSparkMax tilt_motor = new CANSparkMax(DeviceConstants.kIntakePositionalCANid, MotorType.kBrushless);
+  private final CANSparkMax tilt_motor = new CANSparkMax(DeviceConstants.kIntakeTiltCANid, MotorType.kBrushless);
 
   private final RelativeEncoder tilt_encoder = tilt_motor.getEncoder();
 
   public IntakeTilt() {
     super(new PIDController(IntakeConstants.kP, IntakeConstants.kI, IntakeConstants.kD));
-    tilt_encoder.setPositionConversionFactor(IntakeConstants.kPositionalGearbox);
-    tilt_encoder.setVelocityConversionFactor(IntakeConstants.kPositionalGearbox);
+    tilt_encoder.setPositionConversionFactor(IntakeConstants.kTiltGearbox);
+    tilt_encoder.setVelocityConversionFactor(IntakeConstants.kTiltGearbox);
     disable();
     
     // Set default target
