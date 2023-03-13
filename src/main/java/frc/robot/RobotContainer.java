@@ -39,6 +39,11 @@ public class RobotContainer {
     () -> sIntakeWheels.stop(),
     sIntakeWheels
   );
+  private final Command cStop = new RunCommand(() -> {
+    sDrivetrain.stop();
+    sIntakeTilt.stop();
+    sIntakeWheels.stop();
+  });
 
   // Autonomous chooser declaration
   protected final SendableChooser<Command> m_autonChooser = new SendableChooser<Command>();
@@ -93,11 +98,7 @@ public class RobotContainer {
 
     // Button 'B' (hold) will continuously stop all movement
     new JoystickButton(OI.driver_cntlr, OI.Controller.btn.B.val)
-      .whileTrue(new RunCommand(() -> {
-        sDrivetrain.stop();
-        sIntakeTilt.stop();
-        sIntakeWheels.stop();
-      }));
+      .whileTrue(cStop);
 
     // Button 'A' (hold) will cause robot to balance on a charge station
     new JoystickButton(OI.driver_cntlr, OI.Controller.btn.A.val)
@@ -128,11 +129,9 @@ public class RobotContainer {
       .whileTrue(cIntake);
   }
 
-  /** Disables PID controllers */
-  public void stopPID() {
-    sIntakeTilt.stop();
-    cDriveDistance.cancel();
-    cTurnToAngle.cancel();
+  /** Stops all motors and disables PID controllers */
+  public void stop() {
+    cStop.execute();
   }
 
   /**

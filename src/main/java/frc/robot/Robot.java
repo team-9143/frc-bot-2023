@@ -53,8 +53,7 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-    // Disables PID controllers
-    m_robotContainer.stopPID();
+    m_robotContainer.stop();
   }
 
   @Override

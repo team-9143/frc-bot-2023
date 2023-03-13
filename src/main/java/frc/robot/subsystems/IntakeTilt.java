@@ -42,7 +42,7 @@ public class IntakeTilt extends PIDSubsystem {
     return tilt_encoder.getPosition();
   }
 
-  // Disables PID control, stopping calculation and motors, and resets to default target
+  // Disables PID control, stopping calculation and motors, and resets to default target. Movement will only restart when re-enabled.
   public void stop() {
     disable();
     setSetpoint(IntakeConstants.kUpPos);
