@@ -31,7 +31,6 @@ public class RobotContainer {
   private final IntakeTilt sIntakeTilt = new IntakeTilt();
 
   private final Balance cBalance = new Balance(sDrivetrain);
-  private final DriveDistance cDriveDistance = new DriveDistance(sDrivetrain);
   private final TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain);
   private final Intake cIntake = new Intake(sIntakeTilt, sIntakeWheels);
   private final Command cOuttake = new StartEndCommand(
@@ -45,8 +44,11 @@ public class RobotContainer {
     sIntakeWheels.stop();
   });
 
+  // TODO: Testing purposes
+  private final DriveDistance cDriveDistance = new DriveDistance(sDrivetrain);
+
   // Autonomous chooser declaration
-  protected final SendableChooser<Command> m_autonChooser = new SendableChooser<Command>();
+  protected final SendableChooser<Autos.Type> m_autonChooser = new SendableChooser<Autos.Type>();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -55,8 +57,8 @@ public class RobotContainer {
     OI.pigeon.setYaw(0);
 
     // Configure autonomous choices
-    m_autonChooser.addOption("Side Auto", Autos.SideAuto(sDrivetrain, cDriveDistance, cTurnToAngle, cIntake, cOuttake));
-    m_autonChooser.addOption("Center Auto", Autos.CenterAuto(sDrivetrain, cBalance, cDriveDistance, cTurnToAngle, cOuttake));
+    m_autonChooser.addOption("Side Auto", Autos.Type.Side);
+    m_autonChooser.addOption("Center Auto", Autos.Type.Center);
 
     // Configure the trigger bindings
     configureBindings();
@@ -144,6 +146,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // TODO: Autonomous command chooser and commands in Autos class
-    return m_autonChooser.getSelected();
+    return Autos.getAuto(m_autonChooser.getSelected(), sDrivetrain, cBalance, cOuttake);
   }
 }

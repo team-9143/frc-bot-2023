@@ -16,7 +16,7 @@ public class OI {
   public final static Pigeon2 pigeon = new Pigeon2(DeviceConstants.kPigeonCANid);
 
   public static class Controller extends GenericHID {
-    public enum btn {
+    public static enum btn {
       A(1),
       B(2),
       X(3),
@@ -35,7 +35,7 @@ public class OI {
       }
     }
 
-    public enum axis {
+    public static enum axis {
       leftX(0),
       leftY(1),
       rightX(4),
