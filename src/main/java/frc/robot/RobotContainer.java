@@ -117,11 +117,11 @@ public class RobotContainer {
     // TODO: Button 'B' (hold) will continuously stop all movement
 
     // TODO: Button 'A' will disable automatic intake control
-    
+
     // TODO: Button 'Y' will enable automatic intake control
 
     // TODO: Button 'X' will reset tilt encoder (minus default position)
-    
+
     // TODO: Controller triggers will manually move intake up and down
 
     // Button 'LB' (hold) will spit cubes

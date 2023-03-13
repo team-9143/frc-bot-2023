@@ -37,7 +37,7 @@ public class TurnToAngle extends PIDCommand {
   public void execute() {
     super.execute();
     System.out.println(
-      m_controller.getPositionError() + " " + 
+      m_controller.getPositionError() + " " +
       (m_controller.calculate(m_measurement.getAsDouble(), m_setpoint.getAsDouble()))
     );
   }

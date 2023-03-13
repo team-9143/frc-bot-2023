@@ -18,7 +18,7 @@ public final class Autos {
       new ParallelDeadlineGroup(new WaitCommand(1), outtake),
 
       new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(-48)),
-      
+
       new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(36))
     );
   }
@@ -29,7 +29,7 @@ public final class Autos {
       new ParallelDeadlineGroup(new WaitCommand(1), outtake),
 
       new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(-48)),
-      
+
       new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(24)),
 
       balance

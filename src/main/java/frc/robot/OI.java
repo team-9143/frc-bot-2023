@@ -15,7 +15,6 @@ public class OI {
   // Roll increases to the right, pitch to the front, and yaw counter-clockwise
   public final static Pigeon2 pigeon = new Pigeon2(DeviceConstants.kPigeonCANid);
 
-  // TODO: Migrate all controller callings to here
   public static class Controller extends GenericHID {
     public enum btn {
       A(1),

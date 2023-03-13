@@ -27,7 +27,7 @@ public class Balance extends CommandBase {
   public void execute() {
     // Get pitch that increases to the back
     double pitch = -OI.pigeon.getPitch();
-    
+
     if (Math.abs(pitch) > DrivetrainConstants.kBalanceTolerance) {
       if (Math.abs(pitch - previousPitch) > 3) {
         // Stop movement on a large pitch change (usually denoting a fall)
@@ -37,7 +37,7 @@ public class Balance extends CommandBase {
         drivetrain.robotDrive.arcadeDrive(0, Math.copySign(DrivetrainConstants.kSpeedMult * 0.075, pitch), false);
       }
     }
-    
+
     previousPitch = pitch;
   }
 

@@ -25,7 +25,7 @@ public class IntakeTilt extends PIDSubsystem {
     tilt_encoder.setVelocityConversionFactor(IntakeConstants.kTiltGearbox);
     tilt_encoder.setMeasurementPeriod((int) TimedRobot.kDefaultPeriod * 1000);
     disable();
-    
+
     // Set default target
     setSetpoint(IntakeConstants.kUpPos);
   }
