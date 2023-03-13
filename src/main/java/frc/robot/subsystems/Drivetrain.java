@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.OI;
+import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.DeviceConstants;
 
@@ -49,13 +50,15 @@ public class Drivetrain extends SubsystemBase {
       this
     ));
 
-    // TODO: Set encoder velocity conversion factors and measurement periods
     // Sets encoders to measure position and velocity in inches
     l_encoder.setPositionConversionFactor((Math.PI * DrivetrainConstants.kWheelDiameter) / DrivetrainConstants.kGearboxRatio);
     r_encoder.setPositionConversionFactor((Math.PI * DrivetrainConstants.kWheelDiameter) / DrivetrainConstants.kGearboxRatio);
 
     l_encoder.setVelocityConversionFactor((Math.PI * DrivetrainConstants.kWheelDiameter) / DrivetrainConstants.kGearboxRatio);
     r_encoder.setVelocityConversionFactor((Math.PI * DrivetrainConstants.kWheelDiameter) / DrivetrainConstants.kGearboxRatio);
+
+    l_encoder.setMeasurementPeriod((int) TimedRobot.kDefaultPeriod * 1000);
+    r_encoder.setMeasurementPeriod((int) TimedRobot.kDefaultPeriod * 1000);
   }
 
   // Returns the average of the position of the encoders (in inches)

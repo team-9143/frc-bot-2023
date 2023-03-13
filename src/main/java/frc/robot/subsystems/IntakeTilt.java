@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
+import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.Constants.DeviceConstants;
 import frc.robot.Constants.IntakeConstants;
 
@@ -22,6 +23,7 @@ public class IntakeTilt extends PIDSubsystem {
     super(new PIDController(IntakeConstants.kP, IntakeConstants.kI, IntakeConstants.kD));
     tilt_encoder.setPositionConversionFactor(IntakeConstants.kTiltGearbox);
     tilt_encoder.setVelocityConversionFactor(IntakeConstants.kTiltGearbox);
+    tilt_encoder.setMeasurementPeriod((int) TimedRobot.kDefaultPeriod * 1000);
     disable();
     
     // Set default target
