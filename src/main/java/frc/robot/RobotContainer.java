@@ -72,6 +72,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    // Drive Controller:
     // D-pad and right stick will turn to the specified angle
     new Trigger(() -> OI.driver_cntlr.getPOV() != -1)
       .whileTrue(new RunCommand(() -> {
@@ -112,12 +113,15 @@ public class RobotContainer {
         cTurnToAngle.schedule();
       }));
 
-    // TODO: Operator controller:
-
+    // Operator Controller:
     // TODO: Button 'B' (hold) will continuously stop all movement
 
-    // TODO: Button 'Y' (hold) will stop automatic intake movement and on release, reset the base position of the intake encoder
+    // TODO: Button 'A' will disable automatic intake control
+    
+    // TODO: Button 'Y' will enable automatic intake control
 
+    // TODO: Button 'X' will reset tilt encoder (minus default position)
+    
     // TODO: Controller triggers will manually move intake up and down
 
     // Button 'LB' (hold) will spit cubes
