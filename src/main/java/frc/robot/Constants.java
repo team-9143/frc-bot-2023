@@ -48,9 +48,9 @@ public final class Constants {
     public static final double kDistVelTolerance = kDistPosTolerance*100; // Velocity tolerance (in inches/s)
     public static final double kDistMaxSpeed = 1;
     public static final double
-      kDistP = 0,
-      kDistI = 0,
-      kDistD = 0;
+      kDistP = 0.005,
+      kDistI = 0.003,
+      kDistD = 0.003;
 
     // Charge station balancing
     public static final double kBalanceTolerance = 2; // In degrees

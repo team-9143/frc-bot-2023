@@ -20,9 +20,10 @@ public class IntakeTilt extends PIDSubsystem {
 
   public IntakeTilt() {
     super(new PIDController(IntakeConstants.kP, IntakeConstants.kI, IntakeConstants.kD));
-    tilt_encoder.setMeasurementPeriod(20);
     tilt_encoder.setPositionConversionFactor(IntakeConstants.kTiltGearbox);
     tilt_encoder.setVelocityConversionFactor(IntakeConstants.kTiltGearbox);
+    tilt_encoder.setMeasurementPeriod(20);
+    tilt_encoder.setPosition(0);
     disable();
 
     // Set default target

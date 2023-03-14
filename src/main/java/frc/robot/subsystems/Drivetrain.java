@@ -52,7 +52,7 @@ public class Drivetrain extends SubsystemBase {
 
     // Sets encoders to measure position and velocity in inches
     l_encoder.setPositionConversionFactor((Math.PI * DrivetrainConstants.kWheelDiameter) / DrivetrainConstants.kGearboxRatio);
-    r_encoder.setPositionConversionFactor(-(Math.PI * DrivetrainConstants.kWheelDiameter) / DrivetrainConstants.kGearboxRatio);
+    r_encoder.setPositionConversionFactor((Math.PI * DrivetrainConstants.kWheelDiameter) / DrivetrainConstants.kGearboxRatio);
 
     l_encoder.setVelocityConversionFactor((Math.PI * DrivetrainConstants.kWheelDiameter) / DrivetrainConstants.kGearboxRatio);
     r_encoder.setVelocityConversionFactor((Math.PI * DrivetrainConstants.kWheelDiameter) / DrivetrainConstants.kGearboxRatio);
@@ -60,19 +60,22 @@ public class Drivetrain extends SubsystemBase {
     // Sets encoder measurement period to work with default command scheduler loop
     l_encoder.setMeasurementPeriod(20);
     r_encoder.setMeasurementPeriod(20);
+
+    l_encoder.setPosition(0);
+    r_encoder.setPosition(0);
   }
 
   public void turnInPlace(double rotationSpeed) {
-    robotDrive.tankDrive(rotationSpeed, -rotationSpeed, false);
+    robotDrive.tankDrive(rotationSpeed, rotationSpeed, false);
   }
 
   public void moveStraight(double speed) {
-    robotDrive.tankDrive(speed, speed, false);
+    robotDrive.tankDrive(speed, -speed, false);
   }
 
   // Returns the average of the position of the encoders (in inches)
   public double getAvgPosition() {
-    return (l_encoder.getPosition() + r_encoder.getPosition())/2;
+    return (l_encoder.getPosition() - r_encoder.getPosition())/2;
   }
 
   public void resetEncoders() {
