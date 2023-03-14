@@ -5,16 +5,28 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.DeviceConstants;
+import frc.robot.Constants.IntakeConstants;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class IntakeWheels extends SubsystemBase {
-  public final CANSparkMax intake_motor = new CANSparkMax(DeviceConstants.kIntakeWheelsCANid, MotorType.kBrushless);
+  private final CANSparkMax intake_motor = new CANSparkMax(DeviceConstants.kIntakeWheelsID, MotorType.kBrushless);
+
+  public void set(double speed) {intake_motor.set(speed);}
 
   // Stops all motors
   public void stop() {
     intake_motor.stopMotor();
+  }
+
+  // Outtake command
+  public Command getOuttakeCommand() {
+    return this.startEnd(
+      () -> intake_motor.set(IntakeConstants.kOuttakeSpeed),
+      () -> stop()
+    );
   }
 }

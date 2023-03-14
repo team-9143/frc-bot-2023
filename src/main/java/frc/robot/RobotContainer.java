@@ -8,12 +8,13 @@ import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -23,27 +24,38 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  protected final Drivetrain sDrivetrain = new Drivetrain();
-  protected final Limelight sLimelight = new Limelight();
-  protected final IntakeWheels sIntakeWheels = new IntakeWheels();
-  protected final IntakePositional sIntakePosition = new IntakePositional();
+  private final Drivetrain sDrivetrain = new Drivetrain();
+  private final Limelight sLimelight = new Limelight();
+  private final IntakeWheels sIntakeWheels = new IntakeWheels();
+  private final IntakeTilt sIntakeTilt = new IntakeTilt();
 
-  protected final TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain);
-  protected final Balance cBalance = new Balance(sDrivetrain);
-  protected final Intake cIntake = new Intake(sIntakePosition, sIntakeWheels);
-  protected final Command cOuttake = new FunctionalCommand(
-    () -> sIntakeWheels.intake_motor.set(Constants.IntakeConstants.kOuttakeSpeed),
-    () -> {},
-    (interrupted) -> sIntakeWheels.stop(),
-    () -> false,
-    sIntakeWheels
-  );
+  private final Balance cBalance = new Balance(sDrivetrain);
+  private final TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain);
+  private final Intake cIntake = new Intake(sIntakeTilt, sIntakeWheels);
+  private final Command cOuttake = sIntakeWheels.getOuttakeCommand();
+  private final Command cStop = new RunCommand(() -> {
+    sDrivetrain.stop();
+    sIntakeTilt.stop();
+    sIntakeWheels.stop();
+    cTurnToAngle.cancel();
+  });
+
+  // TODO: Testing purposes
+  private final DriveDistance cDriveDistance = new DriveDistance(sDrivetrain);
+
+  // Autonomous chooser declaration
+  public final SendableChooser<Autos.Type> m_autonChooser = new SendableChooser<Autos.Type>();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure Pigeon - make sure to update pitch and roll offsets
     OI.pigeon.configMountPose(0, 0, 0);
     OI.pigeon.setYaw(0);
+
+    // Configure autonomous choices
+    m_autonChooser.addOption("Side Auto", Autos.Type.Side);
+    m_autonChooser.addOption("Center Auto", Autos.Type.Center);
+    m_autonChooser.setDefaultOption("None", Autos.Type.None);
 
     // Configure the trigger bindings
     configureBindings();
@@ -59,59 +71,69 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // TODO: Fix TurnToAngle stutter problem with ~180 degree turns, possible use PID control
-    /*
-    // D-pad or right stick input will turn to the given angle
+    // Drive Controller:
+    // D-pad and right stick will turn to the specified angle
+    new Trigger(() -> OI.driver_cntlr.getPOV() != -1)
+      .whileTrue(new RunCommand(() -> {
+        TurnToAngle.setHeading(Math.round((float) OI.driver_cntlr.getPOV() / 45) * 45);
+        cTurnToAngle.schedule();
+      }));
+
+    // TODO: Fix right stick heading setter
     new Trigger(() ->
-      OI.driver_cntlr.getPOV() != -1
-      || Math.abs(OI.driver_cntlr.getRightStick()[0]) > 0.3
-      || Math.abs(OI.driver_cntlr.getRightStick()[1]) > 0.3
+      OI.driver_cntlr.getPOV() == -1 &&
+      (Math.abs(OI.driver_cntlr.getRightX()) > 0.2 || Math.abs(OI.driver_cntlr.getRightY()) > 0.2)
     )
-      .whileTrue(new RunCommand(() ->
-        cTurnToAngle.findHeading()
-      ));
-    */
+    .whileTrue(new RunCommand(() -> {
+      TurnToAngle.setHeading(Math.toDegrees(Math.atan2(OI.driver_cntlr.getRightY(), OI.driver_cntlr.getRightX())));
+      cTurnToAngle.schedule();
+    }));
 
     // Button 'X' will reset gyro
-    new JoystickButton(OI.driver_cntlr, LogitechController.BTN_X)
+    new JoystickButton(OI.driver_cntlr, OI.Controller.btn.X.val)
       .onTrue(new InstantCommand(() ->
         OI.pigeon.setYaw(0)
       ));
 
     // Button 'B' (hold) will continuously stop all movement
-    new JoystickButton(OI.driver_cntlr, LogitechController.BTN_B)
-      .whileTrue(new RunCommand(() -> {
-        sDrivetrain.stop();
-        sIntakePosition.stop();
-        sIntakeWheels.stop();
-      }));
+    new JoystickButton(OI.driver_cntlr, OI.Controller.btn.B.val)
+      .whileTrue(cStop);
 
     // Button 'A' (hold) will cause robot to balance on a charge station
-    new JoystickButton(OI.driver_cntlr, LogitechController.BTN_A)
+    new JoystickButton(OI.driver_cntlr, OI.Controller.btn.A.val)
       .whileTrue(cBalance);
 
-    // Visual Testing purposes
-    // Button 'Y' will toggle through limelight LED
-    new JoystickButton(OI.driver_cntlr, LogitechController.BTN_Y)
-      .onTrue(new InstantCommand(() ->
-        sLimelight.setLedMode((sLimelight.getLedMode() <= 1) ? 3 : sLimelight.getLedMode()-1)
-      ));    
+    // TODO: Testing purposes
+    // Button 'Y' will activate PID commands
+    new JoystickButton(OI.driver_cntlr, OI.Controller.btn.Y.val)
+      .onTrue(new InstantCommand(() -> {
+        TurnToAngle.setHeading(90);
+        cTurnToAngle.schedule();
+      }));
 
-    // TODO: Operator controller: 
-    
+    // Operator Controller:
     // TODO: Button 'B' (hold) will continuously stop all movement
 
-    // TODO: Button 'Y' (hold) will stop automatic intake movement and on release, reset the base position of the intake encoder
-    
+    // TODO: Button 'A' will disable automatic intake control
+
+    // TODO: Button 'Y' will enable automatic intake control
+
+    // TODO: Button 'X' will reset tilt encoder (minus default position)
+
     // TODO: Controller triggers will manually move intake up and down
 
     // Button 'LB' (hold) will spit cubes
-    new JoystickButton(OI.driver_cntlr, LogitechController.BTN_LB)
+    new JoystickButton(OI.driver_cntlr, OI.Controller.btn.LB.val)
       .whileTrue(cOuttake);
 
     // Button 'RB' (hold) will lower and activate intake
-    new JoystickButton(OI.driver_cntlr, LogitechController.BTN_RB)
+    new JoystickButton(OI.driver_cntlr, OI.Controller.btn.RB.val)
       .whileTrue(cIntake);
+  }
+
+  /** Stops all motors and disables PID controllers */
+  public void stop() {
+    cStop.execute();
   }
 
   /**
@@ -120,8 +142,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
     // TODO: Autonomous command chooser and commands in Autos class
-    return new InstantCommand();
+    return Autos.getAuto(m_autonChooser.getSelected(), sDrivetrain, sIntakeWheels);
   }
 }

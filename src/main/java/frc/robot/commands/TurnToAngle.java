@@ -4,57 +4,57 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.robot.OI;
+import edu.wpi.first.math.MathUtil;
 import frc.robot.Constants.DrivetrainConstants;
 
 import frc.robot.subsystems.Drivetrain;
 
-public class TurnToAngle extends CommandBase {
-  private Drivetrain drivetrain;
-  private static double heading;
+// TODO: Fix issue with large turns producing outputs greater than 1
+public class TurnToAngle extends PIDCommand {
+  private static double m_heading = 0;
 
   public TurnToAngle(Drivetrain drivetrain) {
-    this.drivetrain = drivetrain;
+    super(
+      new PIDController(DrivetrainConstants.kTurnP, DrivetrainConstants.kTurnI, DrivetrainConstants.kTurnD),
+      () -> -OI.pigeon.getYaw(),
+      () -> m_heading,
+      output -> drivetrain.turnInPlace(MathUtil.clamp(output, -DrivetrainConstants.kTurnMaxSpeed, DrivetrainConstants.kTurnMaxSpeed))
+    );
 
-    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
+
+    // Configure additional PID options
+    m_controller.setTolerance(DrivetrainConstants.kTurnPosTolerance, DrivetrainConstants.kTurnVelTolerance);
+    m_controller.enableContinuousInput(-180, 180);
+    m_controller.setSetpoint(0);
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
+  // TODO: Testing purposes
   @Override
-  public void execute()
-  {
-    // Get turning angle within the range -180 to +180, then bind to -1 to 1
-    double turnAngle = (heading + OI.pigeon.getYaw()) % 360;
-    turnAngle += (turnAngle < -180) ? 360 : (turnAngle > 180) ? -360 : 0;
-    double turnAngleMult = turnAngle / 180;
-
-    if (Math.abs(turnAngle) > DrivetrainConstants.kTurnDeadspot) {
-      drivetrain.robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult * Math.copySign((turnAngleMult*turnAngleMult * (1-DrivetrainConstants.kTurnPower)) + DrivetrainConstants.kTurnPower, turnAngleMult), 0, false);
-    } else {
-      // Stop when within turning deadspot
-      drivetrain.stop();
-    }
+  public void execute() {
+    super.execute();
+    System.out.println(
+      m_measurement.getAsDouble() + " " + m_setpoint.getAsDouble() + " " +
+      (m_controller.calculate(m_measurement.getAsDouble(), m_setpoint.getAsDouble()))
+    );
   }
 
-  // Main way to schedule command
-  public void setHeading(double fheading) {
-    heading = fheading;
-    schedule();
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    return m_controller.atSetpoint();
   }
 
-  // Called when a trigger shows sufficient input
-  public void findHeading() {
-    if (OI.driver_cntlr.getPOV() != -1) {
-      // Round heading to 45 degrees, input from d-pad
-      setHeading(45 * Math.round((float) OI.driver_cntlr.getPOV() / 45));
-    } else {
-      // Find specific angle, input from right stick
-      setHeading(Math.toDegrees(Math.atan2(
-        OI.driver_cntlr.getRightStick()[0],
-        OI.driver_cntlr.getRightStick()[1]
-      )));
-    }
+  /**
+   * Sets target heading and resets PID controller
+   *
+   * @param fheading Target heading (in degrees)
+   */
+  public static void setHeading(double fheading) {
+    // TODO: Ensure that heading changes do not mess with derivative/integral calculations, reset PID controller as necessary
+    m_heading = fheading;
   }
 }
