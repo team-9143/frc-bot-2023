@@ -17,7 +17,8 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public final class Autos {
   public static enum Type {
     Side,
-    Center
+    Center,
+    None
   }
 
   public static Command getAuto(Type type, Drivetrain sDrivetrain, Balance cBalance, Command cOuttake) {

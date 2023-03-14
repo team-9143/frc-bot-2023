@@ -58,8 +58,8 @@ public final class Constants {
     public static final double kTiltGearbox = (double) 1/28;
 
     // Cube intake/outtake wheel speed
-    public static final double kIntakeSpeed = 0.05;
-    public static final double kOuttakeSpeed = -0.25;
+    public static final double kIntakeSpeed = 0.3;
+    public static final double kOuttakeSpeed = -1;
 
     // In rotations, multiplied by gearbox ratio
     public static final double kUpPos = -0.02;
@@ -67,8 +67,8 @@ public final class Constants {
 
     // Intake tilt gains
     public static final double
-      kP = 0.013 / kTiltGearbox,
+      kP = 0.012 / kTiltGearbox,
       kI = 0.015 / kTiltGearbox,
-      kD = 0.01 / kTiltGearbox;
+      kD = 0.009 / kTiltGearbox;
   }
 }

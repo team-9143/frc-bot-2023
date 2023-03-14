@@ -146,6 +146,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // TODO: Autonomous command chooser and commands in Autos class
-    return Autos.getAuto(m_autonChooser.getSelected(), sDrivetrain, cBalance, cOuttake);
+    return Autos.getAuto(Autos.Type.None /*m_autonChooser.getSelected()*/, sDrivetrain, cBalance, cOuttake);
   }
 }

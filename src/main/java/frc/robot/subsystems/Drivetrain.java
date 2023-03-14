@@ -44,7 +44,7 @@ public class Drivetrain extends SubsystemBase {
           this.robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult*DrivetrainConstants.kTurnMult * OI.driver_cntlr.getTriggers(), 0, true);
         } else {
           // Regular drive, input from left stick
-          this.robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult*DrivetrainConstants.kTurnMult * OI.driver_cntlr.getLeftX(), -DrivetrainConstants.kSpeedMult*OI.driver_cntlr.getLeftY(), true);
+          this.robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult*DrivetrainConstants.kTurnMult * OI.driver_cntlr.getLeftX(), DrivetrainConstants.kSpeedMult*OI.driver_cntlr.getLeftY(), true);
         }
       },
       this
@@ -57,8 +57,8 @@ public class Drivetrain extends SubsystemBase {
     l_encoder.setVelocityConversionFactor((Math.PI * DrivetrainConstants.kWheelDiameter) / DrivetrainConstants.kGearboxRatio);
     r_encoder.setVelocityConversionFactor((Math.PI * DrivetrainConstants.kWheelDiameter) / DrivetrainConstants.kGearboxRatio);
 
-    l_encoder.setMeasurementPeriod((int) TimedRobot.kDefaultPeriod * 1000);
-    r_encoder.setMeasurementPeriod((int) TimedRobot.kDefaultPeriod * 1000);
+    //l_encoder.setMeasurementPeriod((int) TimedRobot.kDefaultPeriod * 1000);
+    //r_encoder.setMeasurementPeriod((int) TimedRobot.kDefaultPeriod * 1000);
   }
 
   // Returns the average of the position of the encoders (in inches)
