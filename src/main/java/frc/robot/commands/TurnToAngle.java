@@ -21,7 +21,7 @@ public class TurnToAngle extends PIDCommand {
       new PIDController(DrivetrainConstants.kTurnP, DrivetrainConstants.kTurnI, DrivetrainConstants.kTurnD),
       () -> -OI.pigeon.getYaw(),
       () -> m_heading,
-      output -> drivetrain.robotDrive.arcadeDrive(MathUtil.clamp(output, -1, 1), 0)
+      output -> drivetrain.robotDrive.arcadeDrive(MathUtil.clamp(output, -1, 1), 0, false)
     );
 
     addRequirements(drivetrain);
@@ -37,7 +37,7 @@ public class TurnToAngle extends PIDCommand {
   public void execute() {
     super.execute();
     System.out.println(
-      m_controller.getPositionError() + " " +
+      m_measurement.getAsDouble() + " " + m_setpoint.getAsDouble() + " " +
       (m_controller.calculate(m_measurement.getAsDouble(), m_setpoint.getAsDouble()))
     );
   }

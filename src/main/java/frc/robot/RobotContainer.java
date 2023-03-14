@@ -8,6 +8,7 @@ import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -48,7 +49,7 @@ public class RobotContainer {
   private final DriveDistance cDriveDistance = new DriveDistance(sDrivetrain);
 
   // Autonomous chooser declaration
-  protected final SendableChooser<Autos.Type> m_autonChooser = new SendableChooser<Autos.Type>();
+  public final SendableChooser<Autos.Type> m_autonChooser = new SendableChooser<Autos.Type>();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -59,6 +60,7 @@ public class RobotContainer {
     // Configure autonomous choices
     m_autonChooser.addOption("Side Auto", Autos.Type.Side);
     m_autonChooser.addOption("Center Auto", Autos.Type.Center);
+    m_autonChooser.setDefaultOption("None", Autos.Type.None);
 
     // Configure the trigger bindings
     configureBindings();
@@ -146,6 +148,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // TODO: Autonomous command chooser and commands in Autos class
-    return Autos.getAuto(Autos.Type.None /*m_autonChooser.getSelected()*/, sDrivetrain, cBalance, cOuttake);
+    return Autos.getAuto(m_autonChooser.getSelected(), sDrivetrain, cOuttake);
   }
 }

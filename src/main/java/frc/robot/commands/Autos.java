@@ -21,15 +21,14 @@ public final class Autos {
     None
   }
 
-  public static Command getAuto(Type type, Drivetrain sDrivetrain, Balance cBalance, Command cOuttake) {
-    CommandScheduler.getInstance().removeComposedCommand(cBalance);
+  public static Command getAuto(Type type, Drivetrain sDrivetrain, Command cOuttake) {
     CommandScheduler.getInstance().removeComposedCommand(cOuttake);
     
     switch(type) {
       case Side:
         return SideAuto(sDrivetrain, cOuttake);
       case Center:
-        return CenterAuto(sDrivetrain, cBalance, cOuttake);
+        return CenterAuto(sDrivetrain, cOuttake);
       default:
         return new InstantCommand();
     }
@@ -47,7 +46,7 @@ public final class Autos {
   }
 
   // Auto to score a pre-loaded cube, drive over the charge station, then drive back and balance
-  private static Command CenterAuto(Drivetrain sDrivetrain, Balance cBalance, Command cOuttake) {
+  private static Command CenterAuto(Drivetrain sDrivetrain, Command cOuttake) {
     return new SequentialCommandGroup(
       new ParallelDeadlineGroup(new WaitCommand(1), cOuttake),
 
@@ -55,7 +54,7 @@ public final class Autos {
 
       new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(24)),
 
-      cBalance
+      new Balance(sDrivetrain)
     );
   }
 }

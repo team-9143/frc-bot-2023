@@ -20,7 +20,7 @@ public class DriveDistance extends PIDCommand {
       new PIDController(DrivetrainConstants.kDistP, DrivetrainConstants.kDistI, DrivetrainConstants.kDistD),
       () -> drivetrain.getAvgPosition(),
       () -> m_distance,
-      output -> drivetrain.robotDrive.arcadeDrive(0, MathUtil.clamp(output, -1, 1))
+      output -> drivetrain.robotDrive.arcadeDrive(0, MathUtil.clamp(output, -1, 1), false)
     );
 
     this.drivetrain = drivetrain;
