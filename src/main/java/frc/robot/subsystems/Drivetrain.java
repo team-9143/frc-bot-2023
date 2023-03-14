@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.math.MathUtil;
 import frc.robot.OI;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.DeviceConstants;
@@ -38,9 +39,9 @@ public class Drivetrain extends SubsystemBase {
     // Set the default command for a subsystem here.
     setDefaultCommand(new RunCommand(
       () -> {
-        if (Math.abs(OI.driver_cntlr.getTriggers()) > 0.1) {
+        if (Math.abs(OI.driver_cntlr.getTriggers()) > 0.05) {
           // Turn in place, input from trigger
-          turnInPlace(DrivetrainConstants.kTurnMult * OI.driver_cntlr.getTriggers());
+          turnInPlace(DrivetrainConstants.kTurnMult * MathUtil.applyDeadband(OI.driver_cntlr.getTriggers(), 0.05));
         } else {
           // Regular drive, input from left stick
           robotDrive.arcadeDrive(DrivetrainConstants.kTurnMult * OI.driver_cntlr.getLeftX(), DrivetrainConstants.kSpeedMult * OI.driver_cntlr.getLeftY(), true);
