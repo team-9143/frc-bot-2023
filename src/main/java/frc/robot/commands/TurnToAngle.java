@@ -21,7 +21,7 @@ public class TurnToAngle extends PIDCommand {
       new PIDController(DrivetrainConstants.kTurnP, DrivetrainConstants.kTurnI, DrivetrainConstants.kTurnD),
       () -> -OI.pigeon.getYaw(),
       () -> m_heading,
-      output -> drivetrain.robotDrive.arcadeDrive(MathUtil.clamp(output, -1, 1), 0, false)
+      output -> drivetrain.turnInPlace(MathUtil.clamp(output, -DrivetrainConstants.kTurnMaxSpeed, DrivetrainConstants.kTurnMaxSpeed))
     );
 
     addRequirements(drivetrain);

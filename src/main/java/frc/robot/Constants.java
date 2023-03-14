@@ -30,13 +30,14 @@ public final class Constants {
     public static final double kWheelDiameter = 6; // In inches
     public static final double kGearboxRatio = 12.761;
 
-    // General driving
-    public static final double kSpeedMult = 1; // Applies to all drivetrain movement
-    public static final double kTurnMult = 0.7; // For controller-based turning
+    // Teleop driving
+    public static final double kSpeedMult = 1; // Applies to all manual drivetrain movement
+    public static final double kTurnMult = 0.7;
 
     // TurnToAngle
     public static final double kTurnPosTolerance = 1.5; // Position tolerance (in degrees)
     public static final double kTurnVelTolerance = kTurnPosTolerance*100; // Velocity tolerance (in degrees/s)
+    public static final double kTurnMaxSpeed = 1;
     public static final double
       kTurnP = 0.005,
       kTurnI = 0.0035,
@@ -45,6 +46,7 @@ public final class Constants {
     // DriveDistance
     public static final double kDistPosTolerance = 2; // Position tolerance (in inches)
     public static final double kDistVelTolerance = kDistPosTolerance*100; // Velocity tolerance (in inches/s)
+    public static final double kDistMaxSpeed = 1;
     public static final double
       kDistP = 0,
       kDistI = 0,
@@ -52,6 +54,7 @@ public final class Constants {
 
     // Charge station balancing
     public static final double kBalanceTolerance = 2; // In degrees
+    public static final double kBalanceSpeed = 0.075;
   }
 
   public static class IntakeConstants {
@@ -61,7 +64,7 @@ public final class Constants {
     public static final double kIntakeSpeed = 0.3;
     public static final double kOuttakeSpeed = -1;
 
-    // In rotations, multiplied by gearbox ratio
+    // In rotations
     public static final double kUpPos = -0.02;
     public static final double kDownPos = (double) -75/360;
 

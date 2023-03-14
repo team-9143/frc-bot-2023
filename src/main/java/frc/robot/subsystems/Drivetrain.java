@@ -29,7 +29,7 @@ public class Drivetrain extends SubsystemBase {
   private static final RelativeEncoder l_encoder = fl_motor.getEncoder();
   private static final RelativeEncoder r_encoder = fr_motor.getEncoder();
 
-  public final DifferentialDrive robotDrive = new DifferentialDrive(
+  private final DifferentialDrive robotDrive = new DifferentialDrive(
     new MotorControllerGroup(fl_motor, bl_motor),
     new MotorControllerGroup(fr_motor, br_motor)
   );
@@ -40,10 +40,10 @@ public class Drivetrain extends SubsystemBase {
       () -> {
         if (Math.abs(OI.driver_cntlr.getTriggers()) > 0.1) {
           // Turn in place, input from trigger
-          this.robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult*DrivetrainConstants.kTurnMult * OI.driver_cntlr.getTriggers(), 0, true);
+          turnInPlace(DrivetrainConstants.kTurnMult * OI.driver_cntlr.getTriggers());
         } else {
           // Regular drive, input from left stick
-          this.robotDrive.arcadeDrive(DrivetrainConstants.kSpeedMult*DrivetrainConstants.kTurnMult * OI.driver_cntlr.getLeftX(), DrivetrainConstants.kSpeedMult*OI.driver_cntlr.getLeftY(), true);
+          robotDrive.arcadeDrive(DrivetrainConstants.kTurnMult * OI.driver_cntlr.getLeftX(), DrivetrainConstants.kSpeedMult * OI.driver_cntlr.getLeftY(), true);
         }
       },
       this
@@ -56,8 +56,17 @@ public class Drivetrain extends SubsystemBase {
     l_encoder.setVelocityConversionFactor((Math.PI * DrivetrainConstants.kWheelDiameter) / DrivetrainConstants.kGearboxRatio);
     r_encoder.setVelocityConversionFactor((Math.PI * DrivetrainConstants.kWheelDiameter) / DrivetrainConstants.kGearboxRatio);
 
+    // Sets encoder measurement period to work with default command scheduler loop
     l_encoder.setMeasurementPeriod(20);
     r_encoder.setMeasurementPeriod(20);
+  }
+
+  public void turnInPlace(double rotationSpeed) {
+    robotDrive.tankDrive(rotationSpeed, -rotationSpeed, false);
+  }
+
+  public void moveStraight(double speed) {
+    robotDrive.tankDrive(speed, speed, false);
   }
 
   // Returns the average of the position of the encoders (in inches)

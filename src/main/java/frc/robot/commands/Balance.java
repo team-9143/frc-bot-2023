@@ -34,7 +34,7 @@ public class Balance extends CommandBase {
         drivetrain.stop();
       } else {
         // Move forward while tilting backward and vice versa
-        drivetrain.robotDrive.arcadeDrive(0, Math.copySign(DrivetrainConstants.kSpeedMult * 0.075, pitch), false);
+        drivetrain.moveStraight(Math.copySign(DrivetrainConstants.kSpeedMult * DrivetrainConstants.kBalanceSpeed, pitch));
       }
     }
 

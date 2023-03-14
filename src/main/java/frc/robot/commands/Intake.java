@@ -28,7 +28,7 @@ public class Intake extends CommandBase {
     // Sets setpoint down and starts intake
     intakeTilt.setSetpoint(IntakeConstants.kDownPos);
     intakeTilt.enable();
-    intakeWheels.intake_motor.set(IntakeConstants.kIntakeSpeed);
+    intakeWheels.set(IntakeConstants.kIntakeSpeed);
   }
 
   // Called once the command ends or is interrupted.
