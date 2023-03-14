@@ -5,14 +5,11 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.IntakeWheels;
 import edu.wpi.first.wpilibj2.command.Command;
-
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public final class Autos {
   public static enum Type {
@@ -21,23 +18,21 @@ public final class Autos {
     None
   }
 
-  public static Command getAuto(Type type, Drivetrain sDrivetrain, Command cOuttake) {
-    CommandScheduler.getInstance().removeComposedCommand(cOuttake);
-    
+  public static Command getAuto(Type type, Drivetrain sDrivetrain, IntakeWheels sIntakeWheels) {
     switch(type) {
       case Side:
-        return SideAuto(sDrivetrain, cOuttake);
+        return SideAuto(sDrivetrain, sIntakeWheels);
       case Center:
-        return CenterAuto(sDrivetrain, cOuttake);
+        return CenterAuto(sDrivetrain, sIntakeWheels);
       default:
         return new InstantCommand();
     }
   }
 
   // Score a pre-loaded cube, then drive out of the community and back in
-  private static Command SideAuto(Drivetrain sDrivetrain, Command cOuttake) {
+  private static Command SideAuto(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels) {
     return new SequentialCommandGroup(
-      new ParallelDeadlineGroup(new WaitCommand(1), cOuttake),
+      sIntakeWheels.getOuttakeCommand().withTimeout(1),
 
       new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(-48)),
 
@@ -46,9 +41,9 @@ public final class Autos {
   }
 
   // Auto to score a pre-loaded cube, drive over the charge station, then drive back and balance
-  private static Command CenterAuto(Drivetrain sDrivetrain, Command cOuttake) {
+  private static Command CenterAuto(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels) {
     return new SequentialCommandGroup(
-      new ParallelDeadlineGroup(new WaitCommand(1), cOuttake),
+      sIntakeWheels.getOuttakeCommand().withTimeout(1),
 
       new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(-48)),
 

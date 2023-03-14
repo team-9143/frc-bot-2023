@@ -5,7 +5,9 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.DeviceConstants;
+import frc.robot.Constants.IntakeConstants;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -16,5 +18,13 @@ public class IntakeWheels extends SubsystemBase {
   // Stops all motors
   public void stop() {
     intake_motor.stopMotor();
+  }
+
+  // Outtake command
+  public Command getOuttakeCommand() {
+    return this.startEnd(
+      () -> intake_motor.set(IntakeConstants.kOuttakeSpeed),
+      () -> stop()
+    );
   }
 }
