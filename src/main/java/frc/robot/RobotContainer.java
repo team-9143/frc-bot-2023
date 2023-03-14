@@ -37,6 +37,7 @@ public class RobotContainer {
     sDrivetrain.stop();
     sIntakeTilt.stop();
     sIntakeWheels.stop();
+    cTurnToAngle.cancel();
   });
 
   // TODO: Testing purposes
