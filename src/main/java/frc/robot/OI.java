@@ -13,7 +13,7 @@ public class OI {
 
   // In proper orientation, Pigeon is flat and facing so that X-axis is forward
   // Roll increases to the right, pitch to the front, and yaw counter-clockwise
-  public final static Pigeon2 pigeon = new Pigeon2(DeviceConstants.kPigeonCANid);
+  public final static Pigeon2 pigeon = new Pigeon2(DeviceConstants.kPigeonID);
 
   public static class Controller extends GenericHID {
     public static enum btn {

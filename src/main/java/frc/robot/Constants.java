@@ -17,13 +17,13 @@ public final class Constants {
   public static class DeviceConstants {
     public static final byte kDriverCntlrPort = 0;
     public static final byte
-      kFrontLeftCANid = 3,
-      kBackLeftCANid = 4,
-      kFrontRightCANid = 2,
-      kBackRightCANid = 1,
-      kPigeonCANid = 5,
-      kIntakeWheelsCANid = 6,
-      kIntakeTiltCANid = 17;
+      kFrontLeftID = 3,
+      kBackLeftID = 4,
+      kFrontRightID = 2,
+      kBackRightID = 1,
+      kPigeonID = 5,
+      kIntakeWheelsID = 6,
+      kIntakeTiltID = 17;
   }
 
   public static class DrivetrainConstants {

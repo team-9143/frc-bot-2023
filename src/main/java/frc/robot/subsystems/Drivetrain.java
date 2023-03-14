@@ -21,10 +21,10 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 public class Drivetrain extends SubsystemBase {
   // Initialize motors, encoders, and differential drive
   private static final CANSparkMax
-    fl_motor = new CANSparkMax(DeviceConstants.kFrontLeftCANid, MotorType.kBrushless),
-    bl_motor = new CANSparkMax(DeviceConstants.kBackLeftCANid, MotorType.kBrushless),
-    fr_motor = new CANSparkMax(DeviceConstants.kFrontRightCANid, MotorType.kBrushless),
-    br_motor = new CANSparkMax(DeviceConstants.kBackRightCANid, MotorType.kBrushless);
+    fl_motor = new CANSparkMax(DeviceConstants.kFrontLeftID, MotorType.kBrushless),
+    bl_motor = new CANSparkMax(DeviceConstants.kBackLeftID, MotorType.kBrushless),
+    fr_motor = new CANSparkMax(DeviceConstants.kFrontRightID, MotorType.kBrushless),
+    br_motor = new CANSparkMax(DeviceConstants.kBackRightID, MotorType.kBrushless);
 
   private static final RelativeEncoder l_encoder = fl_motor.getEncoder();
   private static final RelativeEncoder r_encoder = fr_motor.getEncoder();
