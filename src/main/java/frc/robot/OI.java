@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj.GenericHID;
 
 public class OI {
   public final static Controller driver_cntlr = new Controller(DeviceConstants.kDriverCntlrPort);
+  public final static Controller operator_cntlr = new Controller(DeviceConstants.kOperatorCntlrPort);
+
   public final static NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
 
   // In proper orientation, Pigeon is flat and facing so that X-axis is forward
