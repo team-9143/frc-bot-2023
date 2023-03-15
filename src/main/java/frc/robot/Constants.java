@@ -15,8 +15,8 @@ package frc.robot;
  */
 public final class Constants {
   public static class DeviceConstants {
-    public static final byte kDriverCntlrPort = 0;
-    public static final byte kOperatorCntlrPort = 1;
+    public static final byte kDriverCntlrPort = 1;
+    public static final byte kOperatorCntlrPort = 0;
     public static final byte
       kFrontLeftID = 3,
       kBackLeftID = 4,
@@ -67,8 +67,8 @@ public final class Constants {
 
     // TODO: Test and tune speed as necessary
     // Manual intake movement
-    public static final double kUpSpeed = 0.3;
-    public static final double kDownSpeed = -0.2;
+    public static final double kUpSpeed = 0.1;
+    public static final double kDownSpeed = -0.08;
 
     // Preset positions in rotations
     public static final double kUpPos = -0.02;

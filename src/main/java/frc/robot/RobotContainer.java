@@ -114,7 +114,7 @@ public class RobotContainer {
 
     // Operator Controller:
     // Button 'B' (hold) will continuously stop all movement
-    new JoystickButton(OI.driver_cntlr, OI.Controller.btn.B.val)
+    new JoystickButton(OI.operator_cntlr, OI.Controller.btn.B.val)
       .whileTrue(cStop);
 
     // Button 'A' will disable automatic intake control
@@ -136,11 +136,11 @@ public class RobotContainer {
       }));
 
     // Triggers will disable intake and manually move up (LT) and down (RT)
-    new Trigger(() -> Math.abs(OI.operator_cntlr.getTriggers()) > 0.1)
+    new Trigger(() -> Math.abs(OI.operator_cntlr.getTriggers()) > 0.05)
       .whileTrue(new FunctionalCommand(
         () -> sIntakeTilt.disable(),
-        () -> sIntakeTilt.useOutput((OI.driver_cntlr.getTriggers() > 0) ? Constants.IntakeConstants.kDownSpeed : Constants.IntakeConstants.kUpSpeed, 0),
-        interrupted -> {},
+        () -> sIntakeTilt.useOutput(((OI.operator_cntlr.getTriggers() < 0) ? Constants.IntakeConstants.kUpSpeed : Constants.IntakeConstants.kDownSpeed), 0),
+        interrupted -> sIntakeTilt.disable(),
         () -> false,
         sIntakeTilt
       ));
