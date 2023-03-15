@@ -8,6 +8,7 @@ import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 
@@ -134,11 +135,14 @@ public class RobotContainer {
         sIntakeTilt.resetEncoder();
       }));
 
-    // Triggers will manually move intake up (LT) and down (RT)
+    // Triggers will disable intake and manually move up (LT) and down (RT)
     new Trigger(() -> Math.abs(OI.operator_cntlr.getTriggers()) > 0.1)
-      .whileTrue(new RunCommand(
-        () -> sIntakeWheels.set((OI.driver_cntlr.getTriggers() > 0) ? Constants.IntakeConstants.kDownSpeed : Constants.IntakeConstants.kUpSpeed),
-        sIntakeWheels
+      .whileTrue(new FunctionalCommand(
+        () -> sIntakeTilt.disable(),
+        () -> sIntakeTilt.useOutput((OI.driver_cntlr.getTriggers() > 0) ? Constants.IntakeConstants.kDownSpeed : Constants.IntakeConstants.kUpSpeed, 0),
+        interrupted -> {},
+        () -> false,
+        sIntakeTilt
       ));
 
     // Button 'LB' (hold) will spit cubes
