@@ -35,8 +35,8 @@ public class RobotContainer {
   private final Command cOuttake = sIntakeWheels.getOuttakeCommand();
   private final Command cStop = new RunCommand(() -> {
     sDrivetrain.stop();
-    sIntakeTilt.stop();
     sIntakeWheels.stop();
+    sIntakeTilt.disable();
     cTurnToAngle.cancel();
   });
 

@@ -4,38 +4,41 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.robot.Constants.IntakeConstants;
 
 import frc.robot.subsystems.IntakeTilt;
 import frc.robot.subsystems.IntakeWheels;
 
-public class Intake extends CommandBase {
-  private final IntakeTilt intakeTilt;
+public class Intake extends PIDCommand {
+  private final IntakeTilt intakeTilt;  
   private final IntakeWheels intakeWheels;
-
+  
   public Intake(IntakeTilt intakeTilt, IntakeWheels intakeWheels) {
+    super(
+      new PIDController(IntakeConstants.kDownP, IntakeConstants.kDownI, IntakeConstants.kDownD),
+      () -> intakeTilt.getMeasurement(),
+      () -> IntakeConstants.kDownPos,
+      output -> intakeTilt.useOutput(output, IntakeConstants.kDownPos)
+    );
+
     this.intakeTilt = intakeTilt;
     this.intakeWheels = intakeWheels;
 
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(intakeTilt);
+    addRequirements(intakeTilt, intakeWheels);
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // Sets setpoint down and starts intake
-    intakeTilt.setSetpoint(IntakeConstants.kDownPos);
-    intakeTilt.enable();
+    intakeTilt.disable();
+    m_controller.reset();
     intakeWheels.set(IntakeConstants.kIntakeSpeed);
   }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    // Sets default setpoint and stops intake
-    intakeTilt.setSetpoint(IntakeConstants.kUpPos);
     intakeWheels.stop();
+    intakeTilt.enable();
   }
-}
+} 
