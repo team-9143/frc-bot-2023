@@ -54,7 +54,8 @@ public class RobotContainer {
     OI.pigeon.setYaw(0);
 
     // Configure autonomous choices
-    m_autonChooser.addOption("Side Auto", Autos.Type.Side);
+    m_autonChooser.addOption("Long Auto", Autos.Type.Long);
+    m_autonChooser.addOption("Short Auto", Autos.Type.Short);
     m_autonChooser.addOption("Center Auto", Autos.Type.Center);
     m_autonChooser.setDefaultOption("None", Autos.Type.None);
 
@@ -165,6 +166,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return Autos.getAuto(m_autonChooser.getSelected(), sDrivetrain, sIntakeWheels);
+    return Autos.getAuto(m_autonChooser.getSelected(), sDrivetrain, sIntakeWheels).beforeStarting(() -> sIntakeTilt.enable());
   }
 }

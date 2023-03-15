@@ -8,20 +8,24 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.IntakeTilt;
 import frc.robot.subsystems.IntakeWheels;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public final class Autos {
   public static enum Type {
-    Side,
+    Long,
+    Short,
     Center,
     None
   }
 
   public static Command getAuto(Type type, Drivetrain sDrivetrain, IntakeWheels sIntakeWheels) {
     switch(type) {
-      case Side:
-        return SideAuto(sDrivetrain, sIntakeWheels);
+      case Long:
+        return LongAuto(sDrivetrain, sIntakeWheels);
+      case Short:
+        return ShortAuto(sDrivetrain, sIntakeWheels);
       case Center:
         return CenterAuto(sDrivetrain, sIntakeWheels);
       default:
@@ -30,13 +34,20 @@ public final class Autos {
   }
 
   // Score a pre-loaded cube, then drive out of the community and back in
-  private static Command SideAuto(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels) {
+  private static Command LongAuto(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels) {
     return new SequentialCommandGroup(
       sIntakeWheels.getOuttakeCommand().withTimeout(1),
 
-      new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(-48)),
+      new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(-140))
+    );
+  }
+  
+  // Score a pre-loaded cube, then drive out of the community and back in
+  private static Command ShortAuto(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels) {
+    return new SequentialCommandGroup(
+      sIntakeWheels.getOuttakeCommand().withTimeout(1),
 
-      new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(36))
+      new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(-80))
     );
   }
 
