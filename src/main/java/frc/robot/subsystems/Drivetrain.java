@@ -28,7 +28,7 @@ public class Drivetrain extends SubsystemBase {
     br_motor = new CANSparkMax(DeviceConstants.kBackRightID, MotorType.kBrushless);
 
   private static final RelativeEncoder l_encoder = fl_motor.getEncoder();
-  private static final RelativeEncoder r_encoder = fr_motor.getEncoder();
+  private static final RelativeEncoder r_encoder = fr_motor.getEncoder(); // Position must be inverted when called
 
   private final DifferentialDrive robotDrive = new DifferentialDrive(
     new MotorControllerGroup(fl_motor, bl_motor),

@@ -19,7 +19,7 @@ public class IntakeTilt extends PIDSubsystem {
   private final RelativeEncoder tilt_encoder = tilt_motor.getEncoder();
 
   public IntakeTilt() {
-    super(new PIDController(IntakeConstants.kP, IntakeConstants.kI, IntakeConstants.kD));
+    super(new PIDController(IntakeConstants.kUpP, IntakeConstants.kUpI, IntakeConstants.kUpD));
     tilt_encoder.setPositionConversionFactor(IntakeConstants.kTiltGearbox);
     tilt_encoder.setVelocityConversionFactor(IntakeConstants.kTiltGearbox);
     tilt_encoder.setMeasurementPeriod(20);
@@ -42,9 +42,7 @@ public class IntakeTilt extends PIDSubsystem {
     return tilt_encoder.getPosition();
   }
 
-  // Disables PID control, stopping calculation and motors, and resets to default target. Movement will only restart when re-enabled.
-  public void stop() {
-    disable();
-    setSetpoint(IntakeConstants.kUpPos);
+  public void resetEncoder() {
+    tilt_encoder.setPosition(IntakeConstants.kUpPos);
   }
 }

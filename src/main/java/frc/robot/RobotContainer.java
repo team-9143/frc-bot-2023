@@ -8,6 +8,7 @@ import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 
@@ -35,8 +36,8 @@ public class RobotContainer {
   private final Command cOuttake = sIntakeWheels.getOuttakeCommand();
   private final Command cStop = new RunCommand(() -> {
     sDrivetrain.stop();
-    sIntakeTilt.stop();
     sIntakeWheels.stop();
+    sIntakeTilt.disable();
     cTurnToAngle.cancel();
   });
 
@@ -112,22 +113,44 @@ public class RobotContainer {
       }));
 
     // Operator Controller:
-    // TODO: Button 'B' (hold) will continuously stop all movement
+    // Button 'B' (hold) will continuously stop all movement
+    new JoystickButton(OI.operator_cntlr, OI.Controller.btn.B.val)
+      .whileTrue(cStop);
 
-    // TODO: Button 'A' will disable automatic intake control
+    // Button 'A' will disable automatic intake control
+    new JoystickButton(OI.operator_cntlr, OI.Controller.btn.A.val)
+      .onTrue(new InstantCommand(() -> {
+        sIntakeTilt.disable();
+      }));
 
-    // TODO: Button 'Y' will enable automatic intake control
+    // Button 'Y' will enable automatic intake control
+    new JoystickButton(OI.operator_cntlr, OI.Controller.btn.Y.val)
+      .onTrue(new InstantCommand(() -> {
+        sIntakeTilt.enable();
+      }));
 
-    // TODO: Button 'X' will reset tilt encoder (minus default position)
+    // Button 'X' will reset tilt encoder
+    new JoystickButton(OI.operator_cntlr, OI.Controller.btn.X.val)
+      .onTrue(new InstantCommand(() -> {
+        sIntakeTilt.resetEncoder();
+      }));
 
-    // TODO: Controller triggers will manually move intake up and down
+    // Triggers will disable intake and manually move up (LT) and down (RT)
+    new Trigger(() -> Math.abs(OI.operator_cntlr.getTriggers()) > 0.05)
+      .whileTrue(new FunctionalCommand(
+        () -> sIntakeTilt.disable(),
+        () -> sIntakeTilt.useOutput(((OI.operator_cntlr.getTriggers() < 0) ? Constants.IntakeConstants.kUpSpeed : Constants.IntakeConstants.kDownSpeed), 0),
+        interrupted -> sIntakeTilt.disable(),
+        () -> false,
+        sIntakeTilt
+      ));
 
     // Button 'LB' (hold) will spit cubes
-    new JoystickButton(OI.driver_cntlr, OI.Controller.btn.LB.val)
+    new JoystickButton(OI.operator_cntlr, OI.Controller.btn.LB.val)
       .whileTrue(cOuttake);
 
     // Button 'RB' (hold) will lower and activate intake
-    new JoystickButton(OI.driver_cntlr, OI.Controller.btn.RB.val)
+    new JoystickButton(OI.operator_cntlr, OI.Controller.btn.RB.val)
       .whileTrue(cIntake);
   }
 
@@ -142,7 +165,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // TODO: Autonomous command chooser and commands in Autos class
     return Autos.getAuto(m_autonChooser.getSelected(), sDrivetrain, sIntakeWheels);
   }
 }
