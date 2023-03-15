@@ -6,7 +6,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
-import edu.wpi.first.math.MathUtil;
 import frc.robot.Constants.DrivetrainConstants;
 
 import frc.robot.subsystems.Drivetrain;
@@ -20,7 +19,7 @@ public class DriveDistance extends PIDCommand {
       new PIDController(DrivetrainConstants.kDistP, DrivetrainConstants.kDistI, DrivetrainConstants.kDistD),
       () -> drivetrain.getAvgPosition(),
       () -> m_distance,
-      output -> drivetrain.moveStraight(MathUtil.clamp(output, -DrivetrainConstants.kDistMaxSpeed, DrivetrainConstants.kDistMaxSpeed))
+      output -> drivetrain.moveStraight(Math.max(-DrivetrainConstants.kDistMaxSpeed, Math.min(output, DrivetrainConstants.kDistMaxSpeed)))
     );
 
     this.drivetrain = drivetrain;
