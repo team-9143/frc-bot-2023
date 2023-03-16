@@ -11,7 +11,6 @@ import frc.robot.Constants.DrivetrainConstants;
 
 import frc.robot.subsystems.Drivetrain;
 
-// TODO: Fix issue with large turns producing outputs greater than 1
 public class TurnToAngle extends PIDCommand {
   private static double m_heading = 0;
 

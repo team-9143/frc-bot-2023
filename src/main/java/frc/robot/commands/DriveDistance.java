@@ -12,7 +12,7 @@ import frc.robot.subsystems.Drivetrain;
 
 public class DriveDistance extends PIDCommand {
   private final Drivetrain drivetrain;
-  private static double m_distance = 0;
+  private static double m_distance = 0; // In inches
 
   public DriveDistance(Drivetrain drivetrain) {
     super(
