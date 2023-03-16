@@ -31,7 +31,7 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
 
-    SmartDashboard.putData("Auton selector", m_robotContainer.m_autonChooser);
+    SmartDashboard.putData("Auton selector", m_robotContainer.m_autonChooser); // May need to open a new SmartDashboard to appear (Toolbar >> File >> New)
   }
 
   /**
@@ -63,8 +63,6 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
-    // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
@@ -72,10 +70,7 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {
-    // Provides operator with notice that robot is still active
-    System.out.println("Robot is still active!");
-  }
+  public void autonomousPeriodic() {}
 
 
   @Override
