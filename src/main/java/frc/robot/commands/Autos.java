@@ -44,7 +44,7 @@ public final class Autos {
       new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(-140))
     );
   }
-  
+
   // Score a pre-loaded cube, then drive out of the community and back in
   private static Command ShortAuto(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels) {
     return new SequentialCommandGroup(
@@ -61,34 +61,34 @@ public final class Autos {
 
       // Move back until pitch is greater than 10
       new FunctionalCommand(
-        () -> sDrivetrain.moveStraight(-0.25),
         () -> {},
-        interrupted -> sDrivetrain.stop(),
+        () -> sDrivetrain.moveStraight(-0.1),
+        interrupted -> {},
         () -> OI.pigeon.getPitch() > 10,
         sDrivetrain
       ),
 
       // Move back until pitch is less than -10
       new FunctionalCommand(
-        () -> sDrivetrain.moveStraight(-0.25),
         () -> {},
-        interrupted -> sDrivetrain.stop(),
+        () -> sDrivetrain.moveStraight(-0.1),
+        interrupted -> {},
         () -> OI.pigeon.getPitch() < -10,
         sDrivetrain
       ),
 
       // Move back until pitch is close to flat
       new FunctionalCommand(
-        () -> sDrivetrain.moveStraight(-0.25),
         () -> {},
-        interrupted -> sDrivetrain.stop(),
+        () -> sDrivetrain.moveStraight(-0.1),
+        interrupted -> {},
         () -> Math.abs(OI.pigeon.getPitch()) < DrivetrainConstants.kBalanceTolerance,
         sDrivetrain
       ),
 
-      new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(-5)),
+      new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(-12)),
 
-      new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(16)),
+      new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(22)),
 
       new Balance(sDrivetrain)
     );
