@@ -155,6 +155,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return Autos.getAuto(m_autonChooser.getSelected(), sDrivetrain, sIntakeWheels).beforeStarting(() -> sIntakeTilt.enable());
+    return Autos.getAuto(m_autonChooser.getSelected(), sDrivetrain, sIntakeWheels);
   }
 }

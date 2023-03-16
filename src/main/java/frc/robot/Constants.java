@@ -29,7 +29,7 @@ public final class Constants {
 
   public static class DrivetrainConstants {
     public static final double kWheelDiameter = 6; // In inches
-    public static final double kGearboxRatio = 12.761;
+    public static final double kGearboxRatio = 12.76 * 0.9;
 
     // Teleop driving
     public static final double kSpeedMult = 1; // Applies to all manual drivetrain movement
@@ -37,25 +37,26 @@ public final class Constants {
 
     // TurnToAngle
     public static final double kTurnPosTolerance = 1.5; // Position tolerance (in degrees)
-    public static final double kTurnVelTolerance = kTurnPosTolerance*70; // Velocity tolerance (in degrees/s)
-    public static final double kTurnMaxSpeed = 0.9;
+    public static final double kTurnVelTolerance = kTurnPosTolerance; // Velocity tolerance (in degrees/s)
+    public static final double kTurnMaxSpeed = 0.85;
     public static final double
       kTurnP = 0.005,
       kTurnI = 0.0035,
       kTurnD = 0.0025;
 
+    // TODO: Fix DriveDistance overshooting
     // DriveDistance
     public static final double kDistPosTolerance = 2; // Position tolerance (in inches)
-    public static final double kDistVelTolerance = kDistPosTolerance*70; // Velocity tolerance (in inches/s)
-    public static final double kDistMaxSpeed = 1;
+    public static final double kDistVelTolerance = kDistPosTolerance; // Velocity tolerance (in inches/s)
+    public static final double kDistMaxSpeed = 0.4;
     public static final double
-      kDistP = 0.005,
-      kDistI = 0.003,
-      kDistD = 0.003;
+      kDistP = 0.01,
+      kDistI = 0.00005,
+      kDistD = 0.007;
 
     // Charge station balancing
     public static final double kBalanceTolerance = 2; // In degrees
-    public static final double kBalanceSpeed = 0.065;
+    public static final double kBalanceSpeed = 0.08;
 
     // Speed for center auton
     public static final double kAutonSpeed = 0.2;
