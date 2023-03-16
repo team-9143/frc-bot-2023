@@ -41,21 +41,20 @@ public class RobotContainer {
     cTurnToAngle.cancel();
   });
 
-  // TODO: Testing purposes
-  private final DriveDistance cDriveDistance = new DriveDistance(sDrivetrain);
-
   // Autonomous chooser declaration
   public final SendableChooser<Autos.Type> m_autonChooser = new SendableChooser<Autos.Type>();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure Pigeon - make sure to update pitch and roll offsets
-    OI.pigeon.configMountPose(0, 0, 0);
+    OI.pigeon.configMountPose(0, -0.1978197, -179.08374);
     OI.pigeon.setYaw(0);
 
     // Configure autonomous choices
-    m_autonChooser.addOption("Side Auto", Autos.Type.Side);
+    m_autonChooser.addOption("Long Auto", Autos.Type.Long);
+    m_autonChooser.addOption("Short Auto", Autos.Type.Short);
     m_autonChooser.addOption("Center Auto", Autos.Type.Center);
+    m_autonChooser.addOption("Simple Center Auto", Autos.Type.CenterSimple);
     m_autonChooser.setDefaultOption("None", Autos.Type.None);
 
     // Configure the trigger bindings
@@ -80,13 +79,12 @@ public class RobotContainer {
         cTurnToAngle.schedule();
       }));
 
-    // TODO: Fix right stick heading setter
     new Trigger(() ->
       OI.driver_cntlr.getPOV() == -1 &&
       (Math.abs(OI.driver_cntlr.getRightX()) > 0.2 || Math.abs(OI.driver_cntlr.getRightY()) > 0.2)
     )
     .whileTrue(new RunCommand(() -> {
-      TurnToAngle.setHeading(Math.toDegrees(Math.atan2(OI.driver_cntlr.getRightY(), OI.driver_cntlr.getRightX())));
+      TurnToAngle.setHeading(Math.toDegrees(Math.atan2(OI.driver_cntlr.getRightY() + 90, OI.driver_cntlr.getRightX())));
       cTurnToAngle.schedule();
     }));
 
@@ -103,14 +101,6 @@ public class RobotContainer {
     // Button 'A' (hold) will cause robot to balance on a charge station
     new JoystickButton(OI.driver_cntlr, OI.Controller.btn.A.val)
       .whileTrue(cBalance);
-
-    // TODO: Testing purposes
-    // Button 'Y' will activate PID commands
-    new JoystickButton(OI.driver_cntlr, OI.Controller.btn.Y.val)
-      .onTrue(new InstantCommand(() -> {
-        TurnToAngle.setHeading(90);
-        cTurnToAngle.schedule();
-      }));
 
     // Operator Controller:
     // Button 'B' (hold) will continuously stop all movement
@@ -165,6 +155,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return Autos.getAuto(m_autonChooser.getSelected(), sDrivetrain, sIntakeWheels);
+    return Autos.getAuto(m_autonChooser.getSelected(), sDrivetrain, sIntakeWheels).beforeStarting(() -> sIntakeTilt.enable());
   }
 }
