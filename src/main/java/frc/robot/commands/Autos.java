@@ -32,6 +32,8 @@ public final class Autos {
         return ShortAuto(sDrivetrain, sIntakeWheels);
       case Center:
         return CenterAuto(sDrivetrain, sIntakeWheels);
+      case CenterSimple:
+        return CenterSimpleAuto(sDrivetrain, sIntakeWheels);
       default:
         return new InstantCommand();
     }

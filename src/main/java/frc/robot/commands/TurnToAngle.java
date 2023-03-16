@@ -31,16 +31,6 @@ public class TurnToAngle extends PIDCommand {
     m_controller.setSetpoint(0);
   }
 
-  // TODO: Testing purposes
-  @Override
-  public void execute() {
-    super.execute();
-    System.out.println(
-      m_measurement.getAsDouble() + " " + m_setpoint.getAsDouble() + " " +
-      (m_controller.calculate(m_measurement.getAsDouble(), m_setpoint.getAsDouble()))
-    );
-  }
-
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
