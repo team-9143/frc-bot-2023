@@ -55,7 +55,7 @@ public final class Constants {
 
     // Charge station balancing
     public static final double kBalanceTolerance = 2; // In degrees
-    public static final double kBalanceSpeed = 0.075;
+    public static final double kBalanceSpeed = 0.1;
 
     // Speed for center auton
     public static final double kAutonSpeed = 0.2;
@@ -75,7 +75,7 @@ public final class Constants {
 
     // Preset positions in rotations
     public static final double kUpPos = -0.02;
-    public static final double kDownPos = (double) -75/360;
+    public static final double kDownPos = -0.28;
 
     // Intake tilt gains
     public static final double
