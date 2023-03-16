@@ -68,7 +68,6 @@ public final class Constants {
     public static final double kIntakeSpeed = 0.3;
     public static final double kOuttakeSpeed = -1;
 
-    // TODO: Test and tune speed as necessary
     // Manual intake movement
     public static final double kUpSpeed = 0.1;
     public static final double kDownSpeed = -0.08;

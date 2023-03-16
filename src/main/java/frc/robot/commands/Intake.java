@@ -12,9 +12,9 @@ import frc.robot.subsystems.IntakeTilt;
 import frc.robot.subsystems.IntakeWheels;
 
 public class Intake extends PIDCommand {
-  private final IntakeTilt intakeTilt;  
+  private final IntakeTilt intakeTilt;
   private final IntakeWheels intakeWheels;
-  
+
   public Intake(IntakeTilt intakeTilt, IntakeWheels intakeWheels) {
     super(
       new PIDController(IntakeConstants.kDownP, IntakeConstants.kDownI, IntakeConstants.kDownD),
@@ -41,4 +41,4 @@ public class Intake extends PIDCommand {
     intakeWheels.stop();
     intakeTilt.enable();
   }
-} 
+}
