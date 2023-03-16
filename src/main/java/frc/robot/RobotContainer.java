@@ -71,6 +71,12 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    // Universal:
+    // Button 'B' (hold) will continuously stop all movement
+    new JoystickButton(OI.driver_cntlr, OI.Controller.btn.B.val)
+    .or(new JoystickButton(OI.operator_cntlr, OI.Controller.btn.B.val))
+      .whileTrue(cStop);
+
     // Drive Controller:
     // D-pad and right stick will turn to the specified angle
     new Trigger(() -> OI.driver_cntlr.getPOV() != -1)
@@ -94,18 +100,12 @@ public class RobotContainer {
         OI.pigeon.setYaw(0)
       ));
 
-    // Button 'B' (hold) will continuously stop all movement
-    new JoystickButton(OI.driver_cntlr, OI.Controller.btn.B.val)
-      .whileTrue(cStop);
 
     // Button 'A' (hold) will cause robot to balance on a charge station
     new JoystickButton(OI.driver_cntlr, OI.Controller.btn.A.val)
       .whileTrue(cBalance);
 
     // Operator Controller:
-    // Button 'B' (hold) will continuously stop all movement
-    new JoystickButton(OI.operator_cntlr, OI.Controller.btn.B.val)
-      .whileTrue(cStop);
 
     // Button 'A' will disable automatic intake control
     new JoystickButton(OI.operator_cntlr, OI.Controller.btn.A.val)
