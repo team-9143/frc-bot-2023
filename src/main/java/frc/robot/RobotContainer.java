@@ -84,14 +84,14 @@ public class RobotContainer {
 
   private void configureDriver() {
     // D-pad and right stick will turn to the specified angle
-    new Trigger(() -> OI.driver_cntlr.getPOV() != -1)
+    new Trigger(() -> TurnToAngle.m_enabled && OI.driver_cntlr.getPOV() != -1)
       .whileTrue(new RunCommand(() -> {
         cTurnToAngle.setHeading(Math.round((float) OI.driver_cntlr.getPOV() / 45) * 45);
         cTurnToAngle.schedule();
       }));
 
     new Trigger(() ->
-      OI.driver_cntlr.getPOV() == -1 &&
+      TurnToAngle.m_enabled && OI.driver_cntlr.getPOV() == -1 &&
       (Math.abs(OI.driver_cntlr.getRightX()) > 0.2 || Math.abs(OI.driver_cntlr.getRightY()) > 0.2)
     )
     .whileTrue(new RunCommand(() -> {
@@ -107,6 +107,12 @@ public class RobotContainer {
     new JoystickButton(OI.driver_cntlr, OI.Controller.btn.X.val)
       .onTrue(new InstantCommand(() ->
         OI.pigeon.setYaw(0)
+      ));
+
+    // Button 'Y' will toggle TurnToAngle
+    new JoystickButton(OI.driver_cntlr, OI.Controller.btn.Y.val)
+      .onTrue(new InstantCommand(() ->
+        TurnToAngle.m_enabled ^= true
       ));
   }
 
@@ -168,6 +174,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // Autos start backwards, so robot yaw should be facing backward
-    return Autos.getAuto(m_autonChooser.getSelected(), sDrivetrain, sIntakeWheels).beforeStarting(() -> OI.pigeon.setYaw(180));
+    return Autos.getAuto(m_autonChooser.getSelected(), sDrivetrain, sIntakeWheels)
+      .beforeStarting(() -> OI.pigeon.setYaw(180));
   }
 }
