@@ -20,6 +20,7 @@ public final class Autos {
     Long,
     Short,
     Center,
+    CenterSimple,
     None
   }
 
@@ -36,7 +37,7 @@ public final class Autos {
     }
   }
 
-  // Score a pre-loaded cube, then drive out of the community and back in
+  // Score a pre-loaded cube, then drive out of the community
   private static Command LongAuto(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels) {
     return new SequentialCommandGroup(
       sIntakeWheels.getOuttakeCommand().withTimeout(1),
@@ -45,7 +46,7 @@ public final class Autos {
     );
   }
 
-  // Score a pre-loaded cube, then drive out of the community and back in
+  // Score a pre-loaded cube, then drive out of the community
   private static Command ShortAuto(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels) {
     return new SequentialCommandGroup(
       sIntakeWheels.getOuttakeCommand().withTimeout(1),
@@ -54,7 +55,7 @@ public final class Autos {
     );
   }
 
-  // Auto to score a pre-loaded cube, drive over the charge station, then drive back and balance
+  // Score a pre-loaded cube, drive over the charge station, then drive back and balance
   private static Command CenterAuto(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels) {
     return new SequentialCommandGroup(
       sIntakeWheels.getOuttakeCommand().withTimeout(1),
@@ -89,6 +90,24 @@ public final class Autos {
       new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(-12)),
 
       new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(24)),
+
+      new Balance(sDrivetrain)
+    );
+  }
+
+  // Score a pre-loaded cube, then drive to the charge station and balance
+  private static Command CenterSimpleAuto(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels) {
+    return new SequentialCommandGroup(
+      sIntakeWheels.getOuttakeCommand().withTimeout(1),
+
+      // Move back until pitch is less than -10
+      new FunctionalCommand(
+        () -> {},
+        () -> sDrivetrain.moveStraight(-DrivetrainConstants.kAutonSpeed),
+        interrupted -> {},
+        () -> OI.pigeon.getPitch() < -10,
+        sDrivetrain
+      ),
 
       new Balance(sDrivetrain)
     );
