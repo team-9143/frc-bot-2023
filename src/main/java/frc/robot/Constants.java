@@ -55,7 +55,7 @@ public final class Constants {
 
     // Charge station balancing
     public static final double kBalanceTolerance = 2; // In degrees
-    public static final double kBalanceSpeed = 0.1;
+    public static final double kBalanceSpeed = 0.065;
 
     // Speed for center auton
     public static final double kAutonSpeed = 0.2;

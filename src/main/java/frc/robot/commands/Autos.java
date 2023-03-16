@@ -105,7 +105,7 @@ public final class Autos {
       // Move back until pitch is less than -10
       new FunctionalCommand(
         () -> {},
-        () -> sDrivetrain.moveStraight(-DrivetrainConstants.kAutonSpeed),
+        () -> sDrivetrain.moveStraight(-DrivetrainConstants.kAutonSpeed * 0.6),
         interrupted -> {},
         () -> OI.pigeon.getPitch() < -10,
         sDrivetrain
