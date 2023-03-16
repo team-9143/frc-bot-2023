@@ -100,13 +100,17 @@ public final class Autos {
 
   // Score a pre-loaded cube, then drive to the charge station and balance
   private static Command CenterSimpleAuto(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels) {
+    TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain);
+    
     return new SequentialCommandGroup(
       sIntakeWheels.getOuttakeCommand().withTimeout(0.5),
+
+      cTurnToAngle.beforeStarting(() -> cTurnToAngle.setHeading(0)),
 
       // Move back until pitch is less than -10
       new FunctionalCommand(
         () -> {},
-        () -> sDrivetrain.moveStraight(-DrivetrainConstants.kAutonSpeed * 0.6),
+        () -> sDrivetrain.moveStraight(DrivetrainConstants.kAutonSpeed * 1.85),
         interrupted -> {},
         () -> OI.pigeon.getPitch() < -10,
         sDrivetrain
