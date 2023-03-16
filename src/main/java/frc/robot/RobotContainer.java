@@ -121,13 +121,11 @@ public class RobotContainer {
     new JoystickButton(OI.operator_cntlr, OI.Controller.btn.A.val)
       .whileTrue(new StartEndCommand(
         () -> {
-          double temp = Constants.IntakeConstants.kIntakeSpeed;
-          Constants.IntakeConstants.kIntakeSpeed = Constants.IntakeConstants.kOuttakeSpeed;
-          Constants.IntakeConstants.kOuttakeSpeed = temp;
+          Constants.IntakeConstants.kIntakeSpeed *= -1;
+          Constants.IntakeConstants.kOuttakeSpeed *= -1;
         }, () -> {
-          double temp = Constants.IntakeConstants.kIntakeSpeed;
-          Constants.IntakeConstants.kIntakeSpeed = Constants.IntakeConstants.kOuttakeSpeed;
-          Constants.IntakeConstants.kOuttakeSpeed = temp;
+          Constants.IntakeConstants.kIntakeSpeed *= -1;
+          Constants.IntakeConstants.kOuttakeSpeed *= -1;
         }
       ));
 
