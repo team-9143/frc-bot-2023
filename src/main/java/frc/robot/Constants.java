@@ -79,9 +79,9 @@ public final class Constants {
 
     // Intake tilt gains
     public static final double
-      kDownP = 0.6,
-      kDownI = 0.4,
-      kDownD = 0.4;
+      kDownP = 0.55,
+      kDownI = 0.45,
+      kDownD = 0.3;
     public static final double
       kUpP = 0.7,
       kUpI = 0.6,
