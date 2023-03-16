@@ -27,7 +27,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Drivetrain sDrivetrain = new Drivetrain();
-  private final Limelight sLimelight = new Limelight();
   private final IntakeWheels sIntakeWheels = new IntakeWheels();
   private final IntakeTilt sIntakeTilt = new IntakeTilt();
 
