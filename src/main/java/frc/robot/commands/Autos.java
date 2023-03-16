@@ -62,7 +62,7 @@ public final class Autos {
       // Move back until pitch is greater than 10
       new FunctionalCommand(
         () -> {},
-        () -> sDrivetrain.moveStraight(-0.1),
+        () -> sDrivetrain.moveStraight(-DrivetrainConstants.kAutonSpeed),
         interrupted -> {},
         () -> OI.pigeon.getPitch() > 10,
         sDrivetrain
@@ -71,7 +71,7 @@ public final class Autos {
       // Move back until pitch is less than -10
       new FunctionalCommand(
         () -> {},
-        () -> sDrivetrain.moveStraight(-0.1),
+        () -> sDrivetrain.moveStraight(-DrivetrainConstants.kAutonSpeed),
         interrupted -> {},
         () -> OI.pigeon.getPitch() < -10,
         sDrivetrain
@@ -80,15 +80,15 @@ public final class Autos {
       // Move back until pitch is close to flat
       new FunctionalCommand(
         () -> {},
-        () -> sDrivetrain.moveStraight(-0.1),
+        () -> sDrivetrain.moveStraight(-DrivetrainConstants.kAutonSpeed),
         interrupted -> {},
-        () -> Math.abs(OI.pigeon.getPitch()) < DrivetrainConstants.kBalanceTolerance,
+        () -> Math.abs(OI.pigeon.getPitch()) < 2,
         sDrivetrain
       ),
 
       new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(-12)),
 
-      new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(22)),
+      new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(24)),
 
       new Balance(sDrivetrain)
     );
