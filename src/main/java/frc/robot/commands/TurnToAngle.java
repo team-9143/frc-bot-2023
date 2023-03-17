@@ -31,6 +31,17 @@ public class TurnToAngle extends PIDCommand {
     m_controller.setSetpoint(0);
   }
 
+  @Override public void execute() {
+    super.execute();
+    if (
+      Math.abs(OI.driver_cntlr.getLeftX()) > 0.05
+      || Math.abs(OI.driver_cntlr.getLeftY()) > 0.05
+      || Math.abs(OI.driver_cntlr.getTriggers()) > 0.05
+    ) {
+      cancel();
+    }
+  }
+
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
@@ -43,7 +54,7 @@ public class TurnToAngle extends PIDCommand {
    * @param fheading Target heading (in degrees)
    */
   public void setHeading(double fheading) {
-    if (Math.abs(fheading - m_heading) >= 80) {
+    if (Math.abs(fheading - m_heading) >= 50) {
       m_controller.reset();
     }
     m_heading = fheading;
