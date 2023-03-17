@@ -40,8 +40,8 @@ public final class Constants {
     public static final double kTurnVelTolerance = kTurnPosTolerance; // Velocity tolerance (in degrees/s)
     public static final double kTurnMaxSpeed = 0.75;
     public static final double
-      kTurnP = 0.005,
-      kTurnI = 0.0035,
+      kTurnP = 0.008,
+      kTurnI = 0.004,
       kTurnD = 0.0025;
 
     // TODO: Fix DriveDistance overshooting
