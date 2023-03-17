@@ -148,11 +148,12 @@ public class RobotContainer {
     new JoystickButton(OI.operator_cntlr, OI.Controller.btn.RB.val)
       .whileTrue(cIntake);
 
+    // TODO: Test, ensure working
     // Triggers will disable intake and manually move up (LT) and down (RT)
     new Trigger(() -> Math.abs(OI.operator_cntlr.getTriggers()) > 0.05)
       .whileTrue(new FunctionalCommand(
         () -> sIntakeTilt.disable(),
-        () -> sIntakeTilt.useOutput(((OI.operator_cntlr.getTriggers() < 0) ? Constants.IntakeConstants.kUpSpeed : Constants.IntakeConstants.kDownSpeed), 0),
+        () -> sIntakeTilt.useOutput(-OI.operator_cntlr.getTriggers() * ((OI.operator_cntlr.getTriggers() < 0) ? Constants.IntakeConstants.kUpSpeed : Constants.IntakeConstants.kDownSpeed), 0),
         interrupted -> sIntakeTilt.disable(),
         () -> false,
         sIntakeTilt

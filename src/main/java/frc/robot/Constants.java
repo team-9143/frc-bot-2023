@@ -71,7 +71,7 @@ public final class Constants {
 
     // Manual intake movement
     public static final double kUpSpeed = 0.1;
-    public static final double kDownSpeed = -0.08;
+    public static final double kDownSpeed = 0.08;
 
     // Preset positions in rotations
     public static final double kUpPos = -0.02;
