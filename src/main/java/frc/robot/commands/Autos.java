@@ -22,6 +22,7 @@ public final class Autos {
     Short,
     Center,
     CenterSimple,
+    Outtake,
     None
   }
 
@@ -35,6 +36,8 @@ public final class Autos {
         return CenterAuto(sDrivetrain, sIntakeWheels);
       case CenterSimple:
         return CenterSimpleAuto(sDrivetrain, sIntakeWheels);
+      case Outtake:
+        return OuttakeAuto(sDrivetrain, sIntakeWheels);
       default:
         return new InstantCommand();
     }
@@ -91,7 +94,7 @@ public final class Autos {
       ),
 
       new RunCommand(() -> sDrivetrain.moveStraight(-DrivetrainConstants.kAutonSpeed * 2), sDrivetrain).withTimeout(0.25),
-      
+
       new RunCommand(() -> sDrivetrain.moveStraight(DrivetrainConstants.kAutonSpeed * 1.5), sDrivetrain).withTimeout(1.5),
 
       new Balance(sDrivetrain)
@@ -101,7 +104,7 @@ public final class Autos {
   // Score a pre-loaded cube, then drive to the charge station and balance
   private static Command CenterSimpleAuto(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels) {
     TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain);
-    
+
     return new SequentialCommandGroup(
       sIntakeWheels.getOuttakeCommand().withTimeout(0.5),
 
@@ -117,6 +120,14 @@ public final class Autos {
       ),
 
       new Balance(sDrivetrain)
+    );
+  }
+  private static Command OuttakeAuto(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels){
+    TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain);
+
+    return new SequentialCommandGroup(
+      sIntakeWheels.getOuttakeCommand().withTimeout(0.5),
+      cTurnToAngle.beforeStarting(() -> cTurnToAngle.setHeading(0))
     );
   }
 }

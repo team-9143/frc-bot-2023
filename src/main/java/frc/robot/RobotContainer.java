@@ -55,6 +55,7 @@ public class RobotContainer {
     m_autonChooser.addOption("Short Auto", Autos.Type.Short);
     m_autonChooser.addOption("Center Auto", Autos.Type.Center);
     m_autonChooser.addOption("Simple Center Auto", Autos.Type.CenterSimple);
+    m_autonChooser.addOption("Just Outtake", Autos.Type.Outtake);
     m_autonChooser.setDefaultOption("None", Autos.Type.None);
 
     // Configure the trigger bindings
