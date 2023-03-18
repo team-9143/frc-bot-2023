@@ -15,8 +15,8 @@ package frc.robot;
  */
 public final class Constants {
   public static class DeviceConstants {
-    public static final byte kDriverCntlrPort = 1;
-    public static final byte kOperatorCntlrPort = 0;
+    public static final byte kDriverCntlrPort = 0;
+    public static final byte kOperatorCntlrPort = 1;
     public static final byte
       kFrontLeftID = 3,
       kBackLeftID = 4,
