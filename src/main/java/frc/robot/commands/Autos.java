@@ -119,6 +119,8 @@ public final class Autos {
         sDrivetrain
       ),
 
+      new RunCommand(() -> sDrivetrain.moveStraight(DrivetrainConstants.kAutonSpeed * 1.85)).withTimeout(1),
+
       new Balance(sDrivetrain)
     );
   }
