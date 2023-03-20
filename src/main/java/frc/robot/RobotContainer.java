@@ -42,12 +42,13 @@ public class RobotContainer {
   });
 
   // Autonomous chooser declaration
+  // TODO: make private, move data placement to robotContainer initialization
   public final SendableChooser<Autos.Type> m_autonChooser = new SendableChooser<Autos.Type>();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure Pigeon - make sure to update pitch and roll offsets
-    OI.pigeon.configMountPose(0, -0.9114803, -179.658188);
+    OI.pigeon.configMountPose(0, -0.1978197, -179.08374);
     OI.pigeon.setYaw(0);
 
     // Configure autonomous choices
@@ -181,7 +182,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // Autos start backwards, so robot yaw should be facing backward
-    return Autos.getAuto(Autos.Type.Long, sDrivetrain, sIntakeWheels)
+    return Autos.getAuto(m_autonChooser.getSelected(), sDrivetrain, sIntakeWheels)
       .beforeStarting(() -> OI.pigeon.setYaw(180));
   }
 }
