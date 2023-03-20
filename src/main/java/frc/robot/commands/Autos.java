@@ -19,7 +19,9 @@ import frc.robot.subsystems.IntakeWheels;
 public final class Autos {
   public static enum Type {
     Long,
+    LongShoot,
     Short,
+    ShortShoot,
     Center,
     CenterSimple,
     Outtake,
@@ -30,8 +32,12 @@ public final class Autos {
     switch(type) {
       case Long:
         return LongAuto(sDrivetrain, sIntakeWheels);
+      case LongShoot:
+        return LongShootAuto(sDrivetrain, sIntakeWheels);
       case Short:
         return ShortAuto(sDrivetrain, sIntakeWheels);
+      case ShortShoot:
+        return ShortShootAuto(sDrivetrain, sIntakeWheels);
       case Center:
         return CenterAuto(sDrivetrain, sIntakeWheels);
       case CenterSimple:
@@ -52,11 +58,29 @@ public final class Autos {
     );
   }
 
+  // Shoot a pre-loaded cube to the higher node, then drive out of the community
+  private static Command LongShootAuto(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels) {
+    return new SequentialCommandGroup(
+      sDrivetrain.getShootCommand(sIntakeWheels),
+      
+      new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(-140))
+    );
+  }
+
   // Score a pre-loaded cube, then drive out of the community
   private static Command ShortAuto(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels) {
     return new SequentialCommandGroup(
       sIntakeWheels.getOuttakeCommand().withTimeout(0.5),
 
+      new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(-80))
+    );
+  }
+
+  // Shoot a pre-loaded cube to the higher node, then drive out of the community
+  private static Command ShortShootAuto(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels) {
+    return new SequentialCommandGroup(
+      sDrivetrain.getShootCommand(sIntakeWheels),
+      
       new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(-80))
     );
   }
@@ -69,7 +93,7 @@ public final class Autos {
       // Move back until pitch is greater than 10
       new FunctionalCommand(
         () -> {},
-        () -> sDrivetrain.moveStraight(-DrivetrainConstants.kAutonSpeed),
+        () -> sDrivetrain.moveStraight(-0.45),
         interrupted -> {},
         () -> OI.pigeon.getPitch() > 10,
         sDrivetrain
@@ -78,7 +102,7 @@ public final class Autos {
       // Move back until pitch is less than -10
       new FunctionalCommand(
         () -> {},
-        () -> sDrivetrain.moveStraight(-DrivetrainConstants.kAutonSpeed),
+        () -> sDrivetrain.moveStraight(-0.3),
         interrupted -> {},
         () -> OI.pigeon.getPitch() < -10,
         sDrivetrain
@@ -87,15 +111,15 @@ public final class Autos {
       // Move back until pitch is close to flat
       new FunctionalCommand(
         () -> {},
-        () -> sDrivetrain.moveStraight(-DrivetrainConstants.kAutonSpeed),
+        () -> sDrivetrain.moveStraight(-0.3),
         interrupted -> {},
         () -> Math.abs(OI.pigeon.getPitch()) < 2,
         sDrivetrain
       ),
 
-      new RunCommand(() -> sDrivetrain.moveStraight(-DrivetrainConstants.kAutonSpeed * 2), sDrivetrain).withTimeout(0.25),
+      new RunCommand(() -> sDrivetrain.moveStraight(-0.45), sDrivetrain).withTimeout(0.1),
 
-      new RunCommand(() -> sDrivetrain.moveStraight(DrivetrainConstants.kAutonSpeed * 1.5), sDrivetrain).withTimeout(1.5),
+      new RunCommand(() -> sDrivetrain.moveStraight(0.45), sDrivetrain).withTimeout(1.5),
 
       new Balance(sDrivetrain)
     );
@@ -103,23 +127,19 @@ public final class Autos {
 
   // Score a pre-loaded cube, then drive to the charge station and balance
   private static Command CenterSimpleAuto(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels) {
-    TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain);
-
     return new SequentialCommandGroup(
       sIntakeWheels.getOuttakeCommand().withTimeout(0.5),
 
-      cTurnToAngle.beforeStarting(() -> cTurnToAngle.setHeading(0)),
-
-      // Move back until pitch is less than -10
+      // Move back until pitch is greater than 10
       new FunctionalCommand(
         () -> {},
-        () -> sDrivetrain.moveStraight(DrivetrainConstants.kAutonSpeed * 1.85),
+        () -> sDrivetrain.moveStraight(-0.45),
         interrupted -> {},
-        () -> OI.pigeon.getPitch() < -10,
+        () -> OI.pigeon.getPitch() > 10,
         sDrivetrain
       ),
 
-      new RunCommand(() -> sDrivetrain.moveStraight(DrivetrainConstants.kAutonSpeed * 1.85)).withTimeout(1),
+      new RunCommand(() -> sDrivetrain.moveStraight(0.4)).withTimeout(1),
 
       new Balance(sDrivetrain)
     );

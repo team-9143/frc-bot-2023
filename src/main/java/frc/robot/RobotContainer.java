@@ -47,12 +47,14 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure Pigeon - make sure to update pitch and roll offsets
-    OI.pigeon.configMountPose(0, -0.1978197, -179.08374);
+    OI.pigeon.configMountPose(0, -0.9114803, -179.658188);
     OI.pigeon.setYaw(0);
 
     // Configure autonomous choices
     m_autonChooser.addOption("Long Auto", Autos.Type.Long);
+    m_autonChooser.addOption("Long Shoot Auto", Autos.Type.LongShoot);
     m_autonChooser.addOption("Short Auto", Autos.Type.Short);
+    m_autonChooser.addOption("Short Shoot Auto", Autos.Type.ShortShoot);
     m_autonChooser.addOption("Center Auto", Autos.Type.Center);
     m_autonChooser.addOption("Simple Center Auto", Autos.Type.CenterSimple);
     m_autonChooser.addOption("Just Outtake", Autos.Type.Outtake);
@@ -129,12 +131,14 @@ public class RobotContainer {
         }
       ));
 
+    // TODO: Un-comment
     // Button 'X' will reset tilt encoder
-    new JoystickButton(OI.operator_cntlr, OI.Controller.btn.X.val)
-      .onTrue(new InstantCommand(() -> {
-        sIntakeTilt.resetEncoder();
-      }));
+    // new JoystickButton(OI.operator_cntlr, OI.Controller.btn.X.val)
+    //   .onTrue(new InstantCommand(() -> {
+    //     sIntakeTilt.resetEncoder();
+    //   }));
 
+    // TODO: Not working? Test
     // Button 'Y' will toggle automatic intake control
     new JoystickButton(OI.operator_cntlr, OI.Controller.btn.Y.val)
       .toggleOnTrue(new InstantCommand(() -> {
@@ -159,6 +163,10 @@ public class RobotContainer {
         () -> false,
         sIntakeTilt
       ));
+
+    // TODO: Style
+    new JoystickButton(OI.operator_cntlr, OI.Controller.btn.X.val)
+      .onTrue(sDrivetrain.getShootCommand(sIntakeWheels));
   }
 
   /** Stops all motors and disables PID controllers */
@@ -173,7 +181,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // Autos start backwards, so robot yaw should be facing backward
-    return Autos.getAuto(m_autonChooser.getSelected(), sDrivetrain, sIntakeWheels)
+    return Autos.getAuto(Autos.Type.Long, sDrivetrain, sIntakeWheels)
       .beforeStarting(() -> OI.pigeon.setYaw(180));
   }
 }
