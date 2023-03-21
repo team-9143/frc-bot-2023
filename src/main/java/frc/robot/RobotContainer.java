@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 /**
@@ -42,8 +43,7 @@ public class RobotContainer {
   });
 
   // Autonomous chooser declaration
-  // TODO: make private, move data placement to robotContainer initialization
-  public final SendableChooser<Autos.Type> m_autonChooser = new SendableChooser<Autos.Type>();
+  private final SendableChooser<Autos.Type> m_autonChooser = new SendableChooser<Autos.Type>();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -60,6 +60,9 @@ public class RobotContainer {
     m_autonChooser.addOption("Simple Center Auto", Autos.Type.CenterSimple);
     m_autonChooser.addOption("Just Outtake", Autos.Type.Outtake);
     m_autonChooser.setDefaultOption("None", Autos.Type.None);
+
+    // Initialize Shuffleboard
+    SmartDashboard.putData("Auton selector", m_autonChooser);
 
     // Configure the trigger bindings
     configureBindings();

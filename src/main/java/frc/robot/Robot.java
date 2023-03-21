@@ -6,7 +6,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.TurnToAngle;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -31,8 +30,6 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-
-    SmartDashboard.putData("Auton selector", m_robotContainer.m_autonChooser); // May need to open a new SmartDashboard to appear (Toolbar >> File >> New)
   }
 
   /**
