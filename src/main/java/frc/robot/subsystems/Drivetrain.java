@@ -87,6 +87,10 @@ public class Drivetrain extends SubsystemBase {
     r_encoder.setPosition(0);
   }
 
+  public RelativeEncoder[] getEncoder(){
+    return new RelativeEncoder[] {l_encoder, r_encoder};
+  }
+
   // Stops drivetrain motors
   public void stop() {
     robotDrive.stopMotor();

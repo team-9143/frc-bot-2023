@@ -5,9 +5,11 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.commands.TurnToAngle;
-
+import frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -20,6 +22,8 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
+  private Drivetrain sDrivetrain;
+  ShuffleboardTab driveTab;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -30,6 +34,7 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    driveTab = Shuffleboard.getTab("Drive");
   }
 
   /**
@@ -46,7 +51,13 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    driveTab.addNumber("Left Encoder", sDrivetrain.getEncoder()[0]::getPosition);
+    driveTab.addNumber("Right Encoder", sDrivetrain.getEncoder()[1]::getPosition);
+    driveTab.addNumber("Gyro Rotation", OI.pigeon::getYaw)
+      .withWidget(BuiltInWidgets.kGyro);
+    driveTab.addBoolean("TurnToAngle", new TurnToAngle(sDrivetrain)::isScheduled); 
   }
+
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
