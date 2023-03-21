@@ -6,7 +6,6 @@ package frc.robot.commands;
 
 import frc.robot.OI;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.DrivetrainConstants;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
