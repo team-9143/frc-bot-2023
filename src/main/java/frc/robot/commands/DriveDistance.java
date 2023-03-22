@@ -17,7 +17,7 @@ public class DriveDistance extends PIDCommand {
   public DriveDistance(Drivetrain drivetrain) {
     super(
       new PIDController(DrivetrainConstants.kDistP, DrivetrainConstants.kDistI, DrivetrainConstants.kDistD),
-      () -> drivetrain.getAvgPosition(),
+      drivetrain::getAvgPosition,
       () -> m_distance,
       output -> drivetrain.moveStraight(Math.max(-DrivetrainConstants.kDistMaxSpeed, Math.min(output, DrivetrainConstants.kDistMaxSpeed)))
     );

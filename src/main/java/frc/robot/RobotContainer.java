@@ -165,9 +165,9 @@ public class RobotContainer {
     // Triggers will disable intake and manually move up (LT) and down (RT)
     new Trigger(() -> Math.abs(OI.operator_cntlr.getTriggers()) > 0.05)
       .whileTrue(new FunctionalCommand(
-        () -> sIntakeTilt.disable(),
+        sIntakeTilt::disable,
         () -> sIntakeTilt.useOutput(-OI.operator_cntlr.getTriggers() * ((OI.operator_cntlr.getTriggers() < 0) ? Constants.IntakeConstants.kUpSpeed : Constants.IntakeConstants.kDownSpeed), 0),
-        interrupted -> sIntakeTilt.disable(),
+        interrupted -> {},
         () -> false,
         sIntakeTilt
       ));

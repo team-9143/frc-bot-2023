@@ -26,9 +26,9 @@ public class IntakeWheels extends SubsystemBase {
 
   // Outtake command
   public Command getOuttakeCommand() {
-    return this.startEnd(
+    return startEnd(
       () -> intake_motor.set(IntakeConstants.kOuttakeSpeed),
-      () -> stop()
+      this::stop
     );
   }
 }

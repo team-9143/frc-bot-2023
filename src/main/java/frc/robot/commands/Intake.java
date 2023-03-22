@@ -18,7 +18,7 @@ public class Intake extends PIDCommand {
   public Intake(IntakeTilt intakeTilt, IntakeWheels intakeWheels) {
     super(
       new PIDController(IntakeConstants.kDownP, IntakeConstants.kDownI, IntakeConstants.kDownD),
-      () -> intakeTilt.getMeasurement(),
+      intakeTilt::getMeasurement,
       () -> IntakeConstants.kDownPos,
       output -> intakeTilt.useOutput(output, IntakeConstants.kDownPos)
     );
