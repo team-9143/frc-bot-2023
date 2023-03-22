@@ -89,7 +89,7 @@ public class RobotContainer {
       .whileTrue(cStop);
 
     configureDriver();
-    configureOperater();
+    configureOperator();
   }
 
   private void configureDriver() {
@@ -126,7 +126,7 @@ public class RobotContainer {
       ));
   }
 
-  private void configureOperater() {
+  private void configureOperator() {
     // Button 'A' (hold) will swap intake and outtake (for cones)
     new JoystickButton(OI.operator_cntlr, OI.Controller.btn.A.val)
       .whileTrue(new StartEndCommand(
@@ -149,8 +149,8 @@ public class RobotContainer {
     // TODO: Not working? Test
     // Button 'Y' will toggle automatic intake control
     new JoystickButton(OI.operator_cntlr, OI.Controller.btn.Y.val)
-      .toggleOnTrue(new InstantCommand(() -> {
-        if (sIntakeTilt.isEnabled()) {sIntakeTilt.disable();} else {sIntakeTilt.disable();}
+      .onTrue(new InstantCommand(() -> {
+        if (sIntakeTilt.isEnabled()) {sIntakeTilt.disable();} else {sIntakeTilt.enable();}
       }));
 
     // Button 'LB' (hold) will spit cubes
@@ -177,19 +177,19 @@ public class RobotContainer {
       .onTrue(sDrivetrain.getShootCommand(sIntakeWheels));
   }
 
-  /** Stops all motors and disables PID controllers */
-  public void stop() {
-    cStop.execute();
-  }
-
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // Autos start backwards, so robot yaw should be facing backward
+    // Autos start backwards, so robot yaw should be backward
     return Autos.getAuto(m_autonChooser.getSelected(), sDrivetrain, sIntakeWheels, sIntakeTilt)
       .beforeStarting(() -> OI.pigeon.setYaw(180));
+  }
+
+  /** Stops all motors and disables PID controllers */
+  public void stop() {
+    cStop.execute();
   }
 }
