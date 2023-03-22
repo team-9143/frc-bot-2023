@@ -87,14 +87,6 @@ public class Drivetrain extends SubsystemBase {
     r_encoder.setPosition(0);
   }
 
-  public RelativeEncoder[] getEncoder(){
-    return new RelativeEncoder[] {l_encoder, r_encoder};
-  }
-
-  public CANSparkMax[] getMotors(){
-    return new CANSparkMax[] {fl_motor, bl_motor, fr_motor, br_motor};
-  }
-
   // Stops drivetrain motors
   public void stop() {
     robotDrive.stopMotor();

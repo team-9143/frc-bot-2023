@@ -15,8 +15,6 @@ public class TurnToAngle extends PIDCommand {
   public static boolean m_enabled = true;
   private static double m_heading = 0;
 
-  public static double getHeading() {return m_heading;}
-
   public TurnToAngle(Drivetrain drivetrain) {
     super(
       new PIDController(DrivetrainConstants.kTurnP, DrivetrainConstants.kTurnI, DrivetrainConstants.kTurnD),
@@ -56,9 +54,11 @@ public class TurnToAngle extends PIDCommand {
    * @param fheading Target heading (in degrees)
    */
   public void setHeading(double fheading) {
-    if (Math.abs(fheading - m_heading) >= 50) {
+    if (Math.abs(fheading - m_heading) > 50) {
       m_controller.reset();
     }
     m_heading = fheading;
   }
+
+  public static double getHeading() {return m_heading;}
 }
