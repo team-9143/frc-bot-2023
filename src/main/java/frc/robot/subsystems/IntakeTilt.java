@@ -45,4 +45,5 @@ public class IntakeTilt extends PIDSubsystem {
   public void resetEncoder() {
     tilt_encoder.setPosition(IntakeConstants.kUpPos);
   }
+  
 }

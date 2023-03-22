@@ -4,12 +4,18 @@
 
 package frc.robot;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.LayoutType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.commands.TurnToAngle;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.IntakeTilt;
+import frc.robot.subsystems.IntakeWheels;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -46,6 +52,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
@@ -53,9 +60,30 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
     driveTab.addNumber("Left Encoder", sDrivetrain.getEncoder()[0]::getPosition);
     driveTab.addNumber("Right Encoder", sDrivetrain.getEncoder()[1]::getPosition);
-    driveTab.addNumber("Gyro Rotation", OI.pigeon::getYaw)
-      .withWidget(BuiltInWidgets.kGyro);
-    driveTab.addBoolean("TurnToAngle", new TurnToAngle(sDrivetrain)::isScheduled); 
+
+    driveTab.getLayout("", BuiltInLayouts.kList);
+    driveTab.getLayout("")
+      .addBoolean("TurnToAngle", new TurnToAngle(sDrivetrain)::isScheduled); 
+    driveTab.getLayout("")
+      .addNumber("Gyro Rotation", OI.pigeon::getYaw)
+        .withWidget(BuiltInWidgets.kGyro);
+    driveTab.getLayout("")
+      .addDouble("Heading", TurnToAngle::getHeading);
+
+    driveTab.getLayout("Intake", BuiltInLayouts.kList);
+    driveTab.getLayout("Intake")
+      .addBoolean("Intake On", () -> IntakeWheels.getEncoder().getVelocity() > 0);
+    driveTab.getLayout("Intake")
+      .addDouble("Intake RPM", IntakeWheels.getEncoder()::getVelocity);
+
+    driveTab.getLayout("Motor Rpm", BuiltInLayouts.kList)
+      .withPosition(4, 0);
+    driveTab.getLayout("Motor RPM")
+      .addDouble("Left Motor", sDrivetrain.getEncoder()[0]::getVelocity).withPosition(4, 0);
+    driveTab.getLayout("Motor RPM")
+      .addDouble("Right Motor", sDrivetrain.getEncoder()[1]::getVelocity).withPosition(4, 0);
+
+    driveTab.addDouble("Docking", OI.pigeon::getPitch).withWidget(BuiltInWidgets.kGyro).withPosition(2, 1);
   }
 
 

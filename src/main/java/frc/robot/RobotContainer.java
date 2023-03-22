@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
@@ -64,7 +65,8 @@ public class RobotContainer {
 
     // Initialize Shuffleboard
     SmartDashboard.putData("Auton selector", m_autonChooser);
-    Shuffleboard.getTab("Drive").add("Auton seletor", m_autonChooser).withPosition(4, 0);
+    Shuffleboard.getTab("Drive").getLayout("Auton Chooser", BuiltInLayouts.kList).withPosition(4, 1).add(m_autonChooser);
+
 
     // Configure the trigger bindings
     configureBindings();
