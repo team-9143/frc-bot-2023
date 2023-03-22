@@ -6,10 +6,10 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
 import frc.robot.commands.TurnToAngle;
 import frc.robot.subsystems.Drivetrain;
@@ -69,6 +69,8 @@ public class Robot extends TimedRobot {
     driveTab.getLayout("")
       .addDouble("Heading", TurnToAngle::getHeading);
 
+    driveTab.addDouble("Docking", OI.pigeon::getPitch).withWidget(BuiltInWidgets.kGyro).withPosition(2, 1);
+    
     driveTab.getLayout("Intake", BuiltInLayouts.kList);
     driveTab.getLayout("Intake")
       .addBoolean("Intake On", () -> IntakeWheels.getEncoder().getVelocity() > 0);
@@ -82,7 +84,6 @@ public class Robot extends TimedRobot {
     driveTab.getLayout("Motor RPM")
       .addDouble("Right Motor", sDrivetrain.getEncoder()[1]::getVelocity).withPosition(4, 0);
 
-    driveTab.addDouble("Docking", OI.pigeon::getPitch).withWidget(BuiltInWidgets.kGyro).withPosition(2, 1);
   }
 
 

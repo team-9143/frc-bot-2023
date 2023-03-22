@@ -92,6 +92,16 @@ public class Drivetrain extends SubsystemBase {
     robotDrive.stopMotor();
   }
 
+  public RelativeEncoder[] getEncoder(){
+    return new RelativeEncoder[] {l_encoder, r_encoder};
+  }
+
+  public CANSparkMax[] getMotors(){
+    return new CANSparkMax[] {fl_motor, bl_motor, fr_motor, br_motor};
+  }
+
+
+
   // Shoots to high node (inonsistent, works best above 12.7 volts)
   public Command getShootCommand(IntakeWheels sIntakeWheels) {
     return new SequentialCommandGroup(
