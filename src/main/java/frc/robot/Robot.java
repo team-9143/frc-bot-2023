@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.fasterxml.jackson.databind.deser.impl.ExternalTypeHandler.Builder;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
@@ -14,7 +16,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.commands.TurnToAngle;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.IntakeWheels;
-
+import frc.robot.subsystems.Limelight;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -57,10 +59,15 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    driveTab.addNumber("Left Encoder", sDrivetrain.getEncoder()[0]::getPosition);
-    driveTab.addNumber("Right Encoder", sDrivetrain.getEncoder()[1]::getPosition);
+    driveTab.getLayout("Encoders", BuiltInLayouts.kGrid)
+      .withPosition(2, 1);
+    driveTab.getLayout("Encoders")
+      .addNumber("Left Encoder", sDrivetrain.getEncoder()[0]::getPosition);
+    driveTab.getLayout("Encoders")
+      .addNumber("Right Encoder", sDrivetrain.getEncoder()[1]::getPosition);
 
-    driveTab.getLayout("", BuiltInLayouts.kList);
+    driveTab.getLayout("", BuiltInLayouts.kList)
+      .withPosition(1, 0);
     driveTab.getLayout("")
       .addBoolean("TurnToAngle", new TurnToAngle(sDrivetrain)::isScheduled); 
     driveTab.getLayout("")
@@ -69,9 +76,23 @@ public class Robot extends TimedRobot {
     driveTab.getLayout("")
       .addDouble("Heading", TurnToAngle::getHeading);
 
-    driveTab.addDouble("Docking", OI.pigeon::getPitch).withWidget(BuiltInWidgets.kGyro).withPosition(2, 1);
+    driveTab.addDouble("Docking", OI.pigeon::getPitch)
+      .withWidget(BuiltInWidgets.kGyro)
+        .withPosition(2, 0);
+
+    driveTab.getLayout("Limelight", BuiltInLayouts.kList)
+      .withPosition(2, 2);
+    driveTab.getLayout("Limelight")
+      .addNumber("TA", new Limelight()::getArea);
+    driveTab.getLayout("Limelight")
+      .addNumber("TX", new Limelight()::getTx);
+    driveTab.getLayout("Limelight")
+      .addNumber("TY", new Limelight()::getTy);
+    driveTab.getLayout("Limelight")
+      .addBoolean("Is Valid", new Limelight()::getValid);
     
-    driveTab.getLayout("Intake", BuiltInLayouts.kList);
+    driveTab.getLayout("Intake", BuiltInLayouts.kList)
+      .withPosition(3, 0);
     driveTab.getLayout("Intake")
       .addBoolean("Intake On", () -> IntakeWheels.getEncoder().getVelocity() > 0);
     driveTab.getLayout("Intake")
@@ -80,9 +101,9 @@ public class Robot extends TimedRobot {
     driveTab.getLayout("Motor Rpm", BuiltInLayouts.kList)
       .withPosition(4, 0);
     driveTab.getLayout("Motor RPM")
-      .addDouble("Left Motor", sDrivetrain.getEncoder()[0]::getVelocity).withPosition(4, 0);
+      .addDouble("Left Motor", sDrivetrain.getEncoder()[0]::getVelocity);
     driveTab.getLayout("Motor RPM")
-      .addDouble("Right Motor", sDrivetrain.getEncoder()[1]::getVelocity).withPosition(4, 0);
+      .addDouble("Right Motor", sDrivetrain.getEncoder()[1]::getVelocity);
 
   }
 
