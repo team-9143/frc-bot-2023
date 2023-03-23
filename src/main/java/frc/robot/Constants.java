@@ -61,6 +61,7 @@ public final class Constants {
 
   public static class IntakeConstants {
     public static final double kTiltGearbox = (double) 1/28;
+    public static final double kWheelGearbox = (double) 1/3;
 
     // Cube intake/outtake wheel speed
     public static double kIntakeSpeed = 0.3;

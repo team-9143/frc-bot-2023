@@ -16,10 +16,13 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import java.util.Map;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -44,7 +47,8 @@ public class RobotContainer {
     cTurnToAngle.cancel();
   });
 
-  // Autonomous chooser declaration
+  // Dashboard declarations
+  public final ShuffleboardTab m_driveTab = Shuffleboard.getTab("Drive");
   private final SendableChooser<Autos.Type> m_autonChooser = new SendableChooser<Autos.Type>();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -63,13 +67,35 @@ public class RobotContainer {
     m_autonChooser.addOption("Just Outtake", Autos.Type.Outtake);
     m_autonChooser.setDefaultOption("None", Autos.Type.None);
 
-    // Initialize Shuffleboard
-    SmartDashboard.putData("Auton selector", m_autonChooser);
-    Shuffleboard.getTab("Drive").getLayout("Auton Chooser", BuiltInLayouts.kList).withPosition(4, 1).add(m_autonChooser);
-
-
     // Configure the trigger bindings
     configureBindings();
+
+    // Initialize Shuffleboard
+    configureShuffleboard();
+  }
+
+  private void configureShuffleboard() {
+    m_driveTab.add(m_autonChooser).withWidget(BuiltInWidgets.kComboBoxChooser);
+    m_driveTab.add(Drivetrain.robotDrive).withWidget(BuiltInWidgets.kDifferentialDrive);
+    
+    ShuffleboardLayout layout_1 = m_driveTab.getLayout("Rotation", BuiltInLayouts.kList);
+    layout_1.add("Gyro", new OI.PigeonGyro(OI.pigeon))
+      .withWidget(BuiltInWidgets.kGyro);
+    layout_1.addBoolean("TurnToAngle Enabled", () -> TurnToAngle.m_enabled)
+      .withWidget(BuiltInWidgets.kBooleanBox);
+    
+    m_driveTab.addDouble("Docking Angle", () -> -OI.pigeon.getPitch())
+      .withWidget(BuiltInWidgets.kDial)
+      .withProperties(Map.of("min", -30, "max", 30, "show value", true));
+
+    ShuffleboardLayout layout_2 = m_driveTab.getLayout("Intake", BuiltInLayouts.kList);
+    layout_2.addBoolean("Intaking", cIntake::isScheduled)
+      .withWidget(BuiltInWidgets.kBooleanBox);
+    layout_2.addBoolean("Outtaking", cOuttake::isScheduled)
+      .withWidget(BuiltInWidgets.kBooleanBox);
+    layout_2.addDouble("Wheel Speed", IntakeWheels.intake_encoder::getVelocity)
+      .withWidget(BuiltInWidgets.kNumberBar)
+      .withProperties(Map.of("min", -2000, "max", 2000, "center", 0));
   }
 
   /**

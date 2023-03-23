@@ -10,15 +10,22 @@ import frc.robot.Constants.DeviceConstants;
 import frc.robot.Constants.IntakeConstants;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
 
 public class IntakeWheels extends SubsystemBase {
   private static final CANSparkMax intake_motor = new CANSparkMax(DeviceConstants.kIntakeWheelsID, MotorType.kBrushless);
 
-  public void set(double speed) {intake_motor.set(speed);}
+  public static final RelativeEncoder intake_encoder = intake_motor.getEncoder();
 
-  public static RelativeEncoder getEncoder() {return intake_motor.getEncoder();}
+  public IntakeWheels() {
+    intake_encoder.setPositionConversionFactor(IntakeConstants.kTiltGearbox);
+    intake_encoder.setVelocityConversionFactor(IntakeConstants.kTiltGearbox);
+    intake_encoder.setMeasurementPeriod(20);
+    intake_encoder.setPosition(0);
+  }
+
+  public void set(double speed) {intake_motor.set(speed);}
 
   // Stops all motors
   public void stop() {

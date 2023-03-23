@@ -34,7 +34,7 @@ public class Drivetrain extends SubsystemBase {
   private static final RelativeEncoder l_encoder = fl_motor.getEncoder();
   private static final RelativeEncoder r_encoder = fr_motor.getEncoder(); // Position must be inverted when called
 
-  private static final DifferentialDrive robotDrive = new DifferentialDrive(
+  public static final DifferentialDrive robotDrive = new DifferentialDrive(
     new MotorControllerGroup(fl_motor, bl_motor),
     new MotorControllerGroup(fr_motor, br_motor)
   );
@@ -91,16 +91,6 @@ public class Drivetrain extends SubsystemBase {
   public void stop() {
     robotDrive.stopMotor();
   }
-
-  public RelativeEncoder[] getEncoder(){
-    return new RelativeEncoder[] {l_encoder, r_encoder};
-  }
-
-  public CANSparkMax[] getMotors(){
-    return new CANSparkMax[] {fl_motor, bl_motor, fr_motor, br_motor};
-  }
-
-
 
   // Shoots to high node (inonsistent, works best above 12.7 volts)
   public Command getShootCommand(IntakeWheels sIntakeWheels) {

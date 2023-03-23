@@ -6,6 +6,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import com.ctre.phoenix.sensors.Pigeon2;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 
 public class OI {
   public final static Controller driver_cntlr = new Controller(DeviceConstants.kDriverCntlrPort);
@@ -67,5 +68,20 @@ public class OI {
     public double getLeftY() {return getRawAxis(axis.leftY.val);}
     public double getRightX() {return getRawAxis(axis.rightX.val);}
     public double getRightY() {return getRawAxis(axis.rightY.val);}
+  }
+
+  public static class PigeonGyro implements Gyro {
+    public final Pigeon2 gyro;
+
+    public PigeonGyro(Pigeon2 gyro) {
+      this.gyro = gyro;
+    }
+    
+    public double getAngle() {return -gyro.getYaw();}
+    public double getRate() {return 0;}
+    
+    public void reset() {}
+    public void calibrate() {}
+    public void close() {}
   }
 }
