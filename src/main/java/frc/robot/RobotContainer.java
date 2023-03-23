@@ -80,7 +80,8 @@ public class RobotContainer {
     
     ShuffleboardLayout layout_1 = m_driveTab.getLayout("Rotation", BuiltInLayouts.kList);
     layout_1.add("Gyro", new OI.PigeonGyro(OI.pigeon))
-      .withWidget(BuiltInWidgets.kGyro);
+      .withWidget(BuiltInWidgets.kGyro)
+      .withProperties(Map.of("major tick spacing", 45, "starting angle", 0, "show tick mark ring", true));
     layout_1.addBoolean("TurnToAngle Enabled", () -> TurnToAngle.m_enabled)
       .withWidget(BuiltInWidgets.kBooleanBox);
     
