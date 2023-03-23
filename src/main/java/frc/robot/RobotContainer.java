@@ -105,12 +105,13 @@ public class RobotContainer {
       cTurnToAngle.schedule();
     }));
 
-    // Button 'A' (hold) will cause robot to balance on a charge station
+    // Button 'A' (hold) will run auto-balance code
     new JoystickButton(OI.driver_cntlr, OI.Controller.btn.A.val)
       .whileTrue(cBalance);
 
-    // Button 'X' will reset gyro
+    // Button 'X' (debounced 1s) will reset gyro
     new JoystickButton(OI.driver_cntlr, OI.Controller.btn.X.val)
+    .debounce(1)
       .onTrue(new InstantCommand(() ->
         OI.pigeon.setYaw(0)
       ));
@@ -135,14 +136,13 @@ public class RobotContainer {
         }
       ));
 
-    // TODO: Un-comment
-    // Button 'X' will reset tilt encoder
-    // new JoystickButton(OI.operator_cntlr, OI.Controller.btn.X.val)
-    //   .onTrue(new InstantCommand(() -> {
-    //     sIntakeTilt.resetEncoder();
-    //   }));
+    // Button 'X' (debounced 1s) will reset tilt encoder
+    new JoystickButton(OI.operator_cntlr, OI.Controller.btn.X.val)
+    .debounce(1)
+      .onTrue(new InstantCommand(() -> {
+        sIntakeTilt.resetEncoder();
+      }));
 
-    // TODO: Not working? Test
     // Button 'Y' will toggle automatic intake control
     new JoystickButton(OI.operator_cntlr, OI.Controller.btn.Y.val)
       .toggleOnTrue(new InstantCommand(() -> {
@@ -157,7 +157,6 @@ public class RobotContainer {
     new JoystickButton(OI.operator_cntlr, OI.Controller.btn.RB.val)
       .whileTrue(cIntake);
 
-    // TODO: Test, ensure working
     // Triggers will disable intake and manually move up (LT) and down (RT)
     new Trigger(() -> Math.abs(OI.operator_cntlr.getTriggers()) > 0.05)
       .whileTrue(new FunctionalCommand(
@@ -167,10 +166,6 @@ public class RobotContainer {
         () -> false,
         sIntakeTilt
       ));
-
-    // TODO: Style
-    new JoystickButton(OI.operator_cntlr, OI.Controller.btn.X.val)
-      .onTrue(sDrivetrain.getShootCommand(sIntakeWheels));
   }
 
   /** Stops all motors and disables PID controllers */
