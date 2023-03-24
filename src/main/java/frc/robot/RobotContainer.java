@@ -24,8 +24,6 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import java.util.Map;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.util.sendable.Sendable;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -78,31 +76,45 @@ public class RobotContainer {
   }
 
   private void configureShuffleboard() {
-    m_driveTab.add(m_autonChooser)
+    m_driveTab.add("Auton chooser", m_autonChooser)
+      .withPosition(6, 5)
+      .withSize(5, 2)
       .withWidget(BuiltInWidgets.kComboBoxChooser);
-    m_driveTab.add(Drivetrain.robotDrive)
+
+    m_driveTab.add("Drivetrain", Drivetrain.robotDrive)
+      .withPosition(7, 0)
+      .withSize(6, 4)
       .withWidget(BuiltInWidgets.kDifferentialDrive)
       .withProperties(Map.of("number of wheels", 6, "wheel diameter", 80, "show velocity vectors", true));
 
-    ShuffleboardLayout layout_1 = m_driveTab.getLayout("Rotation", BuiltInLayouts.kList);
+    m_driveTab.addDouble("Docking Angle", () -> -OI.pigeon.getPitch())
+      .withPosition(4, 0)
+      .withSize(3, 3)
+      .withWidget(BuiltInWidgets.kDial)
+      .withProperties(Map.of("min", -45, "max", 45, "show value", true));
+
+    ShuffleboardLayout layout_1 = m_driveTab.getLayout("Rotation", BuiltInLayouts.kList)
+      .withPosition(0, 0)
+      .withSize(4, 6);
     layout_1.add("Gyro", new OI.PigeonSendable(OI.pigeon))
       .withWidget(BuiltInWidgets.kGyro)
-      .withProperties(Map.of("major tick spacing", 45, "starting angle", 0, "show tick mark ring", true));
+      .withProperties(Map.of("major tick spacing", 45, "starting angle", 180, "show tick mark ring", true));
     layout_1.addBoolean("TurnToAngle Enabled", () -> TurnToAngle.m_enabled)
       .withWidget(BuiltInWidgets.kBooleanBox);
 
-    m_driveTab.addDouble("Docking Angle", () -> -OI.pigeon.getPitch())
-      .withWidget(BuiltInWidgets.kDial)
-      .withProperties(Map.of("min", -30, "max", 30, "show value", true));
-
-    ShuffleboardLayout layout_2 = m_driveTab.getLayout("Intake", BuiltInLayouts.kList);
+    ShuffleboardLayout layout_2 = m_driveTab.getLayout("Intake", BuiltInLayouts.kList)
+      .withPosition(13, 0)
+      .withSize(4, 5);
     layout_2.addBoolean("Intaking", cIntake::isScheduled)
       .withWidget(BuiltInWidgets.kBooleanBox);
     layout_2.addBoolean("Outtaking", cOuttake::isScheduled)
       .withWidget(BuiltInWidgets.kBooleanBox);
     layout_2.addDouble("Wheel Speed", IntakeWheels.intake_encoder::getVelocity)
       .withWidget(BuiltInWidgets.kNumberBar)
-      .withProperties(Map.of("min", -2000, "max", 2000, "center", 0));
+      .withProperties(Map.of("min", -300, "max", 300, "center", 0));
+
+    Shuffleboard.selectTab("Drive");
+    Shuffleboard.disableActuatorWidgets();
   }
 
   /**

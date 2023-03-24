@@ -79,9 +79,6 @@ public class OI {
 
     @Override public double getAngle() {return -gyro.getYaw();}
     @Override public double getRate() {return 0;}
-
     @Override public void reset() {gyro.setYaw(0);}
-    @Override public void calibrate() {}
-    @Override public void close() {}
   }
 }
