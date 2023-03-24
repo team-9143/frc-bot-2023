@@ -124,17 +124,13 @@ public class RobotContainer {
   }
 
   private void configureOperater() {
-    // Button 'A' (hold) will swap intake and outtake (for cones)
+    // TODO: add to shuffleboard
+    // Button 'A' will swap intake and outtake (for cones)
     new JoystickButton(OI.operator_cntlr, OI.Controller.btn.A.val)
-      .whileTrue(new StartEndCommand(
-        () -> {
-          Constants.IntakeConstants.kIntakeSpeed *= -1;
-          Constants.IntakeConstants.kOuttakeSpeed *= -1;
-        }, () -> {
-          Constants.IntakeConstants.kIntakeSpeed *= -1;
-          Constants.IntakeConstants.kOuttakeSpeed *= -1;
-        }
-      ));
+      .onTrue(new InstantCommand(() -> {
+        Constants.IntakeConstants.kIntakeSpeed *= -1;
+        Constants.IntakeConstants.kOuttakeSpeed *= -1;
+      }));
 
     // Button 'X' (debounced 1s) will reset tilt encoder
     new JoystickButton(OI.operator_cntlr, OI.Controller.btn.X.val)
