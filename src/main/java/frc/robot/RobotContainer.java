@@ -9,7 +9,6 @@ import frc.robot.commands.*;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
@@ -33,7 +32,8 @@ public class RobotContainer {
 
   private final Balance cBalance = new Balance(sDrivetrain);
   private final TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain);
-  private final Intake cIntake = new Intake(sIntakeTilt, sIntakeWheels);
+  private final Command cIntakeDown = new IntakeDown(sIntakeTilt, sIntakeWheels);
+  private final Command cIntakeUp = new IntakeUp(sIntakeTilt);
   private final Command cOuttake = sIntakeWheels.getOuttakeCommand();
   private final Command cStop = new RunCommand(() -> {
     sDrivetrain.stop();
@@ -149,9 +149,10 @@ public class RobotContainer {
     new JoystickButton(OI.operator_cntlr, OI.Controller.btn.LB.val)
       .whileTrue(cOuttake);
 
-    // Button 'RB' (hold) will lower and activate intake
+    // Button 'RB' (hold) will lower and activate intake, then raise on release
     new JoystickButton(OI.operator_cntlr, OI.Controller.btn.RB.val)
-      .whileTrue(cIntake);
+      .whileTrue(cIntakeDown)
+      .onFalse(cIntakeUp);
 
     // Triggers will disable intake and manually move up (LT) and down (RT)
     new Trigger(() -> Math.abs(OI.operator_cntlr.getTriggers()) > 0.05)

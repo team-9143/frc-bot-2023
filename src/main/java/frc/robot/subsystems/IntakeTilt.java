@@ -19,15 +19,16 @@ public class IntakeTilt extends PIDSubsystem {
   private final RelativeEncoder tilt_encoder = tilt_motor.getEncoder();
 
   public IntakeTilt() {
-    super(new PIDController(IntakeConstants.kUpP, IntakeConstants.kUpI, IntakeConstants.kUpD));
+    super(new PIDController(IntakeConstants.kSteadyP, IntakeConstants.kSteadyI, IntakeConstants.kSteadyD));
+
     tilt_encoder.setPositionConversionFactor(IntakeConstants.kTiltGearbox);
     tilt_encoder.setVelocityConversionFactor(IntakeConstants.kTiltGearbox);
     tilt_encoder.setMeasurementPeriod(20);
     tilt_encoder.setPosition(0);
-    enable();
 
-    // Set default target
     setSetpoint(IntakeConstants.kUpPos);
+
+    enable();
   }
 
   @Override

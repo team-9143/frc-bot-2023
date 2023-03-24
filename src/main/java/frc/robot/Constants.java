@@ -70,9 +70,10 @@ public final class Constants {
     public static final double kUpSpeed = 0.1;
     public static final double kDownSpeed = 0.08;
 
-    // Preset positions in rotations
+    // Preset positions and tolerances (in rotations)
     public static final double kUpPos = -0.02;
     public static final double kDownPos = -0.28;
+    public static final double kPosTolerance = 0.015;
 
     // Intake tilt gains
     public static final double
@@ -83,5 +84,9 @@ public final class Constants {
       kUpP = 0.7,
       kUpI = 0.6,
       kUpD = 0.3;
+    public static final double
+      kSteadyP = 0.7,
+      kSteadyI = 0.6,
+      kSteadyD = 0.3;
   }
 }
