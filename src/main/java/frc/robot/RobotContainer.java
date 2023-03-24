@@ -21,8 +21,11 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import java.util.Map;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.util.sendable.Sendable;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -75,16 +78,19 @@ public class RobotContainer {
   }
 
   private void configureShuffleboard() {
-    m_driveTab.add(m_autonChooser).withWidget(BuiltInWidgets.kComboBoxChooser);
-    m_driveTab.add(Drivetrain.robotDrive).withWidget(BuiltInWidgets.kDifferentialDrive);
-    
+    m_driveTab.add(m_autonChooser)
+      .withWidget(BuiltInWidgets.kComboBoxChooser);
+    m_driveTab.add(Drivetrain.robotDrive)
+      .withWidget(BuiltInWidgets.kDifferentialDrive)
+      .withProperties(Map.of("number of wheels", 6, "wheel diameter", 80, "show velocity vectors", true));
+
     ShuffleboardLayout layout_1 = m_driveTab.getLayout("Rotation", BuiltInLayouts.kList);
-    layout_1.add("Gyro", new OI.PigeonGyro(OI.pigeon))
+    layout_1.add("Gyro", new OI.PigeonSendable(OI.pigeon))
       .withWidget(BuiltInWidgets.kGyro)
       .withProperties(Map.of("major tick spacing", 45, "starting angle", 0, "show tick mark ring", true));
     layout_1.addBoolean("TurnToAngle Enabled", () -> TurnToAngle.m_enabled)
       .withWidget(BuiltInWidgets.kBooleanBox);
-    
+
     m_driveTab.addDouble("Docking Angle", () -> -OI.pigeon.getPitch())
       .withWidget(BuiltInWidgets.kDial)
       .withProperties(Map.of("min", -30, "max", 30, "show value", true));
