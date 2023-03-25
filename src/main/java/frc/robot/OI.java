@@ -74,18 +74,23 @@ public class OI {
   }
 
   // TODO: Sendables
-  public static class PigeonSendable implements Sendable {
+  public static class PigeonSendable implements Sendable, AutoCloseable {
     public final Pigeon2 gyro;
 
     public PigeonSendable(Pigeon2 gyro) {
       this.gyro = gyro;
-      SendableRegistry.addLW(this, "Pigeon 2.0");
+      SendableRegistry.addLW(this, "Drivetrain", "Pigeon 2.0");
     }
 
     @Override
     public void initSendable(SendableBuilder builder) {
       builder.setSmartDashboardType("Gyro");
       builder.addDoubleProperty("Value", () -> -gyro.getYaw(), null);
+    }
+
+    @Override
+    public void close() {
+      SendableRegistry.remove(this);
     }
   }
 }

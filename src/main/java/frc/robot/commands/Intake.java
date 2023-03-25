@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
+import edu.wpi.first.util.sendable.SendableRegistry;
 import frc.robot.Constants.IntakeConstants;
 
 import frc.robot.subsystems.IntakeTilt;
@@ -27,6 +28,7 @@ public class Intake extends PIDCommand {
     this.intakeWheels = intakeWheels;
 
     addRequirements(intakeTilt, intakeWheels);
+    SendableRegistry.setSubsystem(m_controller, intakeTilt.getSubsystem());
   }
 
   @Override

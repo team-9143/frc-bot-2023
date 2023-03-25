@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
+import edu.wpi.first.util.sendable.SendableRegistry;
 import frc.robot.Constants.DrivetrainConstants;
 
 import frc.robot.subsystems.Drivetrain;
@@ -25,6 +26,7 @@ public class DriveDistance extends PIDCommand {
     this.drivetrain = drivetrain;
 
     addRequirements(drivetrain);
+    SendableRegistry.setSubsystem(m_controller, drivetrain.getSubsystem());
 
     // Configure additional PID options
     m_controller.setTolerance(DrivetrainConstants.kDistPosTolerance, DrivetrainConstants.kDistVelTolerance);
