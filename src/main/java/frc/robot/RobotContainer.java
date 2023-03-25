@@ -49,7 +49,6 @@ public class RobotContainer {
   });
 
   // Dashboard declarations
-  public final ShuffleboardTab m_driveTab = Shuffleboard.getTab("Drive");
   private final SendableChooser<Autos.Type> m_autonChooser = new SendableChooser<Autos.Type>();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -72,28 +71,31 @@ public class RobotContainer {
     configureBindings();
 
     // Initialize Shuffleboard
-    configureShuffleboard();
+    configureDriveTab();
+    configureTestTab();
   }
 
-  private void configureShuffleboard() {
-    m_driveTab.add("Auton chooser", m_autonChooser)
+  private void configureDriveTab() {
+    ShuffleboardTab drive_tab = Shuffleboard.getTab("Drive");
+
+    drive_tab.add("Auton chooser", m_autonChooser)
       .withPosition(6, 5)
       .withSize(5, 2)
       .withWidget(BuiltInWidgets.kComboBoxChooser);
 
-    m_driveTab.add("Drivetrain", Drivetrain.robotDrive)
+    drive_tab.add("Drivetrain", Drivetrain.robotDrive)
       .withPosition(7, 0)
       .withSize(6, 4)
       .withWidget(BuiltInWidgets.kDifferentialDrive)
       .withProperties(Map.of("number of wheels", 6, "wheel diameter", 60, "show velocity vectors", true));
 
-    m_driveTab.addDouble("Docking Angle", () -> -OI.pigeon.getPitch())
+    drive_tab.addDouble("Docking Angle", () -> -OI.pigeon.getPitch())
       .withPosition(4, 0)
       .withSize(3, 3)
       .withWidget(BuiltInWidgets.kDial)
       .withProperties(Map.of("min", -45, "max", 45, "show value", true));
 
-    ShuffleboardLayout layout_1 = m_driveTab.getLayout("Rotation", BuiltInLayouts.kList)
+    ShuffleboardLayout layout_1 = drive_tab.getLayout("Rotation", BuiltInLayouts.kList)
       .withPosition(0, 0)
       .withSize(4, 6);
     layout_1.add("Gyro", new OI.PigeonSendable(OI.pigeon))
@@ -102,7 +104,7 @@ public class RobotContainer {
     layout_1.addBoolean("TurnToAngle Enabled", () -> TurnToAngle.m_enabled)
       .withWidget(BuiltInWidgets.kBooleanBox);
 
-    ShuffleboardLayout layout_2 = m_driveTab.getLayout("Intake", BuiltInLayouts.kList)
+    ShuffleboardLayout layout_2 = drive_tab.getLayout("Intake", BuiltInLayouts.kList)
       .withPosition(13, 0)
       .withSize(4, 5);
     layout_2.addBoolean("Intaking", cIntake::isScheduled)
@@ -113,8 +115,34 @@ public class RobotContainer {
       .withWidget(BuiltInWidgets.kNumberBar)
       .withProperties(Map.of("min", -300, "max", 300, "center", 0));
 
-    Shuffleboard.selectTab("Drive");
     Shuffleboard.disableActuatorWidgets();
+  }
+
+  private void configureTestTab() {
+    ShuffleboardTab test_tab = Shuffleboard.getTab("Test");
+    
+    SendableChooser<?> match_checklist = new SendableChooser<>();
+    match_checklist.addOption("Bumpers are the correct match color", null);
+    match_checklist.addOption("Electrical pull test successful", null);
+    match_checklist.addOption("Motor controllers are blinking in sync", null);
+    match_checklist.addOption("Battery is connected and secured", null);
+    match_checklist.addOption("Robot is in the correct start position", null);
+    match_checklist.addOption("Robot intake/arms are in the correct start position", null);
+    match_checklist.addOption("Robot is set with the correct game piece", null);
+
+    test_tab.add("Match Checklist", match_checklist)
+      .withPosition(0, 0)
+      .withSize(4, 8)
+      .withWidget(BuiltInWidgets.kSplitButtonChooser);
+
+    SendableChooser<?> drivestation_checklist = new SendableChooser<>();
+    drivestation_checklist.addOption("Electronic pull test successful", null);
+    drivestation_checklist.addOption("Joysticks are correctly connected (driver is 0)", null);
+
+    test_tab.add("Driver Station Checklist", drivestation_checklist)
+      .withPosition(4, 0)
+      .withSize(4, 8)
+      .withWidget(BuiltInWidgets.kSplitButtonChooser);
   }
 
   /**
