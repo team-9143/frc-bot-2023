@@ -4,9 +4,12 @@ import frc.robot.Constants.DeviceConstants;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import com.ctre.phoenix.sensors.Pigeon2;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.util.sendable.SendableRegistry;
+
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import com.ctre.phoenix.sensors.Pigeon2;
 
 public class OI {
   public final static Controller driver_cntlr = new Controller(DeviceConstants.kDriverCntlrPort);
@@ -70,15 +73,19 @@ public class OI {
     public double getRightY() {return getRawAxis(axis.rightY.val);}
   }
 
-  public static class PigeonSendable extends ADXRS450_Gyro {
+  // TODO: Sendables
+  public static class PigeonSendable implements Sendable {
     public final Pigeon2 gyro;
 
     public PigeonSendable(Pigeon2 gyro) {
       this.gyro = gyro;
+      SendableRegistry.addLW(this, "Pigeon 2.0");
     }
 
-    @Override public double getAngle() {return -gyro.getYaw();}
-    @Override public double getRate() {return 0;}
-    @Override public void reset() {gyro.setYaw(0);}
+    @Override
+    public void initSendable(SendableBuilder builder) {
+      builder.setSmartDashboardType("Gyro");
+      builder.addDoubleProperty("Value", () -> -gyro.getYaw(), null);
+    }
   }
 }

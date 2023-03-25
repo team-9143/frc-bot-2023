@@ -85,7 +85,7 @@ public class RobotContainer {
       .withPosition(7, 0)
       .withSize(6, 4)
       .withWidget(BuiltInWidgets.kDifferentialDrive)
-      .withProperties(Map.of("number of wheels", 6, "wheel diameter", 80, "show velocity vectors", true));
+      .withProperties(Map.of("number of wheels", 6, "wheel diameter", 60, "show velocity vectors", true));
 
     m_driveTab.addDouble("Docking Angle", () -> -OI.pigeon.getPitch())
       .withPosition(4, 0)
