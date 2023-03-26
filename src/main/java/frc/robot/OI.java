@@ -73,7 +73,6 @@ public class OI {
     public double getRightY() {return getRawAxis(axis.rightY.val);}
   }
 
-  // TODO: Sendables
   public static class PigeonSendable implements Sendable, AutoCloseable {
     public final Pigeon2 gyro;
 
