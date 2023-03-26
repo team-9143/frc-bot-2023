@@ -16,7 +16,7 @@ import com.revrobotics.RelativeEncoder;
 public class IntakeWheels extends SubsystemBase {
   private static final CANSparkMax intake_motor = new CANSparkMax(DeviceConstants.kIntakeWheelsID, MotorType.kBrushless);
 
-  public static final RelativeEncoder intake_encoder = intake_motor.getEncoder();
+  private static final RelativeEncoder intake_encoder = intake_motor.getEncoder();
 
   public IntakeWheels() {
     intake_encoder.setPositionConversionFactor(IntakeConstants.kTiltGearbox);
@@ -26,6 +26,8 @@ public class IntakeWheels extends SubsystemBase {
   }
 
   public void set(double speed) {intake_motor.set(speed);}
+
+  public double getVelocity() {return intake_encoder.getVelocity();}
 
   // Stops all motors
   public void stop() {

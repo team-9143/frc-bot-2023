@@ -111,9 +111,11 @@ public class RobotContainer {
       .withWidget(BuiltInWidgets.kBooleanBox);
     layout_2.addBoolean("Outtaking", cOuttake::isScheduled)
       .withWidget(BuiltInWidgets.kBooleanBox);
-    layout_2.addDouble("Wheel Speed", IntakeWheels.intake_encoder::getVelocity)
+    // TODO: Change to controllable motor
+    layout_2.addDouble("Wheel Speed", sIntakeWheels::getVelocity)
       .withWidget(BuiltInWidgets.kNumberBar)
       .withProperties(Map.of("min", -300, "max", 300, "center", 0));
+    // TODO: Add tilt angle as dial
 
     Shuffleboard.disableActuatorWidgets();
   }
