@@ -178,7 +178,7 @@ public class RobotContainer {
     )
       .withWidget(BuiltInWidgets.kDial)
       .withProperties(Map.of("min", -110, "max", 110, "show value", false));
-    layout_1.addDouble("Difference", () ->
+    layout_1.addDouble("Error", () ->
       (((cIntake.isScheduled()) ? Constants.IntakeConstants.kDownPos : Constants.IntakeConstants.kUpPos) - sIntakeTilt.getMeasurement()) * -360
     )
       .withWidget(BuiltInWidgets.kNumberBar)
