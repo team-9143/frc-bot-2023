@@ -109,6 +109,7 @@ public class RobotContainer {
     new JoystickButton(OI.driver_cntlr, OI.Controller.btn.A.val)
       .whileTrue(cBalance);
 
+    // TODO: Add debounce dial to shuffleboard to show when debounce ends
     // Button 'X' (debounced 1s) will reset gyro
     new JoystickButton(OI.driver_cntlr, OI.Controller.btn.X.val)
     .debounce(1)
