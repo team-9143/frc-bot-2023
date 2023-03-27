@@ -183,6 +183,7 @@ public class RobotContainer {
     )
       .withWidget(BuiltInWidgets.kNumberBar)
       .withProperties(Map.of("min", -110, "max", 110, "center", 0));
+    // TODO: Update with intake up command
     layout_1.addBoolean("PID enabled", () -> cIntake.isScheduled() || sIntakeTilt.isEnabled())
       .withWidget(BuiltInWidgets.kBooleanBox);
   }
