@@ -107,16 +107,16 @@ public class RobotContainer {
     ShuffleboardLayout layout_2 = drive_tab.getLayout("Intake", BuiltInLayouts.kList)
       .withPosition(13, 0)
       .withSize(4, 8);
-    layout_2.addDouble("Intake Angle", () -> sIntakeTilt.getMeasurement() * 360)
+    layout_2.addDouble("Intake Angle", () -> -sIntakeTilt.getMeasurement() * 360)
       .withWidget(BuiltInWidgets.kDial)
-      .withProperties(Map.of("min", -90, "max", 90, "show value", false));
+      .withProperties(Map.of("min", -110, "max", 110, "show value", false));
     layout_2.addBoolean("Intaking", cIntake::isScheduled)
       .withWidget(BuiltInWidgets.kBooleanBox);
     layout_2.addBoolean("Outtaking", cOuttake::isScheduled)
       .withWidget(BuiltInWidgets.kBooleanBox);
-    layout_2.addDouble("Wheel Speed", sIntakeWheels::getVelocity)
+    layout_2.addDouble("Wheel RPM", sIntakeWheels::getVelocity)
       .withWidget(BuiltInWidgets.kNumberBar)
-      .withProperties(Map.of("min", -300, "max", 300, "center", 0));
+      .withProperties(Map.of("min", -250, "max", 250, "center", 0));
 
     Shuffleboard.disableActuatorWidgets();
   }
