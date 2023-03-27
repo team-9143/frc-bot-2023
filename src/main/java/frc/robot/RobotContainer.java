@@ -121,31 +121,70 @@ public class RobotContainer {
     Shuffleboard.disableActuatorWidgets();
   }
 
+  // TODO: Test, potentially add interactive checklist
   private void configureTestTab() {
     ShuffleboardTab test_tab = Shuffleboard.getTab("Test");
-    
-    SendableChooser<?> match_checklist = new SendableChooser<>();
-    match_checklist.addOption("Bumpers are the correct match color", null);
-    match_checklist.addOption("Electrical pull test successful", null);
-    match_checklist.addOption("Motor controllers are blinking in sync", null);
-    match_checklist.addOption("Battery is connected and secured", null);
-    match_checklist.addOption("Robot is in the correct start position", null);
-    match_checklist.addOption("Robot intake/arms are in the correct start position", null);
-    match_checklist.addOption("Robot is set with the correct game piece", null);
 
-    test_tab.add("Match Checklist", match_checklist)
+    test_tab.add("Match Checklist", new String[]{
+      "Bumpers are the correct match color",
+      "Electrical pull test successful",
+      "Motor controllers are blinking in sync",
+      "Battery is connected and secured",
+      "Robot is in the correct start position",
+      "Robot intake/arms are in the correct start position",
+      "Robot is set with the correct game piece"
+    })
       .withPosition(0, 0)
-      .withSize(4, 8)
-      .withWidget(BuiltInWidgets.kSplitButtonChooser);
+      .withSize(5, 8);
 
-    SendableChooser<?> drivestation_checklist = new SendableChooser<>();
-    drivestation_checklist.addOption("Electronic pull test successful", null);
-    drivestation_checklist.addOption("Joysticks are correctly connected (driver is 0)", null);
+    // SendableChooser<?> match_checklist = new SendableChooser<>();
+    // match_checklist.addOption("Bumpers are the correct match color", null);
+    // match_checklist.addOption("Electrical pull test successful", null);
+    // match_checklist.addOption("Motor controllers are blinking in sync", null);
+    // match_checklist.addOption("Battery is connected and secured", null);
+    // match_checklist.addOption("Robot is in the correct start position", null);
+    // match_checklist.addOption("Robot intake/arms are in the correct start position", null);
+    // match_checklist.addOption("Robot is set with the correct game piece", null);
 
-    test_tab.add("Driver Station Checklist", drivestation_checklist)
-      .withPosition(4, 0)
-      .withSize(4, 8)
-      .withWidget(BuiltInWidgets.kSplitButtonChooser);
+    // test_tab.add("Match Checklist", match_checklist)
+    //   .withPosition(0, 0)
+    //   .withSize(5, 8)
+    //   .withWidget(BuiltInWidgets.kSplitButtonChooser);
+
+    test_tab.add("Match Checklist", new String[]{
+      "Electronic pull test successful",
+      "Joysticks are correctly connected (driver is 0)"
+    })
+      .withPosition(5, 0)
+      .withSize(5, 8);
+
+    // SendableChooser<?> drivestation_checklist = new SendableChooser<>();
+    // drivestation_checklist.addOption("Electronic pull test successful", null);
+    // drivestation_checklist.addOption("Joysticks are correctly connected (driver is 0)", null);
+
+    // test_tab.add("Driver Station Checklist", drivestation_checklist)
+    //   .withPosition(5, 0)
+    //   .withSize(5, 8)
+    //   .withWidget(BuiltInWidgets.kSplitButtonChooser);
+
+    ShuffleboardLayout layout_1 = test_tab.getLayout("Intake", BuiltInLayouts.kList)
+      .withPosition(10, 0)
+      .withSize(4, 8);
+    layout_1.addDouble("Intake Angle", () -> sIntakeTilt.getMeasurement() * -360)
+      .withWidget(BuiltInWidgets.kDial)
+      .withProperties(Map.of("min", -110, "max", 110, "show value", false));
+    layout_1.addDouble("Intake Setpoint", () ->
+      ((cIntake.isScheduled()) ? Constants.IntakeConstants.kDownPos : Constants.IntakeConstants.kUpPos) * -360
+    )
+      .withWidget(BuiltInWidgets.kDial)
+      .withProperties(Map.of("min", -110, "max", 110, "show value", false));
+    layout_1.addDouble("Difference", () ->
+      (((cIntake.isScheduled()) ? Constants.IntakeConstants.kDownPos : Constants.IntakeConstants.kUpPos) - sIntakeTilt.getMeasurement()) * -360
+    )
+      .withWidget(BuiltInWidgets.kNumberBar)
+      .withProperties(Map.of("min", -110, "max", 110, "center", 0));
+    layout_1.addBoolean("PID enabled", () -> cIntake.isScheduled() || sIntakeTilt.isEnabled())
+      .withWidget(BuiltInWidgets.kBooleanBox);
   }
 
   /**
