@@ -12,7 +12,7 @@ import frc.robot.subsystems.Drivetrain;
 
 public class DriveDistance extends PIDCommand {
   private final Drivetrain drivetrain;
-  private static double m_distance = 0;
+  private static double m_distance = 0; // In inches
 
   public DriveDistance(Drivetrain drivetrain) {
     super(
@@ -40,6 +40,7 @@ public class DriveDistance extends PIDCommand {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    // TODO: make sure that PIDController.atSetpoint() is comparing velocities in the same units (e.g. not RPM to degrees/s) and that RelativeEncoder.setVelocityConversionFactor() is working as expected
     return m_controller.atSetpoint();
   }
 

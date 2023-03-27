@@ -9,12 +9,13 @@ import frc.robot.commands.*;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 /**
@@ -26,13 +27,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Drivetrain sDrivetrain = new Drivetrain();
-  private final Limelight sLimelight = new Limelight();
   private final IntakeWheels sIntakeWheels = new IntakeWheels();
   private final IntakeTilt sIntakeTilt = new IntakeTilt();
 
   private final Balance cBalance = new Balance(sDrivetrain);
   private final TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain);
-  private final Intake cIntake = new Intake(sIntakeTilt, sIntakeWheels);
+  private final Command cIntakeDown = new IntakeDown(sIntakeTilt, sIntakeWheels);
+  private final Command cIntakeUp = new IntakeUp(sIntakeTilt);
   private final Command cOuttake = sIntakeWheels.getOuttakeCommand();
   private final Command cStop = new RunCommand(() -> {
     sDrivetrain.stop();
@@ -42,7 +43,7 @@ public class RobotContainer {
   });
 
   // Autonomous chooser declaration
-  public final SendableChooser<Autos.Type> m_autonChooser = new SendableChooser<Autos.Type>();
+  private final SendableChooser<Autos.Type> m_autonChooser = new SendableChooser<Autos.Type>();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -52,10 +53,16 @@ public class RobotContainer {
 
     // Configure autonomous choices
     m_autonChooser.addOption("Long Auto", Autos.Type.Long);
+    m_autonChooser.addOption("Long Shoot Auto", Autos.Type.LongShoot);
     m_autonChooser.addOption("Short Auto", Autos.Type.Short);
+    m_autonChooser.addOption("Short Shoot Auto", Autos.Type.ShortShoot);
     m_autonChooser.addOption("Center Auto", Autos.Type.Center);
     m_autonChooser.addOption("Simple Center Auto", Autos.Type.CenterSimple);
+    m_autonChooser.addOption("Just Outtake", Autos.Type.Outtake);
     m_autonChooser.setDefaultOption("None", Autos.Type.None);
+
+    // Initialize Shuffleboard
+    SmartDashboard.putData("Auton selector", m_autonChooser);
 
     // Configure the trigger bindings
     configureBindings();
@@ -71,77 +78,92 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // Drive Controller:
+    // Universal:
+    // Button 'B' (hold) will continuously stop all movement
+    new JoystickButton(OI.driver_cntlr, OI.Controller.btn.B.val)
+    .or(new JoystickButton(OI.operator_cntlr, OI.Controller.btn.B.val))
+      .whileTrue(cStop);
+
+    configureDriver();
+    configureOperater();
+  }
+
+  private void configureDriver() {
     // D-pad and right stick will turn to the specified angle
-    new Trigger(() -> OI.driver_cntlr.getPOV() != -1)
+    new Trigger(() -> TurnToAngle.m_enabled && OI.driver_cntlr.getPOV() != -1)
       .whileTrue(new RunCommand(() -> {
-        TurnToAngle.setHeading(Math.round((float) OI.driver_cntlr.getPOV() / 45) * 45);
+        cTurnToAngle.setHeading(Math.round((float) OI.driver_cntlr.getPOV() / 45) * 45);
         cTurnToAngle.schedule();
       }));
 
     new Trigger(() ->
-      OI.driver_cntlr.getPOV() == -1 &&
+      TurnToAngle.m_enabled && OI.driver_cntlr.getPOV() == -1 &&
       (Math.abs(OI.driver_cntlr.getRightX()) > 0.2 || Math.abs(OI.driver_cntlr.getRightY()) > 0.2)
     )
     .whileTrue(new RunCommand(() -> {
-      TurnToAngle.setHeading(Math.toDegrees(Math.atan2(OI.driver_cntlr.getRightY() + 90, OI.driver_cntlr.getRightX())));
+      cTurnToAngle.setHeading(Math.toDegrees(Math.atan2(OI.driver_cntlr.getRightY(), OI.driver_cntlr.getRightX()) + 90));
       cTurnToAngle.schedule();
     }));
 
-    // Button 'X' will reset gyro
+    // Button 'A' (hold) will run auto-balance code
+    new JoystickButton(OI.driver_cntlr, OI.Controller.btn.A.val)
+      .whileTrue(cBalance);
+
+    // TODO: Add debounce dial to shuffleboard to show when debounce ends
+    // Button 'X' (debounced 1s) will reset gyro
     new JoystickButton(OI.driver_cntlr, OI.Controller.btn.X.val)
+    .debounce(1)
       .onTrue(new InstantCommand(() ->
         OI.pigeon.setYaw(0)
       ));
 
-    // Button 'B' (hold) will continuously stop all movement
-    new JoystickButton(OI.driver_cntlr, OI.Controller.btn.B.val)
-      .whileTrue(cStop);
+    // Button 'Y' will toggle TurnToAngle
+    new JoystickButton(OI.driver_cntlr, OI.Controller.btn.Y.val)
+      .onTrue(new InstantCommand(() ->
+        TurnToAngle.m_enabled ^= true
+      ));
+  }
 
-    // Button 'A' (hold) will cause robot to balance on a charge station
-    new JoystickButton(OI.driver_cntlr, OI.Controller.btn.A.val)
-      .whileTrue(cBalance);
-
-    // Operator Controller:
-    // Button 'B' (hold) will continuously stop all movement
-    new JoystickButton(OI.operator_cntlr, OI.Controller.btn.B.val)
-      .whileTrue(cStop);
-
-    // Button 'A' will disable automatic intake control
+  private void configureOperater() {
+    // TODO: add to shuffleboard
+    // Button 'A' will swap intake and outtake (for cones)
     new JoystickButton(OI.operator_cntlr, OI.Controller.btn.A.val)
       .onTrue(new InstantCommand(() -> {
-        sIntakeTilt.disable();
+        Constants.IntakeConstants.kIntakeSpeed *= -1;
+        Constants.IntakeConstants.kOuttakeSpeed *= -1;
       }));
 
-    // Button 'Y' will enable automatic intake control
-    new JoystickButton(OI.operator_cntlr, OI.Controller.btn.Y.val)
-      .onTrue(new InstantCommand(() -> {
-        sIntakeTilt.enable();
-      }));
-
-    // Button 'X' will reset tilt encoder
+    // Button 'X' (debounced 1s) will reset tilt encoder
     new JoystickButton(OI.operator_cntlr, OI.Controller.btn.X.val)
+    .debounce(1)
       .onTrue(new InstantCommand(() -> {
         sIntakeTilt.resetEncoder();
       }));
 
-    // Triggers will disable intake and manually move up (LT) and down (RT)
-    new Trigger(() -> Math.abs(OI.operator_cntlr.getTriggers()) > 0.05)
-      .whileTrue(new FunctionalCommand(
-        () -> sIntakeTilt.disable(),
-        () -> sIntakeTilt.useOutput(((OI.operator_cntlr.getTriggers() < 0) ? Constants.IntakeConstants.kUpSpeed : Constants.IntakeConstants.kDownSpeed), 0),
-        interrupted -> sIntakeTilt.disable(),
-        () -> false,
-        sIntakeTilt
-      ));
+    // Button 'Y' will toggle automatic intake control
+    new JoystickButton(OI.operator_cntlr, OI.Controller.btn.Y.val)
+      .toggleOnTrue(new InstantCommand(() -> {
+        if (sIntakeTilt.isEnabled()) {sIntakeTilt.disable();} else {sIntakeTilt.disable();}
+      }));
 
     // Button 'LB' (hold) will spit cubes
     new JoystickButton(OI.operator_cntlr, OI.Controller.btn.LB.val)
       .whileTrue(cOuttake);
 
-    // Button 'RB' (hold) will lower and activate intake
+    // Button 'RB' (hold) will lower and activate intake, then raise on release
     new JoystickButton(OI.operator_cntlr, OI.Controller.btn.RB.val)
-      .whileTrue(cIntake);
+      .whileTrue(cIntakeDown)
+      .onFalse(cIntakeUp);
+
+    // Triggers will disable intake and manually move up (LT) and down (RT)
+    new Trigger(() -> Math.abs(OI.operator_cntlr.getTriggers()) > 0.05)
+      .whileTrue(new FunctionalCommand(
+        () -> sIntakeTilt.disable(),
+        () -> sIntakeTilt.useOutput(-OI.operator_cntlr.getTriggers() * ((OI.operator_cntlr.getTriggers() < 0) ? Constants.IntakeConstants.kUpSpeed : Constants.IntakeConstants.kDownSpeed), 0),
+        interrupted -> sIntakeTilt.disable(),
+        () -> false,
+        sIntakeTilt
+      ));
   }
 
   /** Stops all motors and disables PID controllers */
@@ -155,6 +177,8 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return Autos.getAuto(m_autonChooser.getSelected(), sDrivetrain, sIntakeWheels).beforeStarting(() -> sIntakeTilt.enable());
+    // Autos start backwards, so robot yaw should be facing backward
+    return Autos.getAuto(m_autonChooser.getSelected(), sDrivetrain, sIntakeWheels)
+      .beforeStarting(() -> OI.pigeon.setYaw(180));
   }
 }

@@ -6,7 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.TurnToAngle;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -30,8 +30,6 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-
-    SmartDashboard.putData("Auton selector", m_robotContainer.m_autonChooser);
   }
 
   /**
@@ -63,8 +61,6 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
-    // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
@@ -72,10 +68,7 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {
-    // Provides operator with notice that robot is still active
-    System.out.println("Robot is still active!");
-  }
+  public void autonomousPeriodic() {}
 
 
   @Override
@@ -87,6 +80,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    TurnToAngle.m_enabled = false;
   }
 
   /** This function is called periodically during operator control. */

@@ -11,8 +11,8 @@ import frc.robot.Constants.DrivetrainConstants;
 
 import frc.robot.subsystems.Drivetrain;
 
-// TODO: Fix issue with large turns producing outputs greater than 1
 public class TurnToAngle extends PIDCommand {
+  public static boolean m_enabled = false;
   private static double m_heading = 0;
 
   public TurnToAngle(Drivetrain drivetrain) {
@@ -31,6 +31,17 @@ public class TurnToAngle extends PIDCommand {
     m_controller.setSetpoint(0);
   }
 
+  @Override public void execute() {
+    super.execute();
+    if (
+      Math.abs(OI.driver_cntlr.getLeftX()) > 0.05
+      || Math.abs(OI.driver_cntlr.getLeftY()) > 0.05
+      || Math.abs(OI.driver_cntlr.getTriggers()) > 0.05
+    ) {
+      cancel();
+    }
+  }
+
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
@@ -42,8 +53,10 @@ public class TurnToAngle extends PIDCommand {
    *
    * @param fheading Target heading (in degrees)
    */
-  public static void setHeading(double fheading) {
-    // TODO: Ensure that heading changes do not mess with derivative/integral calculations, reset PID controller as necessary
+  public void setHeading(double fheading) {
+    if (Math.abs(fheading - m_heading) >= 50) {
+      m_controller.reset();
+    }
     m_heading = fheading;
   }
 }
