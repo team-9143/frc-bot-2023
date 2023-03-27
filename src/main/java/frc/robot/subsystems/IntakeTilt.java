@@ -34,7 +34,7 @@ public class IntakeTilt extends PIDSubsystem {
   @Override
   public void useOutput(double output, double setpoint) {
     // Use the output here
-    tilt_motor.set(output);
+    tilt_motor.set(Math.max(-IntakeConstants.kTiltMaxSpeed, Math.min(output, IntakeConstants.kTiltMaxSpeed)));
   }
 
   @Override

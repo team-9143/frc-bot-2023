@@ -61,6 +61,8 @@ public final class Constants {
 
   public static class IntakeConstants {
     public static final double kTiltGearbox = (double) 1/28;
+    // TOOD: Tune
+    public static final double kTiltMaxSpeed = 0.5;
 
     // Cube intake/outtake wheel speed
     public static double kIntakeSpeed = 0.3;
