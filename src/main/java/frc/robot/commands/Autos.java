@@ -155,7 +155,6 @@ public final class Autos {
     );
   }
 
-  //TODO: Implement WIPAuto
   private static Command WIPAuto(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels, IntakeTilt sIntakeTilt) {
     TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain);
     return new SequentialCommandGroup(
