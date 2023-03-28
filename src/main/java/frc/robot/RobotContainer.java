@@ -83,17 +83,17 @@ public class RobotContainer {
       .withSize(5, 2)
       .withWidget(BuiltInWidgets.kComboBoxChooser);
 
-    drive_tab.add("Drivetrain", Drivetrain.robotDrive)
-      .withPosition(7, 0)
-      .withSize(6, 4)
-      .withWidget(BuiltInWidgets.kDifferentialDrive)
-      .withProperties(Map.of("number of wheels", 6, "wheel diameter", 60, "show velocity vectors", true));
-
     drive_tab.addDouble("Docking Angle", OI.pigeon::getPitch)
       .withPosition(4, 0)
       .withSize(3, 3)
       .withWidget(BuiltInWidgets.kDial)
       .withProperties(Map.of("min", -45, "max", 45, "show value", true));
+
+    drive_tab.add("Drivetrain", Drivetrain.robotDrive)
+      .withPosition(7, 0)
+      .withSize(6, 4)
+      .withWidget(BuiltInWidgets.kDifferentialDrive)
+      .withProperties(Map.of("number of wheels", 6, "wheel diameter", 60, "show velocity vectors", true));
 
     ShuffleboardLayout layout_1 = drive_tab.getLayout("Rotation", BuiltInLayouts.kList)
       .withPosition(0, 0)
@@ -107,15 +107,15 @@ public class RobotContainer {
     ShuffleboardLayout layout_2 = drive_tab.getLayout("Intake", BuiltInLayouts.kList)
       .withPosition(13, 0)
       .withSize(4, 8);
-    layout_2.addDouble("Intake Angle", () -> -sIntakeTilt.getMeasurement() * 360)
-      .withWidget(BuiltInWidgets.kDial)
-      .withProperties(Map.of("min", -110, "max", 110, "show value", false));
     layout_2.addBoolean("Inverted", () -> Constants.IntakeConstants.kIntakeSpeed < 0)
       .withWidget(BuiltInWidgets.kBooleanBox);
     layout_2.addBoolean("Intaking", cIntakeDown::isScheduled)
       .withWidget(BuiltInWidgets.kBooleanBox);
     layout_2.addBoolean("Outtaking", cOuttake::isScheduled)
       .withWidget(BuiltInWidgets.kBooleanBox);
+    layout_2.addDouble("Intake Angle", () -> -sIntakeTilt.getMeasurement() * 360)
+      .withWidget(BuiltInWidgets.kDial)
+      .withProperties(Map.of("min", -110, "max", 110, "show value", false));
 
     Shuffleboard.disableActuatorWidgets();
   }
@@ -143,9 +143,11 @@ public class RobotContainer {
       .withPosition(5, 0)
       .withSize(5, 8);
 
-    ShuffleboardLayout layout_1 = test_tab.getLayout("Intake", BuiltInLayouts.kList)
+    ShuffleboardLayout layout_1 = test_tab.getLayout("Intake", BuiltInLayouts.kGrid)
       .withPosition(10, 0)
-      .withSize(4, 8);
+      .withSize(4, 8)
+      .withProperties(Map.of("number of columns", 2, "number of rows", 3));
+    // Column 1
     layout_1.addDouble("Intake Angle", () -> sIntakeTilt.getMeasurement() * -360)
       .withWidget(BuiltInWidgets.kDial)
       .withProperties(Map.of("min", -110, "max", 110, "show value", false));
@@ -159,6 +161,7 @@ public class RobotContainer {
     )
       .withWidget(BuiltInWidgets.kNumberBar)
       .withProperties(Map.of("min", -110, "max", 110, "center", 0));
+    // Column 2
     layout_1.addBoolean("PID enabled", () -> cIntakeDown.isScheduled() || cIntakeUp.isScheduled() || sIntakeTilt.isEnabled())
       .withWidget(BuiltInWidgets.kBooleanBox);
     layout_1.addDouble("Wheel RPM", sIntakeWheels::getVelocity)
