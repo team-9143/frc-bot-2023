@@ -121,11 +121,10 @@ public class RobotContainer {
     Shuffleboard.disableActuatorWidgets();
   }
 
-  // TODO: Test, potentially add interactive checklist
+  // TODO: Fix checklists not appearing, potentially add interactivity (toggle switches)
   private void configureTestTab() {
     ShuffleboardTab test_tab = Shuffleboard.getTab("Test");
 
-    // TODO: Fix checklists not appearing
     test_tab.add("Match Checklist", new String[]{
       "Bumpers are the correct match color",
       "Electrical pull test successful",
@@ -197,16 +196,15 @@ public class RobotContainer {
       TurnToAngle.m_enabled && OI.driver_cntlr.getPOV() == -1 &&
       (Math.abs(OI.driver_cntlr.getRightX()) > 0.2 || Math.abs(OI.driver_cntlr.getRightY()) > 0.2)
     )
-    .whileTrue(new RunCommand(() -> {
-      cTurnToAngle.setHeading(Math.toDegrees(Math.atan2(OI.driver_cntlr.getRightY(), OI.driver_cntlr.getRightX()) + 90));
-      cTurnToAngle.schedule();
-    }));
+      .whileTrue(new RunCommand(() -> {
+        cTurnToAngle.setHeading(Math.toDegrees(Math.atan2(OI.driver_cntlr.getRightY(), OI.driver_cntlr.getRightX()) + 90));
+        cTurnToAngle.schedule();
+      }));
 
     // Button 'A' (hold) will run auto-balance code
     new JoystickButton(OI.driver_cntlr, OI.Controller.btn.A.val)
       .whileTrue(cBalance);
 
-    // TODO: Add debounce dial to shuffleboard to show when debounce ends
     // Button 'X' (debounced 1s) will reset gyro
     new JoystickButton(OI.driver_cntlr, OI.Controller.btn.X.val)
     .debounce(1)
