@@ -110,13 +110,12 @@ public class RobotContainer {
     layout_2.addDouble("Intake Angle", () -> -sIntakeTilt.getMeasurement() * 360)
       .withWidget(BuiltInWidgets.kDial)
       .withProperties(Map.of("min", -110, "max", 110, "show value", false));
+    layout_2.addBoolean("Inverted", () -> Constants.IntakeConstants.kIntakeSpeed < 0)
+      .withWidget(BuiltInWidgets.kBooleanBox);
     layout_2.addBoolean("Intaking", cIntakeDown::isScheduled)
       .withWidget(BuiltInWidgets.kBooleanBox);
     layout_2.addBoolean("Outtaking", cOuttake::isScheduled)
       .withWidget(BuiltInWidgets.kBooleanBox);
-    layout_2.addDouble("Wheel RPM", sIntakeWheels::getVelocity)
-      .withWidget(BuiltInWidgets.kNumberBar)
-      .withProperties(Map.of("min", -250, "max", 250, "center", 0));
 
     Shuffleboard.disableActuatorWidgets();
   }
@@ -162,6 +161,9 @@ public class RobotContainer {
       .withProperties(Map.of("min", -110, "max", 110, "center", 0));
     layout_1.addBoolean("PID enabled", () -> cIntakeDown.isScheduled() || cIntakeUp.isScheduled() || sIntakeTilt.isEnabled())
       .withWidget(BuiltInWidgets.kBooleanBox);
+    layout_1.addDouble("Wheel RPM", sIntakeWheels::getVelocity)
+      .withWidget(BuiltInWidgets.kNumberBar)
+      .withProperties(Map.of("min", -250, "max", 250, "center", 0));
   }
 
   /**
@@ -220,7 +222,6 @@ public class RobotContainer {
   }
 
   private void configureOperator() {
-    // TODO: add to shuffleboard
     // Button 'A' will swap intake and outtake (for cones)
     new JoystickButton(OI.operator_cntlr, OI.Controller.btn.A.val)
       .onTrue(new InstantCommand(() -> {
