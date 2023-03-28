@@ -89,7 +89,7 @@ public class RobotContainer {
       .withWidget(BuiltInWidgets.kDifferentialDrive)
       .withProperties(Map.of("number of wheels", 6, "wheel diameter", 60, "show velocity vectors", true));
 
-    drive_tab.addDouble("Docking Angle", () -> -OI.pigeon.getPitch())
+    drive_tab.addDouble("Docking Angle", OI.pigeon::getPitch)
       .withPosition(4, 0)
       .withSize(3, 3)
       .withWidget(BuiltInWidgets.kDial)
@@ -125,6 +125,7 @@ public class RobotContainer {
   private void configureTestTab() {
     ShuffleboardTab test_tab = Shuffleboard.getTab("Test");
 
+    // TODO: Fix checklists not appearing
     test_tab.add("Match Checklist", new String[]{
       "Bumpers are the correct match color",
       "Electrical pull test successful",
@@ -137,35 +138,12 @@ public class RobotContainer {
       .withPosition(0, 0)
       .withSize(5, 8);
 
-    // SendableChooser<?> match_checklist = new SendableChooser<>();
-    // match_checklist.addOption("Bumpers are the correct match color", null);
-    // match_checklist.addOption("Electrical pull test successful", null);
-    // match_checklist.addOption("Motor controllers are blinking in sync", null);
-    // match_checklist.addOption("Battery is connected and secured", null);
-    // match_checklist.addOption("Robot is in the correct start position", null);
-    // match_checklist.addOption("Robot intake/arms are in the correct start position", null);
-    // match_checklist.addOption("Robot is set with the correct game piece", null);
-
-    // test_tab.add("Match Checklist", match_checklist)
-    //   .withPosition(0, 0)
-    //   .withSize(5, 8)
-    //   .withWidget(BuiltInWidgets.kSplitButtonChooser);
-
-    test_tab.add("Match Checklist", new String[]{
+    test_tab.add("Driver Station Checklist", new String[]{
       "Electronic pull test successful",
       "Joysticks are correctly connected (driver is 0)"
     })
       .withPosition(5, 0)
       .withSize(5, 8);
-
-    // SendableChooser<?> drivestation_checklist = new SendableChooser<>();
-    // drivestation_checklist.addOption("Electronic pull test successful", null);
-    // drivestation_checklist.addOption("Joysticks are correctly connected (driver is 0)", null);
-
-    // test_tab.add("Driver Station Checklist", drivestation_checklist)
-    //   .withPosition(5, 0)
-    //   .withSize(5, 8)
-    //   .withWidget(BuiltInWidgets.kSplitButtonChooser);
 
     ShuffleboardLayout layout_1 = test_tab.getLayout("Intake", BuiltInLayouts.kList)
       .withPosition(10, 0)
