@@ -10,7 +10,7 @@ import frc.robot.OI;
 import edu.wpi.first.networktables.NetworkTableEntry;
 
 public class Limelight extends SubsystemBase {
-  private final NetworkTableEntry
+  private static final NetworkTableEntry
     tv = OI.limelight.getEntry("tv"),
     tx = OI.limelight.getEntry("tx"),
     ty = OI.limelight.getEntry("ty"),

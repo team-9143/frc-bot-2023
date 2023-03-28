@@ -61,6 +61,7 @@ public final class Constants {
 
   public static class IntakeConstants {
     public static final double kTiltGearbox = (double) 1/28;
+    public static final double kWheelGearbox = (double) 1/3;
     // TOOD: Tune
     public static final double kTiltMaxSpeed = 0.5;
 

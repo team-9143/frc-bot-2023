@@ -12,8 +12,7 @@ import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
-import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.IntakeWheels;
+import frc.robot.subsystems.*;
 
 public final class Autos {
   public static enum Type {
@@ -24,10 +23,11 @@ public final class Autos {
     Center,
     CenterSimple,
     Outtake,
+    WPIAuto,
     None
   }
 
-  public static Command getAuto(Type type, Drivetrain sDrivetrain, IntakeWheels sIntakeWheels) {
+  public static Command getAuto(Type type, Drivetrain sDrivetrain, IntakeWheels sIntakeWheels, IntakeTilt sIntakeTilt) {
     switch(type) {
       case Long:
         return LongAuto(sDrivetrain, sIntakeWheels);
@@ -43,6 +43,8 @@ public final class Autos {
         return CenterSimpleAuto(sDrivetrain, sIntakeWheels);
       case Outtake:
         return OuttakeAuto(sDrivetrain, sIntakeWheels);
+      case WPIAuto:
+        return WIPAuto(sDrivetrain, sIntakeWheels, sIntakeTilt);
       default:
         return new InstantCommand();
     }
@@ -61,7 +63,7 @@ public final class Autos {
   private static Command LongShootAuto(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels) {
     return new SequentialCommandGroup(
       sDrivetrain.getShootCommand(sIntakeWheels),
-      
+
       new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(-140))
     );
   }
@@ -79,7 +81,7 @@ public final class Autos {
   private static Command ShortShootAuto(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels) {
     return new SequentialCommandGroup(
       sDrivetrain.getShootCommand(sIntakeWheels),
-      
+
       new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(-80))
     );
   }
@@ -143,12 +145,37 @@ public final class Autos {
       new Balance(sDrivetrain)
     );
   }
+
   private static Command OuttakeAuto(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels){
     TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain);
 
     return new SequentialCommandGroup(
       sIntakeWheels.getOuttakeCommand().withTimeout(0.5),
       cTurnToAngle.beforeStarting(() -> cTurnToAngle.setHeading(0))
+    );
+  }
+
+  //TODO: Implement WIPAuto
+  private static Command WIPAuto(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels, IntakeTilt sIntakeTilt) {
+    TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain);
+    return new SequentialCommandGroup(
+      sIntakeWheels.getOuttakeCommand().withTimeout(0.5),
+
+      new TurnToAngle(sDrivetrain).beforeStarting(() -> cTurnToAngle.setHeading(180)),
+
+      new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(224)),
+
+      new IntakeDown(sIntakeTilt, sIntakeWheels).withTimeout(2), new IntakeUp(sIntakeTilt),
+
+      new TurnToAngle(sDrivetrain).beforeStarting(() -> cTurnToAngle.setHeading(90)),
+
+      new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(48)),
+
+      new TurnToAngle(sDrivetrain).beforeStarting(() -> cTurnToAngle.setHeading(0)),
+
+      new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(48)),
+
+      new Balance(sDrivetrain)
     );
   }
 }

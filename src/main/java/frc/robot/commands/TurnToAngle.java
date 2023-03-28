@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
+import edu.wpi.first.util.sendable.SendableRegistry;
 import frc.robot.OI;
 import frc.robot.Constants.DrivetrainConstants;
 
@@ -24,6 +25,7 @@ public class TurnToAngle extends PIDCommand {
     );
 
     addRequirements(drivetrain);
+    SendableRegistry.setSubsystem(m_controller, drivetrain.getSubsystem());
 
     // Configure additional PID options
     m_controller.setTolerance(DrivetrainConstants.kTurnPosTolerance, DrivetrainConstants.kTurnVelTolerance);
@@ -54,9 +56,11 @@ public class TurnToAngle extends PIDCommand {
    * @param fheading Target heading (in degrees)
    */
   public void setHeading(double fheading) {
-    if (Math.abs(fheading - m_heading) >= 50) {
+    if (Math.abs(fheading - m_heading) > 50) {
       m_controller.reset();
     }
     m_heading = fheading;
   }
+
+  public static double getHeading() {return m_heading;}
 }

@@ -15,8 +15,14 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import java.util.Map;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -42,7 +48,7 @@ public class RobotContainer {
     cTurnToAngle.cancel();
   });
 
-  // Autonomous chooser declaration
+  // Dashboard declarations
   private final SendableChooser<Autos.Type> m_autonChooser = new SendableChooser<Autos.Type>();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -61,11 +67,124 @@ public class RobotContainer {
     m_autonChooser.addOption("Just Outtake", Autos.Type.Outtake);
     m_autonChooser.setDefaultOption("None", Autos.Type.None);
 
-    // Initialize Shuffleboard
-    SmartDashboard.putData("Auton selector", m_autonChooser);
-
     // Configure the trigger bindings
     configureBindings();
+
+    // Initialize Shuffleboard
+    configureDriveTab();
+    configureTestTab();
+  }
+
+  private void configureDriveTab() {
+    ShuffleboardTab drive_tab = Shuffleboard.getTab("Drive");
+
+    drive_tab.add("Auton chooser", m_autonChooser)
+      .withPosition(6, 5)
+      .withSize(5, 2)
+      .withWidget(BuiltInWidgets.kComboBoxChooser);
+
+    drive_tab.add("Drivetrain", Drivetrain.robotDrive)
+      .withPosition(7, 0)
+      .withSize(6, 4)
+      .withWidget(BuiltInWidgets.kDifferentialDrive)
+      .withProperties(Map.of("number of wheels", 6, "wheel diameter", 60, "show velocity vectors", true));
+
+    drive_tab.addDouble("Docking Angle", () -> -OI.pigeon.getPitch())
+      .withPosition(4, 0)
+      .withSize(3, 3)
+      .withWidget(BuiltInWidgets.kDial)
+      .withProperties(Map.of("min", -45, "max", 45, "show value", true));
+
+    ShuffleboardLayout layout_1 = drive_tab.getLayout("Rotation", BuiltInLayouts.kList)
+      .withPosition(0, 0)
+      .withSize(4, 6);
+    layout_1.add("Gyro", new OI.PigeonSendable(OI.pigeon))
+      .withWidget(BuiltInWidgets.kGyro)
+      .withProperties(Map.of("major tick spacing", 45, "starting angle", 180, "show tick mark ring", true));
+    layout_1.addBoolean("TurnToAngle Enabled", () -> TurnToAngle.m_enabled)
+      .withWidget(BuiltInWidgets.kBooleanBox);
+
+    ShuffleboardLayout layout_2 = drive_tab.getLayout("Intake", BuiltInLayouts.kList)
+      .withPosition(13, 0)
+      .withSize(4, 8);
+    layout_2.addDouble("Intake Angle", () -> -sIntakeTilt.getMeasurement() * 360)
+      .withWidget(BuiltInWidgets.kDial)
+      .withProperties(Map.of("min", -110, "max", 110, "show value", false));
+    layout_2.addBoolean("Intaking", cIntakeDown::isScheduled)
+      .withWidget(BuiltInWidgets.kBooleanBox);
+    layout_2.addBoolean("Outtaking", cOuttake::isScheduled)
+      .withWidget(BuiltInWidgets.kBooleanBox);
+    layout_2.addDouble("Wheel RPM", sIntakeWheels::getVelocity)
+      .withWidget(BuiltInWidgets.kNumberBar)
+      .withProperties(Map.of("min", -250, "max", 250, "center", 0));
+
+    Shuffleboard.disableActuatorWidgets();
+  }
+
+  // TODO: Test, potentially add interactive checklist
+  private void configureTestTab() {
+    ShuffleboardTab test_tab = Shuffleboard.getTab("Test");
+
+    test_tab.add("Match Checklist", new String[]{
+      "Bumpers are the correct match color",
+      "Electrical pull test successful",
+      "Motor controllers are blinking in sync",
+      "Battery is connected and secured",
+      "Robot is in the correct start position",
+      "Robot intake/arms are in the correct start position",
+      "Robot is set with the correct game piece"
+    })
+      .withPosition(0, 0)
+      .withSize(5, 8);
+
+    // SendableChooser<?> match_checklist = new SendableChooser<>();
+    // match_checklist.addOption("Bumpers are the correct match color", null);
+    // match_checklist.addOption("Electrical pull test successful", null);
+    // match_checklist.addOption("Motor controllers are blinking in sync", null);
+    // match_checklist.addOption("Battery is connected and secured", null);
+    // match_checklist.addOption("Robot is in the correct start position", null);
+    // match_checklist.addOption("Robot intake/arms are in the correct start position", null);
+    // match_checklist.addOption("Robot is set with the correct game piece", null);
+
+    // test_tab.add("Match Checklist", match_checklist)
+    //   .withPosition(0, 0)
+    //   .withSize(5, 8)
+    //   .withWidget(BuiltInWidgets.kSplitButtonChooser);
+
+    test_tab.add("Match Checklist", new String[]{
+      "Electronic pull test successful",
+      "Joysticks are correctly connected (driver is 0)"
+    })
+      .withPosition(5, 0)
+      .withSize(5, 8);
+
+    // SendableChooser<?> drivestation_checklist = new SendableChooser<>();
+    // drivestation_checklist.addOption("Electronic pull test successful", null);
+    // drivestation_checklist.addOption("Joysticks are correctly connected (driver is 0)", null);
+
+    // test_tab.add("Driver Station Checklist", drivestation_checklist)
+    //   .withPosition(5, 0)
+    //   .withSize(5, 8)
+    //   .withWidget(BuiltInWidgets.kSplitButtonChooser);
+
+    ShuffleboardLayout layout_1 = test_tab.getLayout("Intake", BuiltInLayouts.kList)
+      .withPosition(10, 0)
+      .withSize(4, 8);
+    layout_1.addDouble("Intake Angle", () -> sIntakeTilt.getMeasurement() * -360)
+      .withWidget(BuiltInWidgets.kDial)
+      .withProperties(Map.of("min", -110, "max", 110, "show value", false));
+    layout_1.addDouble("Intake Setpoint", () ->
+      ((cIntakeDown.isScheduled()) ? Constants.IntakeConstants.kDownPos : Constants.IntakeConstants.kUpPos) * -360
+    )
+      .withWidget(BuiltInWidgets.kDial)
+      .withProperties(Map.of("min", -110, "max", 110, "show value", false));
+    layout_1.addDouble("Error", () ->
+      (((cIntakeDown.isScheduled()) ? Constants.IntakeConstants.kDownPos : Constants.IntakeConstants.kUpPos) - sIntakeTilt.getMeasurement()) * -360
+    )
+      .withWidget(BuiltInWidgets.kNumberBar)
+      .withProperties(Map.of("min", -110, "max", 110, "center", 0));
+    layout_1.addBoolean("PID enabled", () -> cIntakeDown.isScheduled() || cIntakeUp.isScheduled() || sIntakeTilt.isEnabled())
+      .withWidget(BuiltInWidgets.kBooleanBox);
   }
 
   /**
@@ -85,7 +204,7 @@ public class RobotContainer {
       .whileTrue(cStop);
 
     configureDriver();
-    configureOperater();
+    configureOperator();
   }
 
   private void configureDriver() {
@@ -124,7 +243,7 @@ public class RobotContainer {
       ));
   }
 
-  private void configureOperater() {
+  private void configureOperator() {
     // TODO: add to shuffleboard
     // Button 'A' will swap intake and outtake (for cones)
     new JoystickButton(OI.operator_cntlr, OI.Controller.btn.A.val)
@@ -142,8 +261,8 @@ public class RobotContainer {
 
     // Button 'Y' will toggle automatic intake control
     new JoystickButton(OI.operator_cntlr, OI.Controller.btn.Y.val)
-      .toggleOnTrue(new InstantCommand(() -> {
-        if (sIntakeTilt.isEnabled()) {sIntakeTilt.disable();} else {sIntakeTilt.disable();}
+      .onTrue(new InstantCommand(() -> {
+        if (sIntakeTilt.isEnabled()) {sIntakeTilt.disable();} else {sIntakeTilt.enable();}
       }));
 
     // Button 'LB' (hold) will spit cubes
@@ -158,17 +277,12 @@ public class RobotContainer {
     // Triggers will disable intake and manually move up (LT) and down (RT)
     new Trigger(() -> Math.abs(OI.operator_cntlr.getTriggers()) > 0.05)
       .whileTrue(new FunctionalCommand(
-        () -> sIntakeTilt.disable(),
+        sIntakeTilt::disable,
         () -> sIntakeTilt.useOutput(-OI.operator_cntlr.getTriggers() * ((OI.operator_cntlr.getTriggers() < 0) ? Constants.IntakeConstants.kUpSpeed : Constants.IntakeConstants.kDownSpeed), 0),
-        interrupted -> sIntakeTilt.disable(),
+        interrupted -> {},
         () -> false,
         sIntakeTilt
       ));
-  }
-
-  /** Stops all motors and disables PID controllers */
-  public void stop() {
-    cStop.execute();
   }
 
   /**
@@ -177,8 +291,13 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // Autos start backwards, so robot yaw should be facing backward
-    return Autos.getAuto(m_autonChooser.getSelected(), sDrivetrain, sIntakeWheels)
+    // Autos start backwards, so robot yaw should be backward
+    return Autos.getAuto(m_autonChooser.getSelected(), sDrivetrain, sIntakeWheels, sIntakeTilt)
       .beforeStarting(() -> OI.pigeon.setYaw(180));
+  }
+
+  /** Stops all motors and disables PID controllers */
+  public void stop() {
+    cStop.execute();
   }
 }

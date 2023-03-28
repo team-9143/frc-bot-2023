@@ -4,8 +4,12 @@ import frc.robot.Constants.DeviceConstants;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import com.ctre.phoenix.sensors.Pigeon2;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.util.sendable.SendableRegistry;
+
 import edu.wpi.first.wpilibj.GenericHID;
+import com.ctre.phoenix.sensors.Pigeon2;
 
 public class OI {
   public final static Controller driver_cntlr = new Controller(DeviceConstants.kDriverCntlrPort);
@@ -67,5 +71,25 @@ public class OI {
     public double getLeftY() {return getRawAxis(axis.leftY.val);}
     public double getRightX() {return getRawAxis(axis.rightX.val);}
     public double getRightY() {return getRawAxis(axis.rightY.val);}
+  }
+
+  public static class PigeonSendable implements Sendable, AutoCloseable {
+    public final Pigeon2 gyro;
+
+    public PigeonSendable(Pigeon2 gyro) {
+      this.gyro = gyro;
+      SendableRegistry.addLW(this, "Drivetrain", "Pigeon 2.0");
+    }
+
+    @Override
+    public void initSendable(SendableBuilder builder) {
+      builder.setSmartDashboardType("Gyro");
+      builder.addDoubleProperty("Value", () -> -gyro.getYaw(), null);
+    }
+
+    @Override
+    public void close() {
+      SendableRegistry.remove(this);
+    }
   }
 }
