@@ -29,7 +29,7 @@ public final class Constants {
 
   public static class DrivetrainConstants {
     public static final double kWheelDiameter = 6; // In inches
-    public static final double kGearboxRatio = 12.76 * 0.85; // Multiplier due to traction/encoder error
+    public static final double kGearboxRatio = 12.76 * 0.85; // TODO: Test and fix gearbox ratio
 
     // Teleop driving
     public static final double kSpeedMult = 1; // Applies to all manual drivetrain movement
@@ -81,16 +81,16 @@ public final class Constants {
 
     // Intake tilt gains
     public static final double
-      kDownP = 0.55,
-      kDownI = 0.45,
-      kDownD = 0.3;
+      kDownP = kTiltGearbox * 15.4,
+      kDownI = kTiltGearbox * 12.6,
+      kDownD = kTiltGearbox * 8.4;
     public static final double
-      kUpP = 0.7,
-      kUpI = 0.6,
-      kUpD = 0.3;
+      kUpP = kTiltGearbox * 19.6,
+      kUpI = kTiltGearbox * 16.8,
+      kUpD = kTiltGearbox * 8.4;
     public static final double
-      kSteadyP = 0.7,
-      kSteadyI = 0.6,
-      kSteadyD = 0.3;
+      kSteadyP = kTiltGearbox * 19.6,
+      kSteadyI = kTiltGearbox * 16.8,
+      kSteadyD = kTiltGearbox * 8.4;
   }
 }
