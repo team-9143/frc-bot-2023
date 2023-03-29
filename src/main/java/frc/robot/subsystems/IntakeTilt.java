@@ -49,7 +49,7 @@ public class IntakeTilt extends PIDSubsystem {
   @Override
   public double getMeasurement() {
     // Return the process variable measurement here
-    return (l_encoder.getPosition() - r_encoder.getPosition())/2;
+    return (l_encoder.getPosition() + r_encoder.getPosition())/2;
   }
 
   public void resetEncoder() {

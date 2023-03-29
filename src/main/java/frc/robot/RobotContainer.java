@@ -113,7 +113,7 @@ public class RobotContainer {
       .withWidget(BuiltInWidgets.kBooleanBox);
     layout_2.addBoolean("Outtaking", cOuttake::isScheduled)
       .withWidget(BuiltInWidgets.kBooleanBox);
-    layout_2.addDouble("Intake Angle", () -> -sIntakeTilt.getMeasurement() * 360)
+    layout_2.addDouble("Intake Angle", () -> sIntakeTilt.getMeasurement() * 360)
       .withWidget(BuiltInWidgets.kDial)
       .withProperties(Map.of("min", -110, "max", 110, "show value", false));
 
@@ -144,20 +144,20 @@ public class RobotContainer {
       .withSize(5, 8);
 
     ShuffleboardLayout layout_1 = test_tab.getLayout("Intake", BuiltInLayouts.kGrid)
-      .withPosition(10, 0)
-      .withSize(4, 8)
+      .withPosition(8, 0)
+      .withSize(8, 8)
       .withProperties(Map.of("number of columns", 2, "number of rows", 3));
     // Column 1
-    layout_1.addDouble("Intake Angle", () -> sIntakeTilt.getMeasurement() * -360)
+    layout_1.addDouble("Intake Angle", () -> sIntakeTilt.getMeasurement() * 360)
       .withWidget(BuiltInWidgets.kDial)
-      .withProperties(Map.of("min", -110, "max", 110, "show value", false));
+      .withProperties(Map.of("min", -110, "max", 110, "show value", true));
     layout_1.addDouble("Intake Setpoint", () ->
-      ((cIntakeDown.isScheduled()) ? Constants.IntakeConstants.kDownPos : Constants.IntakeConstants.kUpPos) * -360
+      ((cIntakeDown.isScheduled()) ? Constants.IntakeConstants.kDownPos : Constants.IntakeConstants.kUpPos) * 360
     )
       .withWidget(BuiltInWidgets.kDial)
-      .withProperties(Map.of("min", -110, "max", 110, "show value", false));
+      .withProperties(Map.of("min", -110, "max", 110, "show value", true));
     layout_1.addDouble("Error", () ->
-      (((cIntakeDown.isScheduled()) ? Constants.IntakeConstants.kDownPos : Constants.IntakeConstants.kUpPos) - sIntakeTilt.getMeasurement()) * -360
+      (((cIntakeDown.isScheduled()) ? Constants.IntakeConstants.kDownPos : Constants.IntakeConstants.kUpPos) - sIntakeTilt.getMeasurement()) * 360
     )
       .withWidget(BuiltInWidgets.kNumberBar)
       .withProperties(Map.of("min", -110, "max", 110, "center", 0));
@@ -258,7 +258,7 @@ public class RobotContainer {
     new Trigger(() -> Math.abs(OI.operator_cntlr.getTriggers()) > 0.05)
       .whileTrue(new FunctionalCommand(
         sIntakeTilt::disable,
-        () -> sIntakeTilt.useOutput(-OI.operator_cntlr.getTriggers() * ((OI.operator_cntlr.getTriggers() < 0) ? Constants.IntakeConstants.kUpSpeed : Constants.IntakeConstants.kDownSpeed), 0),
+        () -> sIntakeTilt.useOutput(OI.operator_cntlr.getTriggers() * ((OI.operator_cntlr.getTriggers() < 0) ? Constants.IntakeConstants.kUpSpeed : Constants.IntakeConstants.kDownSpeed), 0),
         interrupted -> {},
         () -> false,
         sIntakeTilt

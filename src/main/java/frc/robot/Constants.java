@@ -65,7 +65,7 @@ public final class Constants {
     public static final double kTiltGearbox = (double) 1/35;
     public static final double kWheelGearbox = (double) 1/3;
     // TOOD: Tune
-    public static final double kTiltMaxSpeed = 0.5;
+    public static final double kTiltMaxSpeed = 1; // TODO: Lower
 
     // Cube intake/outtake wheel speed
     public static double kIntakeSpeed = 0.3;
@@ -77,22 +77,22 @@ public final class Constants {
 
     // TODO: Tune positions to new intake mount
     // Preset positions and tolerances (in rotations)
-    public static final double kUpPos = 0.02;
-    public static final double kDownPos = 0.28;
+    public static final double kUpPos = 0.003;
+    public static final double kDownPos = 0.29;
     public static final double kPosTolerance = 0.015;
 
     // Intake tilt gains
     public static final double
-      kDownP = kTiltGearbox * 15.4,
-      kDownI = kTiltGearbox * 12.6,
-      kDownD = kTiltGearbox * 8.4;
+      kDownP = kTiltGearbox * 29,
+      kDownI = kTiltGearbox * 22,
+      kDownD = kTiltGearbox * 11;
     public static final double
-      kUpP = kTiltGearbox * 19.6,
-      kUpI = kTiltGearbox * 16.8,
-      kUpD = kTiltGearbox * 8.4;
+      kUpP = kTiltGearbox * 31,
+      kUpI = kTiltGearbox * 21,
+      kUpD = kTiltGearbox * 10;
     public static final double
-      kSteadyP = kTiltGearbox * 19.6,
-      kSteadyI = kTiltGearbox * 16.8,
-      kSteadyD = kTiltGearbox * 8.4;
+      kSteadyP = kTiltGearbox * 33,
+      kSteadyI = kTiltGearbox * 23,
+      kSteadyD = kTiltGearbox * 7;
   }
 }
