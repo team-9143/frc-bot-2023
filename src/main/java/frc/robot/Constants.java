@@ -77,8 +77,8 @@ public final class Constants {
 
     // TODO: Tune positions to new intake mount
     // Preset positions and tolerances (in rotations)
-    public static final double kUpPos = -0.02;
-    public static final double kDownPos = -0.28;
+    public static final double kUpPos = 0.02;
+    public static final double kDownPos = 0.28;
     public static final double kPosTolerance = 0.015;
 
     // Intake tilt gains

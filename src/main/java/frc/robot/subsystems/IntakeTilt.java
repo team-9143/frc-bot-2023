@@ -14,17 +14,26 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 
 public class IntakeTilt extends PIDSubsystem {
-  private static final CANSparkMax tilt_motor = new CANSparkMax(DeviceConstants.kIntakeTiltID, MotorType.kBrushless);
+  private static final CANSparkMax l_motor = new CANSparkMax(DeviceConstants.kIntakeTiltLeftID, MotorType.kBrushless);
+  private static final CANSparkMax r_motor = new CANSparkMax(DeviceConstants.kIntakeTiltRightID, MotorType.kBrushless);
 
-  private static final RelativeEncoder tilt_encoder = tilt_motor.getEncoder();
+  private static final RelativeEncoder l_encoder = l_motor.getEncoder();
+  private static final RelativeEncoder r_encoder = r_motor.getEncoder();
 
   public IntakeTilt() {
     super(new PIDController(IntakeConstants.kSteadyP, IntakeConstants.kSteadyI, IntakeConstants.kSteadyD));
 
-    tilt_encoder.setPositionConversionFactor(IntakeConstants.kTiltGearbox);
-    tilt_encoder.setVelocityConversionFactor(IntakeConstants.kTiltGearbox);
-    tilt_encoder.setMeasurementPeriod(20);
-    tilt_encoder.setPosition(0);
+    r_motor.follow(l_motor, true);
+
+    l_encoder.setPositionConversionFactor(IntakeConstants.kTiltGearbox);
+    l_encoder.setVelocityConversionFactor(IntakeConstants.kTiltGearbox);
+    l_encoder.setMeasurementPeriod(20);
+    l_encoder.setPosition(0);
+
+    r_encoder.setPositionConversionFactor(IntakeConstants.kTiltGearbox);
+    r_encoder.setVelocityConversionFactor(IntakeConstants.kTiltGearbox);
+    r_encoder.setMeasurementPeriod(20);
+    r_encoder.setPosition(0);
 
     setSetpoint(IntakeConstants.kUpPos);
 
@@ -34,16 +43,17 @@ public class IntakeTilt extends PIDSubsystem {
   @Override
   public void useOutput(double output, double setpoint) {
     // Use the output here
-    tilt_motor.set(Math.max(-IntakeConstants.kTiltMaxSpeed, Math.min(output, IntakeConstants.kTiltMaxSpeed)));
+    l_motor.set(Math.max(-IntakeConstants.kTiltMaxSpeed, Math.min(output, IntakeConstants.kTiltMaxSpeed)));
   }
 
   @Override
   public double getMeasurement() {
     // Return the process variable measurement here
-    return tilt_encoder.getPosition();
+    return (l_encoder.getPosition() - r_encoder.getPosition())/2;
   }
 
   public void resetEncoder() {
-    tilt_encoder.setPosition(IntakeConstants.kUpPos);
+    l_encoder.setPosition(IntakeConstants.kUpPos);
+    r_encoder.setPosition(IntakeConstants.kUpPos);
   }
 }
