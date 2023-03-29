@@ -25,7 +25,8 @@ public final class Constants {
       kBackRightID = 1,
       kPigeonID = 5,
       kIntakeWheelsID = 6,
-      kIntakeTiltID = 17;
+      kIntakeTiltRightID = 7,
+      kIntakeTiltLeftID = 8;
   }
 
   public static class DrivetrainConstants {
