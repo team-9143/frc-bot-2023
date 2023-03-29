@@ -17,6 +17,7 @@ public final class Constants {
   public static class DeviceConstants {
     public static final byte kDriverCntlrPort = 0;
     public static final byte kOperatorCntlrPort = 1;
+    // TOOD: Add new intake tilt motor
     public static final byte
       kFrontLeftID = 3,
       kBackLeftID = 4,
@@ -60,7 +61,7 @@ public final class Constants {
   }
 
   public static class IntakeConstants {
-    public static final double kTiltGearbox = (double) 1/28;
+    public static final double kTiltGearbox = (double) 1/35;
     public static final double kWheelGearbox = (double) 1/3;
     // TOOD: Tune
     public static final double kTiltMaxSpeed = 0.5;
