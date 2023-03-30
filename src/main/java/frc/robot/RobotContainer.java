@@ -262,7 +262,9 @@ public class RobotContainer {
     new Trigger(() -> Math.abs(OI.operator_cntlr.getTriggers()) > 0.05)
       .whileTrue(new FunctionalCommand(
         sIntakeTilt::disable,
-        () -> sIntakeTilt.useOutput(OI.operator_cntlr.getTriggers() * ((OI.operator_cntlr.getTriggers() < 0) ? Constants.IntakeConstants.kUpSpeed : Constants.IntakeConstants.kDownSpeed), 0),
+        () -> sIntakeTilt.useOutput(
+          Math.pow(OI.operator_cntlr.getTriggers(), 2) * ((OI.operator_cntlr.getTriggers() < 0) ? Constants.IntakeConstants.kUpSpeed : Constants.IntakeConstants.kDownSpeed), 0
+        ),
         interrupted -> {},
         () -> false,
         sIntakeTilt

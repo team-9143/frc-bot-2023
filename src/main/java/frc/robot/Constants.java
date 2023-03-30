@@ -73,7 +73,7 @@ public final class Constants {
     public static double kHoldingSpeed = 0.05;
 
     // Manual intake movement
-    public static final double kUpSpeed = 0.1;
+    public static final double kUpSpeed = -0.1;
     public static final double kDownSpeed = 0.08;
 
     // TODO: Tune positions to new intake mount
