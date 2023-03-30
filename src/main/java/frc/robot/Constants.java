@@ -67,9 +67,10 @@ public final class Constants {
     // TOOD: Tune
     public static final double kTiltMaxSpeed = 1; // TODO: Lower
 
-    // Cube intake/outtake wheel speed
+    // Wheel speed
     public static double kIntakeSpeed = 0.3;
     public static double kOuttakeSpeed = -1;
+    public static double kHoldingSpeed = 0.1;
 
     // Manual intake movement
     public static final double kUpSpeed = 0.1;

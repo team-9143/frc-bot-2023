@@ -13,12 +13,22 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
+
 public class IntakeWheels extends SubsystemBase {
+  public static boolean m_holding;
+  
   private static final CANSparkMax intake_motor = new CANSparkMax(DeviceConstants.kIntakeWheelsID, MotorType.kBrushless);
 
   private static final RelativeEncoder intake_encoder = intake_motor.getEncoder();
 
   public IntakeWheels() {
+    setDefaultCommand(new StartEndCommand(
+      () -> {if (m_holding) {intake_motor.set(IntakeConstants.kHoldingSpeed);}},
+      this::stop,
+      this
+    ));
+    
     intake_encoder.setPositionConversionFactor(IntakeConstants.kTiltGearbox);
     intake_encoder.setVelocityConversionFactor(IntakeConstants.kTiltGearbox);
     intake_encoder.setMeasurementPeriod(20);
