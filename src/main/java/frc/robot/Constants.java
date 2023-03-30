@@ -70,7 +70,7 @@ public final class Constants {
     // Wheel speed
     public static double kIntakeSpeed = 0.3;
     public static double kOuttakeSpeed = -1;
-    public static double kHoldingSpeed = 0.1;
+    public static double kHoldingSpeed = 0.05;
 
     // Manual intake movement
     public static final double kUpSpeed = 0.1;
