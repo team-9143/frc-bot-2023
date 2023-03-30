@@ -234,6 +234,12 @@ public class RobotContainer {
         Constants.IntakeConstants.kIntakeSpeed *= -1;
         Constants.IntakeConstants.kOuttakeSpeed *= -1;
         Constants.IntakeConstants.kHoldingSpeed *= -1;
+        if (cIntakeDown.isScheduled()) {
+          sIntakeWheels.set(Constants.IntakeConstants.kIntakeSpeed);
+        }
+        if (cOuttake.isScheduled()) {
+          sIntakeWheels.set(Constants.IntakeConstants.kOuttakeSpeed);
+        }
       }));
 
     // Button 'X' (debounced 1s) will reset tilt encoder
