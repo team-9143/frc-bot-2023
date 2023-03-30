@@ -143,6 +143,7 @@ public class RobotContainer {
       .withPosition(5, 0)
       .withSize(5, 8);
 
+    // TODO: Remove and re-add to reset layout
     ShuffleboardLayout layout_1 = test_tab.getLayout("Intake", BuiltInLayouts.kGrid)
       .withPosition(8, 0)
       .withSize(8, 8)
@@ -162,11 +163,13 @@ public class RobotContainer {
       .withWidget(BuiltInWidgets.kNumberBar)
       .withProperties(Map.of("min", -110, "max", 110, "center", 0));
     // Column 2
-    layout_1.addBoolean("PID enabled", () -> cIntakeDown.isScheduled() || cIntakeUp.isScheduled() || sIntakeTilt.isEnabled())
-      .withWidget(BuiltInWidgets.kBooleanBox);
     layout_1.addDouble("Wheel RPM", sIntakeWheels::getVelocity)
       .withWidget(BuiltInWidgets.kNumberBar)
       .withProperties(Map.of("min", -250, "max", 250, "center", 0));
+    layout_1.addBoolean("PID enabled", () -> cIntakeDown.isScheduled() || cIntakeUp.isScheduled() || sIntakeTilt.isEnabled())
+      .withWidget(BuiltInWidgets.kBooleanBox);
+    layout_1.addBoolean("Steady", sIntakeTilt::isEnabled)
+      .withWidget(BuiltInWidgets.kBooleanBox);
   }
 
   /**
