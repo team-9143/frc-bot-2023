@@ -17,8 +17,10 @@ import frc.robot.subsystems.*;
 public final class Autos {
   public static enum Type {
     Long,
+    LongSpit,
     LongShoot,
     Short,
+    ShortSpit,
     ShortShoot,
     Center,
     CenterSimple,
@@ -31,10 +33,14 @@ public final class Autos {
     switch(type) {
       case Long:
         return LongAuto(sDrivetrain, sIntakeWheels);
+      case LongSpit:
+        return LongAutoSpit(sDrivetrain, sIntakeWheels);
       case LongShoot:
         return LongShootAuto(sDrivetrain, sIntakeWheels);
       case Short:
         return ShortAuto(sDrivetrain, sIntakeWheels);
+      case ShortSpit:
+      return ShortAutoSpit(sDrivetrain, sIntakeWheels);
       case ShortShoot:
         return ShortShootAuto(sDrivetrain, sIntakeWheels);
       case Center:
@@ -59,6 +65,14 @@ public final class Autos {
     );
   }
 
+  private static Command LongAutoSpit(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels) {
+    return new SequentialCommandGroup(
+      sIntakeWheels.getSpitCommand().withTimeout(0.5),
+
+      new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(-140))
+    );
+  }
+
   // Shoot a pre-loaded cube to the higher node, then drive out of the community
   private static Command LongShootAuto(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels) {
     return new SequentialCommandGroup(
@@ -72,6 +86,14 @@ public final class Autos {
   private static Command ShortAuto(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels) {
     return new SequentialCommandGroup(
       sIntakeWheels.getOuttakeCommand().withTimeout(0.5),
+
+      new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(-80))
+    );
+  }
+
+  private static Command ShortAutoSpit(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels) {
+    return new SequentialCommandGroup(
+      sIntakeWheels.getSpitCommand().withTimeout(0.5),
 
       new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(-80))
     );

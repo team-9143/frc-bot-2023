@@ -54,4 +54,14 @@ public class IntakeWheels extends SubsystemBase {
       this::stop
     );
   }
+
+  public Command getSpitCommand() {
+    return startEnd(
+      () -> {
+        intake_motor.set(IntakeConstants.kSpitSpeed);
+        m_holding = false;
+      },
+      this::stop
+    );
+  }
 }

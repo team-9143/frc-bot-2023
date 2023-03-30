@@ -59,8 +59,10 @@ public class RobotContainer {
 
     // Configure autonomous choices
     m_autonChooser.addOption("Long Auto", Autos.Type.Long);
+    m_autonChooser.addOption("Long Auto Spit", Autos.Type.LongSpit);
     m_autonChooser.addOption("Long Shoot Auto", Autos.Type.LongShoot);
     m_autonChooser.addOption("Short Auto", Autos.Type.Short);
+    m_autonChooser.addOption("Short Spit Auto", Autos.Type.ShortSpit);
     m_autonChooser.addOption("Short Shoot Auto", Autos.Type.ShortShoot);
     m_autonChooser.addOption("Center Auto", Autos.Type.Center);
     m_autonChooser.addOption("Simple Center Auto", Autos.Type.CenterSimple);
@@ -233,6 +235,7 @@ public class RobotContainer {
         Constants.IntakeConstants.kIntakeSpeed *= -1;
         Constants.IntakeConstants.kOuttakeSpeed *= -1;
         Constants.IntakeConstants.kHoldingSpeed *= -1;
+        Constants.IntakeConstants.kSpitSpeed *= -1;
         if (cIntakeDown.isScheduled()) {
           sIntakeWheels.set(Constants.IntakeConstants.kIntakeSpeed);
         }

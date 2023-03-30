@@ -33,6 +33,8 @@ public class Drivetrain extends SubsystemBase {
     fr_motor = new CANSparkMax(DeviceConstants.kFrontRightID, MotorType.kBrushless),
     br_motor = new CANSparkMax(DeviceConstants.kBackRightID, MotorType.kBrushless);
 
+  
+
   private static final RelativeEncoder l_encoder = fl_motor.getEncoder();
   private static final RelativeEncoder r_encoder = fr_motor.getEncoder(); // Position must be inverted when called
 
