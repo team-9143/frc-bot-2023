@@ -24,7 +24,7 @@ public class IntakeWheels extends SubsystemBase {
 
   public IntakeWheels() {
     setDefaultCommand(new StartEndCommand(
-      () -> {if (m_holding) {intake_motor.set(IntakeConstants.kHoldingSpeed);}},
+      () -> {if (m_holding && IntakeConstants.kIntakeSpeed < 0) {intake_motor.set(IntakeConstants.kHoldingSpeed);}},
       this::stop,
       this
     ));
@@ -47,7 +47,10 @@ public class IntakeWheels extends SubsystemBase {
   // Outtake command
   public Command getOuttakeCommand() {
     return startEnd(
-      () -> intake_motor.set(IntakeConstants.kOuttakeSpeed),
+      () -> {
+        intake_motor.set(IntakeConstants.kOuttakeSpeed);
+        m_holding = false;
+      },
       this::stop
     );
   }

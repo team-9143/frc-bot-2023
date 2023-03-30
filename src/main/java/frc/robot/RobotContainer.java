@@ -231,7 +231,6 @@ public class RobotContainer {
         Constants.IntakeConstants.kIntakeSpeed *= -1;
         Constants.IntakeConstants.kOuttakeSpeed *= -1;
         Constants.IntakeConstants.kHoldingSpeed *= -1;
-        IntakeWheels.m_holding ^= true;
       }));
 
     // Button 'X' (debounced 1s) will reset tilt encoder

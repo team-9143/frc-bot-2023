@@ -36,6 +36,7 @@ public class IntakeDown extends PIDCommand {
     intakeTilt.disable();
     m_controller.reset();
     intakeWheels.set(IntakeConstants.kIntakeSpeed);
+    IntakeWheels.m_holding = true;
   }
 
   @Override
