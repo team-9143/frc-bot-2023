@@ -73,6 +73,7 @@ public class RobotContainer {
     // Initialize Shuffleboard
     configureDriveTab();
     configureTestTab();
+    Shuffleboard.disableActuatorWidgets();
   }
 
   private void configureDriveTab() {
@@ -116,8 +117,6 @@ public class RobotContainer {
     layout_2.addDouble("Intake Angle", () -> sIntakeTilt.getMeasurement() * 360)
       .withWidget(BuiltInWidgets.kDial)
       .withProperties(Map.of("min", -110, "max", 110, "show value", false));
-
-    Shuffleboard.disableActuatorWidgets();
   }
 
   // TODO: Fix checklists not appearing, potentially add interactivity (toggle switches)
