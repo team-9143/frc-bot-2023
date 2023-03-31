@@ -124,8 +124,7 @@ public class RobotContainer {
   // TODO: Fix checklists not appearing, potentially add interactivity (toggle switches)
   private void configureTestTab() {
     ShuffleboardTab test_tab = Shuffleboard.getTab("Test");
-
-    test_tab.addStringArray("Match Checklist", () -> new String[]{
+    String[] match_checklist = new String[]{
       "Bumpers are the correct match color",
       "Electrical pull test successful",
       "Motor controllers are blinking in sync",
@@ -133,42 +132,51 @@ public class RobotContainer {
       "Robot is in the correct start position",
       "Robot intake/arms are in the correct start position",
       "Robot is set with the correct game piece"
-    })
-      .withPosition(0, 0)
-      .withSize(5, 8);
-
-    test_tab.addStringArray("Driver Station Checklist", () -> new String[]{
+    };
+    String[] station_checklist = new String[]{
       "Electronic pull test successful",
       "Joysticks are correctly connected (driver is 0)"
-    })
-      .withPosition(5, 0)
-      .withSize(5, 8);
+    };
 
-    ShuffleboardLayout layout_1 = test_tab.getLayout("Intake", BuiltInLayouts.kGrid)
+    ShuffleboardLayout layout_1 = test_tab.getLayout("Match Checklist", BuiltInLayouts.kList)
+      .withPosition(0, 0)
+      .withSize(4, 8);
+    for (String item : match_checklist) {
+      layout_1.addBoolean(item, () -> false).withWidget(BuiltInWidgets.kToggleButton);
+    }
+
+    ShuffleboardLayout layout_2 = test_tab.getLayout("Drive Station Checklist", BuiltInLayouts.kList)
+      .withPosition(4, 0)
+      .withSize(4, 8);
+    for (String item : station_checklist) {
+      layout_2.addBoolean(item, () -> false).withWidget(BuiltInWidgets.kToggleButton);
+    }
+
+    ShuffleboardLayout layout_3 = test_tab.getLayout("Intake", BuiltInLayouts.kGrid)
       .withPosition(8, 0)
       .withSize(8, 8)
       .withProperties(Map.of("number of columns", 2, "number of rows", 3));
     // Column 1
-    layout_1.addDouble("Intake Angle", () -> sIntakeTilt.getMeasurement() * 360)
+    layout_3.addDouble("Intake Angle", () -> sIntakeTilt.getMeasurement() * 360)
       .withWidget(BuiltInWidgets.kDial)
       .withProperties(Map.of("min", -110, "max", 110, "show value", true));
-    layout_1.addDouble("Intake Setpoint", () ->
+    layout_3.addDouble("Intake Setpoint", () ->
       ((cIntakeDown.isScheduled()) ? Constants.IntakeConstants.kDownPos : Constants.IntakeConstants.kUpPos) * 360
     )
       .withWidget(BuiltInWidgets.kDial)
       .withProperties(Map.of("min", -110, "max", 110, "show value", true));
-    layout_1.addDouble("Error", () ->
+    layout_3.addDouble("Error", () ->
       (((cIntakeDown.isScheduled()) ? Constants.IntakeConstants.kDownPos : Constants.IntakeConstants.kUpPos) - sIntakeTilt.getMeasurement()) * 360
     )
       .withWidget(BuiltInWidgets.kNumberBar)
       .withProperties(Map.of("min", -110, "max", 110, "center", 0));
     // Column 2
-    layout_1.addDouble("Wheel RPM", sIntakeWheels::getVelocity)
+    layout_3.addDouble("Wheel RPM", sIntakeWheels::getVelocity)
       .withWidget(BuiltInWidgets.kNumberBar)
       .withProperties(Map.of("min", -250, "max", 250, "center", 0));
-    layout_1.addBoolean("PID enabled", () -> cIntakeDown.isScheduled() || cIntakeUp.isScheduled() || sIntakeTilt.isEnabled())
+    layout_3.addBoolean("PID enabled", () -> cIntakeDown.isScheduled() || cIntakeUp.isScheduled() || sIntakeTilt.isEnabled())
       .withWidget(BuiltInWidgets.kBooleanBox);
-    layout_1.addBoolean("Steady", sIntakeTilt::isEnabled)
+    layout_3.addBoolean("Steady", sIntakeTilt::isEnabled)
       .withWidget(BuiltInWidgets.kBooleanBox);
   }
 
