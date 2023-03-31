@@ -125,7 +125,7 @@ public class RobotContainer {
   private void configureTestTab() {
     ShuffleboardTab test_tab = Shuffleboard.getTab("Test");
 
-    test_tab.add("Match Checklist", new String[]{
+    test_tab.addStringArray("Match Checklist", () -> new String[]{
       "Bumpers are the correct match color",
       "Electrical pull test successful",
       "Motor controllers are blinking in sync",
@@ -137,7 +137,7 @@ public class RobotContainer {
       .withPosition(0, 0)
       .withSize(5, 8);
 
-    test_tab.add("Driver Station Checklist", new String[]{
+    test_tab.addStringArray("Driver Station Checklist", () -> new String[]{
       "Electronic pull test successful",
       "Joysticks are correctly connected (driver is 0)"
     })
