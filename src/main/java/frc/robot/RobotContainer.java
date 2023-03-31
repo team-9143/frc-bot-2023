@@ -61,11 +61,9 @@ public class RobotContainer {
 
     // Configure autonomous choices
     m_autonChooser.addOption("Long Auto", Autos.Type.Long);
-    m_autonChooser.addOption("Long Auto Spit", Autos.Type.LongSpit);
-    m_autonChooser.addOption("Long Shoot Auto", Autos.Type.LongShoot);
+    m_autonChooser.addOption("Long Spit Auto", Autos.Type.LongSpit);
     m_autonChooser.addOption("Short Auto", Autos.Type.Short);
     m_autonChooser.addOption("Short Spit Auto", Autos.Type.ShortSpit);
-    m_autonChooser.addOption("Short Shoot Auto", Autos.Type.ShortShoot);
     m_autonChooser.addOption("Center Auto", Autos.Type.Center);
     m_autonChooser.addOption("Simple Center Auto", Autos.Type.CenterSimple);
     m_autonChooser.addOption("Just Outtake", Autos.Type.Outtake);

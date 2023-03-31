@@ -19,11 +19,7 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class Drivetrain extends SubsystemBase {
   // Initialize motors, encoders, and differential drive
@@ -32,8 +28,6 @@ public class Drivetrain extends SubsystemBase {
     bl_motor = new CANSparkMax(DeviceConstants.kBackLeftID, MotorType.kBrushless),
     fr_motor = new CANSparkMax(DeviceConstants.kFrontRightID, MotorType.kBrushless),
     br_motor = new CANSparkMax(DeviceConstants.kBackRightID, MotorType.kBrushless);
-
-  
 
   private static final RelativeEncoder l_encoder = fl_motor.getEncoder();
   private static final RelativeEncoder r_encoder = fr_motor.getEncoder(); // Position must be inverted when called
@@ -106,18 +100,5 @@ public class Drivetrain extends SubsystemBase {
   // Stops drivetrain motors
   public void stop() {
     robotDrive.stopMotor();
-  }
-
-  // Shoots to high node (inonsistent, works best above 12.7 volts)
-  public Command getShootCommand(IntakeWheels sIntakeWheels) {
-    return new SequentialCommandGroup(
-      new RunCommand(() -> moveStraight(-0.75), this).withTimeout(0.3),
-      new WaitCommand(0.2),
-      new RunCommand(() -> moveStraight(0.75)).withTimeout(0.25),
-      new ParallelCommandGroup(
-        sIntakeWheels.getOuttakeCommand().withTimeout(0.3),
-        new RunCommand(() -> moveStraight(0.75)).withTimeout(0.05)
-      )
-    );
   }
 }

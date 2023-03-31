@@ -18,10 +18,8 @@ public final class Autos {
   public static enum Type {
     Long,
     LongSpit,
-    LongShoot,
     Short,
     ShortSpit,
-    ShortShoot,
     Center,
     CenterSimple,
     Outtake,
@@ -35,14 +33,10 @@ public final class Autos {
         return LongAuto(sDrivetrain, sIntakeWheels);
       case LongSpit:
         return LongAutoSpit(sDrivetrain, sIntakeWheels);
-      case LongShoot:
-        return LongShootAuto(sDrivetrain, sIntakeWheels);
       case Short:
         return ShortAuto(sDrivetrain, sIntakeWheels);
       case ShortSpit:
       return ShortAutoSpit(sDrivetrain, sIntakeWheels);
-      case ShortShoot:
-        return ShortShootAuto(sDrivetrain, sIntakeWheels);
       case Center:
         return CenterAuto(sDrivetrain, sIntakeWheels);
       case CenterSimple:
@@ -73,15 +67,6 @@ public final class Autos {
     );
   }
 
-  // Shoot a pre-loaded cube to the higher node, then drive out of the community
-  private static Command LongShootAuto(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels) {
-    return new SequentialCommandGroup(
-      sDrivetrain.getShootCommand(sIntakeWheels),
-
-      new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(-140))
-    );
-  }
-
   // Score a pre-loaded cube, then drive out of the community
   private static Command ShortAuto(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels) {
     return new SequentialCommandGroup(
@@ -94,15 +79,6 @@ public final class Autos {
   private static Command ShortAutoSpit(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels) {
     return new SequentialCommandGroup(
       sIntakeWheels.getSpitCommand().withTimeout(0.5),
-
-      new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(-80))
-    );
-  }
-
-  // Shoot a pre-loaded cube to the higher node, then drive out of the community
-  private static Command ShortShootAuto(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels) {
-    return new SequentialCommandGroup(
-      sDrivetrain.getShootCommand(sIntakeWheels),
 
       new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(-80))
     );
@@ -187,7 +163,7 @@ public final class Autos {
       new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(224)),
 
       new IntakeDown(sIntakeTilt).alongWith(sIntakeWheels.getIntakeCommand()).withTimeout(2),
-      
+
       new IntakeUp(sIntakeTilt),
 
       new TurnToAngle(sDrivetrain).beforeStarting(() -> cTurnToAngle.setHeading(90)),
