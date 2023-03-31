@@ -262,7 +262,8 @@ public class RobotContainer {
 
     // Button 'RB' (hold) will lower and activate intake, then raise on release
     new JoystickButton(OI.operator_cntlr, OI.Controller.btn.RB.val)
-      .whileTrue(cIntakeDown.alongWith(cIntake))
+      .whileTrue(cIntakeDown)
+      .whileTrue(cIntake)
       .onFalse(cIntakeUp);
 
     // Triggers will disable intake and manually move up (LT) and down (RT)
