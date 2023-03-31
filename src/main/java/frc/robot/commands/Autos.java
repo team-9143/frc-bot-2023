@@ -138,7 +138,7 @@ public final class Autos {
         sDrivetrain
       ),
 
-      new RunCommand(() -> sDrivetrain.moveStraight(0.4)).withTimeout(1),
+      new RunCommand(() -> sDrivetrain.moveStraight(-0.35)).withTimeout(1),
 
       new Balance(sDrivetrain)
     );
