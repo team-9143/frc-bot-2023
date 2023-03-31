@@ -284,7 +284,7 @@ public class RobotContainer {
           Math.pow(OI.operator_cntlr.getTriggers(), 2) *
           ((OI.operator_cntlr.getTriggers() < 0) ? Constants.IntakeConstants.kUpSpeed : Constants.IntakeConstants.kDownSpeed),
         0),
-        interrupted -> {},
+        interrupted -> sIntakeTilt.disable(),
         () -> false,
         sIntakeTilt
       ));
