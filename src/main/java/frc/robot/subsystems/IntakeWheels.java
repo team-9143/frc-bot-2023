@@ -36,6 +36,7 @@ public class IntakeWheels extends SubsystemBase {
   }
 
   public void set(double speed) {intake_motor.set(speed);}
+  public double get() {return intake_motor.get();}
 
   public double getVelocity() {return intake_encoder.getVelocity();}
 
@@ -44,8 +45,17 @@ public class IntakeWheels extends SubsystemBase {
     intake_motor.stopMotor();
   }
 
-  // Outtake command
-  public Command getOuttakeCommand() {
+  public Command getIntakeCommand() {
+    return startEnd(
+      () -> {
+        intake_motor.set(IntakeConstants.kIntakeSpeed);
+        m_holding = true;
+      },
+      this::stop
+    );
+  }
+
+  public Command getShootCommand() {
     return startEnd(
       () -> {
         intake_motor.set(IntakeConstants.kOuttakeSpeed);

@@ -38,9 +38,11 @@ public class RobotContainer {
 
   private final Balance cBalance = new Balance(sDrivetrain);
   private final TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain);
-  private final Command cIntakeDown = new IntakeDown(sIntakeTilt, sIntakeWheels);
-  private final Command cIntakeUp = new IntakeUp(sIntakeTilt);
-  private final Command cOuttake = sIntakeWheels.getOuttakeCommand();
+  private final IntakeDown cIntakeDown = new IntakeDown(sIntakeTilt);
+  private final IntakeUp cIntakeUp = new IntakeUp(sIntakeTilt);
+  private final Command cIntake = sIntakeWheels.getIntakeCommand();
+  private final Command cShoot = sIntakeWheels.getShootCommand();
+  private final Command cSpit = sIntakeWheels.getSpitCommand();
   private final Command cStop = new RunCommand(() -> {
     sDrivetrain.stop();
     sIntakeWheels.stop();
@@ -59,11 +61,9 @@ public class RobotContainer {
 
     // Configure autonomous choices
     m_autonChooser.addOption("Long Auto", Autos.Type.Long);
-    m_autonChooser.addOption("Long Auto Spit", Autos.Type.LongSpit);
-    m_autonChooser.addOption("Long Shoot Auto", Autos.Type.LongShoot);
+    m_autonChooser.addOption("Long Spit Auto", Autos.Type.LongSpit);
     m_autonChooser.addOption("Short Auto", Autos.Type.Short);
     m_autonChooser.addOption("Short Spit Auto", Autos.Type.ShortSpit);
-    m_autonChooser.addOption("Short Shoot Auto", Autos.Type.ShortShoot);
     m_autonChooser.addOption("Center Auto", Autos.Type.Center);
     m_autonChooser.addOption("Simple Center Auto", Autos.Type.CenterSimple);
     m_autonChooser.addOption("Just Outtake", Autos.Type.Outtake);
@@ -112,9 +112,9 @@ public class RobotContainer {
       .withSize(4, 8);
     layout_2.addBoolean("Inverted", () -> Constants.IntakeConstants.kIntakeSpeed < 0)
       .withWidget(BuiltInWidgets.kBooleanBox);
-    layout_2.addBoolean("Intaking", cIntakeDown::isScheduled)
+    layout_2.addBoolean("Intaking", cIntake::isScheduled)
       .withWidget(BuiltInWidgets.kBooleanBox);
-    layout_2.addBoolean("Outtaking", cOuttake::isScheduled)
+    layout_2.addBoolean("Outtaking", () -> cShoot.isScheduled() || cSpit.isScheduled())
       .withWidget(BuiltInWidgets.kBooleanBox);
     layout_2.addDouble("Intake Angle", () -> sIntakeTilt.getMeasurement() * 360)
       .withWidget(BuiltInWidgets.kDial)
@@ -125,7 +125,7 @@ public class RobotContainer {
   private void configureTestTab() {
     ShuffleboardTab test_tab = Shuffleboard.getTab("Test");
 
-    test_tab.add("Match Checklist", new String[]{
+    test_tab.addStringArray("Match Checklist", () -> new String[]{
       "Bumpers are the correct match color",
       "Electrical pull test successful",
       "Motor controllers are blinking in sync",
@@ -137,7 +137,7 @@ public class RobotContainer {
       .withPosition(0, 0)
       .withSize(5, 8);
 
-    test_tab.add("Driver Station Checklist", new String[]{
+    test_tab.addStringArray("Driver Station Checklist", () -> new String[]{
       "Electronic pull test successful",
       "Joysticks are correctly connected (driver is 0)"
     })
@@ -233,13 +233,13 @@ public class RobotContainer {
       .onTrue(new InstantCommand(() -> {
         Constants.IntakeConstants.kIntakeSpeed *= -1;
         Constants.IntakeConstants.kOuttakeSpeed *= -1;
-        Constants.IntakeConstants.kHoldingSpeed *= -1;
         Constants.IntakeConstants.kSpitSpeed *= -1;
-        if (cIntakeDown.isScheduled()) {
+        Constants.IntakeConstants.kHoldingSpeed *= -1;
+
+        if (cIntake.isScheduled()) {
           sIntakeWheels.set(Constants.IntakeConstants.kIntakeSpeed);
-        }
-        if (cOuttake.isScheduled()) {
-          sIntakeWheels.set(Constants.IntakeConstants.kOuttakeSpeed);
+        } else if (!(cShoot.isScheduled() || cSpit.isScheduled())) {
+          sIntakeWheels.stop();
         }
       }));
 
@@ -256,13 +256,13 @@ public class RobotContainer {
         if (sIntakeTilt.isEnabled()) {sIntakeTilt.disable();} else {sIntakeTilt.enable();}
       }));
 
-    // Button 'LB' (hold) will spit cubes
+    // Button 'LB' (hold) will shoot cubes
     new JoystickButton(OI.operator_cntlr, OI.Controller.btn.LB.val)
-      .whileTrue(cOuttake);
+      .whileTrue(cShoot);
 
     // Button 'RB' (hold) will lower and activate intake, then raise on release
     new JoystickButton(OI.operator_cntlr, OI.Controller.btn.RB.val)
-      .whileTrue(cIntakeDown)
+      .whileTrue(cIntakeDown.alongWith(cIntake))
       .onFalse(cIntakeUp);
 
     // Triggers will disable intake and manually move up (LT) and down (RT)
