@@ -206,7 +206,7 @@ public class RobotContainer {
     // D-pad and right stick will turn to the specified angle
     new Trigger(() -> TurnToAngle.m_enabled && OI.driver_cntlr.getPOV() != -1)
       .whileTrue(new RunCommand(() -> {
-        cTurnToAngle.setHeading(Math.round((float) OI.driver_cntlr.getPOV() / 45) * 45);
+        cTurnToAngle.setHeading(OI.driver_cntlr.getPOV());
         cTurnToAngle.schedule();
       }));
 
@@ -289,11 +289,13 @@ public class RobotContainer {
         sIntakeTilt
       ));
     
-    new Trigger(() -> OI.operator_cntlr.getPOV() > 337.5 || OI.operator_cntlr.getPOV() < 22.5)
-      .whileTrue(cIntake);
-    
-    new Trigger(() -> Math.abs(OI.operator_cntlr.getPOV() - 180) < 22.5)
+    // D-pad up will spit
+    new Trigger(() -> OI.operator_cntlr.getPOV() == 0)
       .whileTrue(cSpit);
+    
+    // D-pad down will intake
+    new Trigger(() -> OI.operator_cntlr.getPOV() == 180)
+      .whileTrue(cIntake);
   }
 
   /**
