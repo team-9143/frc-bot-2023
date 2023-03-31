@@ -130,24 +130,26 @@ public class RobotContainer {
       "Motor controllers are blinking in sync",
       "Battery is connected and secured",
       "Robot is in the correct start position",
-      "Robot intake/arms are in the correct start position",
-      "Robot is set with the correct game piece"
+      "Robot arms are in the correct position",
+      "Robot has the correct game piece"
     };
     String[] station_checklist = new String[]{
       "Electronic pull test successful",
-      "Joysticks are correctly connected (driver is 0)"
+      "Joysticks are correctly connected"
     };
 
     ShuffleboardLayout layout_1 = test_tab.getLayout("Match Checklist", BuiltInLayouts.kList)
       .withPosition(0, 0)
-      .withSize(4, 8);
+      .withSize(4, 8)
+      .withProperties(Map.of("label position", "HIDDEN"));
     for (String item : match_checklist) {
       layout_1.addBoolean(item, () -> false).withWidget(BuiltInWidgets.kToggleButton);
     }
 
     ShuffleboardLayout layout_2 = test_tab.getLayout("Drive Station Checklist", BuiltInLayouts.kList)
       .withPosition(4, 0)
-      .withSize(4, 8);
+      .withSize(4, 8)
+      .withProperties(Map.of("label position", "HIDDEN"));
     for (String item : station_checklist) {
       layout_2.addBoolean(item, () -> false).withWidget(BuiltInWidgets.kToggleButton);
     }
