@@ -53,7 +53,7 @@ public final class Autos {
   // Score a pre-loaded cube, then drive out of the community
   private static Command LongAuto(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels) {
     return new SequentialCommandGroup(
-      sIntakeWheels.getOuttakeCommand().withTimeout(0.5),
+      sIntakeWheels.getShootCommand().withTimeout(0.5),
 
       new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(-140))
     );
@@ -70,7 +70,7 @@ public final class Autos {
   // Score a pre-loaded cube, then drive out of the community
   private static Command ShortAuto(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels) {
     return new SequentialCommandGroup(
-      sIntakeWheels.getOuttakeCommand().withTimeout(0.5),
+      sIntakeWheels.getShootCommand().withTimeout(0.5),
 
       new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(-80))
     );
@@ -87,7 +87,7 @@ public final class Autos {
   // Score a pre-loaded cube, drive over the charge station, then drive back and balance
   private static Command CenterAuto(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels) {
     return new SequentialCommandGroup(
-      sIntakeWheels.getOuttakeCommand().withTimeout(0.5),
+      sIntakeWheels.getShootCommand().withTimeout(0.5),
 
       // Move back until pitch is greater than 10
       new FunctionalCommand(
@@ -127,7 +127,7 @@ public final class Autos {
   // Score a pre-loaded cube, then drive to the charge station and balance
   private static Command CenterSimpleAuto(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels) {
     return new SequentialCommandGroup(
-      sIntakeWheels.getOuttakeCommand().withTimeout(0.5),
+      sIntakeWheels.getShootCommand().withTimeout(0.5),
 
       // Move back until pitch is greater than 10
       new FunctionalCommand(
@@ -148,7 +148,7 @@ public final class Autos {
     TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain);
 
     return new SequentialCommandGroup(
-      sIntakeWheels.getOuttakeCommand().withTimeout(0.5),
+      sIntakeWheels.getShootCommand().withTimeout(0.5),
       cTurnToAngle.beforeStarting(() -> cTurnToAngle.setHeading(0))
     );
   }
@@ -156,7 +156,7 @@ public final class Autos {
   private static Command WIPAuto(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels, IntakeTilt sIntakeTilt) {
     TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain);
     return new SequentialCommandGroup(
-      sIntakeWheels.getOuttakeCommand().withTimeout(0.5),
+      sIntakeWheels.getShootCommand().withTimeout(0.5),
 
       new TurnToAngle(sDrivetrain).beforeStarting(() -> cTurnToAngle.setHeading(180)),
 

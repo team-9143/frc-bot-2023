@@ -55,7 +55,7 @@ public class IntakeWheels extends SubsystemBase {
     );
   }
 
-  public Command getOuttakeCommand() {
+  public Command getShootCommand() {
     return startEnd(
       () -> {
         intake_motor.set(IntakeConstants.kOuttakeSpeed);

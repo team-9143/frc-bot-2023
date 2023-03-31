@@ -41,7 +41,7 @@ public class RobotContainer {
   private final IntakeDown cIntakeDown = new IntakeDown(sIntakeTilt);
   private final IntakeUp cIntakeUp = new IntakeUp(sIntakeTilt);
   private final Command cIntake = sIntakeWheels.getIntakeCommand();
-  private final Command cOuttake = sIntakeWheels.getOuttakeCommand();
+  private final Command cShoot = sIntakeWheels.getShootCommand();
   private final Command cSpit = sIntakeWheels.getSpitCommand();
   private final Command cStop = new RunCommand(() -> {
     sDrivetrain.stop();
@@ -114,7 +114,7 @@ public class RobotContainer {
       .withWidget(BuiltInWidgets.kBooleanBox);
     layout_2.addBoolean("Intaking", cIntake::isScheduled)
       .withWidget(BuiltInWidgets.kBooleanBox);
-    layout_2.addBoolean("Outtaking", cOuttake::isScheduled)
+    layout_2.addBoolean("Outtaking", () -> cShoot.isScheduled() || cSpit.isScheduled())
       .withWidget(BuiltInWidgets.kBooleanBox);
     layout_2.addDouble("Intake Angle", () -> sIntakeTilt.getMeasurement() * 360)
       .withWidget(BuiltInWidgets.kDial)
@@ -239,7 +239,7 @@ public class RobotContainer {
 
         if (cIntake.isScheduled()) {
           sIntakeWheels.set(-sIntakeWheels.get());
-        } else if (!(cOuttake.isScheduled() || cSpit.isScheduled())) {
+        } else if (!(cShoot.isScheduled() || cSpit.isScheduled())) {
           sIntakeWheels.stop();
         }
       }));
@@ -257,9 +257,9 @@ public class RobotContainer {
         if (sIntakeTilt.isEnabled()) {sIntakeTilt.disable();} else {sIntakeTilt.enable();}
       }));
 
-    // Button 'LB' (hold) will spit cubes
+    // Button 'LB' (hold) will shoot cubes
     new JoystickButton(OI.operator_cntlr, OI.Controller.btn.LB.val)
-      .whileTrue(cOuttake);
+      .whileTrue(cShoot);
 
     // Button 'RB' (hold) will lower and activate intake, then raise on release
     new JoystickButton(OI.operator_cntlr, OI.Controller.btn.RB.val)
