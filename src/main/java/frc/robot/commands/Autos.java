@@ -186,7 +186,9 @@ public final class Autos {
 
       new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(224)),
 
-      new IntakeDown(sIntakeTilt, sIntakeWheels).withTimeout(2), new IntakeUp(sIntakeTilt),
+      new IntakeDown(sIntakeTilt).alongWith(sIntakeWheels.getIntakeCommand()).withTimeout(2),
+      
+      new IntakeUp(sIntakeTilt),
 
       new TurnToAngle(sDrivetrain).beforeStarting(() -> cTurnToAngle.setHeading(90)),
 

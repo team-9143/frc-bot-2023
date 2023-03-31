@@ -38,9 +38,11 @@ public class RobotContainer {
 
   private final Balance cBalance = new Balance(sDrivetrain);
   private final TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain);
-  private final Command cIntakeDown = new IntakeDown(sIntakeTilt, sIntakeWheels);
-  private final Command cIntakeUp = new IntakeUp(sIntakeTilt);
+  private final IntakeDown cIntakeDown = new IntakeDown(sIntakeTilt);
+  private final IntakeUp cIntakeUp = new IntakeUp(sIntakeTilt);
+  private final Command cIntake = sIntakeWheels.getIntakeCommand();
   private final Command cOuttake = sIntakeWheels.getOuttakeCommand();
+  private final Command cSpit = sIntakeWheels.getSpitCommand();
   private final Command cStop = new RunCommand(() -> {
     sDrivetrain.stop();
     sIntakeWheels.stop();
@@ -112,7 +114,7 @@ public class RobotContainer {
       .withSize(4, 8);
     layout_2.addBoolean("Inverted", () -> Constants.IntakeConstants.kIntakeSpeed < 0)
       .withWidget(BuiltInWidgets.kBooleanBox);
-    layout_2.addBoolean("Intaking", cIntakeDown::isScheduled)
+    layout_2.addBoolean("Intaking", cIntake::isScheduled)
       .withWidget(BuiltInWidgets.kBooleanBox);
     layout_2.addBoolean("Outtaking", cOuttake::isScheduled)
       .withWidget(BuiltInWidgets.kBooleanBox);
@@ -234,13 +236,13 @@ public class RobotContainer {
       .onTrue(new InstantCommand(() -> {
         Constants.IntakeConstants.kIntakeSpeed *= -1;
         Constants.IntakeConstants.kOuttakeSpeed *= -1;
-        Constants.IntakeConstants.kHoldingSpeed *= -1;
         Constants.IntakeConstants.kSpitSpeed *= -1;
-        if (cIntakeDown.isScheduled()) {
-          sIntakeWheels.set(Constants.IntakeConstants.kIntakeSpeed);
-        }
-        if (cOuttake.isScheduled()) {
-          sIntakeWheels.set(Constants.IntakeConstants.kOuttakeSpeed);
+        Constants.IntakeConstants.kHoldingSpeed *= -1;
+
+        if (cIntake.isScheduled()) {
+          sIntakeWheels.set(-sIntakeWheels.get());
+        } else if (!(cOuttake.isScheduled() || cSpit.isScheduled())) {
+          sIntakeWheels.stop();
         }
       }));
 
@@ -263,7 +265,7 @@ public class RobotContainer {
 
     // Button 'RB' (hold) will lower and activate intake, then raise on release
     new JoystickButton(OI.operator_cntlr, OI.Controller.btn.RB.val)
-      .whileTrue(cIntakeDown)
+      .whileTrue(cIntakeDown.alongWith(cIntake))
       .onFalse(cIntakeUp);
 
     // Triggers will disable intake and manually move up (LT) and down (RT)

@@ -10,13 +10,11 @@ import edu.wpi.first.util.sendable.SendableRegistry;
 import frc.robot.Constants.IntakeConstants;
 
 import frc.robot.subsystems.IntakeTilt;
-import frc.robot.subsystems.IntakeWheels;
 
 public class IntakeDown extends PIDCommand {
   private final IntakeTilt intakeTilt;
-  private final IntakeWheels intakeWheels;
 
-  public IntakeDown(IntakeTilt intakeTilt, IntakeWheels intakeWheels) {
+  public IntakeDown(IntakeTilt intakeTilt) {
     super(
       new PIDController(IntakeConstants.kDownP, IntakeConstants.kDownI, IntakeConstants.kDownD),
       intakeTilt::getMeasurement,
@@ -25,9 +23,8 @@ public class IntakeDown extends PIDCommand {
     );
 
     this.intakeTilt = intakeTilt;
-    this.intakeWheels = intakeWheels;
 
-    addRequirements(intakeTilt, intakeWheels);
+    addRequirements(intakeTilt);
     SendableRegistry.setSubsystem(m_controller, intakeTilt.getSubsystem());
   }
 
@@ -35,12 +32,5 @@ public class IntakeDown extends PIDCommand {
   public void initialize() {
     intakeTilt.disable();
     m_controller.reset();
-    intakeWheels.set(IntakeConstants.kIntakeSpeed);
-    IntakeWheels.m_holding = true;
-  }
-
-  @Override
-  public void end(boolean interrupted) {
-    intakeWheels.stop();
   }
 }
