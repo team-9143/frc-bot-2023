@@ -254,9 +254,9 @@ public class RobotContainer {
     // Button 'X' (debounced 1s) will reset tilt encoder
     new JoystickButton(OI.operator_cntlr, OI.Controller.btn.X.val)
     .debounce(1)
-      .onTrue(new InstantCommand(() -> {
-        sIntakeTilt.resetEncoder();
-      }));
+      .onTrue(new InstantCommand(() ->
+        sIntakeTilt.resetEncoder()
+      ));
 
     // Button 'Y' will toggle automatic intake control
     new JoystickButton(OI.operator_cntlr, OI.Controller.btn.Y.val)
@@ -286,6 +286,12 @@ public class RobotContainer {
         () -> false,
         sIntakeTilt
       ));
+    
+    new Trigger(() -> OI.operator_cntlr.getPOV() > 337.5 || OI.operator_cntlr.getPOV() < 22.5)
+      .whileTrue(cIntake);
+    
+    new Trigger(() -> Math.abs(OI.operator_cntlr.getPOV() - 180) < 22.5)
+      .whileTrue(cSpit);
   }
 
   /**
