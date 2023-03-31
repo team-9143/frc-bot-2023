@@ -238,7 +238,7 @@ public class RobotContainer {
         Constants.IntakeConstants.kHoldingSpeed *= -1;
 
         if (cIntake.isScheduled()) {
-          sIntakeWheels.set(-sIntakeWheels.get());
+          sIntakeWheels.set(Constants.IntakeConstants.kIntakeSpeed);
         } else if (!(cShoot.isScheduled() || cSpit.isScheduled())) {
           sIntakeWheels.stop();
         }
