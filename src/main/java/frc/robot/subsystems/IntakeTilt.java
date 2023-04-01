@@ -68,7 +68,11 @@ public class IntakeTilt extends PIDSubsystem {
     new FunctionalCommand(
       () -> {},
       () -> useOutput(IntakeConstants.kAutoAlignSpeed, IntakeConstants.kUpPos),
-      interrupted -> {},
+      interrupted -> {
+        // TODO: Test and tune up position offset (currently 9 degrees back)
+        l_encoder.setPosition(IntakeConstants.kUpPos - 0.025);
+        r_encoder.setPosition(IntakeConstants.kUpPos - 0.025);
+      },
       () -> (l_motor.getOutputCurrent() > IntakeConstants.kMaxCurrent) || (r_motor.getOutputCurrent() > IntakeConstants.kMaxCurrent),
       this
     )
