@@ -67,7 +67,7 @@ public class IntakeTilt extends PIDSubsystem {
   public void autoAlign() {
     new FunctionalCommand(
       () -> {},
-      () -> useOutput(-0.25, IntakeConstants.kUpPos),
+      () -> useOutput(IntakeConstants.kAutoAlignSpeed, IntakeConstants.kUpPos),
       interrupted -> {},
       () -> (l_motor.getOutputCurrent() > IntakeConstants.kMaxCurrent) || (r_motor.getOutputCurrent() > IntakeConstants.kMaxCurrent),
       this

@@ -76,9 +76,9 @@ public final class Constants {
     public static final double kUpSpeed = -0.1;
     public static final double kDownSpeed = 0.08;
     public static final double kAimDownTimer = 0.4; // Seconds to move down for aiming straight
+    public static final double kAutoAlignSpeed = -0.15;
     // TODO: Test and tune against NEO specs
-    public static final double kMaxVoltage = 1; // To check against getBusVoltage() for autoAlign
-    public static final double kMaxCurrent = 80;
+    public static final double kMaxCurrent = 80; // To check against getOutputCurrent() for autoAlign
 
     // Preset positions and tolerances (in rotations)
     public static final double kUpPos = 0.003;
