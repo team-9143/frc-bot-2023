@@ -130,7 +130,39 @@ public class RobotContainer {
 
   private void configureTestTab() {
     ShuffleboardTab test_tab = Shuffleboard.getTab("Test");
-    String[] match_checklist = new String[]{
+
+    ShuffleboardLayout layout_1 = test_tab.getLayout("Intake Angle", BuiltInLayouts.kList)
+      .withPosition(0, 0)
+      .withSize(4, 8);
+    layout_1.addDouble("Intake Angle", () -> sIntakeTilt.getMeasurement() * 360)
+      .withWidget(BuiltInWidgets.kDial)
+      .withProperties(Map.of("min", -110, "max", 110, "show value", true));
+    layout_1.addDouble("Intake Setpoint", () ->
+      ((cIntakeDown.isScheduled()) ? Constants.IntakeConstants.kDownPos : Constants.IntakeConstants.kUpPos) * 360
+    )
+      .withWidget(BuiltInWidgets.kDial)
+      .withProperties(Map.of("min", -110, "max", 110, "show value", true));
+    layout_1.addDouble("Error", () ->
+      (((cIntakeDown.isScheduled()) ? Constants.IntakeConstants.kDownPos : Constants.IntakeConstants.kUpPos) - sIntakeTilt.getMeasurement()) * 360
+    )
+      .withWidget(BuiltInWidgets.kNumberBar)
+      .withProperties(Map.of("min", -110, "max", 110, "center", 0));
+
+    ShuffleboardLayout layout_2 = test_tab.getLayout("Intake Status", BuiltInLayouts.kList)
+      .withPosition(4, 0)
+      .withSize(4, 8);
+    layout_2.addBoolean("PID enabled", () -> cIntakeDown.isScheduled() || cIntakeUp.isScheduled() || sIntakeTilt.isEnabled())
+      .withWidget(BuiltInWidgets.kBooleanBox);
+    layout_2.addBoolean("Keeping steady", sIntakeTilt::isEnabled)
+      .withWidget(BuiltInWidgets.kBooleanBox);
+    layout_2.addBoolean("Upright", sIntakeTilt::atUpPos)
+      .withWidget(BuiltInWidgets.kBooleanBox);
+
+    test_tab.addDouble("Wheel RPM", sIntakeWheels::getVelocity)
+      .withPosition(8, 0)
+      .withSize(5, 2)
+      .withWidget(BuiltInWidgets.kNumberBar)
+      .withProperties(Map.of("min", -250, "max", 250, "center", 0));
       "Bumpers are the correct match color",
       "Electrical pull test successful",
       "Motor controllers are blinking in sync",
