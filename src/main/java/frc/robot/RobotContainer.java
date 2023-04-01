@@ -122,7 +122,6 @@ public class RobotContainer {
       .withProperties(Map.of("min", -110, "max", 110, "show value", false));
   }
 
-  // TODO: Fix checklists not appearing, potentially add interactivity (toggle switches)
   private void configureTestTab() {
     ShuffleboardTab test_tab = Shuffleboard.getTab("Test");
     String[] match_checklist = new String[]{
