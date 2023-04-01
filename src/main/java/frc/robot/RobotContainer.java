@@ -80,6 +80,7 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
 
+    // TODO: Test checklists with addStringArray()
     // Initialize Shuffleboard
     configureDriveTab();
     configureTestTab();
