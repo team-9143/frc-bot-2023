@@ -76,9 +76,6 @@ public class RobotContainer {
     configureDriveTab();
     configureTestTab();
     Shuffleboard.disableActuatorWidgets();
-
-    //Moves Intake Up and Creates New Setpoint
-    autoAlign();
   }
 
   private void configureDriveTab() {
@@ -309,13 +306,8 @@ public class RobotContainer {
       .whileTrue(cSpit);
   }
 
-  public void autoAlign(){
-    new FunctionalCommand(
-      () -> {},
-      () -> IntakeTilt.getMotor().set(-0.25),
-      interrupted -> {},
-      () -> (IntakeTilt.getMotor().getBusVoltage() > 1),
-      sIntakeTilt).schedule();
+  public void autoAlign() {
+    sIntakeTilt.autoAlign();
   }
 
   /**

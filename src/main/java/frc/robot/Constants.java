@@ -77,6 +77,8 @@ public final class Constants {
     public static final double kUpSpeed = -0.1;
     public static final double kDownSpeed = 0.08;
     public static final double kAimDownTimer = 0.5; // Seconds to move down for aiming straight
+    // TODO: Test and tune against NEO specs
+    public static final double kMaxVoltage = 1; // To check against getBusVoltage() for autoAlign
 
     // TODO: Tune positions to new intake mount
     // Preset positions and tolerances (in rotations)

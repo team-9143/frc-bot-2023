@@ -14,11 +14,11 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
+
 public class IntakeTilt extends PIDSubsystem {
   private static final CANSparkMax l_motor = new CANSparkMax(DeviceConstants.kIntakeTiltLeftID, MotorType.kBrushless);
   private static final CANSparkMax r_motor = new CANSparkMax(DeviceConstants.kIntakeTiltRightID, MotorType.kBrushless);
-
-  public static CANSparkMax getMotor() {return l_motor;}
 
   private static final RelativeEncoder l_encoder = l_motor.getEncoder();
   private static final RelativeEncoder r_encoder = r_motor.getEncoder();
@@ -58,6 +58,17 @@ public class IntakeTilt extends PIDSubsystem {
   public void resetEncoder() {
     l_encoder.setPosition(IntakeConstants.kUpPos);
     r_encoder.setPosition(IntakeConstants.kUpPos);
+  }
+
+  public void autoAlign() {
+    new FunctionalCommand(
+      () -> {},
+      () -> useOutput(-0.25, IntakeConstants.kUpPos),
+      interrupted -> {},
+      () -> l_motor.getBusVoltage() > IntakeConstants.kMaxVoltage || r_motor.getBusVoltage() > IntakeConstants.kMaxVoltage,
+      this
+    )
+    .schedule();
   }
 
   public Command getAimDownCommand() {
