@@ -64,13 +64,12 @@ public final class Constants {
   public static class IntakeConstants {
     public static final double kTiltGearbox = (double) 1/35;
     public static final double kWheelGearbox = (double) 1/3;
-    // TOOD: Tune
     public static final double kTiltMaxSpeed = 1; // TODO: Lower
 
     // Wheel speed
     public static double kIntakeSpeed = 0.3;
     public static double kOuttakeSpeed = -1;
-    public static double kSpitSpeed = -0.5;
+    public static double kSpitSpeed = -0.4;
     public static double kHoldingSpeed = 0.05;
 
     // Non-PID intake movement
