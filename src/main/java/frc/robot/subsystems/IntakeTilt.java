@@ -69,7 +69,7 @@ public class IntakeTilt extends PIDSubsystem {
       () -> {},
       () -> useOutput(-0.25, IntakeConstants.kUpPos),
       interrupted -> {},
-      () -> l_motor.getOutputCurrent() > IntakeConstants.kMaxCurrent || r_motor.getOutputCurrent() > IntakeConstants.kMaxCurrent,
+      () -> (l_motor.getOutputCurrent() > IntakeConstants.kMaxCurrent) || (r_motor.getOutputCurrent() > IntakeConstants.kMaxCurrent),
       this
     )
     .schedule();
