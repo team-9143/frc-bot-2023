@@ -292,6 +292,7 @@ public class RobotContainer {
     // D-pad up will move down and shoot
     new Trigger(() -> OI.operator_cntlr.getPOV() == 0)
       .onTrue(sIntakeTilt.getAimDownCommand())
+      .onFalse(cIntakeUp)
     .debounce(Constants.IntakeConstants.kAimDownTimer)
       .whileTrue(cShoot);
 
@@ -302,6 +303,7 @@ public class RobotContainer {
     // D-pad down will move down and spit
     new Trigger(() -> OI.operator_cntlr.getPOV() == 180)
       .onTrue(sIntakeTilt.getAimDownCommand())
+      .onFalse(cIntakeUp)
     .debounce(Constants.IntakeConstants.kAimDownTimer)
       .whileTrue(cSpit);
   }
