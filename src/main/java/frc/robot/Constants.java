@@ -4,7 +4,7 @@
 
 package frc.robot;
 
-// TODO: DriveDistance, TurnToAngle, and Intake gains should be tuned
+// TODO: DriveDistance and TurnToAngle gains must be tuned
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -31,7 +31,7 @@ public final class Constants {
 
   public static class DrivetrainConstants {
     public static final double kWheelDiameter = 6; // In inches
-    public static final double kGearboxRatio = 12.76 * 0.85; // TODO: Test and fix gearbox ratio
+    public static final double kGearboxRatio = 12.76 * 0.85; // TODO: Test and fix drivetrain gearbox ratio
 
     // Teleop driving
     public static final double kSpeedMult = 1; // Applies to all manual drivetrain movement
@@ -64,7 +64,7 @@ public final class Constants {
   public static class IntakeConstants {
     public static final double kTiltGearbox = (double) 1/35;
     public static final double kWheelGearbox = (double) 1/3;
-    public static final double kTiltMaxSpeed = 1; // TODO: Lower
+    public static final double kTiltMaxSpeed = 1; // TODO: Lower max tilt motor speed
 
     // Wheel speed
     public static double kIntakeSpeed = 0.3;
@@ -77,14 +77,14 @@ public final class Constants {
     public static final double kDownSpeed = 0.08;
     public static final double kAimDownTimer = 0.4; // Seconds to move down for aiming straight
     public static final double kAutoAlignSpeed = -0.15;
-    // TODO: Test and tune against NEO specs
+    // TODO: Test and tune maximum current against NEO specs
     public static final double kMaxCurrent = 80; // To check against getOutputCurrent() for autoAlign
 
     // Preset positions and tolerances (in rotations)
     public static final double kUpPos = 0.003;
     public static final double kDownPos = 0.29;
     public static final double kPosTolerance = 0.015;
-    // TODO: Test and tune
+    // TODO: Test and tune position threshold
     public static final double kUpPosThreshold = 0.025; // Maximum threshold to be at the up position
 
     // Intake tilt PID gains
