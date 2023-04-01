@@ -61,10 +61,13 @@ public class IntakeTilt extends PIDSubsystem {
   }
 
   public Command getAimDownCommand() {
-    return startEnd(() -> {
-      disable();
-      useOutput(IntakeConstants.kDownSpeed, 0);
-    },
-    this::disable).withTimeout(IntakeConstants.kAimDownTimer);
+    return startEnd(
+      () -> {
+        disable();
+        useOutput(IntakeConstants.kDownSpeed, 0);
+      },
+      this::disable
+    )
+    .withTimeout(IntakeConstants.kAimDownTimer);
   }
 }
