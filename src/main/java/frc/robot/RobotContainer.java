@@ -9,6 +9,7 @@ import frc.robot.commands.*;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
@@ -44,6 +45,11 @@ public class RobotContainer {
   private final Command cShoot = sIntakeWheels.getShootCommand();
   private final Command cSpit = sIntakeWheels.getSpitCommand();
   private final Command cAimDown = sIntakeTilt.getAimDownCommand();
+  private final Command cManualHold = new StartEndCommand(
+    () -> sIntakeWheels.set(Constants.IntakeConstants.kHoldingSpeed),
+    sIntakeWheels::stop,
+    sIntakeWheels
+  );
   private final Command cStop = new RunCommand(() -> {
     sDrivetrain.stop();
     sIntakeWheels.stop();
@@ -246,8 +252,8 @@ public class RobotContainer {
         Constants.IntakeConstants.kSpitSpeed *= -1;
         Constants.IntakeConstants.kHoldingSpeed *= -1;
 
-        if (cIntake.isScheduled()) {
-          sIntakeWheels.set(Constants.IntakeConstants.kIntakeSpeed);
+        if (cIntake.isScheduled() || cManualHold.isScheduled()) {
+          sIntakeWheels.set(-sIntakeWheels.get());
         } else if (!(cShoot.isScheduled() || cSpit.isScheduled())) {
           sIntakeWheels.stop();
         }
@@ -306,6 +312,10 @@ public class RobotContainer {
       .onFalse(cIntakeUp)
     .debounce(Constants.IntakeConstants.kAimDownTimer)
       .whileTrue(cSpit);
+    
+    // D-pad left will hold pieces
+    new Trigger(() -> OI.operator_cntlr.getPOV() == 270)
+      .whileTrue(cManualHold);
   }
 
   public void autoAlign() {
