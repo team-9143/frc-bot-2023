@@ -82,6 +82,8 @@ public class RobotContainer {
     // Initialize Shuffleboard
     configureDriveTab();
     configureTestTab();
+    configureMatchChecklistTab();
+    configurePitChecklistTab();
     Shuffleboard.disableActuatorWidgets();
   }
 
@@ -199,7 +201,7 @@ public class RobotContainer {
     }
   }
 
-  public void configurePitChecklistTab() {
+  private void configurePitChecklistTab() {
     ShuffleboardTab pit_tab = Shuffleboard.getTab("Pit Checklist");
     
     String[] structural_checklist = new String[]{
