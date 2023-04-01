@@ -33,6 +33,11 @@ public class TurnToAngle extends PIDCommand {
     m_controller.setSetpoint(0);
   }
 
+  public TurnToAngle(Drivetrain drivetrain, double fheading) {
+    this(drivetrain);
+    setHeading(fheading);
+  }
+
   @Override public void execute() {
     super.execute();
     if (

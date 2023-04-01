@@ -15,80 +15,80 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.*;
 
 public final class Autos {
-  public static enum Type {
-    Long,
-    LongSpit,
-    Short,
-    ShortSpit,
-    Center,
+  public static enum Starter {
+    Shoot,
+    Spit,
+    ShootDown,
+    SpitDown,
+    None
+  }
+  public static enum Body {
+    LongEscape,
+    ShortEscape,
+    CenterOver,
     CenterSimple,
-    Outtake,
-    WPIAuto,
     None
   }
 
-  public static Command getAuto(Type type, Drivetrain sDrivetrain, IntakeWheels sIntakeWheels, IntakeTilt sIntakeTilt) {
-    switch(type) {
-      case Long:
-        return LongAuto(sDrivetrain, sIntakeWheels);
-      case LongSpit:
-        return LongAutoSpit(sDrivetrain, sIntakeWheels);
-      case Short:
-        return ShortAuto(sDrivetrain, sIntakeWheels);
-      case ShortSpit:
-      return ShortAutoSpit(sDrivetrain, sIntakeWheels);
-      case Center:
-        return CenterAuto(sDrivetrain, sIntakeWheels);
-      case CenterSimple:
-        return CenterSimpleAuto(sDrivetrain, sIntakeWheels);
-      case Outtake:
-        return OuttakeAuto(sDrivetrain, sIntakeWheels);
-      case WPIAuto:
-        return WIPAuto(sDrivetrain, sIntakeWheels, sIntakeTilt);
+  public static Command getAuto(Starter starter, Body body, IntakeTilt sIntakeTilt, IntakeWheels sIntakeWheels, Drivetrain sDrivetrain) {
+    return new SequentialCommandGroup(getStarter(starter, sIntakeTilt, sIntakeWheels), getBody(body, sDrivetrain));
+  }
+
+  private static Command getStarter(Starter starter, IntakeTilt sIntakeTilt, IntakeWheels sIntakeWheels) {
+    switch (starter) {
+      case Shoot:
+        // Shoot
+        return sIntakeWheels.getShootCommand().withTimeout(0.5);
+      case Spit:
+        // Spit
+        return sIntakeWheels.getSpitCommand().withTimeout(0.5);
+      case ShootDown:
+        // Aim down, shoot, then start moving intake up
+        return new SequentialCommandGroup(
+          sIntakeTilt.getAimDownCommand(),
+          sIntakeWheels.getShootCommand().withTimeout(0.5),
+          new InstantCommand(new IntakeUp(sIntakeTilt)::schedule)
+        );
+      case SpitDown:
+        // Aim down, spit, then start moving intake up
+        return new SequentialCommandGroup(
+          sIntakeTilt.getAimDownCommand(),
+          sIntakeWheels.getSpitCommand().withTimeout(0.5),
+          new InstantCommand(new IntakeUp(sIntakeTilt)::schedule)
+        );
       default:
         return new InstantCommand();
     }
   }
 
-  // Score a pre-loaded cube, then drive out of the community
-  private static Command LongAuto(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels) {
-    return new SequentialCommandGroup(
-      sIntakeWheels.getShootCommand().withTimeout(0.5),
-
-      new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(-140))
-    );
+  private static Command getBody(Body body, Drivetrain sDrivetrain) {
+    switch (body) {
+      case LongEscape:
+        return LongEscapeBody(sDrivetrain);
+      case ShortEscape:
+        return ShortEscapeBody(sDrivetrain);
+      case CenterOver:
+        return CenterOverBody(sDrivetrain);
+      case CenterSimple:
+        return CenterSimpleBody(sDrivetrain);
+      default:
+        return new InstantCommand();
+    }
   }
 
-  private static Command LongAutoSpit(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels) {
-    return new SequentialCommandGroup(
-      sIntakeWheels.getSpitCommand().withTimeout(0.5),
-
-      new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(-140))
-    );
+  /** Drive backwards out of the community's longer side */
+  private static Command LongEscapeBody(Drivetrain sDrivetrain) {
+    return new DriveDistance(sDrivetrain, -140);
   }
 
-  // Score a pre-loaded cube, then drive out of the community
-  private static Command ShortAuto(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels) {
-    return new SequentialCommandGroup(
-      sIntakeWheels.getShootCommand().withTimeout(0.5),
-
-      new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(-80))
-    );
+  /** Drive backwards out of the community's shorter side */
+  private static Command ShortEscapeBody(Drivetrain sDrivetrain) {
+    return new DriveDistance(sDrivetrain, -80);
   }
 
-  private static Command ShortAutoSpit(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels) {
+  /** Drive backwards over the charge station, then drive back and balance */
+  private static Command CenterOverBody(Drivetrain sDrivetrain) {
     return new SequentialCommandGroup(
-      sIntakeWheels.getSpitCommand().withTimeout(0.5),
-
-      new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(-80))
-    );
-  }
-
-  // Score a pre-loaded cube, drive over the charge station, then drive back and balance
-  private static Command CenterAuto(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels) {
-    return new SequentialCommandGroup(
-      sIntakeWheels.getShootCommand().withTimeout(0.5),
-
       // Move back until pitch is greater than 10
       new FunctionalCommand(
         () -> {},
@@ -124,11 +124,9 @@ public final class Autos {
     );
   }
 
-  // Score a pre-loaded cube, then drive to the charge station and balance
-  private static Command CenterSimpleAuto(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels) {
+  /** Drive backwards to the charge station and balance */
+  private static Command CenterSimpleBody(Drivetrain sDrivetrain) {
     return new SequentialCommandGroup(
-      sIntakeWheels.getShootCommand().withTimeout(0.5),
-
       // Move back until pitch is greater than 10
       new FunctionalCommand(
         () -> {},
@@ -144,37 +142,28 @@ public final class Autos {
     );
   }
 
-  private static Command OuttakeAuto(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels){
-    TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain);
+  // private static Command WIPAuto(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels, IntakeTilt sIntakeTilt) {
+  //   TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain);
+  //   return new SequentialCommandGroup(
+  //     sIntakeWheels.getShootCommand().withTimeout(0.5),
 
-    return new SequentialCommandGroup(
-      sIntakeWheels.getShootCommand().withTimeout(0.5),
-      cTurnToAngle.beforeStarting(() -> cTurnToAngle.setHeading(0))
-    );
-  }
+  //     new TurnToAngle(sDrivetrain).beforeStarting(() -> cTurnToAngle.setHeading(180)),
 
-  private static Command WIPAuto(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels, IntakeTilt sIntakeTilt) {
-    TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain);
-    return new SequentialCommandGroup(
-      sIntakeWheels.getShootCommand().withTimeout(0.5),
+  //     new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(224)),
 
-      new TurnToAngle(sDrivetrain).beforeStarting(() -> cTurnToAngle.setHeading(180)),
+  //     new IntakeDown(sIntakeTilt).alongWith(sIntakeWheels.getIntakeCommand()).withTimeout(2),
 
-      new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(224)),
+  //     new IntakeUp(sIntakeTilt),
 
-      new IntakeDown(sIntakeTilt).alongWith(sIntakeWheels.getIntakeCommand()).withTimeout(2),
+  //     new TurnToAngle(sDrivetrain).beforeStarting(() -> cTurnToAngle.setHeading(90)),
 
-      new IntakeUp(sIntakeTilt),
+  //     new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(48)),
 
-      new TurnToAngle(sDrivetrain).beforeStarting(() -> cTurnToAngle.setHeading(90)),
+  //     new TurnToAngle(sDrivetrain).beforeStarting(() -> cTurnToAngle.setHeading(0)),
 
-      new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(48)),
+  //     new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(48)),
 
-      new TurnToAngle(sDrivetrain).beforeStarting(() -> cTurnToAngle.setHeading(0)),
-
-      new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(48)),
-
-      new Balance(sDrivetrain)
-    );
-  }
+  //     new Balance(sDrivetrain)
+  //   );
+  // }
 }

@@ -33,6 +33,11 @@ public class DriveDistance extends PIDCommand {
     m_controller.setSetpoint(0);
   }
 
+  public DriveDistance(Drivetrain drivetrain, double fdistance) {
+    this(drivetrain);
+    setDistance(fdistance);
+  }
+
   @Override
   public void initialize() {
     super.initialize();

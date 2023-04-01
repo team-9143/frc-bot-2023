@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import java.util.Map;
 
@@ -58,7 +59,14 @@ public class RobotContainer {
   });
 
   // Dashboard declarations
-  private final SendableChooser<Autos.Type> m_autonChooser = new SendableChooser<Autos.Type>();
+  private final SendableChooser<Autos.Body> m_autonBodyChooser = new SendableChooser<Autos.Body>();
+  private final SendableChooser<Autos.Starter> m_autonStarterChooser = new SendableChooser<Autos.Starter>();
+  private final GenericEntry m_startingAngle =
+    Shuffleboard.getTab("Drive").add("Starting Angle CW", 180)
+      .withPosition(3, 5)
+      .withSize(2, 2)
+      .withWidget(BuiltInWidgets.kTextView)
+      .getEntry();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -66,16 +74,19 @@ public class RobotContainer {
     OI.pigeon.configMountPose(0, -0.1978197, -179.08374);
     OI.pigeon.setYaw(0);
 
-    // TODO: Add sendablechooser for starting action before each auto
+    // TODO: Test modular autos
     // Configure autonomous choices
-    m_autonChooser.addOption("Long Auto", Autos.Type.Long);
-    m_autonChooser.addOption("Long Spit Auto", Autos.Type.LongSpit);
-    m_autonChooser.addOption("Short Auto", Autos.Type.Short);
-    m_autonChooser.addOption("Short Spit Auto", Autos.Type.ShortSpit);
-    m_autonChooser.addOption("Center Auto", Autos.Type.Center);
-    m_autonChooser.addOption("Simple Center Auto", Autos.Type.CenterSimple);
-    m_autonChooser.addOption("Just Outtake", Autos.Type.Outtake);
-    m_autonChooser.setDefaultOption("None", Autos.Type.None);
+    m_autonStarterChooser.addOption("Shoot", Autos.Starter.Shoot);
+    m_autonStarterChooser.addOption("Spit", Autos.Starter.Spit);
+    m_autonStarterChooser.addOption("Shoot Down", Autos.Starter.ShootDown);
+    m_autonStarterChooser.addOption("Spit Down", Autos.Starter.SpitDown);
+    m_autonStarterChooser.setDefaultOption("None", Autos.Starter.None);
+    
+    m_autonBodyChooser.addOption("Long Backward", Autos.Body.LongEscape);
+    m_autonBodyChooser.addOption("Short Backward", Autos.Body.ShortEscape);
+    m_autonBodyChooser.addOption("Center Over Backward", Autos.Body.CenterOver);
+    m_autonBodyChooser.addOption("Center Backward", Autos.Body.CenterSimple);
+    m_autonBodyChooser.setDefaultOption("None", Autos.Body.None);
 
     // Configure the trigger bindings
     configureBindings();
@@ -91,10 +102,14 @@ public class RobotContainer {
 
   private void configureDriveTab() {
     ShuffleboardTab drive_tab = Shuffleboard.getTab("Drive");
-
-    drive_tab.add("Auton chooser", m_autonChooser)
-      .withPosition(6, 5)
-      .withSize(5, 2)
+   
+    drive_tab.add("Auton Starter", m_autonStarterChooser)
+      .withPosition(5, 5)
+      .withSize(4, 2)
+      .withWidget(BuiltInWidgets.kComboBoxChooser);
+    drive_tab.add("Auton Body", m_autonBodyChooser)
+      .withPosition(9, 5)
+      .withSize(4, 2)
       .withWidget(BuiltInWidgets.kComboBoxChooser);
 
     drive_tab.addDouble("Docking Angle", OI.pigeon::getPitch)
@@ -408,8 +423,8 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // Autos start backwards, so robot yaw should be backward
-    return Autos.getAuto(m_autonChooser.getSelected(), sDrivetrain, sIntakeWheels, sIntakeTilt)
-      .beforeStarting(() -> OI.pigeon.setYaw(180));
+    return Autos.getAuto(m_autonStarterChooser.getSelected(), m_autonBodyChooser.getSelected(), sIntakeTilt, sIntakeWheels, sDrivetrain)
+      .beforeStarting(() -> OI.pigeon.setYaw(-m_startingAngle.getDouble(180)));
   }
 
   /** Stops all motors and disables PID controllers */
