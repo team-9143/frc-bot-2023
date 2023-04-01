@@ -163,6 +163,12 @@ public class RobotContainer {
       .withSize(5, 2)
       .withWidget(BuiltInWidgets.kNumberBar)
       .withProperties(Map.of("min", -250, "max", 250, "center", 0));
+  }
+
+  private void configureMatchChecklistTab() {
+    ShuffleboardTab match_tab = Shuffleboard.getTab("Match Checklist");
+    
+    String[] robot_checklist = new String[]{
       "Bumpers are the correct match color",
       "Electrical pull test successful",
       "Motor controllers are blinking in sync",
@@ -173,51 +179,88 @@ public class RobotContainer {
     };
     String[] station_checklist = new String[]{
       "Electronic pull test successful",
-      "Joysticks are correctly connected"
+      "Joysticks are properly connected"
     };
 
-    ShuffleboardLayout layout_1 = test_tab.getLayout("Match Checklist", BuiltInLayouts.kList)
-      .withPosition(0, 0)
+    ShuffleboardLayout layout_1 = match_tab.getLayout("Robot Checklist", BuiltInLayouts.kList)
+      .withPosition(4, 0)
       .withSize(4, 8)
       .withProperties(Map.of("label position", "HIDDEN"));
-    for (String item : match_checklist) {
+    for (String item : robot_checklist) {
       layout_1.addBoolean(item, () -> false).withWidget(BuiltInWidgets.kToggleButton);
     }
 
-    ShuffleboardLayout layout_2 = test_tab.getLayout("Drive Station Checklist", BuiltInLayouts.kList)
-      .withPosition(4, 0)
+    ShuffleboardLayout layout_2 = match_tab.getLayout("Drive Station Checklist", BuiltInLayouts.kList)
+      .withPosition(8, 0)
       .withSize(4, 8)
       .withProperties(Map.of("label position", "HIDDEN"));
     for (String item : station_checklist) {
       layout_2.addBoolean(item, () -> false).withWidget(BuiltInWidgets.kToggleButton);
     }
+  }
 
-    ShuffleboardLayout layout_3 = test_tab.getLayout("Intake", BuiltInLayouts.kGrid)
+  public void configurePitChecklistTab() {
+    ShuffleboardTab pit_tab = Shuffleboard.getTab("Pit Checklist");
+    
+    String[] structural_checklist = new String[]{
+      "All structural components are secured",
+      "Bumpers are secured",
+      "Bumpers are the correct match color",
+      "Bumper numbers are not damaged",
+      "Motors and controllers are secured"
+    };
+    String[] electrical_checklist = new String[]{
+      "All wiring is secured and clipped",
+      "Electrical pull test successful",
+      "Fully charged battery is installed",
+      "Motor controllers are blinking in sync",
+      "Bench test is successful"
+    };
+    String[] cart_checklist = new String[]{
+      "Station has all needed cables",
+      "Station has fully charged laptop",
+      "Current code is functional and deployed",
+      "Joysticks are properly connected",
+      "Fully charged backup battery available",
+      "Small medical kit is available",
+      "Red and blue duct tape available",
+      "All necessary utility tools available"
+    };
+    String[] post_checklist = new String[]{
+      "Both batteries are removed and charging"
+    };
+
+    ShuffleboardLayout layout_1 = pit_tab.getLayout("Pre-Match Mechanical", BuiltInLayouts.kList)
+      .withPosition(0, 0)
+      .withSize(4, 8)
+      .withProperties(Map.of("label position", "HIDDEN"));
+    for (String item : structural_checklist) {
+      layout_1.addBoolean(item, () -> false).withWidget(BuiltInWidgets.kToggleButton);
+    }
+
+    ShuffleboardLayout layout_2 = pit_tab.getLayout("Pre-Match Electrical", BuiltInLayouts.kList)
+      .withPosition(4, 0)
+      .withSize(4, 8)
+      .withProperties(Map.of("label position", "HIDDEN"));
+    for (String item : electrical_checklist) {
+      layout_2.addBoolean(item, () -> false).withWidget(BuiltInWidgets.kToggleButton);
+    }
+
+    ShuffleboardLayout layout_3 = pit_tab.getLayout("Pre-Match Cart", BuiltInLayouts.kList)
       .withPosition(8, 0)
-      .withSize(8, 8)
-      .withProperties(Map.of("number of columns", 2, "number of rows", 3));
-    // Column 1
-    layout_3.addDouble("Intake Angle", () -> sIntakeTilt.getMeasurement() * 360)
-      .withWidget(BuiltInWidgets.kDial)
-      .withProperties(Map.of("min", -110, "max", 110, "show value", true));
-    layout_3.addDouble("Intake Setpoint", () ->
-      ((cIntakeDown.isScheduled()) ? Constants.IntakeConstants.kDownPos : Constants.IntakeConstants.kUpPos) * 360
-    )
-      .withWidget(BuiltInWidgets.kDial)
-      .withProperties(Map.of("min", -110, "max", 110, "show value", true));
-    layout_3.addDouble("Error", () ->
-      (((cIntakeDown.isScheduled()) ? Constants.IntakeConstants.kDownPos : Constants.IntakeConstants.kUpPos) - sIntakeTilt.getMeasurement()) * 360
-    )
-      .withWidget(BuiltInWidgets.kNumberBar)
-      .withProperties(Map.of("min", -110, "max", 110, "center", 0));
-    // Column 2
-    layout_3.addDouble("Wheel RPM", sIntakeWheels::getVelocity)
-      .withWidget(BuiltInWidgets.kNumberBar)
-      .withProperties(Map.of("min", -250, "max", 250, "center", 0));
-    layout_3.addBoolean("PID enabled", () -> cIntakeDown.isScheduled() || cIntakeUp.isScheduled() || sIntakeTilt.isEnabled())
-      .withWidget(BuiltInWidgets.kBooleanBox);
-    layout_3.addBoolean("Steady", sIntakeTilt::isEnabled)
-      .withWidget(BuiltInWidgets.kBooleanBox);
+      .withSize(4, 8)
+      .withProperties(Map.of("label position", "HIDDEN"));
+    for (String item : cart_checklist) {
+      layout_3.addBoolean(item, () -> false).withWidget(BuiltInWidgets.kToggleButton);
+    }
+
+    ShuffleboardLayout layout_4 = pit_tab.getLayout("Post-Match Checklist", BuiltInLayouts.kList)
+      .withPosition(12, 0)
+      .withSize(4, 8)
+      .withProperties(Map.of("label position", "HIDDEN"));
+    for (String item : post_checklist) {
+      layout_4.addBoolean(item, () -> false).withWidget(BuiltInWidgets.kToggleButton);
+    }
   }
 
   /**
