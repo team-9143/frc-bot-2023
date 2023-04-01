@@ -60,6 +60,10 @@ public class IntakeTilt extends PIDSubsystem {
     r_encoder.setPosition(IntakeConstants.kUpPos);
   }
 
+  public boolean atUpPos() {
+    return Math.abs(getMeasurement() - IntakeConstants.kUpPos) < IntakeConstants.kUpPosThreshold;
+  }
+
   public void autoAlign() {
     new FunctionalCommand(
       () -> {},

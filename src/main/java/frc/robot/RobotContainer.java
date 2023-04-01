@@ -43,6 +43,7 @@ public class RobotContainer {
   private final Command cIntake = sIntakeWheels.getIntakeCommand();
   private final Command cShoot = sIntakeWheels.getShootCommand();
   private final Command cSpit = sIntakeWheels.getSpitCommand();
+  private final Command cAimDown = sIntakeTilt.getAimDownCommand();
   private final Command cStop = new RunCommand(() -> {
     sDrivetrain.stop();
     sIntakeWheels.stop();
@@ -290,8 +291,8 @@ public class RobotContainer {
       ));
 
     // D-pad up will move down and shoot
-    new Trigger(() -> OI.operator_cntlr.getPOV() == 0)
-      .onTrue(sIntakeTilt.getAimDownCommand())
+    new Trigger(() -> sIntakeTilt.atUpPos() && OI.operator_cntlr.getPOV() == 0)
+      .onTrue(cAimDown)
       .onFalse(cIntakeUp)
     .debounce(Constants.IntakeConstants.kAimDownTimer)
       .whileTrue(cShoot);
@@ -301,8 +302,8 @@ public class RobotContainer {
       .whileTrue(cSpit);
 
     // D-pad down will move down and spit
-    new Trigger(() -> OI.operator_cntlr.getPOV() == 180)
-      .onTrue(sIntakeTilt.getAimDownCommand())
+    new Trigger(() -> sIntakeTilt.atUpPos() && OI.operator_cntlr.getPOV() == 180)
+      .onTrue(cAimDown)
       .onFalse(cIntakeUp)
     .debounce(Constants.IntakeConstants.kAimDownTimer)
       .whileTrue(cSpit);

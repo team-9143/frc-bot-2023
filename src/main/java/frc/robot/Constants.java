@@ -80,11 +80,12 @@ public final class Constants {
     // TODO: Test and tune against NEO specs
     public static final double kMaxVoltage = 1; // To check against getBusVoltage() for autoAlign
 
-    // TODO: Tune positions to new intake mount
     // Preset positions and tolerances (in rotations)
     public static final double kUpPos = 0.003;
     public static final double kDownPos = 0.29;
     public static final double kPosTolerance = 0.015;
+    // TODO: Test and tune
+    public static final double kUpPosThreshold = 0.025; // Maximum threshold to be at the up position
 
     // Intake tilt PID gains
     public static final double
