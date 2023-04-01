@@ -189,7 +189,7 @@ public class RobotContainer {
       .withSize(4, 8)
       .withProperties(Map.of("label position", "HIDDEN"));
     for (String item : robot_checklist) {
-      layout_1.addBoolean(item, () -> false).withWidget(BuiltInWidgets.kToggleButton);
+      layout_1.addString(item, () -> item).withWidget(BuiltInWidgets.kTextView);
     }
 
     ShuffleboardLayout layout_2 = match_tab.getLayout("Drive Station Checklist", BuiltInLayouts.kList)
@@ -197,7 +197,7 @@ public class RobotContainer {
       .withSize(4, 8)
       .withProperties(Map.of("label position", "HIDDEN"));
     for (String item : station_checklist) {
-      layout_2.addBoolean(item, () -> false).withWidget(BuiltInWidgets.kToggleButton);
+      layout_2.addString(item, () -> item).withWidget(BuiltInWidgets.kTextView);
     }
   }
 
@@ -237,7 +237,7 @@ public class RobotContainer {
       .withSize(4, 8)
       .withProperties(Map.of("label position", "HIDDEN"));
     for (String item : structural_checklist) {
-      layout_1.addBoolean(item, () -> false).withWidget(BuiltInWidgets.kToggleButton);
+      layout_1.addString(item, () -> item).withWidget(BuiltInWidgets.kTextView);
     }
 
     ShuffleboardLayout layout_2 = pit_tab.getLayout("Pre-Match Electrical", BuiltInLayouts.kList)
@@ -245,7 +245,7 @@ public class RobotContainer {
       .withSize(4, 8)
       .withProperties(Map.of("label position", "HIDDEN"));
     for (String item : electrical_checklist) {
-      layout_2.addBoolean(item, () -> false).withWidget(BuiltInWidgets.kToggleButton);
+      layout_2.addString(item, () -> item).withWidget(BuiltInWidgets.kTextView);
     }
 
     ShuffleboardLayout layout_3 = pit_tab.getLayout("Pre-Match Cart", BuiltInLayouts.kList)
@@ -253,7 +253,7 @@ public class RobotContainer {
       .withSize(4, 8)
       .withProperties(Map.of("label position", "HIDDEN"));
     for (String item : cart_checklist) {
-      layout_3.addBoolean(item, () -> false).withWidget(BuiltInWidgets.kToggleButton);
+      layout_3.addString(item, () -> item).withWidget(BuiltInWidgets.kTextView);
     }
 
     ShuffleboardLayout layout_4 = pit_tab.getLayout("Post-Match Checklist", BuiltInLayouts.kList)
@@ -261,7 +261,7 @@ public class RobotContainer {
       .withSize(4, 8)
       .withProperties(Map.of("label position", "HIDDEN"));
     for (String item : post_checklist) {
-      layout_4.addBoolean(item, () -> false).withWidget(BuiltInWidgets.kToggleButton);
+      layout_4.addString(item, () -> item).withWidget(BuiltInWidgets.kTextView);
     }
   }
 
