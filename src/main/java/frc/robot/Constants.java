@@ -73,9 +73,10 @@ public final class Constants {
     public static double kSpitSpeed = -0.5;
     public static double kHoldingSpeed = 0.05;
 
-    // Manual intake movement
+    // Non-PID intake movement
     public static final double kUpSpeed = -0.1;
     public static final double kDownSpeed = 0.08;
+    public static final double kAimDownTimer = 0.5; // Seconds to move down for aiming straight
 
     // TODO: Tune positions to new intake mount
     // Preset positions and tolerances (in rotations)
@@ -83,7 +84,7 @@ public final class Constants {
     public static final double kDownPos = 0.29;
     public static final double kPosTolerance = 0.015;
 
-    // Intake tilt gains
+    // Intake tilt PID gains
     public static final double
       kDownP = kTiltGearbox * 29,
       kDownI = kTiltGearbox * 22,

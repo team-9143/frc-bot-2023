@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.DeviceConstants;
 import frc.robot.Constants.IntakeConstants;
 
@@ -57,5 +58,13 @@ public class IntakeTilt extends PIDSubsystem {
   public void resetEncoder() {
     l_encoder.setPosition(IntakeConstants.kUpPos);
     r_encoder.setPosition(IntakeConstants.kUpPos);
+  }
+
+  public Command getAimDownCommand() {
+    return startEnd(() -> {
+      disable();
+      useOutput(IntakeConstants.kDownSpeed, 0);
+    },
+    this::disable).withTimeout(IntakeConstants.kAimDownTimer);
   }
 }

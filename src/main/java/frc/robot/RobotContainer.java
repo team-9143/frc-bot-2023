@@ -291,14 +291,22 @@ public class RobotContainer {
         () -> false,
         sIntakeTilt
       ));
-    
-    // D-pad up will spit
+
+    // D-pad up will move down and shoot
     new Trigger(() -> OI.operator_cntlr.getPOV() == 0)
+      .onTrue(sIntakeTilt.getAimDownCommand())
+    .debounce(Constants.IntakeConstants.kAimDownTimer)
+      .whileTrue(cShoot);
+
+    // D-pad right will spit
+    new Trigger(() -> OI.operator_cntlr.getPOV() == 90)
       .whileTrue(cSpit);
-    
-    // D-pad down will intake
+
+    // D-pad down will move down and spit
     new Trigger(() -> OI.operator_cntlr.getPOV() == 180)
-      .whileTrue(cIntake);
+      .onTrue(sIntakeTilt.getAimDownCommand())
+    .debounce(Constants.IntakeConstants.kAimDownTimer)
+      .whileTrue(cSpit);
   }
 
   public void autoAlign(){
