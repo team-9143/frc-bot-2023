@@ -66,6 +66,7 @@ public class RobotContainer {
     OI.pigeon.configMountPose(0, -0.1978197, -179.08374);
     OI.pigeon.setYaw(0);
 
+    // TODO: Add sendablechooser for starting action before each auto
     // Configure autonomous choices
     m_autonChooser.addOption("Long Auto", Autos.Type.Long);
     m_autonChooser.addOption("Long Spit Auto", Autos.Type.LongSpit);
