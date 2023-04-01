@@ -29,16 +29,7 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    
-    // TODO(Jonah): Work on and test, make into a method in IntakeTilt subsystem
-    // if (false) {
-    //   new FunctionalCommand(
-    //    () -> {},
-    //    () -> {},
-    //    interrupted -> {},
-    //    () -> (IntakeTilt.l_motor.getBusVoltage() > 1) || (IntakeTilt.r_motor.getBusVoltage() > 1),
-    //    new IntakeTilt());
-    // }
+    //m_robotContainer.autoAlign();
   }
 
   /**

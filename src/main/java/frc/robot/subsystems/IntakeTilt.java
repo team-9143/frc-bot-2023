@@ -17,6 +17,8 @@ public class IntakeTilt extends PIDSubsystem {
   private static final CANSparkMax l_motor = new CANSparkMax(DeviceConstants.kIntakeTiltLeftID, MotorType.kBrushless);
   private static final CANSparkMax r_motor = new CANSparkMax(DeviceConstants.kIntakeTiltRightID, MotorType.kBrushless);
 
+  public static CANSparkMax getMotor() {return l_motor;}
+
   private static final RelativeEncoder l_encoder = l_motor.getEncoder();
   private static final RelativeEncoder r_encoder = r_motor.getEncoder();
 

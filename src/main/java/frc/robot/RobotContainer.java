@@ -76,6 +76,9 @@ public class RobotContainer {
     configureDriveTab();
     configureTestTab();
     Shuffleboard.disableActuatorWidgets();
+
+    //Moves Intake Up and Creates New Setpoint
+    autoAlign();
   }
 
   private void configureDriveTab() {
@@ -296,6 +299,15 @@ public class RobotContainer {
     // D-pad down will intake
     new Trigger(() -> OI.operator_cntlr.getPOV() == 180)
       .whileTrue(cIntake);
+  }
+
+  public void autoAlign(){
+    new FunctionalCommand(
+      () -> {},
+      () -> IntakeTilt.getMotor().set(-0.25),
+      interrupted -> {},
+      () -> (IntakeTilt.getMotor().getBusVoltage() > 1),
+      sIntakeTilt).schedule();
   }
 
   /**
