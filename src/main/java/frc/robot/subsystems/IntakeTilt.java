@@ -40,7 +40,8 @@ public class IntakeTilt extends PIDSubsystem {
     l_encoder.setPosition(0);
     r_encoder.setPosition(0);
 
-    setSetpoint(IntakeConstants.kUpPos);
+    m_controller.setIntegratorRange(-IntakeConstants.kTiltMaxSpeed, IntakeConstants.kTiltMaxSpeed);
+    m_controller.setSetpoint(IntakeConstants.kUpPos);
 
     enable();
   }

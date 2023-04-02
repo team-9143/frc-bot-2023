@@ -24,6 +24,7 @@ public class IntakeUp extends PIDCommand {
 
     this.intakeTilt = intakeTilt;
 
+    m_controller.setIntegratorRange(-IntakeConstants.kTiltMaxSpeed, IntakeConstants.kTiltMaxSpeed);
     m_controller.setTolerance(IntakeConstants.kPosTolerance);
     m_controller.setSetpoint(IntakeConstants.kUpPos);
 

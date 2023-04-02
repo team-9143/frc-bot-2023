@@ -29,6 +29,7 @@ public class DriveDistance extends PIDCommand {
     SendableRegistry.setSubsystem(m_controller, drivetrain.getSubsystem());
 
     // Configure additional PID options
+    m_controller.setIntegratorRange(-DrivetrainConstants.kDistMaxSpeed, DrivetrainConstants.kDistMaxSpeed);
     m_controller.setTolerance(DrivetrainConstants.kDistPosTolerance, DrivetrainConstants.kDistVelTolerance);
     m_controller.setSetpoint(0);
   }

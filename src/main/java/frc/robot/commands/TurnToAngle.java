@@ -28,6 +28,7 @@ public class TurnToAngle extends PIDCommand {
     SendableRegistry.setSubsystem(m_controller, drivetrain.getSubsystem());
 
     // Configure additional PID options
+    m_controller.setIntegratorRange(-DrivetrainConstants.kTurnMaxSpeed, DrivetrainConstants.kTurnMaxSpeed);
     m_controller.setTolerance(DrivetrainConstants.kTurnPosTolerance, DrivetrainConstants.kTurnVelTolerance);
     m_controller.enableContinuousInput(-180, 180);
     m_controller.setSetpoint(0);

@@ -24,6 +24,8 @@ public class IntakeDown extends PIDCommand {
 
     this.intakeTilt = intakeTilt;
 
+    m_controller.setIntegratorRange(-IntakeConstants.kTiltMaxSpeed, IntakeConstants.kTiltMaxSpeed);
+
     addRequirements(intakeTilt);
     SendableRegistry.setSubsystem(m_controller, intakeTilt.getSubsystem());
   }
