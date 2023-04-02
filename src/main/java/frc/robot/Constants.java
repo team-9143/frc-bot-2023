@@ -30,8 +30,8 @@ public final class Constants {
   }
 
   public static class DrivetrainConstants {
-    public static final double kWheelDiameter = 6; // In inches
-    public static final double kGearboxRatio = 12.76 * 0.85; // TODO: Test and fix drivetrain gearbox ratio
+    public static final double kWheelCircumference = 6 * Math.PI; // In inches
+    public static final double kGearboxRatio = 1/12.76; // TODO: Test and fix drivetrain gearbox ratio, 1 turn should be about 18.85 inches
 
     // Teleop driving
     public static final double kSpeedMult = 1; // Applies to all manual drivetrain movement

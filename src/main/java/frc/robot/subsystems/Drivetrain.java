@@ -64,12 +64,12 @@ public class Drivetrain extends SubsystemBase {
 
     SendableRegistry.setSubsystem(robotDrive, getSubsystem());
 
-    // Sets encoders to measure position and velocity in inches
-    l_encoder.setPositionConversionFactor((Math.PI * DrivetrainConstants.kWheelDiameter) / DrivetrainConstants.kGearboxRatio);
-    r_encoder.setPositionConversionFactor((Math.PI * DrivetrainConstants.kWheelDiameter) / DrivetrainConstants.kGearboxRatio);
+    // Sets encoders to measure in inches
+    l_encoder.setPositionConversionFactor(DrivetrainConstants.kWheelCircumference * DrivetrainConstants.kGearboxRatio);
+    r_encoder.setPositionConversionFactor(DrivetrainConstants.kWheelCircumference * DrivetrainConstants.kGearboxRatio);
 
-    l_encoder.setVelocityConversionFactor((Math.PI * DrivetrainConstants.kWheelDiameter) / DrivetrainConstants.kGearboxRatio);
-    r_encoder.setVelocityConversionFactor((Math.PI * DrivetrainConstants.kWheelDiameter) / DrivetrainConstants.kGearboxRatio);
+    l_encoder.setVelocityConversionFactor(DrivetrainConstants.kWheelCircumference * DrivetrainConstants.kGearboxRatio);
+    r_encoder.setVelocityConversionFactor(DrivetrainConstants.kWheelCircumference * DrivetrainConstants.kGearboxRatio);
 
     // Sets encoder measurement period to work with default command scheduler loop
     l_encoder.setMeasurementPeriod(20);
