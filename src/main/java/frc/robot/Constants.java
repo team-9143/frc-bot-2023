@@ -14,6 +14,14 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+  public static class PhysConstants {
+    public static final double kDrivetrainGearbox = 1/12.76; // TODO: Test and fix drivetrain gearbox ratio, 1 turn should be about 18.85 inches
+    public static final double kTiltGearbox = (double) 1/35;
+    public static final double kWheelGearbox = (double) 1/3;
+
+    public static final double kWheelCircumference = 6 * Math.PI; // In inches
+  }
+
   public static class DeviceConstants {
     public static final byte kDriverCntlrPort = 0;
     public static final byte kOperatorCntlrPort = 1;
@@ -30,11 +38,8 @@ public final class Constants {
   }
 
   public static class DrivetrainConstants {
-    public static final double kWheelCircumference = 6 * Math.PI; // In inches
-    public static final double kGearboxRatio = 1/12.76; // TODO: Test and fix drivetrain gearbox ratio, 1 turn should be about 18.85 inches
-
-    // Teleop driving
-    public static final double kSpeedMult = 1; // Applies to all manual drivetrain movement
+    // Manual driving
+    public static final double kSpeedMult = 1;
     public static final double kTurnMult = 0.7;
 
     // TurnToAngle
@@ -62,8 +67,6 @@ public final class Constants {
   }
 
   public static class IntakeConstants {
-    public static final double kTiltGearbox = (double) 1/35;
-    public static final double kWheelGearbox = (double) 1/3;
     public static final double kTiltMaxSpeed = 1; // TODO: Lower max tilt motor speed
 
     // Wheel speed
@@ -89,16 +92,16 @@ public final class Constants {
 
     // Intake tilt PID gains
     public static final double
-      kDownP = kTiltGearbox * 29,
-      kDownI = kTiltGearbox * 22,
-      kDownD = kTiltGearbox * 11;
+      kDownP = PhysConstants.kTiltGearbox * 29,
+      kDownI = PhysConstants.kTiltGearbox * 22,
+      kDownD = PhysConstants.kTiltGearbox * 11;
     public static final double
-      kUpP = kTiltGearbox * 31,
-      kUpI = kTiltGearbox * 21,
-      kUpD = kTiltGearbox * 10;
+      kUpP = PhysConstants.kTiltGearbox * 31,
+      kUpI = PhysConstants.kTiltGearbox * 21,
+      kUpD = PhysConstants.kTiltGearbox * 10;
     public static final double
-      kSteadyP = kTiltGearbox * 33,
-      kSteadyI = kTiltGearbox * 23,
-      kSteadyD = kTiltGearbox * 7;
+      kSteadyP = PhysConstants.kTiltGearbox * 33,
+      kSteadyI = PhysConstants.kTiltGearbox * 23,
+      kSteadyD = PhysConstants.kTiltGearbox * 7;
   }
 }

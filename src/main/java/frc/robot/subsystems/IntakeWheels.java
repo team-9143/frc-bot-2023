@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.PhysConstants;
 import frc.robot.Constants.DeviceConstants;
 import frc.robot.Constants.IntakeConstants;
 
@@ -29,8 +30,8 @@ public class IntakeWheels extends SubsystemBase {
       this
     ));
 
-    intake_encoder.setPositionConversionFactor(IntakeConstants.kTiltGearbox);
-    intake_encoder.setVelocityConversionFactor(IntakeConstants.kTiltGearbox);
+    intake_encoder.setPositionConversionFactor(PhysConstants.kTiltGearbox);
+    intake_encoder.setVelocityConversionFactor(PhysConstants.kTiltGearbox);
     intake_encoder.setMeasurementPeriod(20);
     intake_encoder.setPosition(0);
   }

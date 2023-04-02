@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.PhysConstants;
 import frc.robot.Constants.DeviceConstants;
 import frc.robot.Constants.IntakeConstants;
 
@@ -28,14 +29,15 @@ public class IntakeTilt extends PIDSubsystem {
 
     r_motor.follow(l_motor, true);
 
-    l_encoder.setPositionConversionFactor(IntakeConstants.kTiltGearbox);
-    l_encoder.setVelocityConversionFactor(IntakeConstants.kTiltGearbox);
+    l_encoder.setPositionConversionFactor(PhysConstants.kTiltGearbox);
+    l_encoder.setVelocityConversionFactor(PhysConstants.kTiltGearbox);
+    r_encoder.setPositionConversionFactor(PhysConstants.kTiltGearbox);
+    r_encoder.setVelocityConversionFactor(PhysConstants.kTiltGearbox);
+    
     l_encoder.setMeasurementPeriod(20);
-    l_encoder.setPosition(0);
-
-    r_encoder.setPositionConversionFactor(IntakeConstants.kTiltGearbox);
-    r_encoder.setVelocityConversionFactor(IntakeConstants.kTiltGearbox);
     r_encoder.setMeasurementPeriod(20);
+    
+    l_encoder.setPosition(0);
     r_encoder.setPosition(0);
 
     setSetpoint(IntakeConstants.kUpPos);

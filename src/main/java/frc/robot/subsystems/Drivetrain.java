@@ -9,6 +9,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.util.sendable.SendableRegistry;
 import frc.robot.OI;
+import frc.robot.Constants.PhysConstants;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.DeviceConstants;
 
@@ -65,13 +66,12 @@ public class Drivetrain extends SubsystemBase {
     SendableRegistry.setSubsystem(robotDrive, getSubsystem());
 
     // Sets encoders to measure in inches
-    l_encoder.setPositionConversionFactor(DrivetrainConstants.kWheelCircumference * DrivetrainConstants.kGearboxRatio);
-    r_encoder.setPositionConversionFactor(DrivetrainConstants.kWheelCircumference * DrivetrainConstants.kGearboxRatio);
+    l_encoder.setPositionConversionFactor(PhysConstants.kWheelCircumference * PhysConstants.kDrivetrainGearbox);
+    l_encoder.setVelocityConversionFactor(PhysConstants.kWheelCircumference * PhysConstants.kDrivetrainGearbox);
+    r_encoder.setPositionConversionFactor(PhysConstants.kWheelCircumference * PhysConstants.kDrivetrainGearbox);
+    r_encoder.setVelocityConversionFactor(PhysConstants.kWheelCircumference * PhysConstants.kDrivetrainGearbox);
 
-    l_encoder.setVelocityConversionFactor(DrivetrainConstants.kWheelCircumference * DrivetrainConstants.kGearboxRatio);
-    r_encoder.setVelocityConversionFactor(DrivetrainConstants.kWheelCircumference * DrivetrainConstants.kGearboxRatio);
-
-    // Sets encoder measurement period to work with default command scheduler loop
+    // Sets encoder measurement period in time with default loop
     l_encoder.setMeasurementPeriod(20);
     r_encoder.setMeasurementPeriod(20);
 
