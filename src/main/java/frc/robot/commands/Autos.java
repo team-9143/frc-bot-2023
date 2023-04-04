@@ -91,7 +91,7 @@ public final class Autos {
     switch (end) {
       case TurnAround:
         // Turn 180 degrees
-        return new TurnToAngle(sDrivetrain, OI.pigeon.getYaw() + 180);
+        return new TurnToAngle(sDrivetrain, 180);
       default:
         return new InstantCommand();
     }

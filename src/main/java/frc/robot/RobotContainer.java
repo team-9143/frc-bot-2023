@@ -449,8 +449,8 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // Autos start backwards, so robot yaw should be backward
     return Autos.getAuto(m_autonStarterChooser.getSelected(), m_autonBodyChooser.getSelected(), m_autonEndChooser.getSelected(), sIntakeTilt, sIntakeWheels, sDrivetrain)
+      .beforeStarting(() -> OI.pigeon.setYaw(0))
       .andThen(() -> OI.pigeon.setYaw(-m_startingAngle.getDouble(180)));
   }
 
