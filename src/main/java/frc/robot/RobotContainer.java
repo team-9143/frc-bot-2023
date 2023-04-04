@@ -48,7 +48,7 @@ public class RobotContainer {
   private final Command cIntake = sIntakeWheels.getIntakeCommand();
   private final Command cShoot = sIntakeWheels.getShootCommand();
   private final Command cSpit = sIntakeWheels.getSpitCommand();
-  private final Command cAimDown = sIntakeTilt.getAimDownCommand();
+  private final Command cAimDown = sIntakeTilt.getAimMidCommand();
   private final Command cManualHold = new StartEndCommand(
     () -> sIntakeWheels.set(Constants.IntakeConstants.kHoldingSpeed),
     sIntakeWheels::stop,

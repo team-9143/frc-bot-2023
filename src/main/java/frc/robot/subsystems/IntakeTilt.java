@@ -82,8 +82,8 @@ public class IntakeTilt extends PIDSubsystem {
   }
 
   // TODO: Stop based on position, not time passed
-  public Command getAimDownCommand() {
     return startEnd(
+  public Command getAimMidCommand() {
       () -> {
         disable();
         useOutput(IntakeConstants.kDownSpeed, 0);

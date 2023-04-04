@@ -56,14 +56,14 @@ public final class Autos {
       case ShootDown:
         // Aim down, shoot, then move intake up
         return new SequentialCommandGroup(
-          sIntakeTilt.getAimDownCommand(),
+          sIntakeTilt.getAimMidCommand(),
           sIntakeWheels.getShootCommand().withTimeout(0.5),
           new IntakeUp(sIntakeTilt).until(sIntakeTilt::atUpPos)
         );
       case SpitDown:
         // Aim down, spit, then move intake up
         return new SequentialCommandGroup(
-          sIntakeTilt.getAimDownCommand(),
+          sIntakeTilt.getAimMidCommand(),
           sIntakeWheels.getSpitCommand().withTimeout(0.5),
           new IntakeUp(sIntakeTilt).until(sIntakeTilt::atUpPos)
         );
