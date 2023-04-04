@@ -102,6 +102,8 @@ public class RobotContainer {
 
   private void configureDriveTab() {
     ShuffleboardTab drive_tab = Shuffleboard.getTab("Drive");
+    UsbCamera camera = CameraServer.startAutomaticCapture();
+    camera.setResolution(-640, -480);
 
     drive_tab.add("Auton Starter", m_autonStarterChooser)
       .withPosition(5, 5)
@@ -145,6 +147,8 @@ public class RobotContainer {
     layout_2.addDouble("Intake Angle", () -> sIntakeTilt.getMeasurement() * 360)
       .withWidget(BuiltInWidgets.kDial)
       .withProperties(Map.of("min", -110, "max", 110, "show value", false));
+
+      drive_tab.add(camera);
   }
 
   private void configureTestTab() {
