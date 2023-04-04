@@ -99,12 +99,12 @@ public final class Autos {
 
   /** Drive backwards out of the community's longer side */
   private static Command LongEscapeBody(Drivetrain sDrivetrain) {
-    return new DriveDistance(sDrivetrain, -140);
+    return new DriveDistance(sDrivetrain, -150);
   }
 
   /** Drive backwards out of the community's shorter side */
   private static Command ShortEscapeBody(Drivetrain sDrivetrain) {
-    return new DriveDistance(sDrivetrain, -80);
+    return new DriveDistance(sDrivetrain, -90);
   }
 
   /** Drive backwards over the charge station, then drive back and balance */
@@ -157,7 +157,7 @@ public final class Autos {
         sDrivetrain
       ),
 
-      new RunCommand(() -> sDrivetrain.moveStraight(-0.35)).withTimeout(1),
+      new RunCommand(() -> sDrivetrain.moveStraight(-0.35), sDrivetrain).withTimeout(1),
 
       new Balance(sDrivetrain)
     );
