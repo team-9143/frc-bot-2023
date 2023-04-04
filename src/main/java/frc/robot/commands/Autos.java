@@ -8,6 +8,7 @@ import frc.robot.OI;
 import edu.wpi.first.wpilibj2.command.Command;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -31,6 +32,7 @@ public final class Autos {
   }
   public static enum Ending {
     TurnAround,
+    PickupCone,
     None
   }
 
@@ -38,7 +40,7 @@ public final class Autos {
     return new SequentialCommandGroup(
       getStarter(starter, sIntakeTilt, sIntakeWheels).raceWith(new RunCommand(sDrivetrain::stop, sDrivetrain)),
       getBody(body, sDrivetrain),
-      getEnd(end, sDrivetrain)
+      getEnd(end, sDrivetrain, sIntakeTilt, sIntakeWheels)
     );
   }
 
@@ -86,12 +88,27 @@ public final class Autos {
     }
   }
 
-  /** A command for the end of the auton. Moves the drivetrain */
-  private static Command getEnd(Ending end, Drivetrain sDrivetrain) {
+  /** A command for the end of the auton. Moves the drivetrain. */
+  private static Command getEnd(Ending end, Drivetrain sDrivetrain, IntakeTilt sIntakeTilt, IntakeWheels sIntakeWheels) {
     switch (end) {
       case TurnAround:
         // Turn 180 degrees
         return new TurnToAngle(sDrivetrain, 180);
+      case PickupCone:
+        // TODO: Test
+        // Turn around and pickup a cone (inverts the intake wheels)
+        return new SequentialCommandGroup(
+          new TurnToAngle(sDrivetrain, 180),
+          new InstantCommand(sIntakeWheels::invert),
+          
+          new ParallelCommandGroup(
+            new IntakeDown(sIntakeTilt),
+            sIntakeWheels.getIntakeCommand(),
+            new RunCommand(() -> sDrivetrain.moveStraight(0.2), sDrivetrain)
+          ).withTimeout(3),
+
+          new IntakeUp(sIntakeTilt)
+        );
       default:
         return new InstantCommand();
     }

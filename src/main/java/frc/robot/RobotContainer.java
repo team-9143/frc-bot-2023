@@ -92,6 +92,7 @@ public class RobotContainer {
     m_autonBodyChooser.setDefaultOption("None", Autos.Body.None);
 
     m_autonEndChooser.addOption("Turn Around", Autos.Ending.TurnAround);
+    m_autonEndChooser.addOption("Pickup Cone", Autos.Ending.PickupCone);
     m_autonEndChooser.setDefaultOption("None", Autos.Ending.None);
 
     // Configure the trigger bindings
