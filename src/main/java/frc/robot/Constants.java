@@ -51,7 +51,6 @@ public final class Constants {
       kTurnI = 0.003,
       kTurnD = 0.003;
 
-    // TODO: Fix DriveDistance overshooting
     // DriveDistance
     public static final double kDistPosTolerance = 2; // Position tolerance (in inches)
     public static final double kDistVelTolerance = kDistPosTolerance; // Velocity tolerance (in inches/s)
@@ -87,7 +86,6 @@ public final class Constants {
     public static final double kUpPos = 0.003;
     public static final double kDownPos = 0.29;
     public static final double kPosTolerance = 0.015;
-    // TODO: Test and tune position threshold
     public static final double kUpPosThreshold = 0.025; // Maximum threshold to be at the up position
 
     // Intake tilt PID gains

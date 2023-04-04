@@ -77,7 +77,6 @@ public class RobotContainer {
     OI.pigeon.configMountPose(0, -0.1978197, -179.08374);
     OI.pigeon.setYaw(0);
 
-    // TODO: Test modular autos
     // Configure autonomous choices
     m_autonStarterChooser.addOption("Shoot", Autos.Starter.Shoot);
     m_autonStarterChooser.addOption("Spit", Autos.Starter.Spit);
