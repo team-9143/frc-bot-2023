@@ -85,7 +85,7 @@ public class IntakeTilt extends PIDSubsystem {
     ).schedule();
   }
 
-  // TODO: Stop based on position, not time passed
+  // TODO: Add holding speed to keep intake in place
   public Command getAimMidCommand() {
     return new FunctionalCommand(
       () -> {

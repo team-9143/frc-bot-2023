@@ -84,9 +84,9 @@ public final class Constants {
 
     // Preset positions and tolerances (in rotations)
     public static final double kUpPos = 0.003;
-    public static final double kMidPos = 0.15; // TODO: Test mid position
+    public static final double kMidPos = 0.14;
     public static final double kDownPos = 0.29;
-    public static final double kPosTolerance = 0.015;
+    public static final double kPosTolerance = 0.025;
 
     // Maximum threshold to be considered at a position (in rotations)
     public static final double kUpPosThreshold = 0.025; // Large to account for play in the up position
