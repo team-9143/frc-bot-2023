@@ -197,13 +197,13 @@ public class RobotContainer {
       .withSize(5, 2)
       .withWidget(BuiltInWidgets.kNumberBar)
       .withProperties(Map.of("min", -250, "max", 250, "center", 0));
-  
+
     test_tab.addDouble("TurnToAngle Error", cTurnToAngle.getController()::getPositionError)
       .withPosition(8, 2)
       .withSize(5, 2)
       .withWidget(BuiltInWidgets.kNumberBar)
       .withProperties(Map.of("min", -180, "max", 180, "center", 0));
-    
+
     test_tab.addDouble("DriveDistance Error", cDriveDistance.getController()::getPositionError)
       .withPosition(8, 4)
       .withSize(5, 2)

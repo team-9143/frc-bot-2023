@@ -100,7 +100,7 @@ public final class Autos {
         return new SequentialCommandGroup(
           new TurnToAngle(sDrivetrain, 180),
           new InstantCommand(sIntakeWheels::invert),
-          
+
           new ParallelCommandGroup(
             new IntakeDown(sIntakeTilt),
             sIntakeWheels.getIntakeCommand(),

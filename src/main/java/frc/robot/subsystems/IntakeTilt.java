@@ -33,10 +33,10 @@ public class IntakeTilt extends PIDSubsystem {
     l_encoder.setVelocityConversionFactor(PhysConstants.kTiltGearbox);
     r_encoder.setPositionConversionFactor(PhysConstants.kTiltGearbox);
     r_encoder.setVelocityConversionFactor(PhysConstants.kTiltGearbox);
-    
+
     l_encoder.setMeasurementPeriod(20);
     r_encoder.setMeasurementPeriod(20);
-    
+
     l_encoder.setPosition(0);
     r_encoder.setPosition(0);
 
