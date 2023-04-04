@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
@@ -80,7 +81,6 @@ public final class Autos {
       case ShortEscape:
         return ShortEscape(sDrivetrain);
       case PickupCone:
-        // TODO: Test
         return PickupCone(sDrivetrain, sIntakeTilt, sIntakeWheels);
       case CenterOver:
         return CenterOver(sDrivetrain);
@@ -116,13 +116,16 @@ public final class Autos {
   private static Command PickupCone(Drivetrain sDrivetrain, IntakeTilt sIntakeTilt, IntakeWheels sIntakeWheels) {
     return new SequentialCommandGroup(
       new TurnToAngle(sDrivetrain, 180),
-      new DriveDistance(sDrivetrain, 180), // Move near cone
+      new DriveDistance(sDrivetrain, 165), // Move near cone
       new InstantCommand(sIntakeWheels::invert),
 
       new ParallelCommandGroup(
         new IntakeDown(sIntakeTilt),
         sIntakeWheels.getIntakeCommand(),
-        new RunCommand(() -> sDrivetrain.moveStraight(0.2), sDrivetrain)
+        new SequentialCommandGroup(
+          new WaitCommand(2.5),
+          new RunCommand(() -> sDrivetrain.moveStraight(0.1), sDrivetrain)
+        )
       ).until(() -> sDrivetrain.getAvgPosition() >= 204),
 
       new IntakeUp(sIntakeTilt).until(sIntakeTilt::atUpPos)
