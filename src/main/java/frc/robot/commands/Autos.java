@@ -26,20 +26,20 @@ public final class Autos {
   public static enum Body {
     LongEscape,
     ShortEscape,
+    PickupCone,
     CenterOver,
     CenterSimple,
     None
   }
   public static enum Ending {
     TurnAround,
-    PickupCone,
     None
   }
 
   public static Command getAuto(Starter starter, Body body, Ending end, IntakeTilt sIntakeTilt, IntakeWheels sIntakeWheels, Drivetrain sDrivetrain) {
     return new SequentialCommandGroup(
       getStarter(starter, sIntakeTilt, sIntakeWheels).raceWith(new RunCommand(sDrivetrain::stop, sDrivetrain)),
-      getBody(body, sDrivetrain),
+      getBody(body, sDrivetrain, sIntakeTilt, sIntakeWheels),
       getEnd(end, sDrivetrain, sIntakeTilt, sIntakeWheels)
     );
   }
@@ -73,12 +73,15 @@ public final class Autos {
   }
 
   /** A command contining the main body of the auton. Moves the drivetrain. */
-  private static Command getBody(Body body, Drivetrain sDrivetrain) {
+  private static Command getBody(Body body, Drivetrain sDrivetrain, IntakeTilt sIntakeTilt, IntakeWheels sIntakeWheels) {
     switch (body) {
       case LongEscape:
         return LongEscape(sDrivetrain);
       case ShortEscape:
         return ShortEscape(sDrivetrain);
+      case PickupCone:
+        // TODO: Test
+        return PickupCone(sDrivetrain, sIntakeTilt, sIntakeWheels);
       case CenterOver:
         return CenterOver(sDrivetrain);
       case CenterSimple:
@@ -94,21 +97,6 @@ public final class Autos {
       case TurnAround:
         // Turn 180 degrees
         return new TurnToAngle(sDrivetrain, 180);
-      case PickupCone:
-        // TODO: Test
-        // Turn around and pickup a cone (inverts the intake wheels)
-        return new SequentialCommandGroup(
-          new TurnToAngle(sDrivetrain, 180),
-          new InstantCommand(sIntakeWheels::invert),
-
-          new ParallelCommandGroup(
-            new IntakeDown(sIntakeTilt),
-            sIntakeWheels.getIntakeCommand(),
-            new RunCommand(() -> sDrivetrain.moveStraight(0.2), sDrivetrain)
-          ).withTimeout(3),
-
-          new IntakeUp(sIntakeTilt)
-        );
       default:
         return new InstantCommand();
     }
@@ -122,6 +110,23 @@ public final class Autos {
   /** Drive backwards out of the community's shorter side */
   private static Command ShortEscape(Drivetrain sDrivetrain) {
     return new DriveDistance(sDrivetrain, -90);
+  }
+
+  /** Turn around and pickup a cone (inverts the intake wheels) */
+  private static Command PickupCone(Drivetrain sDrivetrain, IntakeTilt sIntakeTilt, IntakeWheels sIntakeWheels) {
+    return new SequentialCommandGroup(
+      new TurnToAngle(sDrivetrain, 180),
+      new DriveDistance(sDrivetrain, 180), // Move near cone
+      new InstantCommand(sIntakeWheels::invert),
+
+      new ParallelCommandGroup(
+        new IntakeDown(sIntakeTilt),
+        sIntakeWheels.getIntakeCommand(),
+        new RunCommand(() -> sDrivetrain.moveStraight(0.2), sDrivetrain)
+      ).until(() -> sDrivetrain.getAvgPosition() >= 204),
+
+      new IntakeUp(sIntakeTilt).until(sIntakeTilt::atUpPos)
+    );
   }
 
   /** Drive backwards over the charge station, then drive back and balance */

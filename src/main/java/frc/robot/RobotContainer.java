@@ -87,12 +87,12 @@ public class RobotContainer {
 
     m_autonBodyChooser.addOption("Long Backward", Autos.Body.LongEscape);
     m_autonBodyChooser.addOption("Short Backward", Autos.Body.ShortEscape);
+    m_autonBodyChooser.addOption("Pickup Cone", Autos.Body.PickupCone);
     m_autonBodyChooser.addOption("Center Over Backward", Autos.Body.CenterOver);
     m_autonBodyChooser.addOption("Center Backward", Autos.Body.CenterSimple);
     m_autonBodyChooser.setDefaultOption("None", Autos.Body.None);
 
     m_autonEndChooser.addOption("Turn Around", Autos.Ending.TurnAround);
-    m_autonEndChooser.addOption("Pickup Cone", Autos.Ending.PickupCone);
     m_autonEndChooser.setDefaultOption("None", Autos.Ending.None);
 
     // Configure the trigger bindings
