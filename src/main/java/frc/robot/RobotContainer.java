@@ -42,7 +42,7 @@ public class RobotContainer {
 
   private final Balance cBalance = new Balance(sDrivetrain);
   private final TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain);
-  private final DriveDistance cDriveDistance = new DriveDistance(sDrivetrain); //Only for shuffleboard
+  private final DriveDistance cDriveDistance = new DriveDistance(sDrivetrain); // Only for shuffleboard
   private final IntakeDown cIntakeDown = new IntakeDown(sIntakeTilt);
   private final IntakeUp cIntakeUp = new IntakeUp(sIntakeTilt);
   private final Command cIntake = sIntakeWheels.getIntakeCommand();
@@ -79,6 +79,21 @@ public class RobotContainer {
     OI.pigeon.setYaw(0);
 
     // Configure autonomous choices
+    configureChoosers();
+
+    // Configure the trigger bindings
+    configureBindings();
+
+    // TODO: Test checklists with addStringArray()
+    // Initialize Shuffleboard
+    configureDriveTab();
+    configureTestTab();
+    configureMatchChecklistTab();
+    configurePitChecklistTab();
+    Shuffleboard.disableActuatorWidgets();
+  }
+
+  private void configureChoosers() {
     m_autonStarterChooser.addOption("Shoot", Autos.Starter.Shoot);
     m_autonStarterChooser.addOption("Spit", Autos.Starter.Spit);
     m_autonStarterChooser.addOption("Shoot Down", Autos.Starter.ShootDown);
@@ -94,17 +109,6 @@ public class RobotContainer {
 
     m_autonEndChooser.addOption("Turn Around", Autos.Ending.TurnAround);
     m_autonEndChooser.setDefaultOption("None", Autos.Ending.None);
-
-    // Configure the trigger bindings
-    configureBindings();
-
-    // TODO: Test checklists with addStringArray()
-    // Initialize Shuffleboard
-    configureDriveTab();
-    configureTestTab();
-    configureMatchChecklistTab();
-    configurePitChecklistTab();
-    Shuffleboard.disableActuatorWidgets();
   }
 
   private void configureDriveTab() {
