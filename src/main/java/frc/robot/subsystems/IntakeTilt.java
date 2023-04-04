@@ -67,6 +67,10 @@ public class IntakeTilt extends PIDSubsystem {
     return Math.abs(getMeasurement() - IntakeConstants.kUpPos) < IntakeConstants.kUpPosThreshold;
   }
 
+  public boolean atMidPos() {
+    return Math.abs(getMeasurement() - IntakeConstants.kMidPos) < IntakeConstants.kMidPosThreshold;
+  }
+
   public void autoAlign() {
     new FunctionalCommand(
       () -> useOutput(IntakeConstants.kAutoAlignSpeed, IntakeConstants.kUpPos),
@@ -82,13 +86,16 @@ public class IntakeTilt extends PIDSubsystem {
   }
 
   // TODO: Stop based on position, not time passed
-    return startEnd(
   public Command getAimMidCommand() {
+    return new FunctionalCommand(
       () -> {
         disable();
         useOutput(IntakeConstants.kDownSpeed, 0);
       },
-      this::disable
-    ).withTimeout(IntakeConstants.kAimDownTimer);
+      () -> {},
+      interrupted -> disable(),
+      this::atMidPos,
+      this
+    );
   }
 }
