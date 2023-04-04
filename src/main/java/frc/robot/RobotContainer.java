@@ -22,10 +22,10 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import java.util.Map;
 
 /**
@@ -90,7 +90,7 @@ public class RobotContainer {
     m_autonBodyChooser.addOption("Center Over Backward", Autos.Body.CenterOver);
     m_autonBodyChooser.addOption("Center Backward", Autos.Body.CenterSimple);
     m_autonBodyChooser.setDefaultOption("None", Autos.Body.None);
-    
+
     m_autonEndChooser.addOption("Turn Around", Autos.Ending.TurnAround);
     m_autonEndChooser.setDefaultOption("None", Autos.Ending.None);
 
@@ -108,7 +108,13 @@ public class RobotContainer {
 
   private void configureDriveTab() {
     ShuffleboardTab drive_tab = Shuffleboard.getTab("Drive");
+
+    // TODO: Fully implement
     UsbCamera camera = CameraServer.startAutomaticCapture();
+    Shuffleboard.getTab("Camera Test").addCamera("Camera", camera.getName(), camera.getPath())
+      .withWidget(BuiltInWidgets.kCameraStream)
+      .withProperties(Map.of("show crosshair", false, "Rotation", "HALF"));
+
     drive_tab.add("Auton Starter", m_autonStarterChooser)
       .withPosition(3, 5)
       .withSize(3, 2)
@@ -155,8 +161,6 @@ public class RobotContainer {
     layout_2.addDouble("Intake Angle", () -> sIntakeTilt.getMeasurement() * 360)
       .withWidget(BuiltInWidgets.kDial)
       .withProperties(Map.of("min", -110, "max", 110, "show value", false));
-
-    drive_tab.addCamera("Camera", camera.getName(), camera.getPath()).withWidget(BuiltInWidgets.kCameraStream).withProperties(Map.of("Rotation", "HALF"));
   }
 
   private void configureTestTab() {
@@ -327,7 +331,6 @@ public class RobotContainer {
       (Math.abs(OI.driver_cntlr.getRightX()) > 0.2 || Math.abs(OI.driver_cntlr.getRightY()) > 0.2)
     )
       .whileTrue(new RunCommand(() -> {
-        // TODO: Test
         cTurnToAngle.setHeading(Math.toDegrees(Math.atan2(OI.driver_cntlr.getRightY(), OI.driver_cntlr.getRightX())) + 90);
         cTurnToAngle.schedule();
       }));
