@@ -48,8 +48,8 @@ public final class Constants {
     public static final double kTurnMaxSpeed = 0.75;
     public static final double
       kTurnP = 0.008,
-      kTurnI = 0.004,
-      kTurnD = 0.0025;
+      kTurnI = 0.003,
+      kTurnD = 0.003;
 
     // TODO: Fix DriveDistance overshooting
     // DriveDistance
@@ -57,8 +57,8 @@ public final class Constants {
     public static final double kDistVelTolerance = kDistPosTolerance; // Velocity tolerance (in inches/s)
     public static final double kDistMaxSpeed = 0.4; // Time efficiency is unnecessary, high traction is priority
     public static final double
-      kDistP = 0.01,
-      kDistI = 0.00005,
+      kDistP = 0.04,
+      kDistI = 0.00003,
       kDistD = 0.007;
 
     // Charge station balancing
@@ -72,7 +72,7 @@ public final class Constants {
     // Wheel speed
     public static double kIntakeSpeed = 0.3;
     public static double kOuttakeSpeed = -1;
-    public static double kSpitSpeed = -0.4;
+    public static double kSpitSpeed = -0.3;
     public static double kHoldingSpeed = 0.05;
 
     // Non-PID intake movement
