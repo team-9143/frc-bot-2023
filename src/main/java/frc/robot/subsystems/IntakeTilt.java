@@ -69,8 +69,8 @@ public class IntakeTilt extends PIDSubsystem {
 
   public void autoAlign() {
     new FunctionalCommand(
-      () -> {},
       () -> useOutput(IntakeConstants.kAutoAlignSpeed, IntakeConstants.kUpPos),
+      () -> {},
       interrupted -> {
         // TODO: Test and tune up position offset (currently 9 degrees back)
         l_encoder.setPosition(IntakeConstants.kUpPos - 0.025);
