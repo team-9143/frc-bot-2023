@@ -15,10 +15,11 @@ import frc.robot.subsystems.Drivetrain;
 public class TurnToAngle extends PIDCommand {
   public static boolean m_enabled = false;
   private static double m_heading = 0;
+  private static final PIDController m_controller = new PIDController(DrivetrainConstants.kTurnP, DrivetrainConstants.kTurnI, DrivetrainConstants.kTurnD);
 
   public TurnToAngle(Drivetrain drivetrain) {
     super(
-      new PIDController(DrivetrainConstants.kTurnP, DrivetrainConstants.kTurnI, DrivetrainConstants.kTurnD),
+      m_controller,
       () -> -OI.pigeon.getYaw(),
       () -> m_heading,
       output -> drivetrain.turnInPlace(Math.max(-DrivetrainConstants.kTurnMaxSpeed, Math.min(output, DrivetrainConstants.kTurnMaxSpeed)))

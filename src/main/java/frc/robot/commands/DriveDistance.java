@@ -14,10 +14,11 @@ import frc.robot.subsystems.Drivetrain;
 public class DriveDistance extends PIDCommand {
   private final Drivetrain drivetrain;
   private static double m_distance = 0; // In inches
+  private static final PIDController m_controller = new PIDController(DrivetrainConstants.kDistP, DrivetrainConstants.kDistI, DrivetrainConstants.kDistD);
 
   public DriveDistance(Drivetrain drivetrain) {
     super(
-      new PIDController(DrivetrainConstants.kDistP, DrivetrainConstants.kDistI, DrivetrainConstants.kDistD),
+      m_controller,
       drivetrain::getAvgPosition,
       () -> m_distance,
       output -> drivetrain.moveStraight(Math.max(-DrivetrainConstants.kDistMaxSpeed, Math.min(output, DrivetrainConstants.kDistMaxSpeed)))

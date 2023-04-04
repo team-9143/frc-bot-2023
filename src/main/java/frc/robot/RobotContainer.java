@@ -42,6 +42,7 @@ public class RobotContainer {
 
   private final Balance cBalance = new Balance(sDrivetrain);
   private final TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain);
+  private final DriveDistance cDriveDistance = new DriveDistance(sDrivetrain); //Only for shuffleboard
   private final IntakeDown cIntakeDown = new IntakeDown(sIntakeTilt);
   private final IntakeUp cIntakeUp = new IntakeUp(sIntakeTilt);
   private final Command cIntake = sIntakeWheels.getIntakeCommand();
@@ -109,10 +110,10 @@ public class RobotContainer {
     ShuffleboardTab drive_tab = Shuffleboard.getTab("Drive");
 
     // TODO: Fully implement
-    UsbCamera camera = CameraServer.startAutomaticCapture();
-    Shuffleboard.getTab("Camera Test").addCamera("Camera", camera.getName(), camera.getPath())
-      .withWidget(BuiltInWidgets.kCameraStream)
-      .withProperties(Map.of("show crosshair", false, "Rotation", "HALF"));
+    // UsbCamera camera = CameraServer.startAutomaticCapture();
+    // Shuffleboard.getTab("Camera Test").addCamera("Camera", camera.getName(), camera.getPath())
+    //   .withWidget(BuiltInWidgets.kCameraStream)
+    //   .withProperties(Map.of("show crosshair", false, "Rotation", "HALF"));
 
     drive_tab.add("Auton Starter", m_autonStarterChooser)
       .withPosition(3, 5)
@@ -176,9 +177,7 @@ public class RobotContainer {
     )
       .withWidget(BuiltInWidgets.kDial)
       .withProperties(Map.of("min", -110, "max", 110, "show value", true));
-    layout_1.addDouble("Error", () ->
-      (((cIntakeDown.isScheduled()) ? Constants.IntakeConstants.kDownPos : Constants.IntakeConstants.kUpPos) - sIntakeTilt.getMeasurement()) * 360
-    )
+    layout_1.addDouble("Error", () -> sIntakeTilt.getController().getPositionError() * 360)
       .withWidget(BuiltInWidgets.kNumberBar)
       .withProperties(Map.of("min", -110, "max", 110, "center", 0));
 
@@ -192,11 +191,23 @@ public class RobotContainer {
     layout_2.addBoolean("Upright", sIntakeTilt::atUpPos)
       .withWidget(BuiltInWidgets.kBooleanBox);
 
-    test_tab.addDouble("Wheel RPM", sIntakeWheels::getVelocity)
+    test_tab.addDouble("Intake Wheel RPM", sIntakeWheels::getVelocity)
       .withPosition(8, 0)
       .withSize(5, 2)
       .withWidget(BuiltInWidgets.kNumberBar)
       .withProperties(Map.of("min", -250, "max", 250, "center", 0));
+  
+    test_tab.addDouble("TurnToAngle Error", cTurnToAngle.getController()::getPositionError)
+      .withPosition(8, 2)
+      .withSize(5, 2)
+      .withWidget(BuiltInWidgets.kNumberBar)
+      .withProperties(Map.of("min", -180, "max", 180, "center", 0));
+    
+    test_tab.addDouble("DriveDistance Error", cDriveDistance.getController()::getPositionError)
+      .withPosition(8, 4)
+      .withSize(5, 2)
+      .withWidget(BuiltInWidgets.kNumberBar)
+      .withProperties(Map.of("min", -150, "max", 150, "center", 0));
   }
 
   private void configureMatchChecklistTab() {

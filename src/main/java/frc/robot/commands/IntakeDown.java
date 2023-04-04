@@ -13,10 +13,11 @@ import frc.robot.subsystems.IntakeTilt;
 
 public class IntakeDown extends PIDCommand {
   private final IntakeTilt intakeTilt;
+  private static final PIDController m_controller = new PIDController(IntakeConstants.kDownP, IntakeConstants.kDownI, IntakeConstants.kDownD);
 
   public IntakeDown(IntakeTilt intakeTilt) {
     super(
-      new PIDController(IntakeConstants.kDownP, IntakeConstants.kDownI, IntakeConstants.kDownD),
+      m_controller,
       intakeTilt::getMeasurement,
       () -> IntakeConstants.kDownPos,
       output -> intakeTilt.useOutput(output, IntakeConstants.kDownPos)
