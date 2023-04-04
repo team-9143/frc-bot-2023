@@ -41,6 +41,13 @@ public class IntakeWheels extends SubsystemBase {
 
   public double getVelocity() {return intake_encoder.getVelocity();}
 
+  public void invert() {
+    IntakeConstants.kIntakeSpeed *= -1;
+    IntakeConstants.kOuttakeSpeed *= -1;
+    IntakeConstants.kSpitSpeed *= -1;
+    IntakeConstants.kHoldingSpeed *= -1;
+  }
+
   // Stops all motors
   public void stop() {
     intake_motor.stopMotor();

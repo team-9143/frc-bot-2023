@@ -368,10 +368,7 @@ public class RobotContainer {
     // Button 'A' will swap intake and outtake (for cones)
     new JoystickButton(OI.operator_cntlr, OI.Controller.btn.A.val)
       .onTrue(new InstantCommand(() -> {
-        Constants.IntakeConstants.kIntakeSpeed *= -1;
-        Constants.IntakeConstants.kOuttakeSpeed *= -1;
-        Constants.IntakeConstants.kSpitSpeed *= -1;
-        Constants.IntakeConstants.kHoldingSpeed *= -1;
+        sIntakeWheels.invert();
 
         if (cIntake.isScheduled() || cManualHold.isScheduled()) {
           sIntakeWheels.set(-sIntakeWheels.get());
