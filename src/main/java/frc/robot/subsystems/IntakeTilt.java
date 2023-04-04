@@ -78,10 +78,10 @@ public class IntakeTilt extends PIDSubsystem {
       },
       () -> (l_motor.getOutputCurrent() > IntakeConstants.kMaxCurrent) || (r_motor.getOutputCurrent() > IntakeConstants.kMaxCurrent),
       this
-    )
-    .schedule();
+    ).schedule();
   }
 
+  // TODO: Stop based on position, not time passed
   public Command getAimDownCommand() {
     return startEnd(
       () -> {
@@ -89,7 +89,6 @@ public class IntakeTilt extends PIDSubsystem {
         useOutput(IntakeConstants.kDownSpeed, 0);
       },
       this::disable
-    )
-    .withTimeout(IntakeConstants.kAimDownTimer);
+    ).withTimeout(IntakeConstants.kAimDownTimer);
   }
 }
