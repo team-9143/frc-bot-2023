@@ -29,11 +29,20 @@ public final class Autos {
     CenterSimple,
     None
   }
-
-  public static Command getAuto(Starter starter, Body body, IntakeTilt sIntakeTilt, IntakeWheels sIntakeWheels, Drivetrain sDrivetrain) {
-    return new SequentialCommandGroup(getStarter(starter, sIntakeTilt, sIntakeWheels), getBody(body, sDrivetrain));
+  public static enum Ending {
+    TurnAround,
+    None
   }
 
+  public static Command getAuto(Starter starter, Body body, Ending end, IntakeTilt sIntakeTilt, IntakeWheels sIntakeWheels, Drivetrain sDrivetrain) {
+    return new SequentialCommandGroup(
+      getStarter(starter, sIntakeTilt, sIntakeWheels).raceWith(new RunCommand(sDrivetrain::stop, sDrivetrain)),
+      getBody(body, sDrivetrain),
+      getEnd(end, sDrivetrain)
+    );
+  }
+
+  /** A command to handle the preloaded game piece. Does not move the drivetrain. */
   private static Command getStarter(Starter starter, IntakeTilt sIntakeTilt, IntakeWheels sIntakeWheels) {
     switch (starter) {
       case Shoot:
@@ -47,20 +56,21 @@ public final class Autos {
         return new SequentialCommandGroup(
           sIntakeTilt.getAimDownCommand(),
           sIntakeWheels.getShootCommand().withTimeout(0.5),
-          new InstantCommand(new IntakeUp(sIntakeTilt)::schedule)
+          new IntakeUp(sIntakeTilt).until(sIntakeTilt::atUpPos)
         );
       case SpitDown:
         // Aim down, spit, then start moving intake up
         return new SequentialCommandGroup(
           sIntakeTilt.getAimDownCommand(),
           sIntakeWheels.getSpitCommand().withTimeout(0.5),
-          new InstantCommand(new IntakeUp(sIntakeTilt)::schedule)
+          new IntakeUp(sIntakeTilt).until(sIntakeTilt::atUpPos)
         );
       default:
         return new InstantCommand();
     }
   }
 
+  /** A command contining the main body of the auton. Moves the drivetrain. */
   private static Command getBody(Body body, Drivetrain sDrivetrain) {
     switch (body) {
       case LongEscape:
@@ -71,6 +81,17 @@ public final class Autos {
         return CenterOverBody(sDrivetrain);
       case CenterSimple:
         return CenterSimpleBody(sDrivetrain);
+      default:
+        return new InstantCommand();
+    }
+  }
+
+  /** A command for the end of the auton. Moves the drivetrain */
+  private static Command getEnd(Ending end, Drivetrain sDrivetrain) {
+    switch (end) {
+      case TurnAround:
+        // Turn 180 degrees
+        return new TurnToAngle(sDrivetrain, OI.pigeon.getYaw() + 180);
       default:
         return new InstantCommand();
     }

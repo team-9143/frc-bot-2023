@@ -63,9 +63,10 @@ public class RobotContainer {
   // Dashboard declarations
   private final SendableChooser<Autos.Body> m_autonBodyChooser = new SendableChooser<Autos.Body>();
   private final SendableChooser<Autos.Starter> m_autonStarterChooser = new SendableChooser<Autos.Starter>();
+  private final SendableChooser<Autos.Ending> m_autonEndChooser = new SendableChooser<Autos.Ending>();
   private final GenericEntry m_startingAngle =
     Shuffleboard.getTab("Drive").add("Starting Angle", 180)
-      .withPosition(3, 5)
+      .withPosition(1, 5)
       .withSize(2, 2)
       .withWidget(BuiltInWidgets.kTextView)
       .getEntry();
@@ -89,6 +90,9 @@ public class RobotContainer {
     m_autonBodyChooser.addOption("Center Over Backward", Autos.Body.CenterOver);
     m_autonBodyChooser.addOption("Center Backward", Autos.Body.CenterSimple);
     m_autonBodyChooser.setDefaultOption("None", Autos.Body.None);
+    
+    m_autonEndChooser.addOption("Turn Around", Autos.Ending.TurnAround);
+    m_autonEndChooser.setDefaultOption("None", Autos.Ending.None);
 
     // Configure the trigger bindings
     configureBindings();
@@ -106,12 +110,16 @@ public class RobotContainer {
     ShuffleboardTab drive_tab = Shuffleboard.getTab("Drive");
     UsbCamera camera = CameraServer.startAutomaticCapture();
     drive_tab.add("Auton Starter", m_autonStarterChooser)
-      .withPosition(5, 5)
-      .withSize(4, 2)
+      .withPosition(3, 5)
+      .withSize(3, 2)
       .withWidget(BuiltInWidgets.kComboBoxChooser);
     drive_tab.add("Auton Body", m_autonBodyChooser)
+      .withPosition(6, 5)
+      .withSize(3, 2)
+      .withWidget(BuiltInWidgets.kComboBoxChooser);
+    drive_tab.add("Auton Ending", m_autonEndChooser)
       .withPosition(9, 5)
-      .withSize(4, 2)
+      .withSize(3, 2)
       .withWidget(BuiltInWidgets.kComboBoxChooser);
 
     drive_tab.addDouble("Docking Angle", OI.pigeon::getPitch)
@@ -429,8 +437,8 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // Autos start backwards, so robot yaw should be backward
-    return Autos.getAuto(m_autonStarterChooser.getSelected(), m_autonBodyChooser.getSelected(), sIntakeTilt, sIntakeWheels, sDrivetrain)
-      .beforeStarting(() -> OI.pigeon.setYaw(-m_startingAngle.getDouble(180)));
+    return Autos.getAuto(m_autonStarterChooser.getSelected(), m_autonBodyChooser.getSelected(), m_autonEndChooser.getSelected(), sIntakeTilt, sIntakeWheels, sDrivetrain)
+      .andThen(() -> OI.pigeon.setYaw(-m_startingAngle.getDouble(180)));
   }
 
   /** Stops all motors and disables PID controllers */
