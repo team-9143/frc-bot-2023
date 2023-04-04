@@ -392,8 +392,8 @@ public class RobotContainer {
       ));
 
     // D-pad up will move down and shoot
-    new Trigger(() -> sIntakeTilt.atUpPos() && OI.operator_cntlr.getPOV() == 0)
-      .onTrue(cAimDown)
+    new Trigger(() -> OI.operator_cntlr.getPOV() == 0)
+      .onTrue(new InstantCommand(() -> {if (sIntakeTilt.atUpPos()) {cAimDown.schedule();}}))
       .onFalse(cIntakeUp)
     .debounce(Constants.IntakeConstants.kAimDownTimer)
       .whileTrue(cShoot);
@@ -403,8 +403,8 @@ public class RobotContainer {
       .whileTrue(cSpit);
 
     // D-pad down will move down and spit
-    new Trigger(() -> sIntakeTilt.atUpPos() && OI.operator_cntlr.getPOV() == 180)
-      .onTrue(cAimDown)
+    new Trigger(() -> OI.operator_cntlr.getPOV() == 180)
+      .onTrue(new InstantCommand(() -> {if (sIntakeTilt.atUpPos()) {cAimDown.schedule();}}))
       .onFalse(cIntakeUp)
     .debounce(Constants.IntakeConstants.kAimDownTimer)
       .whileTrue(cSpit);
