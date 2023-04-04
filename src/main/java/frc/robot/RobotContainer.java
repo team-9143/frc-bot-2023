@@ -7,6 +7,8 @@ package frc.robot;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
@@ -54,11 +56,11 @@ public class RobotContainer {
     sIntakeWheels::stop,
     sIntakeWheels
   );
-  private final Command cStop = new RunCommand(() -> {
+  private final Command cStop = new InstantCommand(() -> {
     sDrivetrain.stop();
     sIntakeWheels.stop();
     sIntakeTilt.disable();
-    cTurnToAngle.cancel();
+    CommandScheduler.getInstance().cancelAll();
   });
 
   // Dashboard declarations
@@ -458,6 +460,6 @@ public class RobotContainer {
 
   /** Stops all motors and disables PID controllers */
   public void stop() {
-    cStop.execute();
+    cStop.initialize();
   }
 }
