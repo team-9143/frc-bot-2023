@@ -54,14 +54,14 @@ public final class Autos {
         // Spit
         return sIntakeWheels.getSpitCommand().withTimeout(0.5);
       case ShootDown:
-        // Aim down, shoot, then start moving intake up
+        // Aim down, shoot, then move intake up
         return new SequentialCommandGroup(
           sIntakeTilt.getAimDownCommand(),
           sIntakeWheels.getShootCommand().withTimeout(0.5),
           new IntakeUp(sIntakeTilt).until(sIntakeTilt::atUpPos)
         );
       case SpitDown:
-        // Aim down, spit, then start moving intake up
+        // Aim down, spit, then move intake up
         return new SequentialCommandGroup(
           sIntakeTilt.getAimDownCommand(),
           sIntakeWheels.getSpitCommand().withTimeout(0.5),
@@ -76,13 +76,13 @@ public final class Autos {
   private static Command getBody(Body body, Drivetrain sDrivetrain) {
     switch (body) {
       case LongEscape:
-        return LongEscapeBody(sDrivetrain);
+        return LongEscape(sDrivetrain);
       case ShortEscape:
-        return ShortEscapeBody(sDrivetrain);
+        return ShortEscape(sDrivetrain);
       case CenterOver:
-        return CenterOverBody(sDrivetrain);
+        return CenterOver(sDrivetrain);
       case CenterSimple:
-        return CenterSimpleBody(sDrivetrain);
+        return CenterSimple(sDrivetrain);
       default:
         return new InstantCommand();
     }
@@ -115,17 +115,17 @@ public final class Autos {
   }
 
   /** Drive backwards out of the community's longer side */
-  private static Command LongEscapeBody(Drivetrain sDrivetrain) {
+  private static Command LongEscape(Drivetrain sDrivetrain) {
     return new DriveDistance(sDrivetrain, -150);
   }
 
   /** Drive backwards out of the community's shorter side */
-  private static Command ShortEscapeBody(Drivetrain sDrivetrain) {
+  private static Command ShortEscape(Drivetrain sDrivetrain) {
     return new DriveDistance(sDrivetrain, -90);
   }
 
   /** Drive backwards over the charge station, then drive back and balance */
-  private static Command CenterOverBody(Drivetrain sDrivetrain) {
+  private static Command CenterOver(Drivetrain sDrivetrain) {
     return new SequentialCommandGroup(
       // Move back until pitch is greater than 10
       new FunctionalCommand(
@@ -163,7 +163,7 @@ public final class Autos {
   }
 
   /** Drive backwards to the charge station and balance */
-  private static Command CenterSimpleBody(Drivetrain sDrivetrain) {
+  private static Command CenterSimple(Drivetrain sDrivetrain) {
     return new SequentialCommandGroup(
       // Move back until pitch is greater than 10
       new FunctionalCommand(
