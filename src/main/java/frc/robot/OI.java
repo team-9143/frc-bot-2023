@@ -84,7 +84,7 @@ public class OI {
     @Override
     public void initSendable(SendableBuilder builder) {
       builder.setSmartDashboardType("Gyro");
-      builder.addDoubleProperty("Value", () -> -gyro.getYaw(), null);
+      builder.addDoubleProperty("Value", () -> -gyro.getYaw() % 360, null);
     }
 
     @Override

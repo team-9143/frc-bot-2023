@@ -62,7 +62,7 @@ public class RobotContainer {
   private final SendableChooser<Autos.Body> m_autonBodyChooser = new SendableChooser<Autos.Body>();
   private final SendableChooser<Autos.Starter> m_autonStarterChooser = new SendableChooser<Autos.Starter>();
   private final GenericEntry m_startingAngle =
-    Shuffleboard.getTab("Drive").add("Starting Angle CW", 180)
+    Shuffleboard.getTab("Drive").add("Starting Angle", 180)
       .withPosition(3, 5)
       .withSize(2, 2)
       .withWidget(BuiltInWidgets.kTextView)
@@ -81,7 +81,7 @@ public class RobotContainer {
     m_autonStarterChooser.addOption("Shoot Down", Autos.Starter.ShootDown);
     m_autonStarterChooser.addOption("Spit Down", Autos.Starter.SpitDown);
     m_autonStarterChooser.setDefaultOption("None", Autos.Starter.None);
-    
+
     m_autonBodyChooser.addOption("Long Backward", Autos.Body.LongEscape);
     m_autonBodyChooser.addOption("Short Backward", Autos.Body.ShortEscape);
     m_autonBodyChooser.addOption("Center Over Backward", Autos.Body.CenterOver);
@@ -102,7 +102,7 @@ public class RobotContainer {
 
   private void configureDriveTab() {
     ShuffleboardTab drive_tab = Shuffleboard.getTab("Drive");
-   
+
     drive_tab.add("Auton Starter", m_autonStarterChooser)
       .withPosition(5, 5)
       .withSize(4, 2)
@@ -124,9 +124,9 @@ public class RobotContainer {
       .withWidget(BuiltInWidgets.kDifferentialDrive)
       .withProperties(Map.of("number of wheels", 6, "wheel diameter", 60, "show velocity vectors", true));
 
-    ShuffleboardLayout layout_1 = drive_tab.getLayout("Rotation", BuiltInLayouts.kList)
+    ShuffleboardLayout layout_1 = drive_tab.getLayout("Heading", BuiltInLayouts.kList)
       .withPosition(0, 0)
-      .withSize(4, 6);
+      .withSize(4, 5);
     layout_1.add("Gyro", new OI.PigeonSendable(OI.pigeon))
       .withWidget(BuiltInWidgets.kGyro)
       .withProperties(Map.of("major tick spacing", 45, "starting angle", 180, "show tick mark ring", true));
@@ -186,7 +186,7 @@ public class RobotContainer {
 
   private void configureMatchChecklistTab() {
     ShuffleboardTab match_tab = Shuffleboard.getTab("Match Checklist");
-    
+
     String[] robot_checklist = new String[]{
       "Bumpers are the correct match color",
       "Electrical pull test successful",
@@ -220,7 +220,7 @@ public class RobotContainer {
 
   private void configurePitChecklistTab() {
     ShuffleboardTab pit_tab = Shuffleboard.getTab("Pit Checklist");
-    
+
     String[] structural_checklist = new String[]{
       "All structural components are secured",
       "Bumpers are secured",
@@ -408,7 +408,7 @@ public class RobotContainer {
       .onFalse(cIntakeUp)
     .debounce(Constants.IntakeConstants.kAimDownTimer)
       .whileTrue(cSpit);
-    
+
     // D-pad left will hold pieces
     new Trigger(() -> OI.operator_cntlr.getPOV() == 270)
       .whileTrue(cManualHold);
