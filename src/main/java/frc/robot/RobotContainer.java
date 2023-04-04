@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import java.util.Map;
@@ -103,7 +104,7 @@ public class RobotContainer {
 
   private void configureDriveTab() {
     ShuffleboardTab drive_tab = Shuffleboard.getTab("Drive");
-    String camera = CameraServer.startAutomaticCapture().getPath();
+    UsbCamera camera = CameraServer.startAutomaticCapture();
     drive_tab.add("Auton Starter", m_autonStarterChooser)
       .withPosition(5, 5)
       .withSize(4, 2)
@@ -147,7 +148,7 @@ public class RobotContainer {
       .withWidget(BuiltInWidgets.kDial)
       .withProperties(Map.of("min", -110, "max", 110, "show value", false));
 
-    drive_tab.addCamera("Camera", "camera", camera).withWidget(BuiltInWidgets.kCameraStream).withProperties(Map.of("Rotation", "HALF"));
+    drive_tab.addCamera("Camera", camera.getName(), camera.getPath()).withWidget(BuiltInWidgets.kCameraStream).withProperties(Map.of("Rotation", "HALF"));
   }
 
   private void configureTestTab() {
