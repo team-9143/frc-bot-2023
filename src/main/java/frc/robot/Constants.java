@@ -15,7 +15,7 @@ package frc.robot;
  */
 public final class Constants {
   public static class PhysConstants {
-    public static final double kDrivetrainGearbox = 1/12.76; // TODO: Test and fix drivetrain gearbox ratio, 1 turn should be about 18.85 inches
+    public static final double kDrivetrainGearbox = 1/8.45;
     public static final double kTiltGearbox = (double) 1/35;
     public static final double kWheelGearbox = (double) 1/3;
 
