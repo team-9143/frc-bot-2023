@@ -333,9 +333,10 @@ public class RobotContainer {
 
     // Button 'Y' will toggle TurnToAngle
     new JoystickButton(OI.driver_cntlr, OI.Controller.btn.Y.val)
-      .onTrue(new InstantCommand(() ->
-        TurnToAngle.m_enabled ^= true
-      ));
+      .onTrue(new InstantCommand(() -> {
+        cTurnToAngle.cancel();
+        TurnToAngle.m_enabled ^= true;
+      }));
   }
 
   private void configureOperator() {
