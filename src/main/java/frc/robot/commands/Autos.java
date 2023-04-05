@@ -34,7 +34,9 @@ public final class Autos {
     None
   }
   public static enum Ending {
-    TurnAround,
+    TurnAway,
+    TurnClose,
+    ReturnToGrid,
     None
   }
 
@@ -97,9 +99,18 @@ public final class Autos {
   /** A command for the end of the auton. Moves the drivetrain. */
   private static Command getEnd(Ending end, Drivetrain sDrivetrain, IntakeTilt sIntakeTilt, IntakeWheels sIntakeWheels) {
     switch (end) {
-      case TurnAround:
-        // Turn 180 degrees
+      case TurnAway:
+        // Turn to face away from the drive station
         return new TurnToAngle(sDrivetrain, 180);
+      case TurnClose:
+        // Turn to face the drive station
+        return new TurnToAngle(sDrivetrain, 0);
+      case ReturnToGrid:
+        // Turn to face the drive station and move back to the grid (assumes only straight movement)
+        return new SequentialCommandGroup(
+          new TurnToAngle(sDrivetrain, 0),
+          new DriveDistance(sDrivetrain, 0)
+        );
       default:
         return new InstantCommand();
     }

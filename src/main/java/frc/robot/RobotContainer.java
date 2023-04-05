@@ -109,7 +109,9 @@ public class RobotContainer {
     m_autonBodyChooser.addOption("Center Backward", Autos.Body.CenterSimple);
     m_autonBodyChooser.setDefaultOption("None", Autos.Body.None);
 
-    m_autonEndChooser.addOption("Turn Around", Autos.Ending.TurnAround);
+    m_autonEndChooser.addOption("Turn Away", Autos.Ending.TurnAway);
+    m_autonEndChooser.addOption("Turn Close", Autos.Ending.TurnClose);
+    m_autonEndChooser.addOption("Straight Return", Autos.Ending.ReturnToGrid);
     m_autonEndChooser.setDefaultOption("None", Autos.Ending.None);
   }
 
