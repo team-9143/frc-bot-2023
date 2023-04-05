@@ -118,9 +118,9 @@ public final class Autos {
   /** Turn around and pickup a cone (inverts the intake wheels) */
   private static Command PickupCone(Drivetrain sDrivetrain, IntakeTilt sIntakeTilt, IntakeWheels sIntakeWheels) {
     return new SequentialCommandGroup(
-      new TurnToAngle(sDrivetrain, 180),
       new DriveDistance(sDrivetrain, 165), // Move near cone
-      new InstantCommand(sIntakeWheels::invert),
+      new TurnToAngle(sDrivetrain, 180),
+      new InstantCommand(() -> {if (IntakeConstants.kIntakeSpeed > 0) {sIntakeWheels.invert();}}),
 
       new ParallelCommandGroup(
         new IntakeDown(sIntakeTilt),
