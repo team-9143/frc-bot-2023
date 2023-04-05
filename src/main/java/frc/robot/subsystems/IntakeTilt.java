@@ -71,7 +71,7 @@ public class IntakeTilt extends PIDSubsystem {
       () -> useOutput(IntakeConstants.kAutoAlignSpeed, IntakeConstants.kUpPos),
       () -> {},
       interrupted -> {
-        // TODO: Test and tune up position offset (currently 9 degrees back)
+        // TODO(autoAlign): Test and tune up position offset (currently 9 degrees back)
         l_encoder.setPosition(IntakeConstants.kUpPos - 0.025);
         r_encoder.setPosition(IntakeConstants.kUpPos - 0.025);
       },

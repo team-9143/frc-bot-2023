@@ -86,7 +86,7 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
 
-    // TODO: Test checklists with addStringArray()
+    // TODO(low prio): Test checklists with addStringArray()
     // Initialize Shuffleboard
     configureDriveTab();
     configureTestTab();
@@ -116,7 +116,7 @@ public class RobotContainer {
   private void configureDriveTab() {
     ShuffleboardTab drive_tab = Shuffleboard.getTab("Drive");
 
-    // TODO: Fully implement
+    // TODO(? prio): Fully implement camera
     // UsbCamera camera = CameraServer.startAutomaticCapture();
     // Shuffleboard.getTab("Camera Test").addCamera("Camera", camera.getName(), camera.getPath())
     //   .withWidget(BuiltInWidgets.kCameraStream)

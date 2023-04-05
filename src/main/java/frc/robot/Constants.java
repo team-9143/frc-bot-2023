@@ -4,7 +4,7 @@
 
 package frc.robot;
 
-// TODO: DriveDistance and TurnToAngle gains must be tuned
+// TODO(HIGH prio): DriveDistance and TurnToAngle gains must be tuned
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -66,7 +66,7 @@ public final class Constants {
   }
 
   public static class IntakeConstants {
-    public static final double kTiltMaxSpeed = 0.7; // TODO: Lower max tilt motor speed
+    public static final double kTiltMaxSpeed = 0.7; // TODO(low prio): Lower max tilt motor speed
 
     // Wheel speed
     public static double kIntakeSpeed = 0.3;
@@ -80,7 +80,7 @@ public final class Constants {
     public static final double kSteadySpeed = -0.01; // TODO(HIGH prio): Tune tilt steady speed
     public static final double kAimMidTimer = 0.4; // Seconds to wait to aim mid
     public static final double kAutoAlignSpeed = -0.15;
-    // TODO: Test and tune maximum current against NEO specs
+    // TODO(autoAlign): Test and tune maximum current against NEO specs
     public static final double kMaxCurrent = 80; // To check against getOutputCurrent() for autoAlign
 
     // Preset positions and tolerances (in rotations)
