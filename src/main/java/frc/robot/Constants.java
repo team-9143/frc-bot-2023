@@ -43,13 +43,13 @@ public final class Constants {
     public static final double kTurnMult = 0.7;
 
     // TurnToAngle
-    public static final double kTurnPosTolerance = 1.5; // Position tolerance (in degrees)
+    public static final double kTurnPosTolerance = 0.75; // Position tolerance (in degrees)
     public static final double kTurnVelTolerance = kTurnPosTolerance; // Velocity tolerance (in degrees/s)
-    public static final double kTurnMaxSpeed = 0.75;
+    public static final double kTurnMaxSpeed = 0.30;
     public static final double
-      kTurnP = 0.008,
-      kTurnI = 0.003,
-      kTurnD = 0.003;
+      kTurnP = 0.0175,
+      kTurnI = 0.00061,
+      kTurnD = 0.0045;
 
     // DriveDistance
     public static final double kDistPosTolerance = 2; // Position tolerance (in inches)
