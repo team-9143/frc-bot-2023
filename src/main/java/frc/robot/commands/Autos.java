@@ -4,8 +4,9 @@
 
 package frc.robot.commands;
 
-import frc.robot.OI;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.OI;
+import frc.robot.Constants.IntakeConstants;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -57,15 +58,17 @@ public final class Autos {
       case ShootDown:
         // Aim down, shoot, then move intake up
         return new SequentialCommandGroup(
-          sIntakeTilt.getAimMidCommand(),
-          sIntakeWheels.getShootCommand().withTimeout(0.5),
+          new AimMid(sIntakeTilt).raceWith(
+            new WaitCommand(IntakeConstants.kAimMidTimer).andThen(sIntakeWheels.getShootCommand().withTimeout(0.5))
+          ),
           new IntakeUp(sIntakeTilt).until(sIntakeTilt::atUpPos)
         );
       case SpitDown:
         // Aim down, spit, then move intake up
         return new SequentialCommandGroup(
-          sIntakeTilt.getAimMidCommand(),
-          sIntakeWheels.getSpitCommand().withTimeout(0.5),
+          new AimMid(sIntakeTilt).raceWith(
+            new WaitCommand(IntakeConstants.kAimMidTimer).andThen(sIntakeWheels.getSpitCommand().withTimeout(0.5))
+          ),
           new IntakeUp(sIntakeTilt).until(sIntakeTilt::atUpPos)
         );
       default:
@@ -122,10 +125,7 @@ public final class Autos {
       new ParallelCommandGroup(
         new IntakeDown(sIntakeTilt),
         sIntakeWheels.getIntakeCommand(),
-        new SequentialCommandGroup(
-          new WaitCommand(2.5),
-          new RunCommand(() -> sDrivetrain.moveStraight(0.1), sDrivetrain)
-        )
+        new WaitCommand(2.5).andThen(new RunCommand(() -> sDrivetrain.moveStraight(0.1), sDrivetrain))
       ).until(() -> sDrivetrain.getAvgPosition() >= 204),
 
       new IntakeUp(sIntakeTilt).until(sIntakeTilt::atUpPos)

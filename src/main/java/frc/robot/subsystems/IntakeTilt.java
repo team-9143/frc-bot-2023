@@ -6,7 +6,6 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.PhysConstants;
 import frc.robot.Constants.DeviceConstants;
 import frc.robot.Constants.IntakeConstants;
@@ -67,10 +66,6 @@ public class IntakeTilt extends PIDSubsystem {
     return Math.abs(getMeasurement() - IntakeConstants.kUpPos) < IntakeConstants.kUpPosThreshold;
   }
 
-  public boolean atMidPos() {
-    return Math.abs(getMeasurement() - IntakeConstants.kMidPos) < IntakeConstants.kMidPosThreshold;
-  }
-
   public void autoAlign() {
     new FunctionalCommand(
       () -> useOutput(IntakeConstants.kAutoAlignSpeed, IntakeConstants.kUpPos),
@@ -83,19 +78,5 @@ public class IntakeTilt extends PIDSubsystem {
       () -> (l_motor.getOutputCurrent() > IntakeConstants.kMaxCurrent) || (r_motor.getOutputCurrent() > IntakeConstants.kMaxCurrent),
       this
     ).schedule();
-  }
-
-  // TODO: Add holding speed to keep intake in place
-  public Command getAimMidCommand() {
-    return new FunctionalCommand(
-      () -> {
-        disable();
-        useOutput(IntakeConstants.kDownSpeed, 0);
-      },
-      () -> {},
-      interrupted -> disable(),
-      this::atMidPos,
-      this
-    );
   }
 }

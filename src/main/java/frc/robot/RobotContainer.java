@@ -50,7 +50,7 @@ public class RobotContainer {
   private final Command cIntake = sIntakeWheels.getIntakeCommand();
   private final Command cShoot = sIntakeWheels.getShootCommand();
   private final Command cSpit = sIntakeWheels.getSpitCommand();
-  private final Command cAimDown = sIntakeTilt.getAimMidCommand();
+  private final Command cAimMid = new AimMid(sIntakeTilt);
   private final Command cManualHold = new StartEndCommand(
     () -> sIntakeWheels.set(Constants.IntakeConstants.kHoldingSpeed),
     sIntakeWheels::stop,
@@ -420,22 +420,22 @@ public class RobotContainer {
         sIntakeTilt
       ));
 
-    // D-pad up will move down and shoot
+    // D-pad up will angle down, then shoot
     new Trigger(() -> OI.operator_cntlr.getPOV() == 0)
-      .onTrue(new InstantCommand(() -> {if (sIntakeTilt.atUpPos()) {cAimDown.schedule();}}))
+      .whileTrue(cAimMid)
       .onFalse(cIntakeUp)
-    .debounce(Constants.IntakeConstants.kAimDownTimer)
+    .debounce(Constants.IntakeConstants.kAimMidTimer)
       .whileTrue(cShoot);
 
     // D-pad right will spit
     new Trigger(() -> OI.operator_cntlr.getPOV() == 90)
       .whileTrue(cSpit);
 
-    // D-pad down will move down and spit
+    // D-pad down will angle down, then spit
     new Trigger(() -> OI.operator_cntlr.getPOV() == 180)
-      .onTrue(new InstantCommand(() -> {if (sIntakeTilt.atUpPos()) {cAimDown.schedule();}}))
+      .whileTrue(cAimMid)
       .onFalse(cIntakeUp)
-    .debounce(Constants.IntakeConstants.kAimDownTimer)
+    .debounce(Constants.IntakeConstants.kAimMidTimer)
       .whileTrue(cSpit);
 
     // D-pad left will hold pieces
