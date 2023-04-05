@@ -19,7 +19,7 @@ public final class Constants {
     public static final double kTiltGearbox = (double) 1/35;
     public static final double kWheelGearbox = (double) 1/3;
 
-    public static final double kWheelCircumference = 6 * Math.PI; // In inches
+    public static final double kWheelCircumference = 6 * Math.PI; // UNIT: inches
   }
 
   public static class DeviceConstants {
@@ -43,8 +43,8 @@ public final class Constants {
     public static final double kTurnMult = 0.7;
 
     // TurnToAngle
-    public static final double kTurnPosTolerance = 0.75; // Position tolerance (in degrees)
-    public static final double kTurnVelTolerance = kTurnPosTolerance; // Velocity tolerance (in degrees/s)
+    public static final double kTurnPosTolerance = 0.75; // UNIT: degrees
+    public static final double kTurnVelTolerance = kTurnPosTolerance; // UNIT: degrees/s
     public static final double kTurnMaxSpeed = 0.3;
     public static final double
       kTurnP = 0.018,
@@ -52,16 +52,16 @@ public final class Constants {
       kTurnD = 0.0045;
 
     // DriveDistance
-    public static final double kDistPosTolerance = 2; // Position tolerance (in inches)
-    public static final double kDistVelTolerance = kDistPosTolerance; // Velocity tolerance (in inches/s)
-    public static final double kDistMaxSpeed = 0.4; // Time efficiency is unnecessary, high traction is priority
+    public static final double kDistPosTolerance = 2; // UNIT: inches
+    public static final double kDistVelTolerance = kDistPosTolerance; // UNIT: inches/s
+    public static final double kDistMaxSpeed = 0.4; // Traction is priority
     public static final double
       kDistP = 0.04,
       kDistI = 0.00003,
       kDistD = 0.007;
 
     // Charge station balancing
-    public static final double kBalanceTolerance = 2; // In degrees
+    public static final double kBalanceTolerance = 2; // UNIT: degrees
     public static final double kBalanceSpeed = 0.08;
   }
 
@@ -78,18 +78,18 @@ public final class Constants {
     public static final double kUpSpeed = -0.1;
     public static final double kDownSpeed = 0.08;
     public static final double kSteadySpeed = -0.01; // TODO(HIGH prio): Tune tilt steady speed
-    public static final double kAimMidTimer = 0.4; // Seconds to wait to aim mid
+    public static final double kAimMidTimer = 0.4; // Seconds to wait for AimMid command
     public static final double kAutoAlignSpeed = -0.15;
     // TODO(autoAlign): Test and tune maximum current against NEO specs
-    public static final double kMaxCurrent = 80; // To check against getOutputCurrent() for autoAlign
+    public static final double kMaxCurrent = 80; // For autoAlign
 
-    // Preset positions and tolerances (in rotations)
+    // Preset positions and tolerances (UNIT: rotations)
     public static final double kUpPos = 0.003;
     public static final double kMidPos = 0.14;
     public static final double kDownPos = 0.29;
     public static final double kPosTolerance = 0.025;
 
-    // Maximum threshold to be considered at a position (in rotations)
+    // Maximum threshold to be considered at a position (UNIT: rotations)
     public static final double kUpPosThreshold = 0.025; // Large to account for play in the up position
     public static final double kMidPosThreshold = 0.004;
 
