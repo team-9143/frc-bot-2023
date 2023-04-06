@@ -464,6 +464,10 @@ public class RobotContainer {
     sIntakeTilt.autoAlign();
   }
 
+  public void enableIntake() {
+    sIntakeTilt.enable();
+  }
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

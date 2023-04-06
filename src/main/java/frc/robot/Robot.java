@@ -83,6 +83,7 @@ public class Robot extends TimedRobot {
     }
 
     TurnToAngle.m_enabled = false;
+    m_robotContainer.enableIntake();
   }
 
   /** This function is called periodically during operator control. */
