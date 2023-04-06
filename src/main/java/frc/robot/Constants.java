@@ -85,7 +85,7 @@ public final class Constants {
 
     // Preset positions and tolerances (UNIT: rotations)
     public static final double kUpPos = 0.003;
-    public static final double kMidPos = 0.14;
+    public static final double kMidPos = 0.05;
     public static final double kDownPos = 0.29;
     public static final double kPosTolerance = 0.025;
 
