@@ -68,7 +68,7 @@ public class RobotContainer {
   private final SendableChooser<Autos.Starter> m_autonStarterChooser = new SendableChooser<Autos.Starter>();
   private final SendableChooser<Autos.Ending> m_autonEndChooser = new SendableChooser<Autos.Ending>();
   private final GenericEntry m_startingAngle =
-    Shuffleboard.getTab("Drive").add("Starting Angle", 180)
+    Shuffleboard.getTab("Drive").add("Teleop Start Angle", 180)
       .withPosition(1, 5)
       .withSize(2, 2)
       .withWidget(BuiltInWidgets.kTextView)
