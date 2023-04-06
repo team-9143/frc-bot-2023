@@ -143,7 +143,7 @@ public class RobotContainer {
       .withWidget(BuiltInWidgets.kDial)
       .withProperties(Map.of("min", -45, "max", 45, "show value", true));
 
-    ShuffleboardLayout layout_1 = drive_tab.getLayout("Heading", BuiltInLayouts.kList)
+    ShuffleboardLayout layout_1 = drive_tab.getLayout("Rotation", BuiltInLayouts.kList)
       .withPosition(0, 0)
       .withSize(4, 5);
     layout_1.add("Gyro", new OI.PigeonSendable(OI.pigeon))
@@ -232,6 +232,12 @@ public class RobotContainer {
       .withSize(5, 4)
       .withWidget(BuiltInWidgets.kDifferentialDrive)
       .withProperties(Map.of("number of wheels", 6, "wheel diameter", 60, "show velocity vectors", true));
+    
+    test_tab.add("Gyro", new OI.PigeonSendable(OI.pigeon))
+      .withPosition(11, 4)
+      .withSize(5, 4)
+      .withWidget(BuiltInWidgets.kGyro)
+      .withProperties(Map.of("major tick spacing", 45, "starting angle", 180, "show tick mark ring", true));
   }
 
   private void configureMatchChecklistTab() {
