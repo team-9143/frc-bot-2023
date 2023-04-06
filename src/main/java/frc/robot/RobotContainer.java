@@ -190,14 +190,18 @@ public class RobotContainer {
     layout_1.addDouble("Intake Setpoint", () ->
       ((cIntakeDown.isScheduled()) ? Constants.IntakeConstants.kDownPos :
       (cAimMid.isScheduled()) ? Constants.IntakeConstants.kMidPos :
-      Constants.IntakeConstants.kUpPos) * 360
-    )
-      .withWidget(BuiltInWidgets.kDial)
-      .withProperties(Map.of("min", -110, "max", 110, "show value", true));
+      Constants.IntakeConstants.kUpPos) * 360)
+        .withWidget(BuiltInWidgets.kDial)
+        .withProperties(Map.of("min", -110, "max", 110, "show value", true));
+
     // TODO(HIGH prio): Check if working for other setpoints
-    layout_1.addDouble("Error", () -> sIntakeTilt.getController().getPositionError() * 360)
-      .withWidget(BuiltInWidgets.kNumberBar)
-      .withProperties(Map.of("min", -110, "max", 110, "center", 0));
+    layout_1.addDouble("Error", () ->
+      (((cIntakeDown.isScheduled()) ? Constants.IntakeConstants.kDownPos :
+      (cAimMid.isScheduled()) ? Constants.IntakeConstants.kMidPos :
+      Constants.IntakeConstants.kUpPos) -
+      sIntakeTilt.getMeasurement()) * 360)
+        .withWidget(BuiltInWidgets.kNumberBar)
+        .withProperties(Map.of("min", -110, "max", 110, "center", 0));
 
     ShuffleboardLayout layout_2 = test_tab.getLayout("Intake Status", BuiltInLayouts.kList)
       .withPosition(4, 0)
@@ -232,7 +236,7 @@ public class RobotContainer {
       .withSize(5, 4)
       .withWidget(BuiltInWidgets.kDifferentialDrive)
       .withProperties(Map.of("number of wheels", 6, "wheel diameter", 60, "show velocity vectors", true));
-    
+
     test_tab.add("Gyro", new OI.PigeonSendable(OI.pigeon))
       .withPosition(11, 4)
       .withSize(5, 4)
