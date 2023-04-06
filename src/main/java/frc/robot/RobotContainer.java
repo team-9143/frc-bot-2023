@@ -163,9 +163,9 @@ public class RobotContainer {
       .withSize(4, 8);
     layout_2.addBoolean("Inverted", () -> Constants.IntakeConstants.kIntakeSpeed < 0)
       .withWidget(BuiltInWidgets.kBooleanBox);
-    layout_2.addBoolean("Intaking", cIntake::isScheduled)
+    layout_2.addBoolean("Intaking", () -> (sIntakeWheels.get() * Constants.IntakeConstants.kOuttakeSpeed) < 0)
       .withWidget(BuiltInWidgets.kBooleanBox);
-    layout_2.addBoolean("Outtaking", () -> cShoot.isScheduled() || cSpit.isScheduled())
+    layout_2.addBoolean("Outtaking", () -> (sIntakeWheels.get() * Constants.IntakeConstants.kOuttakeSpeed) > 0)
       .withWidget(BuiltInWidgets.kBooleanBox);
     layout_2.addDouble("Intake Angle", () -> sIntakeTilt.getMeasurement() * 360)
       .withWidget(BuiltInWidgets.kDial)
