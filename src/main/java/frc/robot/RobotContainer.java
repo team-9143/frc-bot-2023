@@ -68,7 +68,7 @@ public class RobotContainer {
   private final SendableChooser<Autos.Starter> m_autonStarterChooser = new SendableChooser<Autos.Starter>();
   private final SendableChooser<Autos.Ending> m_autonEndChooser = new SendableChooser<Autos.Ending>();
   private final GenericEntry m_startingAngle =
-    Shuffleboard.getTab("Drive").add("Teleop Start Angle", 180)
+    Shuffleboard.getTab("Drive").add("Teleop Angle Offset", 180)
       .withPosition(1, 5)
       .withSize(2, 2)
       .withWidget(BuiltInWidgets.kTextView)
@@ -486,7 +486,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return Autos.getAuto(m_autonStarterChooser.getSelected(), m_autonBodyChooser.getSelected(), m_autonEndChooser.getSelected(), sIntakeTilt, sIntakeWheels, sDrivetrain)
       .beforeStarting(() -> OI.pigeon.setYaw(0))
-      .andThen(() -> OI.pigeon.setYaw(-m_startingAngle.getDouble(180)));
+      .andThen(() -> OI.pigeon.setYaw(OI.pigeon.getYaw() - m_startingAngle.getDouble(180)));
   }
 
   /** Stops all motors and disables PID controllers */
