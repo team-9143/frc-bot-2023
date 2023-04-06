@@ -36,7 +36,7 @@ public final class Autos {
   public static enum Ending {
     TurnAway,
     TurnClose,
-    ReturnToGrid,
+    Return,
     None
   }
 
@@ -105,11 +105,11 @@ public final class Autos {
       case TurnClose:
         // Turn to face the drive station
         return new TurnToAngle(sDrivetrain, 0);
-      case ReturnToGrid:
-        // Turn to face the drive station and move back to the grid (assumes only straight movement)
+      case Return:
+        // Turn around, then move the distance of the drivetrain encoders (undo all straight movement since the encoders were reset)
         return new SequentialCommandGroup(
-          new TurnToAngle(sDrivetrain, 0),
-          new DriveDistance(sDrivetrain, 0)
+          new TurnToAngle(sDrivetrain, OI.pigeon.getYaw() + 180),
+          new DriveDistance(sDrivetrain, Math.abs(sDrivetrain.getAvgPosition())*2)
         );
       default:
         return new InstantCommand();

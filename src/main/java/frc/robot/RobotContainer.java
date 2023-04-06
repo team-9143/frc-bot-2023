@@ -111,7 +111,7 @@ public class RobotContainer {
 
     m_autonEndChooser.addOption("Turn Away", Autos.Ending.TurnAway);
     m_autonEndChooser.addOption("Turn Close", Autos.Ending.TurnClose);
-    m_autonEndChooser.addOption("Straight Return", Autos.Ending.ReturnToGrid);
+    m_autonEndChooser.addOption("Return", Autos.Ending.Return);
     m_autonEndChooser.setDefaultOption("None", Autos.Ending.None);
   }
 
