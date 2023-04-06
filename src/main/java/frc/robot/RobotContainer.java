@@ -143,12 +143,6 @@ public class RobotContainer {
       .withWidget(BuiltInWidgets.kDial)
       .withProperties(Map.of("min", -45, "max", 45, "show value", true));
 
-    drive_tab.add("Drivetrain", Drivetrain.robotDrive)
-      .withPosition(7, 0)
-      .withSize(6, 4)
-      .withWidget(BuiltInWidgets.kDifferentialDrive)
-      .withProperties(Map.of("number of wheels", 6, "wheel diameter", 60, "show velocity vectors", true));
-
     ShuffleboardLayout layout_1 = drive_tab.getLayout("Heading", BuiltInLayouts.kList)
       .withPosition(0, 0)
       .withSize(4, 5);
@@ -158,18 +152,30 @@ public class RobotContainer {
     layout_1.addBoolean("TurnToAngle Enabled", () -> TurnToAngle.m_enabled)
       .withWidget(BuiltInWidgets.kBooleanBox);
 
-    ShuffleboardLayout layout_2 = drive_tab.getLayout("Intake", BuiltInLayouts.kList)
-      .withPosition(13, 0)
-      .withSize(4, 8);
-    layout_2.addBoolean("Inverted", () -> Constants.IntakeConstants.kIntakeSpeed < 0)
-      .withWidget(BuiltInWidgets.kBooleanBox);
-    layout_2.addBoolean("Intaking", () -> (sIntakeWheels.get() * Constants.IntakeConstants.kOuttakeSpeed) < 0)
-      .withWidget(BuiltInWidgets.kBooleanBox);
-    layout_2.addBoolean("Outtaking", () -> (sIntakeWheels.get() * Constants.IntakeConstants.kOuttakeSpeed) > 0)
-      .withWidget(BuiltInWidgets.kBooleanBox);
+    ShuffleboardLayout layout_2 = drive_tab.getLayout("Intake Angle", BuiltInLayouts.kGrid)
+      .withPosition(7, 0)
+      .withSize(6, 3)
+      .withProperties(Map.of("number of columns", 2, "number of rows", 1));
     layout_2.addDouble("Intake Angle", () -> sIntakeTilt.getMeasurement() * 360)
       .withWidget(BuiltInWidgets.kDial)
-      .withProperties(Map.of("min", -110, "max", 110, "show value", false));
+      .withProperties(Map.of("min", -110, "max", 110, "show value", true));
+    layout_2.addDouble("Intake Setpoint", () ->
+      ((cIntakeDown.isScheduled()) ? Constants.IntakeConstants.kDownPos :
+      (cAimMid.isScheduled()) ? Constants.IntakeConstants.kMidPos :
+      Constants.IntakeConstants.kUpPos) * 360
+    )
+      .withWidget(BuiltInWidgets.kDial)
+      .withProperties(Map.of("min", -110, "max", 110, "show value", true));
+
+    ShuffleboardLayout layout_3 = drive_tab.getLayout("Intake", BuiltInLayouts.kList)
+      .withPosition(13, 0)
+      .withSize(4, 6);
+    layout_3.addBoolean("Inverted", () -> Constants.IntakeConstants.kIntakeSpeed < 0)
+      .withWidget(BuiltInWidgets.kBooleanBox);
+    layout_3.addBoolean("Intaking", () -> (sIntakeWheels.get() * Constants.IntakeConstants.kOuttakeSpeed) < 0)
+      .withWidget(BuiltInWidgets.kBooleanBox);
+    layout_3.addBoolean("Outtaking", () -> (sIntakeWheels.get() * Constants.IntakeConstants.kOuttakeSpeed) > 0)
+      .withWidget(BuiltInWidgets.kBooleanBox);
   }
 
   private void configureTestTab() {
@@ -182,7 +188,9 @@ public class RobotContainer {
       .withWidget(BuiltInWidgets.kDial)
       .withProperties(Map.of("min", -110, "max", 110, "show value", true));
     layout_1.addDouble("Intake Setpoint", () ->
-      ((cIntakeDown.isScheduled()) ? Constants.IntakeConstants.kDownPos : Constants.IntakeConstants.kUpPos) * 360
+      ((cIntakeDown.isScheduled()) ? Constants.IntakeConstants.kDownPos :
+      (cAimMid.isScheduled()) ? Constants.IntakeConstants.kMidPos :
+      Constants.IntakeConstants.kUpPos) * 360
     )
       .withWidget(BuiltInWidgets.kDial)
       .withProperties(Map.of("min", -110, "max", 110, "show value", true));
@@ -192,7 +200,7 @@ public class RobotContainer {
 
     ShuffleboardLayout layout_2 = test_tab.getLayout("Intake Status", BuiltInLayouts.kList)
       .withPosition(4, 0)
-      .withSize(4, 8);
+      .withSize(3, 6);
     layout_2.addBoolean("PID enabled", () -> cIntakeDown.isScheduled() || cIntakeUp.isScheduled() || sIntakeTilt.isEnabled())
       .withWidget(BuiltInWidgets.kBooleanBox);
     layout_2.addBoolean("Keeping steady", sIntakeTilt::isEnabled)
@@ -201,22 +209,28 @@ public class RobotContainer {
       .withWidget(BuiltInWidgets.kBooleanBox);
 
     test_tab.addDouble("Intake Wheel RPM", sIntakeWheels::getVelocity)
-      .withPosition(8, 0)
-      .withSize(5, 2)
+      .withPosition(7, 0)
+      .withSize(4, 2)
       .withWidget(BuiltInWidgets.kNumberBar)
       .withProperties(Map.of("min", -250, "max", 250, "center", 0));
 
     test_tab.addDouble("TurnToAngle Error", () -> cTurnToAngle.getController().getPositionError())
-      .withPosition(8, 2)
-      .withSize(5, 2)
+      .withPosition(7, 2)
+      .withSize(4, 2)
       .withWidget(BuiltInWidgets.kNumberBar)
       .withProperties(Map.of("min", -180, "max", 180, "center", 0));
 
     test_tab.addDouble("DriveDistance Error", () -> cDriveDistance.getController().getPositionError())
-      .withPosition(8, 4)
-      .withSize(5, 2)
+      .withPosition(7, 4)
+      .withSize(4, 2)
       .withWidget(BuiltInWidgets.kNumberBar)
       .withProperties(Map.of("min", -150, "max", 150, "center", 0));
+
+    test_tab.add("Drivetrain", Drivetrain.robotDrive)
+      .withPosition(11, 0)
+      .withSize(5, 4)
+      .withWidget(BuiltInWidgets.kDifferentialDrive)
+      .withProperties(Map.of("number of wheels", 6, "wheel diameter", 60, "show velocity vectors", true));
   }
 
   private void configureMatchChecklistTab() {
