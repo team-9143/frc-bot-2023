@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -42,8 +43,8 @@ public class RobotContainer {
   private final IntakeTilt sIntakeTilt = new IntakeTilt();
 
   private final Balance cBalance = new Balance(sDrivetrain);
-  private final TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain, 0);
-  private final DriveDistance cDriveDistance = new DriveDistance(sDrivetrain, 0); // Only for shuffleboard
+  private final TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain);
+  private final DriveDistance cDriveDistance = new DriveDistance(sDrivetrain); // Only for shuffleboard
   private final IntakeDown cIntakeDown = new IntakeDown(sIntakeTilt);
   private final IntakeUp cIntakeUp = new IntakeUp(sIntakeTilt);
   private final Command cIntake = sIntakeWheels.getIntakeCommand();
@@ -110,7 +111,7 @@ public class RobotContainer {
 
     m_autonEndChooser.addOption("Turn Away", Autos.Ending.TurnAway);
     m_autonEndChooser.addOption("Turn Close", Autos.Ending.TurnClose);
-    m_autonEndChooser.addOption("Return (cone)", Autos.Ending.ReturnCone);
+    m_autonEndChooser.addOption("Return", Autos.Ending.Return);
     m_autonEndChooser.setDefaultOption("None", Autos.Ending.None);
   }
 
@@ -362,22 +363,21 @@ public class RobotContainer {
   }
 
   private void configureDriver() {
-    // TODO: Remove or fix static heading setter
     // D-pad and right stick will turn to the specified angle
-    // new Trigger(() -> TurnToAngle.m_enabled && OI.driver_cntlr.getPOV() != -1)
-    //   .whileTrue(new RunCommand(() -> {
-    //     cTurnToAngle.setHeading(OI.driver_cntlr.getPOV());
-    //     cTurnToAngle.schedule();
-    //   }));
+    new Trigger(() -> TurnToAngle.m_enabled && OI.driver_cntlr.getPOV() != -1)
+      .whileTrue(new RunCommand(() -> {
+        cTurnToAngle.setHeading(OI.driver_cntlr.getPOV());
+        cTurnToAngle.schedule();
+      }));
 
-    // new Trigger(() ->
-    //   TurnToAngle.m_enabled && OI.driver_cntlr.getPOV() == -1 &&
-    //   (Math.abs(OI.driver_cntlr.getRightX()) > 0.2 || Math.abs(OI.driver_cntlr.getRightY()) > 0.2)
-    // )
-    //   .whileTrue(new RunCommand(() -> {
-    //     cTurnToAngle.setHeading(Math.toDegrees(Math.atan2(OI.driver_cntlr.getRightY(), OI.driver_cntlr.getRightX())) + 90);
-    //     cTurnToAngle.schedule();
-    //   }));
+    new Trigger(() ->
+      TurnToAngle.m_enabled && OI.driver_cntlr.getPOV() == -1 &&
+      (Math.abs(OI.driver_cntlr.getRightX()) > 0.2 || Math.abs(OI.driver_cntlr.getRightY()) > 0.2)
+    )
+      .whileTrue(new RunCommand(() -> {
+        cTurnToAngle.setHeading(Math.toDegrees(Math.atan2(OI.driver_cntlr.getRightY(), OI.driver_cntlr.getRightX())) + 90);
+        cTurnToAngle.schedule();
+      }));
 
     // Button 'A' (hold) will run auto-balance code
     new JoystickButton(OI.driver_cntlr, OI.Controller.btn.A.val)

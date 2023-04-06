@@ -13,13 +13,14 @@ import frc.robot.subsystems.Drivetrain;
 
 public class DriveDistance extends PIDCommand {
   private final Drivetrain drivetrain;
+  private static double m_distance = 0; // In inches
   private static final PIDController m_controller = new PIDController(DrivetrainConstants.kDistP, DrivetrainConstants.kDistI, DrivetrainConstants.kDistD);
 
-  public DriveDistance(Drivetrain drivetrain, double distance) {
+  public DriveDistance(Drivetrain drivetrain) {
     super(
       m_controller,
       drivetrain::getAvgPosition,
-      () -> distance,
+      () -> m_distance,
       output -> drivetrain.moveStraight(Math.max(-DrivetrainConstants.kDistMaxSpeed, Math.min(output, DrivetrainConstants.kDistMaxSpeed)))
     );
 
@@ -34,6 +35,11 @@ public class DriveDistance extends PIDCommand {
     m_controller.setSetpoint(0);
   }
 
+  public DriveDistance(Drivetrain drivetrain, double fdistance) {
+    this(drivetrain);
+    setDistance(fdistance);
+  }
+
   @Override
   public void initialize() {
     super.initialize();
@@ -44,5 +50,14 @@ public class DriveDistance extends PIDCommand {
   @Override
   public boolean isFinished() {
     return m_controller.atSetpoint();
+  }
+
+  /**
+   * Sets target distance
+   *
+   * @param fdistance Target distance (in inches)
+   */
+  public static void setDistance(double fdistance) {
+    m_distance = fdistance;
   }
 }
