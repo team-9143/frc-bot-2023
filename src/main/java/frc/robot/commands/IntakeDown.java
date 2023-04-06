@@ -6,38 +6,34 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
+import edu.wpi.first.util.sendable.SendableRegistry;
 import frc.robot.Constants.IntakeConstants;
 
 import frc.robot.subsystems.IntakeTilt;
-import frc.robot.subsystems.IntakeWheels;
 
 public class IntakeDown extends PIDCommand {
   private final IntakeTilt intakeTilt;
-  private final IntakeWheels intakeWheels;
+  private static final PIDController m_controller = new PIDController(IntakeConstants.kDownP, IntakeConstants.kDownI, IntakeConstants.kDownD);
 
-  public IntakeDown(IntakeTilt intakeTilt, IntakeWheels intakeWheels) {
+  public IntakeDown(IntakeTilt intakeTilt) {
     super(
-      new PIDController(IntakeConstants.kDownP, IntakeConstants.kDownI, IntakeConstants.kDownD),
-      () -> intakeTilt.getMeasurement(),
+      m_controller,
+      intakeTilt::getMeasurement,
       () -> IntakeConstants.kDownPos,
       output -> intakeTilt.useOutput(output, IntakeConstants.kDownPos)
     );
 
     this.intakeTilt = intakeTilt;
-    this.intakeWheels = intakeWheels;
 
-    addRequirements(intakeTilt, intakeWheels);
+    m_controller.setIntegratorRange(-IntakeConstants.kTiltMaxSpeed, IntakeConstants.kTiltMaxSpeed);
+
+    addRequirements(intakeTilt);
+    SendableRegistry.setSubsystem(m_controller, intakeTilt.getSubsystem());
   }
 
   @Override
   public void initialize() {
     intakeTilt.disable();
     m_controller.reset();
-    intakeWheels.set(IntakeConstants.kIntakeSpeed);
-  }
-
-  @Override
-  public void end(boolean interrupted) {
-    intakeWheels.stop();
   }
 }

@@ -4,7 +4,7 @@
 
 package frc.robot;
 
-// TODO: DriveDistance, TurnToAngle, and Intake gains should be tuned
+// TODO(HIGH prio): DriveDistance and TurnToAngle gains must be tuned
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -14,9 +14,18 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+  public static class PhysConstants {
+    public static final double kDrivetrainGearbox = 1/8.45;
+    public static final double kTiltGearbox = (double) 1/35;
+    public static final double kWheelGearbox = (double) 1/3;
+
+    public static final double kWheelCircumference = 6 * Math.PI; // UNIT: inches
+  }
+
   public static class DeviceConstants {
     public static final byte kDriverCntlrPort = 0;
     public static final byte kOperatorCntlrPort = 1;
+    // TOOD: Add new intake tilt motor
     public static final byte
       kFrontLeftID = 3,
       kBackLeftID = 4,
@@ -24,71 +33,78 @@ public final class Constants {
       kBackRightID = 1,
       kPigeonID = 5,
       kIntakeWheelsID = 6,
-      kIntakeTiltID = 17;
+      kIntakeTiltRightID = 7,
+      kIntakeTiltLeftID = 8;
   }
 
   public static class DrivetrainConstants {
-    public static final double kWheelDiameter = 6; // In inches
-    public static final double kGearboxRatio = 12.76 * 0.85; // Multiplier due to traction/encoder error
-
-    // Teleop driving
-    public static final double kSpeedMult = 1; // Applies to all manual drivetrain movement
+    // Manual driving
+    public static final double kSpeedMult = 1;
     public static final double kTurnMult = 0.7;
 
     // TurnToAngle
-    public static final double kTurnPosTolerance = 1.5; // Position tolerance (in degrees)
-    public static final double kTurnVelTolerance = kTurnPosTolerance; // Velocity tolerance (in degrees/s)
-    public static final double kTurnMaxSpeed = 0.75;
+    public static final double kTurnPosTolerance = 0.75; // UNIT: degrees
+    public static final double kTurnVelTolerance = kTurnPosTolerance; // UNIT: degrees/s
+    public static final double kTurnMaxSpeed = 0.3;
     public static final double
-      kTurnP = 0.008,
-      kTurnI = 0.004,
-      kTurnD = 0.0025;
+      kTurnP = 0.018,
+      kTurnI = 0.0006,
+      kTurnD = 0.0045;
 
-    // TODO: Fix DriveDistance overshooting
     // DriveDistance
-    public static final double kDistPosTolerance = 2; // Position tolerance (in inches)
-    public static final double kDistVelTolerance = kDistPosTolerance; // Velocity tolerance (in inches/s)
-    public static final double kDistMaxSpeed = 0.4; // Time efficiency is unnecessary, high traction is priority
+    public static final double kDistPosTolerance = 2; // UNIT: inches
+    public static final double kDistVelTolerance = kDistPosTolerance; // UNIT: inches/s
+    public static final double kDistMaxSpeed = 0.4; // Traction is priority
     public static final double
-      kDistP = 0.01,
-      kDistI = 0.00005,
+      kDistP = 0.04,
+      kDistI = 0.00003,
       kDistD = 0.007;
 
     // Charge station balancing
-    public static final double kBalanceTolerance = 2; // In degrees
+    public static final double kBalanceTolerance = 2; // UNIT: degrees
     public static final double kBalanceSpeed = 0.08;
   }
 
   public static class IntakeConstants {
-    public static final double kTiltGearbox = (double) 1/28;
-    // TOOD: Tune
-    public static final double kTiltMaxSpeed = 0.5;
+    public static final double kTiltMaxSpeed = 0.7; // TODO(low prio): Lower max tilt motor speed
 
-    // Cube intake/outtake wheel speed
+    // Wheel speed
     public static double kIntakeSpeed = 0.3;
     public static double kOuttakeSpeed = -1;
+    public static double kSpitSpeed = -0.5;
+    public static double kHoldingSpeed = 0.05;
 
-    // Manual intake movement
-    public static final double kUpSpeed = 0.1;
+    // Non-PID intake movement
+    public static final double kUpSpeed = -0.1;
     public static final double kDownSpeed = 0.08;
+    public static final double kSteadySpeed = -0.01; // TODO(HIGH prio): Tune tilt steady speed
+    public static final double kAimMidTimer = 0.4; // Seconds to wait for AimMid command
+    public static final double kAutoAlignSpeed = -0.15;
+    // TODO(autoAlign): Test and tune maximum current against NEO specs
+    public static final double kMaxCurrent = 80; // For autoAlign
 
-    // Preset positions and tolerances (in rotations)
-    public static final double kUpPos = -0.02;
-    public static final double kDownPos = -0.28;
-    public static final double kPosTolerance = 0.015;
+    // Preset positions and tolerances (UNIT: rotations)
+    public static final double kUpPos = 0.003;
+    public static final double kMidPos = 0.05;
+    public static final double kDownPos = 0.29;
+    public static final double kPosTolerance = 0.025;
 
-    // Intake tilt gains
+    // Maximum threshold to be considered at a position (UNIT: rotations)
+    public static final double kUpPosThreshold = 0.025; // Large to account for play in the up position
+    public static final double kMidPosThreshold = 0.004;
+
+    // Intake tilt PID gains
     public static final double
-      kDownP = 0.55,
-      kDownI = 0.45,
-      kDownD = 0.3;
+      kDownP = PhysConstants.kTiltGearbox * 29,
+      kDownI = PhysConstants.kTiltGearbox * 22,
+      kDownD = PhysConstants.kTiltGearbox * 11;
     public static final double
-      kUpP = 0.7,
-      kUpI = 0.6,
-      kUpD = 0.3;
+      kUpP = PhysConstants.kTiltGearbox * 31,
+      kUpI = PhysConstants.kTiltGearbox * 21,
+      kUpD = PhysConstants.kTiltGearbox * 10;
     public static final double
-      kSteadyP = 0.7,
-      kSteadyI = 0.6,
-      kSteadyD = 0.3;
+      kSteadyP = PhysConstants.kTiltGearbox * 33,
+      kSteadyI = PhysConstants.kTiltGearbox * 23,
+      kSteadyD = PhysConstants.kTiltGearbox * 7;
   }
 }

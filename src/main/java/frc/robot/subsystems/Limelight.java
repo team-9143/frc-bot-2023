@@ -10,7 +10,7 @@ import frc.robot.OI;
 import edu.wpi.first.networktables.NetworkTableEntry;
 
 public class Limelight extends SubsystemBase {
-  private final NetworkTableEntry
+  private static final NetworkTableEntry
     tv = OI.limelight.getEntry("tv"),
     tx = OI.limelight.getEntry("tx"),
     ty = OI.limelight.getEntry("ty"),
@@ -23,7 +23,7 @@ public class Limelight extends SubsystemBase {
   public double getTy() {return ty.getDouble(0);}
   public double getArea() {return ta.getDouble(0);}
   public boolean getValid() {return (tv.getInteger(0) == 1) ? true : false;}
-  // TODO: Add AprilTag and 3D space entries
+  // TODO(low prio): Add AprilTag and 3D space entries
 
   // Visual testing purposes
   /**

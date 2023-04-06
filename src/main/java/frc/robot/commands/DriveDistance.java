@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
+import edu.wpi.first.util.sendable.SendableRegistry;
 import frc.robot.Constants.DrivetrainConstants;
 
 import frc.robot.subsystems.Drivetrain;
@@ -13,11 +14,12 @@ import frc.robot.subsystems.Drivetrain;
 public class DriveDistance extends PIDCommand {
   private final Drivetrain drivetrain;
   private static double m_distance = 0; // In inches
+  private static final PIDController m_controller = new PIDController(DrivetrainConstants.kDistP, DrivetrainConstants.kDistI, DrivetrainConstants.kDistD);
 
   public DriveDistance(Drivetrain drivetrain) {
     super(
-      new PIDController(DrivetrainConstants.kDistP, DrivetrainConstants.kDistI, DrivetrainConstants.kDistD),
-      () -> drivetrain.getAvgPosition(),
+      m_controller,
+      drivetrain::getAvgPosition,
       () -> m_distance,
       output -> drivetrain.moveStraight(Math.max(-DrivetrainConstants.kDistMaxSpeed, Math.min(output, DrivetrainConstants.kDistMaxSpeed)))
     );
@@ -25,10 +27,17 @@ public class DriveDistance extends PIDCommand {
     this.drivetrain = drivetrain;
 
     addRequirements(drivetrain);
+    SendableRegistry.setSubsystem(m_controller, drivetrain.getSubsystem());
 
     // Configure additional PID options
+    m_controller.setIntegratorRange(-DrivetrainConstants.kDistMaxSpeed, DrivetrainConstants.kDistMaxSpeed);
     m_controller.setTolerance(DrivetrainConstants.kDistPosTolerance, DrivetrainConstants.kDistVelTolerance);
     m_controller.setSetpoint(0);
+  }
+
+  public DriveDistance(Drivetrain drivetrain, double fdistance) {
+    this(drivetrain);
+    setDistance(fdistance);
   }
 
   @Override
@@ -40,7 +49,6 @@ public class DriveDistance extends PIDCommand {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // TODO: make sure that PIDController.atSetpoint() is comparing velocities in the same units (e.g. not RPM to degrees/s) and that RelativeEncoder.setVelocityConversionFactor() is working as expected
     return m_controller.atSetpoint();
   }
 

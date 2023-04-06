@@ -6,7 +6,10 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.util.sendable.SendableRegistry;
 import frc.robot.OI;
+import frc.robot.Constants.PhysConstants;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.DeviceConstants;
 
@@ -17,11 +20,7 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class Drivetrain extends SubsystemBase {
   // Initialize motors, encoders, and differential drive
@@ -34,10 +33,20 @@ public class Drivetrain extends SubsystemBase {
   private static final RelativeEncoder l_encoder = fl_motor.getEncoder();
   private static final RelativeEncoder r_encoder = fr_motor.getEncoder(); // Position must be inverted when called
 
-  private final DifferentialDrive robotDrive = new DifferentialDrive(
-    new MotorControllerGroup(fl_motor, bl_motor),
-    new MotorControllerGroup(fr_motor, br_motor)
-  );
+  private static final MotorControllerGroup l_motors = new MotorControllerGroup(fl_motor, bl_motor);
+  private static final MotorControllerGroup r_motors = new MotorControllerGroup(fr_motor, br_motor);
+
+  // Inverts the right motors for properly functioning sendable
+  public static final DifferentialDrive robotDrive = new DifferentialDrive(l_motors, r_motors) {
+    @Override
+    public void initSendable(SendableBuilder builder) {
+      builder.setSmartDashboardType("DifferentialDrive");
+      builder.setActuator(true);
+      builder.setSafeState(this::stopMotor);
+      builder.addDoubleProperty("Left Motor Speed", l_motors::get, l_motors::set);
+      builder.addDoubleProperty("Right Motor Speed", () -> -r_motors.get(), x -> r_motors.set(-x));
+    }
+  };
 
   public Drivetrain() {
     // Set the default command for a subsystem here.
@@ -54,14 +63,15 @@ public class Drivetrain extends SubsystemBase {
       this
     ));
 
-    // Sets encoders to measure position and velocity in inches
-    l_encoder.setPositionConversionFactor((Math.PI * DrivetrainConstants.kWheelDiameter) / DrivetrainConstants.kGearboxRatio);
-    r_encoder.setPositionConversionFactor((Math.PI * DrivetrainConstants.kWheelDiameter) / DrivetrainConstants.kGearboxRatio);
+    SendableRegistry.setSubsystem(robotDrive, getSubsystem());
 
-    l_encoder.setVelocityConversionFactor((Math.PI * DrivetrainConstants.kWheelDiameter) / DrivetrainConstants.kGearboxRatio);
-    r_encoder.setVelocityConversionFactor((Math.PI * DrivetrainConstants.kWheelDiameter) / DrivetrainConstants.kGearboxRatio);
+    // Sets encoders to measure in inches
+    l_encoder.setPositionConversionFactor(PhysConstants.kWheelCircumference * PhysConstants.kDrivetrainGearbox);
+    l_encoder.setVelocityConversionFactor(PhysConstants.kWheelCircumference * PhysConstants.kDrivetrainGearbox / 60);
+    r_encoder.setPositionConversionFactor(PhysConstants.kWheelCircumference * PhysConstants.kDrivetrainGearbox);
+    r_encoder.setVelocityConversionFactor(PhysConstants.kWheelCircumference * PhysConstants.kDrivetrainGearbox / 60);
 
-    // Sets encoder measurement period to work with default command scheduler loop
+    // Sets encoder measurement period in time with default loop
     l_encoder.setMeasurementPeriod(20);
     r_encoder.setMeasurementPeriod(20);
 
@@ -90,18 +100,5 @@ public class Drivetrain extends SubsystemBase {
   // Stops drivetrain motors
   public void stop() {
     robotDrive.stopMotor();
-  }
-
-  // Shoots to high node (inonsistent, works best above 12.7 volts)
-  public Command getShootCommand(IntakeWheels sIntakeWheels) {
-    return new SequentialCommandGroup(
-      new RunCommand(() -> moveStraight(-0.75), this).withTimeout(0.3),
-      new WaitCommand(0.2),
-      new RunCommand(() -> moveStraight(0.75)).withTimeout(0.25),
-      new ParallelCommandGroup(
-        sIntakeWheels.getOuttakeCommand().withTimeout(0.3),
-        new RunCommand(() -> moveStraight(0.75)).withTimeout(0.05)
-      )
-    );
   }
 }
