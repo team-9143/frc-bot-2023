@@ -194,6 +194,7 @@ public class RobotContainer {
     )
       .withWidget(BuiltInWidgets.kDial)
       .withProperties(Map.of("min", -110, "max", 110, "show value", true));
+    // TODO(HIGH prio): Check if working for other setpoints
     layout_1.addDouble("Error", () -> sIntakeTilt.getController().getPositionError() * 360)
       .withWidget(BuiltInWidgets.kNumberBar)
       .withProperties(Map.of("min", -110, "max", 110, "center", 0));

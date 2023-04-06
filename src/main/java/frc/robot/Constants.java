@@ -77,7 +77,7 @@ public final class Constants {
     // Non-PID intake movement
     public static final double kUpSpeed = -0.1;
     public static final double kDownSpeed = 0.08;
-    public static final double kSteadySpeed = -0.01; // TODO(HIGH prio): Tune tilt steady speed
+    public static final double kSteadySpeed = -0.01;
     public static final double kAimMidTimer = 0.4; // Seconds to wait for AimMid command
     public static final double kAutoAlignSpeed = -0.15;
     // TODO(autoAlign): Test and tune maximum current against NEO specs

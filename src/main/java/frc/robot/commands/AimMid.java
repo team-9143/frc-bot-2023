@@ -9,7 +9,6 @@ import frc.robot.Constants.IntakeConstants;
 
 import frc.robot.subsystems.IntakeTilt;
 
-// TODO(HIGH prio): test and tune speeds
 public class AimMid extends CommandBase {
   private final IntakeTilt intakeTilt;
 
