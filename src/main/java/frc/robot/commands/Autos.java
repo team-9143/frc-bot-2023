@@ -36,7 +36,7 @@ public final class Autos {
   public static enum Ending {
     TurnAway,
     TurnClose,
-    Return,
+    ReturnCone,
     None
   }
 
@@ -105,11 +105,11 @@ public final class Autos {
       case TurnClose:
         // Turn to face the drive station
         return new TurnToAngle(sDrivetrain, 0);
-      case Return:
-        // Turn around, then move the distance of the drivetrain encoders (undo all straight movement since the encoders were reset)
+      case ReturnCone:
+        // Turn toward the drive station, then move the same distance as PickupCone
         return new SequentialCommandGroup(
-          new TurnToAngle(sDrivetrain, OI.pigeon.getYaw() + 180),
-          new DriveDistance(sDrivetrain, Math.abs(sDrivetrain.getAvgPosition())*2)
+          new TurnToAngle(sDrivetrain, 0),
+          new DriveDistance(sDrivetrain, 204)
         );
       default:
         return new InstantCommand();
@@ -129,15 +129,16 @@ public final class Autos {
   /** Turn around and pickup a cone (inverts the intake wheels) */
   private static Command PickupCone(Drivetrain sDrivetrain, IntakeTilt sIntakeTilt, IntakeWheels sIntakeWheels) {
     return new SequentialCommandGroup(
-      new DriveDistance(sDrivetrain, 165), // Move near cone
+      new DriveDistance(sDrivetrain, -165), // Move near cone
       new TurnToAngle(sDrivetrain, 180),
       new InstantCommand(() -> {if (IntakeConstants.kIntakeSpeed > 0) {sIntakeWheels.invert();}}),
 
+      new InstantCommand(sDrivetrain::resetEncoders),
       new ParallelCommandGroup(
         new IntakeDown(sIntakeTilt),
         sIntakeWheels.getIntakeCommand(),
-        new WaitCommand(2.5).andThen(new RunCommand(() -> sDrivetrain.moveStraight(0.1), sDrivetrain))
-      ).until(() -> sDrivetrain.getAvgPosition() >= 204),
+        new WaitCommand(2).andThen(new RunCommand(() -> sDrivetrain.moveStraight(0.1), sDrivetrain))
+      ).until(() -> sDrivetrain.getAvgPosition() >= 40),
 
       new IntakeUp(sIntakeTilt).until(sIntakeTilt::atUpPos)
     );

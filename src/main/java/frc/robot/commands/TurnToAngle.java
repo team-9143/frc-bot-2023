@@ -14,14 +14,13 @@ import frc.robot.subsystems.Drivetrain;
 
 public class TurnToAngle extends PIDCommand {
   public static boolean m_enabled = false;
-  private static double m_heading = 0;
   private static final PIDController m_controller = new PIDController(DrivetrainConstants.kTurnP, DrivetrainConstants.kTurnI, DrivetrainConstants.kTurnD);
 
-  public TurnToAngle(Drivetrain drivetrain) {
+  public TurnToAngle(Drivetrain drivetrain, double heading) {
     super(
       m_controller,
       () -> -OI.pigeon.getYaw(),
-      () -> m_heading,
+      () -> heading,
       output -> drivetrain.turnInPlace(Math.max(-DrivetrainConstants.kTurnMaxSpeed, Math.min(output, DrivetrainConstants.kTurnMaxSpeed)))
     );
 
@@ -35,28 +34,9 @@ public class TurnToAngle extends PIDCommand {
     m_controller.setSetpoint(0);
   }
 
-  public TurnToAngle(Drivetrain drivetrain, double fheading) {
-    this(drivetrain);
-    setHeading(fheading);
-  }
-
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return m_controller.atSetpoint();
   }
-
-  /**
-   * Sets target heading and resets PID controller
-   *
-   * @param fheading Target heading (in degrees)
-   */
-  public void setHeading(double fheading) {
-    if (Math.abs(fheading - m_heading) > 50) {
-      m_controller.reset();
-    }
-    m_heading = fheading;
-  }
-
-  public static double getHeading() {return m_heading;}
 }
