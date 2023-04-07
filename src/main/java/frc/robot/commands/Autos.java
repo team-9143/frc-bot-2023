@@ -36,20 +36,15 @@ public final class Autos {
   public static enum Ending {
     TurnAway,
     TurnClose,
-    Return,
     None
   }
 
   public static Command getAuto(Starter starter, Body body, Ending end, IntakeTilt sIntakeTilt, IntakeWheels sIntakeWheels, Drivetrain sDrivetrain) {
-    return new InstantCommand(() -> {
-      getStarter(starter, sIntakeTilt, sIntakeWheels).raceWith(new RunCommand(sDrivetrain::stop, sDrivetrain))
-        .andThen(new InstantCommand(() -> {
-          getBody(body, sDrivetrain, sIntakeTilt, sIntakeWheels)
-            .andThen(new InstantCommand(() -> {
-              getEnd(end, sDrivetrain, sIntakeTilt, sIntakeWheels).schedule();
-            })).schedule();
-        })).schedule();
-    });
+    return new SequentialCommandGroup(
+      getStarter(starter, sIntakeTilt, sIntakeWheels).raceWith(new RunCommand(sDrivetrain::stop, sDrivetrain)),
+      getBody(body, sDrivetrain, sIntakeTilt, sIntakeWheels),
+      getEnd(end, sDrivetrain, sIntakeTilt, sIntakeWheels)
+    );
   }
 
   /** A command to handle the preloaded game piece. Does not move the drivetrain. */
@@ -109,12 +104,6 @@ public final class Autos {
       case TurnClose:
         // Turn to face the drive station
         return new TurnToAngle(sDrivetrain, 0);
-      case Return:
-        // Turn around, then move the distance of the drivetrain encoders (undo all straight movement since the encoders were reset)
-        return new SequentialCommandGroup(
-          new TurnToAngle(sDrivetrain, OI.pigeon.getYaw() + 180),
-          new DriveDistance(sDrivetrain, Math.abs(sDrivetrain.getAvgPosition())*2)
-        );
       default:
         return new InstantCommand();
     }
@@ -133,7 +122,7 @@ public final class Autos {
   /** Turn around and pickup a cone (inverts the intake wheels) */
   private static Command PickupCone(Drivetrain sDrivetrain, IntakeTilt sIntakeTilt, IntakeWheels sIntakeWheels) {
     return new SequentialCommandGroup(
-      new DriveDistance(sDrivetrain, 165), // Move near cone
+      new DriveDistance(sDrivetrain, -165), // Move near cone
       new TurnToAngle(sDrivetrain, 180),
       new InstantCommand(() -> {if (IntakeConstants.kIntakeSpeed > 0) {sIntakeWheels.invert();}}),
 
@@ -141,7 +130,7 @@ public final class Autos {
         new IntakeDown(sIntakeTilt),
         sIntakeWheels.getIntakeCommand(),
         new WaitCommand(2.5).andThen(new RunCommand(() -> sDrivetrain.moveStraight(0.1), sDrivetrain))
-      ).until(() -> sDrivetrain.getAvgPosition() >= 204),
+      ).until(() -> sDrivetrain.getAvgPosition() >= -125),
 
       new IntakeUp(sIntakeTilt).until(sIntakeTilt::atUpPos)
     );
