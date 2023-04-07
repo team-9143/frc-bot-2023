@@ -41,11 +41,15 @@ public final class Autos {
   }
 
   public static Command getAuto(Starter starter, Body body, Ending end, IntakeTilt sIntakeTilt, IntakeWheels sIntakeWheels, Drivetrain sDrivetrain) {
-    return new SequentialCommandGroup(
-      getStarter(starter, sIntakeTilt, sIntakeWheels).raceWith(new RunCommand(sDrivetrain::stop, sDrivetrain)),
-      getBody(body, sDrivetrain, sIntakeTilt, sIntakeWheels),
-      getEnd(end, sDrivetrain, sIntakeTilt, sIntakeWheels)
-    );
+    return new InstantCommand(() -> {
+      getStarter(starter, sIntakeTilt, sIntakeWheels).raceWith(new RunCommand(sDrivetrain::stop, sDrivetrain))
+        .andThen(new InstantCommand(() -> {
+          getBody(body, sDrivetrain, sIntakeTilt, sIntakeWheels)
+            .andThen(new InstantCommand(() -> {
+              getEnd(end, sDrivetrain, sIntakeTilt, sIntakeWheels).schedule();
+            })).schedule();
+        })).schedule();
+    });
   }
 
   /** A command to handle the preloaded game piece. Does not move the drivetrain. */
