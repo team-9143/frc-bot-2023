@@ -60,6 +60,7 @@ public class RobotContainer {
     sDrivetrain.stop();
     sIntakeWheels.stop();
     sIntakeTilt.disable();
+    IntakeWheels.m_holding = false;
     CommandScheduler.getInstance().cancelAll();
   });
 
