@@ -40,6 +40,8 @@ public final class Autos {
   }
 
   public static Command getAuto(Starter starter, Body body, Ending end, IntakeTilt sIntakeTilt, IntakeWheels sIntakeWheels, Drivetrain sDrivetrain) {
+    // TODO(HIGH prio): Fix auton endings - entails rewriting static headings in TurnToAngle and DriveDistance, as well as allowing for values (ex. current encoder position) to be given to the end module at module initialization, potential create as a new type of command
+    // TODO:(mid prio): Attempt to add dynamic secondary body module with values depending on the selected first body module
     return new SequentialCommandGroup(
       getStarter(starter, sIntakeTilt, sIntakeWheels).raceWith(new RunCommand(sDrivetrain::stop, sDrivetrain)),
       getBody(body, sDrivetrain, sIntakeTilt, sIntakeWheels),
