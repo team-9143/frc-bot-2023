@@ -111,14 +111,20 @@ public final class Autos {
     }
   }
 
-  /** Drive backwards out of the community's longer side */
+  /** Drive backwards out of the community's longer side, then turn around */
   private static Command LongEscape(Drivetrain sDrivetrain) {
-    return new DriveDistance(sDrivetrain, -150);
+    return new SequentialCommandGroup(
+      new DriveDistance(sDrivetrain, -150),
+      new TurnToAngle(sDrivetrain, 180)
+    );
   }
 
-  /** Drive backwards out of the community's shorter side */
+  /** Drive backwards out of the community's shorter side, then turn around */
   private static Command ShortEscape(Drivetrain sDrivetrain) {
-    return new DriveDistance(sDrivetrain, -90);
+    return new SequentialCommandGroup(
+      new DriveDistance(sDrivetrain, -90),
+      new TurnToAngle(sDrivetrain, 180)
+    );
   }
 
   /** Turn around and pickup a cone (inverts the intake wheels) */
