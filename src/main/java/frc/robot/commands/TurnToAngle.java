@@ -6,7 +6,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
-import edu.wpi.first.util.sendable.SendableRegistry;
 import frc.robot.OI;
 import frc.robot.Constants.DrivetrainConstants;
 
@@ -26,7 +25,6 @@ public class TurnToAngle extends PIDCommand {
     );
 
     addRequirements(drivetrain);
-    SendableRegistry.setSubsystem(m_controller, drivetrain.getSubsystem());
 
     // Configure additional PID options
     m_controller.setIntegratorRange(-DrivetrainConstants.kTurnMaxSpeed, DrivetrainConstants.kTurnMaxSpeed);

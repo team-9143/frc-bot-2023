@@ -6,7 +6,6 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
-import edu.wpi.first.util.sendable.SendableRegistry;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import com.ctre.phoenix.sensors.Pigeon2;
@@ -19,7 +18,13 @@ public class OI {
 
   // In proper orientation, Pigeon is flat and facing so that X-axis is forward
   // Roll increases to the right, pitch to the front, and yaw counter-clockwise
-  public final static Pigeon2 pigeon = new Pigeon2(DeviceConstants.kPigeonID);
+  // TODO: Test sendable pigeon
+  public final static Pigeon2 pigeon = new Pigeon2(DeviceConstants.kPigeonID) {
+    public void initSendable(SendableBuilder builder) {
+      builder.setSmartDashboardType("Gyro");
+      builder.addDoubleProperty("Value", () -> -this.getYaw() % 360, null);
+    }
+  };
 
   public static class Controller extends GenericHID {
     public static enum btn {
@@ -73,23 +78,20 @@ public class OI {
     public double getRightY() {return getRawAxis(axis.rightY.val);}
   }
 
-  public static class PigeonSendable implements Sendable, AutoCloseable {
-    public final Pigeon2 gyro;
+  // public static class PigeonSendable implements Sendable, AutoCloseable {
+  //   public final Pigeon2 gyro;
 
-    public PigeonSendable(Pigeon2 gyro) {
-      this.gyro = gyro;
-      SendableRegistry.addLW(this, "Drivetrain", "Pigeon 2.0");
-    }
+  //   public PigeonSendable(Pigeon2 gyro) {
+  //     this.gyro = gyro;
+  //   }
 
-    @Override
-    public void initSendable(SendableBuilder builder) {
-      builder.setSmartDashboardType("Gyro");
-      builder.addDoubleProperty("Value", () -> -gyro.getYaw() % 360, null);
-    }
+  //   @Override
+  //   public void initSendable(SendableBuilder builder) {
+  //     builder.setSmartDashboardType("Gyro");
+  //     builder.addDoubleProperty("Value", () -> -gyro.getYaw() % 360, null);
+  //   }
 
-    @Override
-    public void close() {
-      SendableRegistry.remove(this);
-    }
-  }
+  //   @Override
+  //   public void close() {}
+  // }
 }

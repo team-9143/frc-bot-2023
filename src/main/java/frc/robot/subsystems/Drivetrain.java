@@ -7,7 +7,6 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.util.sendable.SendableBuilder;
-import edu.wpi.first.util.sendable.SendableRegistry;
 import frc.robot.OI;
 import frc.robot.Constants.PhysConstants;
 import frc.robot.Constants.DrivetrainConstants;
@@ -63,7 +62,6 @@ public class Drivetrain extends SubsystemBase {
       this
     ));
 
-    SendableRegistry.setSubsystem(robotDrive, getSubsystem());
 
     // Sets encoders to measure in inches
     l_encoder.setPositionConversionFactor(PhysConstants.kWheelCircumference * PhysConstants.kDrivetrainGearbox);

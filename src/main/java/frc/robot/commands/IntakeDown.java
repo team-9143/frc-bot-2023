@@ -6,7 +6,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
-import edu.wpi.first.util.sendable.SendableRegistry;
 import frc.robot.Constants.IntakeConstants;
 
 import frc.robot.subsystems.IntakeTilt;
@@ -28,7 +27,6 @@ public class IntakeDown extends PIDCommand {
     m_controller.setIntegratorRange(-IntakeConstants.kTiltMaxSpeed, IntakeConstants.kTiltMaxSpeed);
 
     addRequirements(intakeTilt);
-    SendableRegistry.setSubsystem(m_controller, intakeTilt.getSubsystem());
   }
 
   @Override
