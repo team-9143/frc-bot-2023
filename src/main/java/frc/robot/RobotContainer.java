@@ -212,7 +212,7 @@ public class RobotContainer {
         .withWidget(BuiltInWidgets.kDial)
         .withProperties(Map.of("min", -110, "max", 110, "show value", true));
 
-    layout_1.addDouble("Error", () ->
+    layout_1.addDouble("Intake Error", () ->
       (((cIntakeDown.isScheduled()) ? Constants.IntakeConstants.kDownPos :
       (cAimMid.isScheduled()) ? Constants.IntakeConstants.kMidPos :
       Constants.IntakeConstants.kUpPos) -
@@ -223,27 +223,22 @@ public class RobotContainer {
     ShuffleboardLayout layout_2 = test_tab.getLayout("Intake Status", BuiltInLayouts.kList)
       .withPosition(4, 0)
       .withSize(3, 6);
-    layout_2.addBoolean("PID enabled", () -> cIntakeDown.isScheduled() || cIntakeUp.isScheduled() || sIntakeTilt.isEnabled())
-      .withWidget(BuiltInWidgets.kBooleanBox);
-    layout_2.addBoolean("Keeping steady", sIntakeTilt::isEnabled)
-      .withWidget(BuiltInWidgets.kBooleanBox);
     layout_2.addBoolean("Upright", () -> sIntakeTilt.getMeasurement() < Constants.IntakeConstants.kUpPosTolerance)
       .withWidget(BuiltInWidgets.kBooleanBox);
-
-    test_tab.addDouble("Intake Wheel RPM", sIntakeWheels::getVelocity)
-      .withPosition(7, 0)
-      .withSize(4, 2)
+    layout_2.addBoolean("PID Enabled", () -> cIntakeDown.isScheduled() || cIntakeUp.isScheduled() || sIntakeTilt.isEnabled())
+      .withWidget(BuiltInWidgets.kBooleanBox);
+    layout_2.addDouble("Intake Wheel RPM", sIntakeWheels::getVelocity)
       .withWidget(BuiltInWidgets.kNumberBar)
       .withProperties(Map.of("min", -250, "max", 250, "center", 0));
 
     test_tab.addDouble("TurnToAngle Error", () -> cTurnToAngle.getController().getPositionError())
-      .withPosition(7, 2)
+      .withPosition(7, 0)
       .withSize(4, 2)
       .withWidget(BuiltInWidgets.kNumberBar)
       .withProperties(Map.of("min", -180, "max", 180, "center", 0));
 
     test_tab.addDouble("DriveDistance Error", () -> cDriveDistance.getController().getPositionError())
-      .withPosition(7, 4)
+      .withPosition(7, 2)
       .withSize(4, 2)
       .withWidget(BuiltInWidgets.kNumberBar)
       .withProperties(Map.of("min", -150, "max", 150, "center", 0));
