@@ -87,11 +87,8 @@ public final class Constants {
     public static final double kUpPos = 0.003;
     public static final double kMidPos = 0.1;
     public static final double kDownPos = 0.29;
-    public static final double kPosTolerance = 0.025;
-
-    // Maximum threshold to be considered at a position (UNIT: rotations)
-    public static final double kUpPosThreshold = 0.025; // Large to account for play in the up position
-    public static final double kMidPosThreshold = 0.004;
+    public static final double kUpPosTolerance = 0.025; // Large to account for play in the up position
+    public static final double kMidPosTolerance = 0.004;
 
     // Intake tilt PID gains
     public static final double

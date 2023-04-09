@@ -12,7 +12,7 @@ import frc.robot.subsystems.IntakeTilt;
 
 public class IntakeDown extends PIDCommand {
   private final IntakeTilt intakeTilt;
-  private static final PIDController m_controller = new PIDController(IntakeConstants.kDownP, IntakeConstants.kDownI, IntakeConstants.kDownD);
+  public static final PIDController m_controller = new PIDController(IntakeConstants.kDownP, IntakeConstants.kDownI, IntakeConstants.kDownD);
 
   public IntakeDown(IntakeTilt intakeTilt) {
     super(
@@ -23,8 +23,6 @@ public class IntakeDown extends PIDCommand {
     );
 
     this.intakeTilt = intakeTilt;
-
-    m_controller.setIntegratorRange(-IntakeConstants.kTiltMaxSpeed, IntakeConstants.kTiltMaxSpeed);
 
     addRequirements(intakeTilt);
   }

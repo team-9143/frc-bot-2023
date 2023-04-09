@@ -29,7 +29,7 @@ public class AimMid extends CommandBase {
   @Override
   public void execute() {
     intakeTilt.useOutput(
-      (Math.abs(intakeTilt.getMeasurement() - IntakeConstants.kMidPos) < IntakeConstants.kMidPosThreshold) ? IntakeConstants.kSteadySpeed :
+      (Math.abs(intakeTilt.getMeasurement() - IntakeConstants.kMidPos) < IntakeConstants.kMidPosTolerance) ? IntakeConstants.kSteadySpeed :
       (intakeTilt.getMeasurement() < IntakeConstants.kMidPos) ? IntakeConstants.kDownSpeed : IntakeConstants.kUpSpeed,
     IntakeConstants.kMidPos);
   }

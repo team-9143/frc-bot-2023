@@ -14,7 +14,7 @@ import frc.robot.subsystems.Drivetrain;
 public class TurnToAngle extends PIDCommand {
   public static boolean m_enabled = false;
   private static double m_heading = 0;
-  private static final PIDController m_controller = new PIDController(DrivetrainConstants.kTurnP, DrivetrainConstants.kTurnI, DrivetrainConstants.kTurnD);
+  public static final PIDController m_controller = new PIDController(DrivetrainConstants.kTurnP, DrivetrainConstants.kTurnI, DrivetrainConstants.kTurnD);
 
   public TurnToAngle(Drivetrain drivetrain) {
     super(
@@ -25,12 +25,6 @@ public class TurnToAngle extends PIDCommand {
     );
 
     addRequirements(drivetrain);
-
-    // Configure additional PID options
-    m_controller.setIntegratorRange(-DrivetrainConstants.kTurnMaxSpeed, DrivetrainConstants.kTurnMaxSpeed);
-    m_controller.setTolerance(DrivetrainConstants.kTurnPosTolerance, DrivetrainConstants.kTurnVelTolerance);
-    m_controller.enableContinuousInput(-180, 180);
-    m_controller.setSetpoint(0);
   }
 
   public TurnToAngle(Drivetrain drivetrain, double fheading) {

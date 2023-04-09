@@ -81,6 +81,9 @@ public class RobotContainer {
     OI.pigeon.configMountPose(0, -0.24665457, -179.574783);
     OI.pigeon.setYaw(0);
 
+    // Configure PID controllers
+    configurePID();
+
     // Configure autonomous choices
     configureChoosers();
 
@@ -94,6 +97,24 @@ public class RobotContainer {
     configureMatchChecklistTab();
     configurePitChecklistTab();
     Shuffleboard.disableActuatorWidgets();
+  }
+
+  private void configurePID() {
+    TurnToAngle.m_controller.setIntegratorRange(-Constants.DrivetrainConstants.kTurnMaxSpeed, Constants.DrivetrainConstants.kTurnMaxSpeed);
+    TurnToAngle.m_controller.setTolerance(Constants.DrivetrainConstants.kTurnPosTolerance, Constants.DrivetrainConstants.kTurnVelTolerance);
+    TurnToAngle.m_controller.enableContinuousInput(-180, 180);
+    TurnToAngle.m_controller.setSetpoint(0);
+
+    DriveDistance.m_controller.setIntegratorRange(-Constants.DrivetrainConstants.kDistMaxSpeed, Constants.DrivetrainConstants.kDistMaxSpeed);
+    DriveDistance.m_controller.setTolerance(Constants.DrivetrainConstants.kDistPosTolerance, Constants.DrivetrainConstants.kDistVelTolerance);
+    DriveDistance.m_controller.setSetpoint(0);
+
+    IntakeDown.m_controller.setIntegratorRange(-Constants.IntakeConstants.kTiltMaxSpeed, Constants.IntakeConstants.kTiltMaxSpeed);
+    IntakeDown.m_controller.setSetpoint(Constants.IntakeConstants.kDownPos);
+
+    IntakeUp.m_controller.setIntegratorRange(-Constants.IntakeConstants.kTiltMaxSpeed, Constants.IntakeConstants.kTiltMaxSpeed);
+    IntakeUp.m_controller.setTolerance(Constants.IntakeConstants.kUpPosTolerance);
+    IntakeUp.m_controller.setSetpoint(Constants.IntakeConstants.kUpPos);
   }
 
   private void configureChoosers() {
@@ -209,7 +230,7 @@ public class RobotContainer {
       .withWidget(BuiltInWidgets.kBooleanBox);
     layout_2.addBoolean("Keeping steady", sIntakeTilt::isEnabled)
       .withWidget(BuiltInWidgets.kBooleanBox);
-    layout_2.addBoolean("Upright", sIntakeTilt::atUpPos)
+    layout_2.addBoolean("Upright", () -> sIntakeTilt.getMeasurement() < Constants.IntakeConstants.kUpPosTolerance)
       .withWidget(BuiltInWidgets.kBooleanBox);
 
     test_tab.addDouble("Intake Wheel RPM", sIntakeWheels::getVelocity)

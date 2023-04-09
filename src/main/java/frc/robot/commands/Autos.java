@@ -64,7 +64,7 @@ public final class Autos {
           new AimMid(sIntakeTilt).raceWith(
             new WaitCommand(IntakeConstants.kAimMidTimer).andThen(sIntakeWheels.getShootCommand().withTimeout(0.5))
           ),
-          new IntakeUp(sIntakeTilt).until(sIntakeTilt::atUpPos)
+          new IntakeUp(sIntakeTilt)
         );
       case SpitDown:
         // Aim down, spit, then move intake up
@@ -72,7 +72,7 @@ public final class Autos {
           new AimMid(sIntakeTilt).raceWith(
             new WaitCommand(IntakeConstants.kAimMidTimer).andThen(sIntakeWheels.getSpitCommand().withTimeout(0.5))
           ),
-          new IntakeUp(sIntakeTilt).until(sIntakeTilt::atUpPos)
+          new IntakeUp(sIntakeTilt)
         );
       default:
         return new InstantCommand();
@@ -140,7 +140,7 @@ public final class Autos {
         new WaitCommand(2.5).andThen(new RunCommand(() -> sDrivetrain.moveStraight(0.1), sDrivetrain))
       ).until(() -> sDrivetrain.getAvgPosition() >= -125),
 
-      new IntakeUp(sIntakeTilt).until(sIntakeTilt::atUpPos)
+      new IntakeUp(sIntakeTilt)
     );
   }
 
