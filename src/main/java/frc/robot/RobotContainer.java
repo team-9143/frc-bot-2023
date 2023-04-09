@@ -42,7 +42,6 @@ public class RobotContainer {
 
   private final Balance cBalance = new Balance(sDrivetrain);
   private final TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain, 0);
-  private final DriveDistance cDriveDistance = new DriveDistance(sDrivetrain, 0); // Only for shuffleboard
   private final IntakeDown cIntakeDown = new IntakeDown(sIntakeTilt);
   private final IntakeUp cIntakeUp = new IntakeUp(sIntakeTilt);
   private final Command cIntake = sIntakeWheels.getIntakeCommand();
