@@ -7,8 +7,6 @@ package frc.robot;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
@@ -56,13 +54,12 @@ public class RobotContainer {
     sIntakeWheels::stop,
     sIntakeWheels
   );
-  private final Command cStop = new InstantCommand(() -> {
+  private final Command cStop = new RunCommand(() -> {
     sDrivetrain.stop();
     sIntakeWheels.stop();
     sIntakeTilt.disable();
     IntakeWheels.m_holding = false;
-    CommandScheduler.getInstance().cancelAll();
-  });
+  }, sDrivetrain, sIntakeWheels, sIntakeTilt);
 
   // Dashboard declarations
   private final SendableChooser<Autos.Body> m_autonBodyChooser = new SendableChooser<Autos.Body>();
