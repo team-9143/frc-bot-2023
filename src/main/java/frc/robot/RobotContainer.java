@@ -8,6 +8,7 @@ import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -58,7 +59,8 @@ public class RobotContainer {
     sIntakeWheels.stop();
     sIntakeTilt.disable();
     IntakeWheels.m_holding = false;
-  }, sDrivetrain, sIntakeWheels, sIntakeTilt);
+  }, sDrivetrain, sIntakeWheels, sIntakeTilt)
+    .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
 
   // Dashboard declarations
   private final SendableChooser<Autos.Body> m_autonBodyChooser = new SendableChooser<Autos.Body>();
