@@ -60,6 +60,7 @@ public class RobotContainer {
     sDrivetrain.stop();
     sIntakeWheels.stop();
     sIntakeTilt.disable();
+    IntakeWheels.m_holding = false;
     CommandScheduler.getInstance().cancelAll();
   });
 
@@ -67,8 +68,8 @@ public class RobotContainer {
   private final SendableChooser<Autos.Body> m_autonBodyChooser = new SendableChooser<Autos.Body>();
   private final SendableChooser<Autos.Starter> m_autonStarterChooser = new SendableChooser<Autos.Starter>();
   private final SendableChooser<Autos.Ending> m_autonEndChooser = new SendableChooser<Autos.Ending>();
-  private final GenericEntry m_startingAngle =
-    Shuffleboard.getTab("Drive").add("Starting Angle", 180)
+  private final GenericEntry m_autonOffset =
+    Shuffleboard.getTab("Drive").add("Auton Angle Offset", 180)
       .withPosition(1, 5)
       .withSize(2, 2)
       .withWidget(BuiltInWidgets.kTextView)
@@ -77,7 +78,7 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure Pigeon - make sure to update pitch and roll offsets
-    OI.pigeon.configMountPose(0, -0.1978197, -179.08374);
+    OI.pigeon.configMountPose(0, -0.24665457, -179.574783);
     OI.pigeon.setYaw(0);
 
     // Configure autonomous choices
@@ -109,9 +110,8 @@ public class RobotContainer {
     m_autonBodyChooser.addOption("Center Backward", Autos.Body.CenterSimple);
     m_autonBodyChooser.setDefaultOption("None", Autos.Body.None);
 
-    m_autonEndChooser.addOption("Turn Away", Autos.Ending.TurnAway);
-    m_autonEndChooser.addOption("Turn Close", Autos.Ending.TurnClose);
-    m_autonEndChooser.addOption("Straight Return", Autos.Ending.ReturnToGrid);
+    //m_autonEndChooser.addOption("Turn Away", Autos.Ending.TurnAway);
+    //m_autonEndChooser.addOption("Turn Close", Autos.Ending.TurnClose);
     m_autonEndChooser.setDefaultOption("None", Autos.Ending.None);
   }
 
@@ -143,7 +143,7 @@ public class RobotContainer {
       .withWidget(BuiltInWidgets.kDial)
       .withProperties(Map.of("min", -45, "max", 45, "show value", true));
 
-    ShuffleboardLayout layout_1 = drive_tab.getLayout("Heading", BuiltInLayouts.kList)
+    ShuffleboardLayout layout_1 = drive_tab.getLayout("Rotation", BuiltInLayouts.kList)
       .withPosition(0, 0)
       .withSize(4, 5);
     layout_1.add("Gyro", new OI.PigeonSendable(OI.pigeon))
@@ -190,13 +190,17 @@ public class RobotContainer {
     layout_1.addDouble("Intake Setpoint", () ->
       ((cIntakeDown.isScheduled()) ? Constants.IntakeConstants.kDownPos :
       (cAimMid.isScheduled()) ? Constants.IntakeConstants.kMidPos :
-      Constants.IntakeConstants.kUpPos) * 360
-    )
-      .withWidget(BuiltInWidgets.kDial)
-      .withProperties(Map.of("min", -110, "max", 110, "show value", true));
-    layout_1.addDouble("Error", () -> sIntakeTilt.getController().getPositionError() * 360)
-      .withWidget(BuiltInWidgets.kNumberBar)
-      .withProperties(Map.of("min", -110, "max", 110, "center", 0));
+      Constants.IntakeConstants.kUpPos) * 360)
+        .withWidget(BuiltInWidgets.kDial)
+        .withProperties(Map.of("min", -110, "max", 110, "show value", true));
+
+    layout_1.addDouble("Error", () ->
+      (((cIntakeDown.isScheduled()) ? Constants.IntakeConstants.kDownPos :
+      (cAimMid.isScheduled()) ? Constants.IntakeConstants.kMidPos :
+      Constants.IntakeConstants.kUpPos) -
+      sIntakeTilt.getMeasurement()) * 360)
+        .withWidget(BuiltInWidgets.kNumberBar)
+        .withProperties(Map.of("min", -110, "max", 110, "center", 0));
 
     ShuffleboardLayout layout_2 = test_tab.getLayout("Intake Status", BuiltInLayouts.kList)
       .withPosition(4, 0)
@@ -231,6 +235,12 @@ public class RobotContainer {
       .withSize(5, 4)
       .withWidget(BuiltInWidgets.kDifferentialDrive)
       .withProperties(Map.of("number of wheels", 6, "wheel diameter", 60, "show velocity vectors", true));
+
+    test_tab.add("Gyro", new OI.PigeonSendable(OI.pigeon))
+      .withPosition(11, 4)
+      .withSize(5, 4)
+      .withWidget(BuiltInWidgets.kGyro)
+      .withProperties(Map.of("major tick spacing", 45, "starting angle", 180, "show tick mark ring", true));
   }
 
   private void configureMatchChecklistTab() {
@@ -463,6 +473,10 @@ public class RobotContainer {
     sIntakeTilt.autoAlign();
   }
 
+  public void enableIntake() {
+    sIntakeTilt.enable();
+  }
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
@@ -471,7 +485,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return Autos.getAuto(m_autonStarterChooser.getSelected(), m_autonBodyChooser.getSelected(), m_autonEndChooser.getSelected(), sIntakeTilt, sIntakeWheels, sDrivetrain)
       .beforeStarting(() -> OI.pigeon.setYaw(0))
-      .andThen(() -> OI.pigeon.setYaw(-m_startingAngle.getDouble(180)));
+      .andThen(() -> OI.pigeon.setYaw(OI.pigeon.getYaw() - m_autonOffset.getDouble(180)));
   }
 
   /** Stops all motors and disables PID controllers */

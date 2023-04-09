@@ -53,6 +53,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     m_robotContainer.stop();
+    TurnToAngle.m_enabled = false;
   }
 
   @Override
@@ -83,6 +84,7 @@ public class Robot extends TimedRobot {
     }
 
     TurnToAngle.m_enabled = false;
+    m_robotContainer.enableIntake();
   }
 
   /** This function is called periodically during operator control. */

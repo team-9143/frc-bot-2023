@@ -36,11 +36,12 @@ public final class Autos {
   public static enum Ending {
     TurnAway,
     TurnClose,
-    ReturnToGrid,
     None
   }
 
   public static Command getAuto(Starter starter, Body body, Ending end, IntakeTilt sIntakeTilt, IntakeWheels sIntakeWheels, Drivetrain sDrivetrain) {
+    // TODO(HIGH prio): Fix auton endings - entails rewriting static headings in TurnToAngle and DriveDistance, as well as allowing for values (ex. current encoder position) to be given to the end module at module initialization, potential create as a new type of command
+    // TODO:(mid prio): Attempt to add dynamic secondary body module with values depending on the selected first body module
     return new SequentialCommandGroup(
       getStarter(starter, sIntakeTilt, sIntakeWheels).raceWith(new RunCommand(sDrivetrain::stop, sDrivetrain)),
       getBody(body, sDrivetrain, sIntakeTilt, sIntakeWheels),
@@ -105,31 +106,31 @@ public final class Autos {
       case TurnClose:
         // Turn to face the drive station
         return new TurnToAngle(sDrivetrain, 0);
-      case ReturnToGrid:
-        // Turn to face the drive station and move back to the grid (assumes only straight movement)
-        return new SequentialCommandGroup(
-          new TurnToAngle(sDrivetrain, 0),
-          new DriveDistance(sDrivetrain, 0)
-        );
       default:
         return new InstantCommand();
     }
   }
 
-  /** Drive backwards out of the community's longer side */
+  /** Drive backwards out of the community's longer side, then turn around */
   private static Command LongEscape(Drivetrain sDrivetrain) {
-    return new DriveDistance(sDrivetrain, -150);
+    return new SequentialCommandGroup(
+      new DriveDistance(sDrivetrain, -150),
+      new TurnToAngle(sDrivetrain, 180)
+    );
   }
 
-  /** Drive backwards out of the community's shorter side */
+  /** Drive backwards out of the community's shorter side, then turn around */
   private static Command ShortEscape(Drivetrain sDrivetrain) {
-    return new DriveDistance(sDrivetrain, -90);
+    return new SequentialCommandGroup(
+      new DriveDistance(sDrivetrain, -90),
+      new TurnToAngle(sDrivetrain, 180)
+    );
   }
 
   /** Turn around and pickup a cone (inverts the intake wheels) */
   private static Command PickupCone(Drivetrain sDrivetrain, IntakeTilt sIntakeTilt, IntakeWheels sIntakeWheels) {
     return new SequentialCommandGroup(
-      new DriveDistance(sDrivetrain, 165), // Move near cone
+      new DriveDistance(sDrivetrain, -165), // Move near cone
       new TurnToAngle(sDrivetrain, 180),
       new InstantCommand(() -> {if (IntakeConstants.kIntakeSpeed > 0) {sIntakeWheels.invert();}}),
 
@@ -137,7 +138,7 @@ public final class Autos {
         new IntakeDown(sIntakeTilt),
         sIntakeWheels.getIntakeCommand(),
         new WaitCommand(2.5).andThen(new RunCommand(() -> sDrivetrain.moveStraight(0.1), sDrivetrain))
-      ).until(() -> sDrivetrain.getAvgPosition() >= 204),
+      ).until(() -> sDrivetrain.getAvgPosition() >= -125),
 
       new IntakeUp(sIntakeTilt).until(sIntakeTilt::atUpPos)
     );
