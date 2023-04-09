@@ -41,7 +41,7 @@ public class RobotContainer {
   private final IntakeTilt sIntakeTilt = new IntakeTilt();
 
   private final Balance cBalance = new Balance(sDrivetrain);
-  private final TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain);
+  private final TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain, 0);
   private final DriveDistance cDriveDistance = new DriveDistance(sDrivetrain); // Only for shuffleboard
   private final IntakeDown cIntakeDown = new IntakeDown(sIntakeTilt);
   private final IntakeUp cIntakeUp = new IntakeUp(sIntakeTilt);
@@ -231,7 +231,7 @@ public class RobotContainer {
       .withWidget(BuiltInWidgets.kNumberBar)
       .withProperties(Map.of("min", -250, "max", 250, "center", 0));
 
-    test_tab.addDouble("TurnToAngle Error", () -> cTurnToAngle.getController().getPositionError())
+    test_tab.addDouble("TurnToAngle Error", () -> TurnToAngle.m_controller.getPositionError())
       .withPosition(7, 0)
       .withSize(4, 2)
       .withWidget(BuiltInWidgets.kNumberBar)

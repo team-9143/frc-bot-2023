@@ -4,52 +4,49 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj2.command.PIDCommand;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.OI;
+import edu.wpi.first.math.controller.PIDController;
 import frc.robot.Constants.DrivetrainConstants;
 
 import frc.robot.subsystems.Drivetrain;
 
-public class TurnToAngle extends PIDCommand {
+public class TurnToAngle extends CommandBase {
   public static final PIDController m_controller = new PIDController(DrivetrainConstants.kTurnP, DrivetrainConstants.kTurnI, DrivetrainConstants.kTurnD);
   
+  private final Drivetrain drivetrain;
   public static boolean m_enabled = false;
-  private static double m_heading = 0;
+  private double heading;
 
-  public TurnToAngle(Drivetrain drivetrain) {
-    super(
-      m_controller,
-      () -> -OI.pigeon.getYaw(),
-      () -> m_heading,
-      output -> drivetrain.turnInPlace(Math.max(-DrivetrainConstants.kTurnMaxSpeed, Math.min(output, DrivetrainConstants.kTurnMaxSpeed)))
-    );
+  public TurnToAngle(Drivetrain drivetrain, double heading) {
+    this.drivetrain = drivetrain;
+    this.heading = heading;
 
+    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
   }
 
-  public TurnToAngle(Drivetrain drivetrain, double fheading) {
-    this(drivetrain);
-    setHeading(fheading);
+  @Override
+  public void initialize() {
+    m_controller.reset();
   }
 
-  // Returns true when the command should end.
+  @Override
+  public void execute() {
+    drivetrain.turnInPlace(Math.max(-DrivetrainConstants.kTurnMaxSpeed, Math.min(
+      m_controller.calculate(-OI.pigeon.getYaw(), heading),
+    DrivetrainConstants.kTurnMaxSpeed)));
+  }
+
   @Override
   public boolean isFinished() {
     return m_controller.atSetpoint();
   }
 
-  /**
-   * Sets target heading and resets PID controller
-   *
-   * @param fheading Target heading (in degrees)
-   */
-  public void setHeading(double fheading) {
-    if (Math.abs(fheading - m_heading) > 50) {
-      m_controller.reset();
-    }
-    m_heading = fheading;
+  @Override
+  public void end(boolean interrupted) {
+    drivetrain.stop();
   }
 
-  public static double getHeading() {return m_heading;}
+  public void setHeading(double heading) {this.heading = heading;}
 }

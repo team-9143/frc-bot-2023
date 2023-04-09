@@ -83,7 +83,6 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
 
-    TurnToAngle.m_enabled = false;
     m_robotContainer.enableIntake();
   }
 
