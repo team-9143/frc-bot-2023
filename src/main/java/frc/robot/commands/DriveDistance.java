@@ -4,54 +4,46 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.robot.Constants.DrivetrainConstants;
 
 import frc.robot.subsystems.Drivetrain;
 
-public class DriveDistance extends PIDCommand {
+public class DriveDistance extends CommandBase {
   public static final PIDController m_controller = new PIDController(DrivetrainConstants.kDistP, DrivetrainConstants.kDistI, DrivetrainConstants.kDistD);
   
   private final Drivetrain drivetrain;
-  private static double m_distance = 0; // In inches
+  private double distance; // UNIT: inches
 
-  public DriveDistance(Drivetrain drivetrain) {
-    super(
-      m_controller,
-      drivetrain::getAvgPosition,
-      () -> m_distance,
-      output -> drivetrain.moveStraight(Math.max(-DrivetrainConstants.kDistMaxSpeed, Math.min(output, DrivetrainConstants.kDistMaxSpeed)))
-    );
-
+  public DriveDistance(Drivetrain drivetrain, double distance) {
     this.drivetrain = drivetrain;
+    this.distance = distance;
 
+    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
-  }
-
-  public DriveDistance(Drivetrain drivetrain, double fdistance) {
-    this(drivetrain);
-    setDistance(fdistance);
   }
 
   @Override
   public void initialize() {
-    super.initialize();
+    m_controller.reset();
     drivetrain.resetEncoders();
   }
 
-  // Returns true when the command should end.
+  @Override
+  public void execute() {
+    drivetrain.moveStraight(Math.max(-DrivetrainConstants.kDistMaxSpeed, Math.min(
+      m_controller.calculate(drivetrain.getAvgPosition(), distance),
+    DrivetrainConstants.kDistMaxSpeed)));
+  }
+
   @Override
   public boolean isFinished() {
     return m_controller.atSetpoint();
   }
 
-  /**
-   * Sets target distance
-   *
-   * @param fdistance Target distance (in inches)
-   */
-  public static void setDistance(double fdistance) {
-    m_distance = fdistance;
+  @Override
+  public void end(boolean interrupted) {
+    drivetrain.stop();
   }
 }
