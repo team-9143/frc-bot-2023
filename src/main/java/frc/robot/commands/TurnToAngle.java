@@ -12,9 +12,10 @@ import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.subsystems.Drivetrain;
 
 public class TurnToAngle extends PIDCommand {
+  public static final PIDController m_controller = new PIDController(DrivetrainConstants.kTurnP, DrivetrainConstants.kTurnI, DrivetrainConstants.kTurnD);
+  
   public static boolean m_enabled = false;
   private static double m_heading = 0;
-  public static final PIDController m_controller = new PIDController(DrivetrainConstants.kTurnP, DrivetrainConstants.kTurnI, DrivetrainConstants.kTurnD);
 
   public TurnToAngle(Drivetrain drivetrain) {
     super(

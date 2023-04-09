@@ -11,8 +11,9 @@ import frc.robot.Constants.IntakeConstants;
 import frc.robot.subsystems.IntakeTilt;
 
 public class IntakeUp extends PIDCommand {
-  private final IntakeTilt intakeTilt;
   public static final PIDController m_controller = new PIDController(IntakeConstants.kUpP, IntakeConstants.kUpI, IntakeConstants.kUpD);
+  
+  private final IntakeTilt intakeTilt;
 
   public IntakeUp(IntakeTilt intakeTilt) {
     super(
