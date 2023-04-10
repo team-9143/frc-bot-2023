@@ -36,6 +36,7 @@ public final class Autos {
   public static enum Ending {
     TurnAway,
     TurnClose,
+    ReturnFromCone,
     None
   }
 
@@ -45,7 +46,7 @@ public final class Autos {
     return new SequentialCommandGroup(
       getStarter(starter, sIntakeTilt, sIntakeWheels).raceWith(new RunCommand(sDrivetrain::stop, sDrivetrain)),
       getBody(body, sDrivetrain, sIntakeTilt, sIntakeWheels),
-      getEnd(end, sDrivetrain, sIntakeTilt, sIntakeWheels)
+      getEnd(end, body, sDrivetrain, sIntakeTilt, sIntakeWheels)
     );
   }
 
@@ -98,7 +99,7 @@ public final class Autos {
   }
 
   /** A command for the end of the auton. Moves the drivetrain. */
-  private static Command getEnd(Ending end, Drivetrain sDrivetrain, IntakeTilt sIntakeTilt, IntakeWheels sIntakeWheels) {
+  private static Command getEnd(Ending end, Body body, Drivetrain sDrivetrain, IntakeTilt sIntakeTilt, IntakeWheels sIntakeWheels) {
     switch (end) {
       case TurnAway:
         // Turn to face away from the drive station
@@ -106,6 +107,14 @@ public final class Autos {
       case TurnClose:
         // Turn to face the drive station
         return new TurnToAngle(sDrivetrain, 0);
+      case ReturnFromCone:
+        // If picking up a cone, turn and return to the grid
+        if (body == Body.PickupCone) {
+          return new SequentialCommandGroup(
+            new TurnToAngle(sDrivetrain, 0),
+            new DriveDistance(sDrivetrain, 205)
+          );
+        }
       default:
         return new InstantCommand();
     }
@@ -199,29 +208,4 @@ public final class Autos {
       new Balance(sDrivetrain)
     );
   }
-
-  // private static Command WIPAuto(Drivetrain sDrivetrain, IntakeWheels sIntakeWheels, IntakeTilt sIntakeTilt) {
-  //   TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain);
-  //   return new SequentialCommandGroup(
-  //     sIntakeWheels.getShootCommand().withTimeout(0.5),
-
-  //     new TurnToAngle(sDrivetrain).beforeStarting(() -> cTurnToAngle.setHeading(180)),
-
-  //     new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(224)),
-
-  //     new IntakeDown(sIntakeTilt).alongWith(sIntakeWheels.getIntakeCommand()).withTimeout(2),
-
-  //     new IntakeUp(sIntakeTilt),
-
-  //     new TurnToAngle(sDrivetrain).beforeStarting(() -> cTurnToAngle.setHeading(90)),
-
-  //     new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(48)),
-
-  //     new TurnToAngle(sDrivetrain).beforeStarting(() -> cTurnToAngle.setHeading(0)),
-
-  //     new DriveDistance(sDrivetrain).beforeStarting(() -> DriveDistance.setDistance(48)),
-
-  //     new Balance(sDrivetrain)
-  //   );
-  // }
 }
