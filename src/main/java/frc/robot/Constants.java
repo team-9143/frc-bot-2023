@@ -16,8 +16,8 @@ package frc.robot;
 public final class Constants {
   public static class PhysConstants {
     public static final double kDrivetrainGearbox = 1/8.45;
-    public static final double kTiltGearbox = (double) 1/35;
-    public static final double kWheelGearbox = (double) 1/3;
+    public static final double kTiltGearbox = 1/35.0;
+    public static final double kWheelGearbox = 1/3.0;
 
     public static final double kWheelCircumference = 6 * Math.PI; // UNIT: inches
   }
