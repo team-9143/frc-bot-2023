@@ -116,23 +116,23 @@ public class RobotContainer {
   }
 
   private void configureChoosers() {
-    m_autonStarterChooser.addOption("Shoot", Autos.Starter.Shoot);
-    m_autonStarterChooser.addOption("Spit", Autos.Starter.Spit);
-    m_autonStarterChooser.addOption("Shoot Down", Autos.Starter.ShootDown);
-    m_autonStarterChooser.addOption("Spit Down", Autos.Starter.SpitDown);
-    m_autonStarterChooser.setDefaultOption("None", Autos.Starter.None);
+    m_autonStarterChooser.addOption("Shoot", Autos.Starter.CUBE_SHOOT);
+    m_autonStarterChooser.addOption("Spit", Autos.Starter.CUBE_SPIT);
+    m_autonStarterChooser.addOption("Shoot Down", Autos.Starter.CUBE_SHOOT_DOWN);
+    m_autonStarterChooser.addOption("Spit Down", Autos.Starter.CUBE_SPIT_DOWN);
+    m_autonStarterChooser.setDefaultOption("None", Autos.Starter.NONE);
 
-    m_autonBodyChooser.addOption("Long Backward", Autos.Body.LongEscape);
-    m_autonBodyChooser.addOption("Short Backward", Autos.Body.ShortEscape);
-    m_autonBodyChooser.addOption("Pickup Cone", Autos.Body.PickupCone);
-    m_autonBodyChooser.addOption("Center Over Backward", Autos.Body.CenterOver);
-    m_autonBodyChooser.addOption("Center Backward", Autos.Body.CenterSimple);
-    m_autonBodyChooser.setDefaultOption("None", Autos.Body.None);
+    m_autonBodyChooser.addOption("Long Backward", Autos.Body.ESCAPE_LONG);
+    m_autonBodyChooser.addOption("Short Backward", Autos.Body.ESCAPE_SHORT);
+    m_autonBodyChooser.addOption("Pickup Cone", Autos.Body.PICKUP_CONE);
+    m_autonBodyChooser.addOption("Center Over Backward", Autos.Body.CENTER_OVER);
+    m_autonBodyChooser.addOption("Center Backward", Autos.Body.CENTER_SIMPLE);
+    m_autonBodyChooser.setDefaultOption("None", Autos.Body.NONE);
 
-    m_autonEndChooser.addOption("Turn Away", Autos.Ending.TurnAway);
-    m_autonEndChooser.addOption("Turn Close", Autos.Ending.TurnClose);
-    m_autonEndChooser.addOption("Return From Cone", Autos.Ending.ReturnFromCone);
-    m_autonEndChooser.setDefaultOption("None", Autos.Ending.None);
+    m_autonEndChooser.addOption("Turn Away", Autos.Ending.TURN_AWAY);
+    m_autonEndChooser.addOption("Turn Close", Autos.Ending.TURN_CLOSE);
+    m_autonEndChooser.addOption("Return From Cone", Autos.Ending.RETURN_FROM_CONE);
+    m_autonEndChooser.setDefaultOption("None", Autos.Ending.NONE);
   }
 
   private void configureDriveTab() {

@@ -19,25 +19,25 @@ import frc.robot.subsystems.*;
 
 public final class Autos {
   public static enum Starter {
-    Shoot,
-    Spit,
-    ShootDown,
-    SpitDown,
-    None
+    CUBE_SHOOT,
+    CUBE_SPIT,
+    CUBE_SHOOT_DOWN,
+    CUBE_SPIT_DOWN,
+    NONE
   }
   public static enum Body {
-    LongEscape,
-    ShortEscape,
-    PickupCone,
-    CenterOver,
-    CenterSimple,
-    None
+    ESCAPE_LONG,
+    ESCAPE_SHORT,
+    PICKUP_CONE,
+    CENTER_OVER,
+    CENTER_SIMPLE,
+    NONE
   }
   public static enum Ending {
-    TurnAway,
-    TurnClose,
-    ReturnFromCone,
-    None
+    TURN_AWAY,
+    TURN_CLOSE,
+    RETURN_FROM_CONE,
+    NONE
   }
 
   public static Command getAuto(Starter starter, Body body, Ending end, IntakeTilt sIntakeTilt, IntakeWheels sIntakeWheels, Drivetrain sDrivetrain) {
@@ -53,13 +53,13 @@ public final class Autos {
   /** A command to handle the preloaded game piece. Does not move the drivetrain. */
   private static Command getStarter(Starter starter, IntakeTilt sIntakeTilt, IntakeWheels sIntakeWheels) {
     switch (starter) {
-      case Shoot:
+      case CUBE_SHOOT:
         // Shoot
         return sIntakeWheels.getShootCommand().withTimeout(0.5);
-      case Spit:
+      case CUBE_SPIT:
         // Spit
         return sIntakeWheels.getSpitCommand().withTimeout(0.5);
-      case ShootDown:
+      case CUBE_SHOOT_DOWN:
         // Aim down, shoot, then move intake up
         return new SequentialCommandGroup(
           new AimMid(sIntakeTilt).raceWith(
@@ -67,7 +67,7 @@ public final class Autos {
           ),
           new IntakeUp(sIntakeTilt)
         );
-      case SpitDown:
+      case CUBE_SPIT_DOWN:
         // Aim down, spit, then move intake up
         return new SequentialCommandGroup(
           new AimMid(sIntakeTilt).raceWith(
@@ -83,15 +83,15 @@ public final class Autos {
   /** A command contining the main body of the auton. Moves the drivetrain. */
   private static Command getBody(Body body, Drivetrain sDrivetrain, IntakeTilt sIntakeTilt, IntakeWheels sIntakeWheels) {
     switch (body) {
-      case LongEscape:
+      case ESCAPE_LONG:
         return LongEscape(sDrivetrain);
-      case ShortEscape:
+      case ESCAPE_SHORT:
         return ShortEscape(sDrivetrain);
-      case PickupCone:
+      case PICKUP_CONE:
         return PickupCone(sDrivetrain, sIntakeTilt, sIntakeWheels);
-      case CenterOver:
+      case CENTER_OVER:
         return CenterOver(sDrivetrain);
-      case CenterSimple:
+      case CENTER_SIMPLE:
         return CenterSimple(sDrivetrain);
       default:
         return new InstantCommand();
@@ -101,15 +101,15 @@ public final class Autos {
   /** A command for the end of the auton. Moves the drivetrain. */
   private static Command getEnd(Ending end, Body body, Drivetrain sDrivetrain, IntakeTilt sIntakeTilt, IntakeWheels sIntakeWheels) {
     switch (end) {
-      case TurnAway:
+      case TURN_AWAY:
         // Turn to face away from the drive station
         return new TurnToAngle(sDrivetrain, 180);
-      case TurnClose:
+      case TURN_CLOSE:
         // Turn to face the drive station
         return new TurnToAngle(sDrivetrain, 0);
-      case ReturnFromCone:
+      case RETURN_FROM_CONE:
         // If picking up a cone, turn and return to the grid
-        if (body == Body.PickupCone) {
+        if (body == Body.PICKUP_CONE) {
           return new SequentialCommandGroup(
             new TurnToAngle(sDrivetrain, 0),
             new DriveDistance(sDrivetrain, 205)
