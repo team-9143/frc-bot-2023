@@ -4,19 +4,13 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.OI;
 import frc.robot.Constants.DrivetrainConstants;
 
+import java.util.Set;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.Drivetrain;
 
 public class Balance extends CommandBase {
-  private final Drivetrain drivetrain;
-  private double previousPitch = 0;
-
-  public Balance(Drivetrain drivetrain) {
-    this.drivetrain = drivetrain;
-    previousPitch = -OI.pigeon.getPitch();
-
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(drivetrain);
-  }
+  private static final Drivetrain drivetrain = Drivetrain.getInstance();
+  private double previousPitch = -OI.pigeon.getPitch();
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -31,7 +25,7 @@ public class Balance extends CommandBase {
       }
     } else {
       // Stop movement on a large pitch change (usually denoting a fall) or when stabilized
-      drivetrain.stop();
+      Drivetrain.stop();
     }
 
     previousPitch = pitch;
@@ -40,6 +34,11 @@ public class Balance extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    drivetrain.stop();
+    Drivetrain.stop();
+  }
+
+  @Override
+  public Set<Subsystem> getRequirements() {
+    return Set.of(drivetrain);
   }
 }

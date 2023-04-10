@@ -21,7 +21,7 @@ public class Drivetrain extends SubsystemBase {
   private static Drivetrain m_instance;
 
   /** @return the singleton instance */
-  public static Drivetrain getInstance() {
+  public static synchronized Drivetrain getInstance() {
     if (m_instance == null) {
       m_instance = new Drivetrain();
     }
@@ -102,7 +102,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   // Stops drivetrain motors
-  public void stop() {
+  public static void stop() {
     robotDrive.stopMotor();
   }
 }

@@ -4,24 +4,21 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.robot.Constants.IntakeConstants;
 
+import java.util.Set;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.IntakeTilt;
 
 public class IntakeUp extends PIDCommand {
+  private static final IntakeTilt intakeTilt = IntakeTilt.getInstance();
   public static final PIDController m_controller = new PIDController(IntakeConstants.kUpP, IntakeConstants.kUpI, IntakeConstants.kUpD);
 
-  private final IntakeTilt intakeTilt;
-
-  public IntakeUp(IntakeTilt intakeTilt) {
+  public IntakeUp() {
     super(
       m_controller,
       intakeTilt::getMeasurement,
       () -> IntakeConstants.kUpPos,
       output -> intakeTilt.useOutput(output, IntakeConstants.kUpPos)
     );
-
-    this.intakeTilt = intakeTilt;
-
-    addRequirements(intakeTilt);
   }
 
   @Override
@@ -38,5 +35,10 @@ public class IntakeUp extends PIDCommand {
   @Override
   public void end(boolean interrupted) {
     intakeTilt.enable();
+  }
+
+  @Override
+  public Set<Subsystem> getRequirements() {
+    return Set.of(intakeTilt);
   }
 }

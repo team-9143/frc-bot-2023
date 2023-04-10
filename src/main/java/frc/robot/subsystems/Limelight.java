@@ -9,7 +9,7 @@ public class Limelight extends SubsystemBase {
   private static Limelight m_instance;
 
   /** @return the singleton instance */
-  public static Limelight getInstance() {
+  public static synchronized Limelight getInstance() {
     if (m_instance == null) {
       m_instance = new Limelight();
     }

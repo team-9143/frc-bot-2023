@@ -3,17 +3,12 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.IntakeConstants;
 
+import java.util.Set;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.IntakeTilt;
 
 public class AimMid extends CommandBase {
-  private final IntakeTilt intakeTilt;
-
-  public AimMid(IntakeTilt intakeTilt) {
-    this.intakeTilt = intakeTilt;
-
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(intakeTilt);
-  }
+  private static final IntakeTilt intakeTilt = IntakeTilt.getInstance();
 
   // Called when the command is initially scheduled.
   @Override
@@ -34,5 +29,10 @@ public class AimMid extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     intakeTilt.disable();
+  }
+
+  @Override
+  public Set<Subsystem> getRequirements() {
+    return Set.of(intakeTilt);
   }
 }

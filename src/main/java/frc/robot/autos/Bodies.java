@@ -2,7 +2,6 @@ package frc.robot.autos;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.OI;
-import frc.robot.Constants.IntakeConstants;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -12,13 +11,12 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 import frc.robot.commands.*;
-import frc.robot.subsystems.*;
+import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.IntakeWheels;
 
 /** Contains auton bodies */
 public class Bodies {
   private static final Drivetrain sDrivetrain = Drivetrain.getInstance();
-  private static final IntakeTilt sIntakeTilt = IntakeTilt.getInstance();
-  private static final IntakeWheels sIntakeWheels = IntakeWheels.getInstance();
 
   /** A command handling the main body of an auton. Moves the drivetrain. */
   public static Command getBody(AutoSelector.Body body) {
@@ -41,33 +39,33 @@ public class Bodies {
   /** Drive backwards out of the community's longer side, then turn around */
   private static Command LongEscape() {
     return new SequentialCommandGroup(
-      new DriveDistance(sDrivetrain, -150),
-      new TurnToAngle(sDrivetrain, 180)
+      new DriveDistance(-150),
+      new TurnToAngle(180)
     );
   }
 
   /** Drive backwards out of the community's shorter side, then turn around */
   private static Command ShortEscape() {
     return new SequentialCommandGroup(
-      new DriveDistance(sDrivetrain, -90),
-      new TurnToAngle(sDrivetrain, 180)
+      new DriveDistance(-90),
+      new TurnToAngle(180)
     );
   }
 
   /** Turn around and pickup a cone (inverts the intake wheels) */
   private static Command PickupCone() {
     return new SequentialCommandGroup(
-      new DriveDistance(sDrivetrain, -165), // Move near cone
-      new TurnToAngle(sDrivetrain, 180),
-      new InstantCommand(() -> {if (IntakeConstants.kIntakeSpeed > 0) {sIntakeWheels.invert();}}),
+      new DriveDistance(-165), // Move near cone
+      new TurnToAngle(180),
+      new InstantCommand(() -> {if (IntakeWheels.isInverted()) {IntakeWheels.invert();}}),
 
       new ParallelCommandGroup(
-        new IntakeDown(sIntakeTilt),
-        sIntakeWheels.getIntakeCommand(),
+        new IntakeDown(),
+        IntakeWheels.getIntakeCommand(),
         new WaitCommand(2.5).andThen(new RunCommand(() -> sDrivetrain.moveStraight(0.1), sDrivetrain))
       ).until(() -> sDrivetrain.getAvgPosition() >= -125),
 
-      new IntakeUp(sIntakeTilt)
+      new IntakeUp()
     );
   }
 
@@ -105,7 +103,7 @@ public class Bodies {
 
       new RunCommand(() -> sDrivetrain.moveStraight(0.45), sDrivetrain).withTimeout(1.5),
 
-      new Balance(sDrivetrain)
+      new Balance()
     );
   }
 
@@ -123,7 +121,7 @@ public class Bodies {
 
       new RunCommand(() -> sDrivetrain.moveStraight(-0.35), sDrivetrain).withTimeout(1),
 
-      new Balance(sDrivetrain)
+      new Balance()
     );
   }
 }

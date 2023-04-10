@@ -16,7 +16,7 @@ public class IntakeTilt extends PIDSubsystem {
   private static IntakeTilt m_instance;
 
   /** @return the singleton instance */
-  public static IntakeTilt getInstance() {
+  public static synchronized IntakeTilt getInstance() {
     if (m_instance == null) {
       m_instance = new IntakeTilt();
     }

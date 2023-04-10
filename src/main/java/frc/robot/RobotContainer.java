@@ -50,22 +50,22 @@ public class RobotContainer {
   private static final IntakeWheels sIntakeWheels = IntakeWheels.getInstance();
   private static final IntakeTilt sIntakeTilt = IntakeTilt.getInstance();
 
-  private final Balance cBalance = new Balance(sDrivetrain);
-  private final TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain, 0);
-  private final IntakeDown cIntakeDown = new IntakeDown(sIntakeTilt);
-  private final IntakeUp cIntakeUp = new IntakeUp(sIntakeTilt);
-  private final Command cIntake = sIntakeWheels.getIntakeCommand();
-  private final Command cShoot = sIntakeWheels.getShootCommand();
-  private final Command cSpit = sIntakeWheels.getSpitCommand();
-  private final Command cAimMid = new AimMid(sIntakeTilt);
+  private final Balance cBalance = new Balance();
+  private final TurnToAngle cTurnToAngle = new TurnToAngle(0);
+  private final IntakeDown cIntakeDown = new IntakeDown();
+  private final IntakeUp cIntakeUp = new IntakeUp();
+  private final Command cIntake = IntakeWheels.getIntakeCommand();
+  private final Command cShoot = IntakeWheels.getShootCommand();
+  private final Command cSpit = IntakeWheels.getSpitCommand();
+  private final Command cAimMid = new AimMid();
   private final Command cManualHold = new StartEndCommand(
     () -> sIntakeWheels.set(Constants.IntakeConstants.kHoldingSpeed),
-    sIntakeWheels::stop,
+    IntakeWheels::stop,
     sIntakeWheels
   );
   private static final Command cStop = new RunCommand(() -> {
-    sDrivetrain.stop();
-    sIntakeWheels.stop();
+    Drivetrain.stop();
+    IntakeWheels.stop();
     sIntakeTilt.stop();
     IntakeWheels.m_holding = false;
   }, sDrivetrain, sIntakeWheels, sIntakeTilt)
@@ -165,7 +165,7 @@ public class RobotContainer {
     ShuffleboardLayout layout_3 = drive_tab.getLayout("Intake", BuiltInLayouts.kList)
       .withPosition(13, 0)
       .withSize(4, 6);
-    layout_3.addBoolean("Inverted", () -> Constants.IntakeConstants.kIntakeSpeed < 0)
+    layout_3.addBoolean("Inverted", IntakeWheels::isInverted)
       .withWidget(BuiltInWidgets.kBooleanBox);
     layout_3.addBoolean("Intaking", () -> (sIntakeWheels.get() * Constants.IntakeConstants.kOuttakeSpeed) < 0)
       .withWidget(BuiltInWidgets.kBooleanBox);
@@ -391,12 +391,12 @@ public class RobotContainer {
     // Button 'A' will swap intake and outtake (for cones)
     new JoystickButton(OI.operator_cntlr, OI.Controller.btn.A.val)
       .onTrue(new InstantCommand(() -> {
-        sIntakeWheels.invert();
+        IntakeWheels.invert();
 
         if (cIntake.isScheduled() || cManualHold.isScheduled()) {
           sIntakeWheels.set(-sIntakeWheels.get());
         } else if (!(cShoot.isScheduled() || cSpit.isScheduled())) {
-          sIntakeWheels.stop();
+          IntakeWheels.stop();
         }
       }));
 

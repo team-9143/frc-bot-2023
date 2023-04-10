@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 
-import frc.robot.subsystems.*;
+import frc.robot.subsystems.Drivetrain;
 
 public final class AutoSelector {
   public static enum Starter {
@@ -61,7 +61,7 @@ public final class AutoSelector {
     // TODO:(mid prio): Attempt to add dynamic secondary body module with values depending on the selected first body module, editing values with a refresh button
     return new SequentialCommandGroup(
       Starters.getStarter(m_starterChooser.getSelected())
-        .raceWith(new RunCommand(Drivetrain.getInstance()::stop, Drivetrain.getInstance())),
+        .raceWith(new RunCommand(Drivetrain::stop, Drivetrain.getInstance())),
       Bodies.getBody(m_bodyChooser.getSelected()),
       Endings.getEnding(m_endChooser.getSelected(), m_bodyChooser.getSelected())
     );

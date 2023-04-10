@@ -16,7 +16,7 @@ public class IntakeWheels extends SubsystemBase {
   private static IntakeWheels m_instance;
 
   /** @return the singleton instance */
-  public static IntakeWheels getInstance() {
+  public static synchronized IntakeWheels getInstance() {
     if (m_instance == null) {
       m_instance = new IntakeWheels();
     }
@@ -30,10 +30,9 @@ public class IntakeWheels extends SubsystemBase {
   private static final RelativeEncoder intake_encoder = intake_motor.getEncoder();
 
   private IntakeWheels() {
-    setDefaultCommand(new StartEndCommand(
-      () -> {if (m_holding && IntakeConstants.kIntakeSpeed < 0) {intake_motor.set(IntakeConstants.kHoldingSpeed);}},
-      this::stop,
-      this
+    setDefaultCommand(startEnd(
+      () -> {if (m_holding && isInverted()) {intake_motor.set(IntakeConstants.kHoldingSpeed);}},
+      IntakeWheels::stop
     ));
 
     intake_encoder.setPositionConversionFactor(PhysConstants.kTiltGearbox);
@@ -47,45 +46,52 @@ public class IntakeWheels extends SubsystemBase {
 
   public double getVelocity() {return intake_encoder.getVelocity();}
 
-  public void invert() {
+  public static void invert() {
     IntakeConstants.kIntakeSpeed *= -1;
     IntakeConstants.kOuttakeSpeed *= -1;
     IntakeConstants.kSpitSpeed *= -1;
     IntakeConstants.kHoldingSpeed *= -1;
   }
 
+  public static boolean isInverted() {
+    return IntakeConstants.kIntakeSpeed < 0;
+  }
+
   // Stops all motors
-  public void stop() {
+  public static void stop() {
     intake_motor.stopMotor();
   }
 
-  public Command getIntakeCommand() {
-    return startEnd(
+  public static Command getIntakeCommand() {
+    return new StartEndCommand(
       () -> {
         intake_motor.set(IntakeConstants.kIntakeSpeed);
         m_holding = true;
       },
-      this::stop
+      IntakeWheels::stop,
+      m_instance
     );
   }
 
-  public Command getShootCommand() {
-    return startEnd(
+  public static Command getShootCommand() {
+    return new StartEndCommand(
       () -> {
         intake_motor.set(IntakeConstants.kOuttakeSpeed);
         m_holding = false;
       },
-      this::stop
+      IntakeWheels::stop,
+      m_instance
     );
   }
 
-  public Command getSpitCommand() {
-    return startEnd(
+  public static Command getSpitCommand() {
+    return new StartEndCommand(
       () -> {
         intake_motor.set(IntakeConstants.kSpitSpeed);
         m_holding = false;
       },
-      this::stop
+      IntakeWheels::stop,
+      m_instance
     );
   }
 }
