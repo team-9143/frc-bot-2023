@@ -15,6 +15,7 @@ public class IntakeUp extends CommandBase {
   @Override
   public void initialize() {
     m_controller.reset();
+    IntakeTilt.m_setpoint = IntakeConstants.kUpPos;
   }
 
   @Override

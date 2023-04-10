@@ -77,7 +77,7 @@ public class RobotContainer {
     OI.pigeon.setYaw(0);
 
     // Configure PID controllers
-    configurePID();
+    configureControllers();
 
     // Configure the trigger bindings
     configureBindings();
@@ -91,7 +91,7 @@ public class RobotContainer {
     Shuffleboard.disableActuatorWidgets();
   }
 
-  private void configurePID() {
+  private void configureControllers() {
     TurnToAngle.m_controller.setIntegratorRange(-Constants.DrivetrainConstants.kTurnMaxSpeed, Constants.DrivetrainConstants.kTurnMaxSpeed);
     TurnToAngle.m_controller.setTolerance(Constants.DrivetrainConstants.kTurnPosTolerance, Constants.DrivetrainConstants.kTurnVelTolerance);
     TurnToAngle.m_controller.enableContinuousInput(-180, 180);

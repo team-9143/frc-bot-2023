@@ -14,6 +14,7 @@ public class AimMid extends CommandBase {
   @Override
   public void initialize() {
     IntakeTilt.disable();
+    IntakeTilt.m_setpoint = IntakeConstants.kMidPos;
   }
 
   // Called every time the scheduler runs while the command is scheduled.

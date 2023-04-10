@@ -16,6 +16,7 @@ public class IntakeDown extends CommandBase {
   public void initialize() {
     IntakeTilt.disable();
     m_controller.reset();
+    IntakeTilt.m_setpoint = IntakeConstants.kDownPos;
   }
 
   @Override

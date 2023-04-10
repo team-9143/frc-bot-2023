@@ -25,6 +25,7 @@ public class IntakeTilt extends SubsystemBase {
 
   public static final PIDController m_controller = new PIDController(IntakeConstants.kSteadyP, IntakeConstants.kSteadyI, IntakeConstants.kSteadyD);
   private static boolean m_enabled = false;
+  public static double m_setpoint = IntakeConstants.kUpPos;
 
   private static final CANSparkMax l_motor = new CANSparkMax(DeviceConstants.kIntakeTiltLeftID, MotorType.kBrushless);
   private static final CANSparkMax r_motor = new CANSparkMax(DeviceConstants.kIntakeTiltRightID, MotorType.kBrushless);
@@ -34,7 +35,10 @@ public class IntakeTilt extends SubsystemBase {
 
   private IntakeTilt() {
     setDefaultCommand(new FunctionalCommand(
-      m_controller::reset,
+      () -> {
+        m_controller.reset();
+        m_setpoint = IntakeConstants.kUpPos;
+      },
       () -> {if (m_enabled) {set(m_controller.calculate(getPosition()));}},
       interrupted -> {},
       () -> false,
