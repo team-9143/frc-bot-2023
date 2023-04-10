@@ -24,7 +24,6 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 
 import frc.robot.autos.AutoSelector;
-import edu.wpi.first.networktables.GenericEntry;
 // import edu.wpi.first.cameraserver.CameraServer;
 // import edu.wpi.first.cscore.UsbCamera;
 import java.util.Map;
@@ -36,10 +35,20 @@ import java.util.Map;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+  private static RobotContainer m_instance;
+
+  /** @return the singleton instance */
+  public static RobotContainer getInstance() {
+    if (m_instance == null) {
+      m_instance = new RobotContainer();
+    }
+    return m_instance;
+  }
+  
   // The robot's subsystems and commands are defined here...
-  private final Drivetrain sDrivetrain = new Drivetrain();
-  private final IntakeWheels sIntakeWheels = new IntakeWheels();
-  private final IntakeTilt sIntakeTilt = new IntakeTilt();
+  private static final Drivetrain sDrivetrain = Drivetrain.getInstance();
+  private static final IntakeWheels sIntakeWheels = IntakeWheels.getInstance();
+  private static final IntakeTilt sIntakeTilt = IntakeTilt.getInstance();
 
   private final Balance cBalance = new Balance(sDrivetrain);
   private final TurnToAngle cTurnToAngle = new TurnToAngle(sDrivetrain, 0);
@@ -54,24 +63,16 @@ public class RobotContainer {
     sIntakeWheels::stop,
     sIntakeWheels
   );
-  private final Command cStop = new RunCommand(() -> {
+  private static final Command cStop = new RunCommand(() -> {
     sDrivetrain.stop();
     sIntakeWheels.stop();
-    sIntakeTilt.disable();
+    sIntakeTilt.stop();
     IntakeWheels.m_holding = false;
   }, sDrivetrain, sIntakeWheels, sIntakeTilt)
     .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
 
-  // Dashboard declarations
-  private final GenericEntry m_autonOffset =
-    Shuffleboard.getTab("Drive").add("Auton Angle Offset", 180)
-      .withPosition(1, 5)
-      .withSize(2, 2)
-      .withWidget(BuiltInWidgets.kTextView)
-      .getEntry();
-
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  public RobotContainer() {
+  private RobotContainer() {
     // Configure Pigeon - make sure to update pitch and roll offsets
     OI.pigeon.configMountPose(0, -0.24665457, -179.574783);
     OI.pigeon.setYaw(0);
@@ -430,7 +431,7 @@ public class RobotContainer {
           Math.pow(OI.operator_cntlr.getTriggers(), 2) *
           ((OI.operator_cntlr.getTriggers() < 0) ? Constants.IntakeConstants.kUpSpeed : Constants.IntakeConstants.kDownSpeed),
         0),
-        interrupted -> sIntakeTilt.disable(),
+        interrupted -> sIntakeTilt.stop(),
         () -> false,
         sIntakeTilt
       ));
@@ -458,27 +459,8 @@ public class RobotContainer {
       .whileTrue(cManualHold);
   }
 
-  public void autoAlign() {
-    sIntakeTilt.autoAlign();
-  }
-
-  public void enableIntake() {
-    sIntakeTilt.enable();
-  }
-
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    return AutoSelector.getAuto(sIntakeTilt, sIntakeWheels, sDrivetrain)
-      .beforeStarting(() -> OI.pigeon.setYaw(0))
-      .andThen(() -> OI.pigeon.setYaw(OI.pigeon.getYaw() - m_autonOffset.getDouble(180)));
-  }
-
-  /** Stops all motors and disables PID controllers */
-  public void stop() {
-    cStop.initialize();
+  /** Stops all motors, disables PID controllers, and cancels commands requiring actuator subsystems */
+  public static void stop() {
+    cStop.execute();
   }
 }

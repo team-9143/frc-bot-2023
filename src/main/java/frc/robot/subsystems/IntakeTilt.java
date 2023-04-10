@@ -13,13 +13,23 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 
 public class IntakeTilt extends PIDSubsystem {
+  private static IntakeTilt m_instance;
+
+  /** @return the singleton instance */
+  public static IntakeTilt getInstance() {
+    if (m_instance == null) {
+      m_instance = new IntakeTilt();
+    }
+    return m_instance;
+  }
+
   private static final CANSparkMax l_motor = new CANSparkMax(DeviceConstants.kIntakeTiltLeftID, MotorType.kBrushless);
   private static final CANSparkMax r_motor = new CANSparkMax(DeviceConstants.kIntakeTiltRightID, MotorType.kBrushless);
 
   private static final RelativeEncoder l_encoder = l_motor.getEncoder();
   private static final RelativeEncoder r_encoder = r_motor.getEncoder();
 
-  public IntakeTilt() {
+  private IntakeTilt() {
     super(new PIDController(IntakeConstants.kSteadyP, IntakeConstants.kSteadyI, IntakeConstants.kSteadyD));
 
     r_motor.follow(l_motor, true);
@@ -56,6 +66,10 @@ public class IntakeTilt extends PIDSubsystem {
   public void resetEncoder() {
     l_encoder.setPosition(IntakeConstants.kUpPos);
     r_encoder.setPosition(IntakeConstants.kUpPos);
+  }
+
+  public void stop() {
+    disable();
   }
 
   public void autoAlign() {

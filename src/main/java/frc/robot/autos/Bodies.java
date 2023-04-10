@@ -16,26 +16,30 @@ import frc.robot.subsystems.*;
 
 /** Contains auton bodies */
 public class Bodies {
+  private static final Drivetrain sDrivetrain = Drivetrain.getInstance();
+  private static final IntakeTilt sIntakeTilt = IntakeTilt.getInstance();
+  private static final IntakeWheels sIntakeWheels = IntakeWheels.getInstance();
+
   /** A command handling the main body of an auton. Moves the drivetrain. */
-  public static Command getBody(AutoSelector.Body body, Drivetrain sDrivetrain, IntakeTilt sIntakeTilt, IntakeWheels sIntakeWheels) {
+  public static Command getBody(AutoSelector.Body body) {
     switch (body) {
       case ESCAPE_LONG:
-        return LongEscape(sDrivetrain);
+        return LongEscape();
       case ESCAPE_SHORT:
-        return ShortEscape(sDrivetrain);
+        return ShortEscape();
       case PICKUP_CONE:
-        return PickupCone(sDrivetrain, sIntakeTilt, sIntakeWheels);
+        return PickupCone();
       case CENTER_OVER:
-        return CenterOver(sDrivetrain);
+        return CenterOver();
       case CENTER_SIMPLE:
-        return CenterSimple(sDrivetrain);
+        return CenterSimple();
       default:
         return new InstantCommand();
     }
   }
 
   /** Drive backwards out of the community's longer side, then turn around */
-  private static Command LongEscape(Drivetrain sDrivetrain) {
+  private static Command LongEscape() {
     return new SequentialCommandGroup(
       new DriveDistance(sDrivetrain, -150),
       new TurnToAngle(sDrivetrain, 180)
@@ -43,7 +47,7 @@ public class Bodies {
   }
 
   /** Drive backwards out of the community's shorter side, then turn around */
-  private static Command ShortEscape(Drivetrain sDrivetrain) {
+  private static Command ShortEscape() {
     return new SequentialCommandGroup(
       new DriveDistance(sDrivetrain, -90),
       new TurnToAngle(sDrivetrain, 180)
@@ -51,7 +55,7 @@ public class Bodies {
   }
 
   /** Turn around and pickup a cone (inverts the intake wheels) */
-  private static Command PickupCone(Drivetrain sDrivetrain, IntakeTilt sIntakeTilt, IntakeWheels sIntakeWheels) {
+  private static Command PickupCone() {
     return new SequentialCommandGroup(
       new DriveDistance(sDrivetrain, -165), // Move near cone
       new TurnToAngle(sDrivetrain, 180),
@@ -68,7 +72,7 @@ public class Bodies {
   }
 
   /** Drive backwards over the charge station, then drive back and balance */
-  private static Command CenterOver(Drivetrain sDrivetrain) {
+  private static Command CenterOver() {
     return new SequentialCommandGroup(
       // Move back until pitch is greater than 10
       new FunctionalCommand(
@@ -106,7 +110,7 @@ public class Bodies {
   }
 
   /** Drive backwards to the charge station and balance */
-  private static Command CenterSimple(Drivetrain sDrivetrain) {
+  private static Command CenterSimple() {
     return new SequentialCommandGroup(
       // Move back until pitch is greater than 10
       new FunctionalCommand(

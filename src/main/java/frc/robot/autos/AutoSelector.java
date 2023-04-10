@@ -56,13 +56,14 @@ public final class AutoSelector {
     m_endChooser.setDefaultOption("None", AutoSelector.Ending.NONE);
   }
 
-  public static Command getAuto(IntakeTilt sIntakeTilt, IntakeWheels sIntakeWheels, Drivetrain sDrivetrain) {
+  public static Command getAuto() {
     // TODO(HIGH prio): Fix auton endings - entails rewriting static headings in TurnToAngle and DriveDistance, as well as allowing for values (ex. current encoder position) to be given to the end module at module initialization, potential create as a new type of command
     // TODO:(mid prio): Attempt to add dynamic secondary body module with values depending on the selected first body module, editing values with a refresh button
     return new SequentialCommandGroup(
-      Starters.getStarter(m_starterChooser.getSelected(), sIntakeTilt, sIntakeWheels).raceWith(new RunCommand(sDrivetrain::stop, sDrivetrain)),
-      Bodies.getBody(m_bodyChooser.getSelected(), sDrivetrain, sIntakeTilt, sIntakeWheels),
-      Endings.getEnding(m_endChooser.getSelected(), m_bodyChooser.getSelected(), sDrivetrain, sIntakeTilt, sIntakeWheels)
+      Starters.getStarter(m_starterChooser.getSelected())
+        .raceWith(new RunCommand(Drivetrain.getInstance()::stop, Drivetrain.getInstance())),
+      Bodies.getBody(m_bodyChooser.getSelected()),
+      Endings.getEnding(m_endChooser.getSelected(), m_bodyChooser.getSelected())
     );
   }
 }

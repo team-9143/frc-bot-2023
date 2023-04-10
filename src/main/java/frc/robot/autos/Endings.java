@@ -10,8 +10,10 @@ import frc.robot.subsystems.*;
 
 /** Contains auton endings */
 public class Endings {
+  private static final Drivetrain sDrivetrain = Drivetrain.getInstance();
+
   /** A command handling the end of an auton. Moves the drivetrain. */
-  public static Command getEnding(AutoSelector.Ending end, AutoSelector.Body body, Drivetrain sDrivetrain, IntakeTilt sIntakeTilt, IntakeWheels sIntakeWheels) {
+  public static Command getEnding(AutoSelector.Ending end, AutoSelector.Body body) {
     switch (end) {
       case TURN_AWAY:
         // Turn to face away from the drive station

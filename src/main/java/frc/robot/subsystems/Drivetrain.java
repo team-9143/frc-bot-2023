@@ -18,6 +18,16 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 
 public class Drivetrain extends SubsystemBase {
+  private static Drivetrain m_instance;
+
+  /** @return the singleton instance */
+  public static Drivetrain getInstance() {
+    if (m_instance == null) {
+      m_instance = new Drivetrain();
+    }
+    return m_instance;
+  }
+  
   // Initialize motors, encoders, and differential drive
   private static final CANSparkMax
     fl_motor = new CANSparkMax(DeviceConstants.kFrontLeftID, MotorType.kBrushless),
@@ -43,7 +53,7 @@ public class Drivetrain extends SubsystemBase {
     }
   };
 
-  public Drivetrain() {
+  private Drivetrain() {
     // Set the default command for a subsystem here.
     setDefaultCommand(new RunCommand(
       () -> {

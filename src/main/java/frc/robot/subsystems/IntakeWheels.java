@@ -13,13 +13,23 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 
 public class IntakeWheels extends SubsystemBase {
+  private static IntakeWheels m_instance;
+
+  /** @return the singleton instance */
+  public static IntakeWheels getInstance() {
+    if (m_instance == null) {
+      m_instance = new IntakeWheels();
+    }
+    return m_instance;
+  }
+  
   public static boolean m_holding;
 
   private static final CANSparkMax intake_motor = new CANSparkMax(DeviceConstants.kIntakeWheelsID, MotorType.kBrushless);
 
   private static final RelativeEncoder intake_encoder = intake_motor.getEncoder();
 
-  public IntakeWheels() {
+  private IntakeWheels() {
     setDefaultCommand(new StartEndCommand(
       () -> {if (m_holding && IntakeConstants.kIntakeSpeed < 0) {intake_motor.set(IntakeConstants.kHoldingSpeed);}},
       this::stop,

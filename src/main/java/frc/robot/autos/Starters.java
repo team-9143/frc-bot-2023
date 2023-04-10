@@ -12,8 +12,11 @@ import frc.robot.subsystems.*;
 
 /** Contains auton starters */
 public class Starters {
+  private static final IntakeTilt sIntakeTilt = IntakeTilt.getInstance();
+  private static final IntakeWheels sIntakeWheels = IntakeWheels.getInstance();
+  
   /** A command to handle a preloaded game piece. Does not move the drivetrain. */
-  public static Command getStarter(AutoSelector.Starter starter, IntakeTilt sIntakeTilt, IntakeWheels sIntakeWheels) {
+  public static Command getStarter(AutoSelector.Starter starter) {
     switch (starter) {
       case CUBE_SHOOT:
         // Shoot

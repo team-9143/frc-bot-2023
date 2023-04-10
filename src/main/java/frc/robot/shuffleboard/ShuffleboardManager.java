@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class ShuffleboardManager {
   private static ShuffleboardManager m_instance;
 
-  /** Returns the singleton instance. */
+  /** @return the singleton instance */
   public static ShuffleboardManager getInstance() {
     if (m_instance == null) {
       m_instance = new ShuffleboardManager();

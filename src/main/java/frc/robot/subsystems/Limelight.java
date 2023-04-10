@@ -6,6 +6,16 @@ import frc.robot.OI;
 import edu.wpi.first.networktables.NetworkTableEntry;
 
 public class Limelight extends SubsystemBase {
+  private static Limelight m_instance;
+
+  /** @return the singleton instance */
+  public static Limelight getInstance() {
+    if (m_instance == null) {
+      m_instance = new Limelight();
+    }
+    return m_instance;
+  }
+  
   private static final NetworkTableEntry
     tv = OI.limelight.getEntry("tv"),
     tx = OI.limelight.getEntry("tx"),
@@ -14,6 +24,8 @@ public class Limelight extends SubsystemBase {
 
     // Visual testing purposes
     ledMode = OI.limelight.getEntry("ledMode");
+
+  private Limelight() {}
 
   public double getTx() {return tx.getDouble(0);}
   public double getTy() {return ty.getDouble(0);}
