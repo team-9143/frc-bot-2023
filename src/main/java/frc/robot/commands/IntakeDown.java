@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -12,7 +8,7 @@ import frc.robot.subsystems.IntakeTilt;
 
 public class IntakeDown extends PIDCommand {
   public static final PIDController m_controller = new PIDController(IntakeConstants.kDownP, IntakeConstants.kDownI, IntakeConstants.kDownD);
-  
+
   private final IntakeTilt intakeTilt;
 
   public IntakeDown(IntakeTilt intakeTilt) {
