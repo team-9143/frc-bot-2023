@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.autos;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.OI;
@@ -15,73 +15,13 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
+import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
-public final class Autos {
-  public static enum Starter {
-    CUBE_SHOOT,
-    CUBE_SPIT,
-    CUBE_SHOOT_DOWN,
-    CUBE_SPIT_DOWN,
-    NONE
-  }
-  public static enum Body {
-    ESCAPE_LONG,
-    ESCAPE_SHORT,
-    PICKUP_CONE,
-    CENTER_OVER,
-    CENTER_SIMPLE,
-    NONE
-  }
-  public static enum Ending {
-    TURN_AWAY,
-    TURN_CLOSE,
-    RETURN_FROM_CONE,
-    NONE
-  }
-
-  public static Command getAuto(Starter starter, Body body, Ending end, IntakeTilt sIntakeTilt, IntakeWheels sIntakeWheels, Drivetrain sDrivetrain) {
-    // TODO(HIGH prio): Fix auton endings - entails rewriting static headings in TurnToAngle and DriveDistance, as well as allowing for values (ex. current encoder position) to be given to the end module at module initialization, potential create as a new type of command
-    // TODO:(mid prio): Attempt to add dynamic secondary body module with values depending on the selected first body module, editing values with a refresh button
-    return new SequentialCommandGroup(
-      getStarter(starter, sIntakeTilt, sIntakeWheels).raceWith(new RunCommand(sDrivetrain::stop, sDrivetrain)),
-      getBody(body, sDrivetrain, sIntakeTilt, sIntakeWheels),
-      getEnd(end, body, sDrivetrain, sIntakeTilt, sIntakeWheels)
-    );
-  }
-
-  /** A command to handle the preloaded game piece. Does not move the drivetrain. */
-  private static Command getStarter(Starter starter, IntakeTilt sIntakeTilt, IntakeWheels sIntakeWheels) {
-    switch (starter) {
-      case CUBE_SHOOT:
-        // Shoot
-        return sIntakeWheels.getShootCommand().withTimeout(0.5);
-      case CUBE_SPIT:
-        // Spit
-        return sIntakeWheels.getSpitCommand().withTimeout(0.5);
-      case CUBE_SHOOT_DOWN:
-        // Aim down, shoot, then move intake up
-        return new SequentialCommandGroup(
-          new AimMid(sIntakeTilt).raceWith(
-            new WaitCommand(IntakeConstants.kAimMidTimer).andThen(sIntakeWheels.getShootCommand().withTimeout(0.5))
-          ),
-          new IntakeUp(sIntakeTilt)
-        );
-      case CUBE_SPIT_DOWN:
-        // Aim down, spit, then move intake up
-        return new SequentialCommandGroup(
-          new AimMid(sIntakeTilt).raceWith(
-            new WaitCommand(IntakeConstants.kAimMidTimer).andThen(sIntakeWheels.getSpitCommand().withTimeout(0.5))
-          ),
-          new IntakeUp(sIntakeTilt)
-        );
-      default:
-        return new InstantCommand();
-    }
-  }
-
-  /** A command contining the main body of the auton. Moves the drivetrain. */
-  private static Command getBody(Body body, Drivetrain sDrivetrain, IntakeTilt sIntakeTilt, IntakeWheels sIntakeWheels) {
+/** Contains auton bodies */
+public class Bodies {
+  /** A command handling the main body of an auton. Moves the drivetrain. */
+  public static Command getBody(AutoSelector.Body body, Drivetrain sDrivetrain, IntakeTilt sIntakeTilt, IntakeWheels sIntakeWheels) {
     switch (body) {
       case ESCAPE_LONG:
         return LongEscape(sDrivetrain);
@@ -93,28 +33,6 @@ public final class Autos {
         return CenterOver(sDrivetrain);
       case CENTER_SIMPLE:
         return CenterSimple(sDrivetrain);
-      default:
-        return new InstantCommand();
-    }
-  }
-
-  /** A command for the end of the auton. Moves the drivetrain. */
-  private static Command getEnd(Ending end, Body body, Drivetrain sDrivetrain, IntakeTilt sIntakeTilt, IntakeWheels sIntakeWheels) {
-    switch (end) {
-      case TURN_AWAY:
-        // Turn to face away from the drive station
-        return new TurnToAngle(sDrivetrain, 180);
-      case TURN_CLOSE:
-        // Turn to face the drive station
-        return new TurnToAngle(sDrivetrain, 0);
-      case RETURN_FROM_CONE:
-        // If picking up a cone, turn and return to the grid
-        if (body == Body.PICKUP_CONE) {
-          return new SequentialCommandGroup(
-            new TurnToAngle(sDrivetrain, 0),
-            new DriveDistance(sDrivetrain, 205)
-          );
-        }
       default:
         return new InstantCommand();
     }

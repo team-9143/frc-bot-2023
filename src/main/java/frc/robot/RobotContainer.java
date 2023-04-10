@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 
+import frc.robot.autos.AutoSelector;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 // import edu.wpi.first.cameraserver.CameraServer;
@@ -116,23 +117,23 @@ public class RobotContainer {
   }
 
   private void configureChoosers() {
-    m_autonStarterChooser.addOption("Shoot", Autos.Starter.CUBE_SHOOT);
-    m_autonStarterChooser.addOption("Spit", Autos.Starter.CUBE_SPIT);
-    m_autonStarterChooser.addOption("Shoot Down", Autos.Starter.CUBE_SHOOT_DOWN);
-    m_autonStarterChooser.addOption("Spit Down", Autos.Starter.CUBE_SPIT_DOWN);
-    m_autonStarterChooser.setDefaultOption("None", Autos.Starter.NONE);
+    m_autonStarterChooser.addOption("Shoot", AutoSelector.Starter.CUBE_SHOOT);
+    m_autonStarterChooser.addOption("Spit", AutoSelector.Starter.CUBE_SPIT);
+    m_autonStarterChooser.addOption("Shoot Down", AutoSelector.Starter.CUBE_SHOOT_DOWN);
+    m_autonStarterChooser.addOption("Spit Down", AutoSelector.Starter.CUBE_SPIT_DOWN);
+    m_autonStarterChooser.setDefaultOption("None", AutoSelector.Starter.NONE);
 
-    m_autonBodyChooser.addOption("Long Backward", Autos.Body.ESCAPE_LONG);
-    m_autonBodyChooser.addOption("Short Backward", Autos.Body.ESCAPE_SHORT);
-    m_autonBodyChooser.addOption("Pickup Cone", Autos.Body.PICKUP_CONE);
-    m_autonBodyChooser.addOption("Center Over Backward", Autos.Body.CENTER_OVER);
-    m_autonBodyChooser.addOption("Center Backward", Autos.Body.CENTER_SIMPLE);
-    m_autonBodyChooser.setDefaultOption("None", Autos.Body.NONE);
+    m_autonBodyChooser.addOption("Long Backward", AutoSelector.Body.ESCAPE_LONG);
+    m_autonBodyChooser.addOption("Short Backward", AutoSelector.Body.ESCAPE_SHORT);
+    m_autonBodyChooser.addOption("Pickup Cone", AutoSelector.Body.PICKUP_CONE);
+    m_autonBodyChooser.addOption("Center Over Backward", AutoSelector.Body.CENTER_OVER);
+    m_autonBodyChooser.addOption("Center Backward", AutoSelector.Body.CENTER_SIMPLE);
+    m_autonBodyChooser.setDefaultOption("None", AutoSelector.Body.NONE);
 
-    m_autonEndChooser.addOption("Turn Away", Autos.Ending.TURN_AWAY);
-    m_autonEndChooser.addOption("Turn Close", Autos.Ending.TURN_CLOSE);
-    m_autonEndChooser.addOption("Return From Cone", Autos.Ending.RETURN_FROM_CONE);
-    m_autonEndChooser.setDefaultOption("None", Autos.Ending.NONE);
+    m_autonEndChooser.addOption("Turn Away", AutoSelector.Ending.TURN_AWAY);
+    m_autonEndChooser.addOption("Turn Close", AutoSelector.Ending.TURN_CLOSE);
+    m_autonEndChooser.addOption("Return From Cone", AutoSelector.Ending.RETURN_FROM_CONE);
+    m_autonEndChooser.setDefaultOption("None", AutoSelector.Ending.NONE);
   }
 
   private void configureDriveTab() {
@@ -498,7 +499,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return Autos.getAuto(m_autonStarterChooser.getSelected(), m_autonBodyChooser.getSelected(), m_autonEndChooser.getSelected(), sIntakeTilt, sIntakeWheels, sDrivetrain)
+    return AutoSelector.getAuto(m_autonStarterChooser.getSelected(), m_autonBodyChooser.getSelected(), m_autonEndChooser.getSelected(), sIntakeTilt, sIntakeWheels, sDrivetrain)
       .beforeStarting(() -> OI.pigeon.setYaw(0))
       .andThen(() -> OI.pigeon.setYaw(OI.pigeon.getYaw() - m_autonOffset.getDouble(180)));
   }
