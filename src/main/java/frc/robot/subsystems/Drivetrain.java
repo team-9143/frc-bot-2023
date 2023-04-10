@@ -27,7 +27,7 @@ public class Drivetrain extends SubsystemBase {
     }
     return m_instance;
   }
-  
+
   // Initialize motors, encoders, and differential drive
   private static final CANSparkMax
     fl_motor = new CANSparkMax(DeviceConstants.kFrontLeftID, MotorType.kBrushless),

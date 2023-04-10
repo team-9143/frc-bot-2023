@@ -15,7 +15,9 @@ public class Limelight extends SubsystemBase {
     }
     return m_instance;
   }
-  
+
+  private Limelight() {}
+
   private static final NetworkTableEntry
     tv = OI.limelight.getEntry("tv"),
     tx = OI.limelight.getEntry("tx"),
@@ -25,12 +27,10 @@ public class Limelight extends SubsystemBase {
     // Visual testing purposes
     ledMode = OI.limelight.getEntry("ledMode");
 
-  private Limelight() {}
-
-  public double getTx() {return tx.getDouble(0);}
-  public double getTy() {return ty.getDouble(0);}
-  public double getArea() {return ta.getDouble(0);}
-  public boolean getValid() {return (tv.getInteger(0) == 1) ? true : false;}
+  public static double getTx() {return tx.getDouble(0);}
+  public static double getTy() {return ty.getDouble(0);}
+  public static double getArea() {return ta.getDouble(0);}
+  public static boolean getValid() {return (tv.getInteger(0) == 1) ? true : false;}
   // TODO(low prio): Add AprilTag and 3D space entries
 
   // Visual testing purposes
@@ -46,7 +46,7 @@ public class Limelight extends SubsystemBase {
    *
    * @param mode
    */
-  public void setLedMode(int mode) {ledMode.setInteger(mode);}
+  public static void setLedMode(int mode) {ledMode.setInteger(mode);}
 
-  public int getLedMode() {return (int) ledMode.getInteger(0);}
+  public static int getLedMode() {return (int) ledMode.getInteger(0);}
 }

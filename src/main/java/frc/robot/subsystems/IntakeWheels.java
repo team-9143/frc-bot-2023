@@ -22,7 +22,7 @@ public class IntakeWheels extends SubsystemBase {
     }
     return m_instance;
   }
-  
+
   public static boolean m_holding;
 
   private static final CANSparkMax intake_motor = new CANSparkMax(DeviceConstants.kIntakeWheelsID, MotorType.kBrushless);
@@ -31,7 +31,7 @@ public class IntakeWheels extends SubsystemBase {
 
   private IntakeWheels() {
     setDefaultCommand(startEnd(
-      () -> {if (m_holding && isInverted()) {intake_motor.set(IntakeConstants.kHoldingSpeed);}},
+      () -> {if (m_holding && isInverted()) {set(IntakeConstants.kHoldingSpeed);}},
       IntakeWheels::stop
     ));
 
@@ -62,10 +62,10 @@ public class IntakeWheels extends SubsystemBase {
     intake_motor.stopMotor();
   }
 
-  public static Command getIntakeCommand() {
+  public Command getIntakeCommand() {
     return new StartEndCommand(
       () -> {
-        intake_motor.set(IntakeConstants.kIntakeSpeed);
+        set(IntakeConstants.kIntakeSpeed);
         m_holding = true;
       },
       IntakeWheels::stop,
@@ -73,10 +73,10 @@ public class IntakeWheels extends SubsystemBase {
     );
   }
 
-  public static Command getShootCommand() {
+  public Command getShootCommand() {
     return new StartEndCommand(
       () -> {
-        intake_motor.set(IntakeConstants.kOuttakeSpeed);
+        set(IntakeConstants.kOuttakeSpeed);
         m_holding = false;
       },
       IntakeWheels::stop,
@@ -84,10 +84,10 @@ public class IntakeWheels extends SubsystemBase {
     );
   }
 
-  public static Command getSpitCommand() {
+  public Command getSpitCommand() {
     return new StartEndCommand(
       () -> {
-        intake_motor.set(IntakeConstants.kSpitSpeed);
+        set(IntakeConstants.kSpitSpeed);
         m_holding = false;
       },
       IntakeWheels::stop,
