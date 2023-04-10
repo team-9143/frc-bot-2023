@@ -63,9 +63,6 @@ public class RobotContainer {
     .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
 
   // Dashboard declarations
-  private final SendableChooser<Autos.Body> m_autonBodyChooser = new SendableChooser<Autos.Body>();
-  private final SendableChooser<Autos.Starter> m_autonStarterChooser = new SendableChooser<Autos.Starter>();
-  private final SendableChooser<Autos.Ending> m_autonEndChooser = new SendableChooser<Autos.Ending>();
   private final GenericEntry m_autonOffset =
     Shuffleboard.getTab("Drive").add("Auton Angle Offset", 180)
       .withPosition(1, 5)
@@ -81,9 +78,6 @@ public class RobotContainer {
 
     // Configure PID controllers
     configurePID();
-
-    // Configure autonomous choices
-    configureChoosers();
 
     // Configure the trigger bindings
     configureBindings();
@@ -115,26 +109,6 @@ public class RobotContainer {
     IntakeUp.m_controller.setSetpoint(Constants.IntakeConstants.kUpPos);
   }
 
-  private void configureChoosers() {
-    m_autonStarterChooser.addOption("Shoot", AutoSelector.Starter.CUBE_SHOOT);
-    m_autonStarterChooser.addOption("Spit", AutoSelector.Starter.CUBE_SPIT);
-    m_autonStarterChooser.addOption("Shoot Down", AutoSelector.Starter.CUBE_SHOOT_DOWN);
-    m_autonStarterChooser.addOption("Spit Down", AutoSelector.Starter.CUBE_SPIT_DOWN);
-    m_autonStarterChooser.setDefaultOption("None", AutoSelector.Starter.NONE);
-
-    m_autonBodyChooser.addOption("Long Backward", AutoSelector.Body.ESCAPE_LONG);
-    m_autonBodyChooser.addOption("Short Backward", AutoSelector.Body.ESCAPE_SHORT);
-    m_autonBodyChooser.addOption("Pickup Cone", AutoSelector.Body.PICKUP_CONE);
-    m_autonBodyChooser.addOption("Center Over Backward", AutoSelector.Body.CENTER_OVER);
-    m_autonBodyChooser.addOption("Center Backward", AutoSelector.Body.CENTER_SIMPLE);
-    m_autonBodyChooser.setDefaultOption("None", AutoSelector.Body.NONE);
-
-    m_autonEndChooser.addOption("Turn Away", AutoSelector.Ending.TURN_AWAY);
-    m_autonEndChooser.addOption("Turn Close", AutoSelector.Ending.TURN_CLOSE);
-    m_autonEndChooser.addOption("Return From Cone", AutoSelector.Ending.RETURN_FROM_CONE);
-    m_autonEndChooser.setDefaultOption("None", AutoSelector.Ending.NONE);
-  }
-
   private void configureDriveTab() {
     ShuffleboardTab drive_tab = Shuffleboard.getTab("Drive");
 
@@ -144,15 +118,15 @@ public class RobotContainer {
     //   .withWidget(BuiltInWidgets.kCameraStream)
     //   .withProperties(Map.of("show crosshair", false, "Rotation", "HALF"));
 
-    drive_tab.add("Auton Starter", m_autonStarterChooser)
+    drive_tab.add("Auton Starter", AutoSelector.m_starterChooser)
       .withPosition(3, 5)
       .withSize(3, 2)
       .withWidget(BuiltInWidgets.kComboBoxChooser);
-    drive_tab.add("Auton Body", m_autonBodyChooser)
+    drive_tab.add("Auton Body", AutoSelector.m_bodyChooser)
       .withPosition(6, 5)
       .withSize(3, 2)
       .withWidget(BuiltInWidgets.kComboBoxChooser);
-    drive_tab.add("Auton Ending", m_autonEndChooser)
+    drive_tab.add("Auton Ending", AutoSelector.m_endChooser)
       .withPosition(9, 5)
       .withSize(3, 2)
       .withWidget(BuiltInWidgets.kComboBoxChooser);
@@ -498,7 +472,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return AutoSelector.getAuto(m_autonStarterChooser.getSelected(), m_autonBodyChooser.getSelected(), m_autonEndChooser.getSelected(), sIntakeTilt, sIntakeWheels, sDrivetrain)
+    return AutoSelector.getAuto(sIntakeTilt, sIntakeWheels, sDrivetrain)
       .beforeStarting(() -> OI.pigeon.setYaw(0))
       .andThen(() -> OI.pigeon.setYaw(OI.pigeon.getYaw() - m_autonOffset.getDouble(180)));
   }
