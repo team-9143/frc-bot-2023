@@ -25,7 +25,6 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 
 import frc.robot.autos.AutoSelector;
 import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 // import edu.wpi.first.cameraserver.CameraServer;
 // import edu.wpi.first.cscore.UsbCamera;
 import java.util.Map;
