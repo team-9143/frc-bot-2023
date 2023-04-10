@@ -60,6 +60,7 @@ public class IntakeTilt extends SubsystemBase {
   }
 
   public void set(double speed) {l_motor.set(speed);}
+  public double get() {return l_motor.get();}
 
   public double getPosition() {
     return (l_encoder.getPosition() + r_encoder.getPosition())/2;

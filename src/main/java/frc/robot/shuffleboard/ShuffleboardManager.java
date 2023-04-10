@@ -18,6 +18,10 @@ public class ShuffleboardManager {
     abstract void initialize();
   }
 
+  public interface ShuffleboardChecklistBase extends ShuffleboardTabBase {
+    abstract void reset();
+  }
+
   private static final boolean m_debugging = false;
 
   private static final ArrayList<ShuffleboardTabBase> m_tabs = new ArrayList<>();

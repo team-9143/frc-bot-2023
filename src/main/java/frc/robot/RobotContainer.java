@@ -17,15 +17,12 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
+import frc.robot.shuffleboard.ShuffleboardManager;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-
-import frc.robot.autos.AutoSelector;
-// import edu.wpi.first.cameraserver.CameraServer;
-// import edu.wpi.first.cscore.UsbCamera;
 import java.util.Map;
 
 /**
@@ -84,8 +81,8 @@ public class RobotContainer {
 
     // TODO(low prio): Test checklists with addStringArray()
     // Initialize Shuffleboard
-    configureDriveTab();
-    configureTestTab();
+    ShuffleboardManager.getInstance();
+    
     configureMatchChecklistTab();
     configurePitChecklistTab();
     Shuffleboard.disableActuatorWidgets();
@@ -110,129 +107,6 @@ public class RobotContainer {
     IntakeUp.m_controller.setIntegratorRange(-Constants.IntakeConstants.kTiltMaxSpeed, Constants.IntakeConstants.kTiltMaxSpeed);
     IntakeUp.m_controller.setTolerance(Constants.IntakeConstants.kUpPosTolerance);
     IntakeUp.m_controller.setSetpoint(Constants.IntakeConstants.kUpPos);
-  }
-
-  private void configureDriveTab() {
-    ShuffleboardTab drive_tab = Shuffleboard.getTab("Drive");
-
-    // TODO(? prio): Fully implement camera
-    // UsbCamera camera = CameraServer.startAutomaticCapture();
-    // Shuffleboard.getTab("Camera Test").addCamera("Camera", camera.getName(), camera.getPath())
-    //   .withWidget(BuiltInWidgets.kCameraStream)
-    //   .withProperties(Map.of("show crosshair", false, "Rotation", "HALF"));
-
-    drive_tab.add("Auton Starter", AutoSelector.m_starterChooser)
-      .withPosition(3, 5)
-      .withSize(3, 2)
-      .withWidget(BuiltInWidgets.kComboBoxChooser);
-    drive_tab.add("Auton Body", AutoSelector.m_bodyChooser)
-      .withPosition(6, 5)
-      .withSize(3, 2)
-      .withWidget(BuiltInWidgets.kComboBoxChooser);
-    drive_tab.add("Auton Ending", AutoSelector.m_endChooser)
-      .withPosition(9, 5)
-      .withSize(3, 2)
-      .withWidget(BuiltInWidgets.kComboBoxChooser);
-
-    drive_tab.addDouble("Docking Angle", OI.pigeon::getPitch)
-      .withPosition(4, 0)
-      .withSize(3, 3)
-      .withWidget(BuiltInWidgets.kDial)
-      .withProperties(Map.of("min", -45, "max", 45, "show value", true));
-
-    ShuffleboardLayout layout_1 = drive_tab.getLayout("Rotation", BuiltInLayouts.kList)
-      .withPosition(0, 0)
-      .withSize(4, 5);
-    layout_1.add("Gyro", OI.pigeon)
-      .withWidget(BuiltInWidgets.kGyro)
-      .withProperties(Map.of("major tick spacing", 45, "starting angle", 180, "show tick mark ring", true));
-    layout_1.addBoolean("TurnToAngle Enabled", () -> TurnToAngle.m_enabled)
-      .withWidget(BuiltInWidgets.kBooleanBox);
-
-    ShuffleboardLayout layout_2 = drive_tab.getLayout("Intake Angle", BuiltInLayouts.kGrid)
-      .withPosition(7, 0)
-      .withSize(6, 3)
-      .withProperties(Map.of("number of columns", 2, "number of rows", 1));
-    layout_2.addDouble("Intake Angle", () -> sIntakeTilt.getPosition() * 360)
-      .withWidget(BuiltInWidgets.kDial)
-      .withProperties(Map.of("min", -110, "max", 110, "show value", true));
-    layout_2.addDouble("Intake Setpoint", () ->
-      ((cIntakeDown.isScheduled()) ? Constants.IntakeConstants.kDownPos :
-      (cAimMid.isScheduled()) ? Constants.IntakeConstants.kMidPos :
-      Constants.IntakeConstants.kUpPos) * 360
-    )
-      .withWidget(BuiltInWidgets.kDial)
-      .withProperties(Map.of("min", -110, "max", 110, "show value", true));
-
-    ShuffleboardLayout layout_3 = drive_tab.getLayout("Intake", BuiltInLayouts.kList)
-      .withPosition(13, 0)
-      .withSize(4, 6);
-    layout_3.addBoolean("Inverted", IntakeWheels::isInverted)
-      .withWidget(BuiltInWidgets.kBooleanBox);
-    layout_3.addBoolean("Intaking", () -> (sIntakeWheels.get() * Constants.IntakeConstants.kOuttakeSpeed) < 0)
-      .withWidget(BuiltInWidgets.kBooleanBox);
-    layout_3.addBoolean("Outtaking", () -> (sIntakeWheels.get() * Constants.IntakeConstants.kOuttakeSpeed) > 0)
-      .withWidget(BuiltInWidgets.kBooleanBox);
-  }
-
-  private void configureTestTab() {
-    ShuffleboardTab test_tab = Shuffleboard.getTab("Test");
-
-    ShuffleboardLayout layout_1 = test_tab.getLayout("Intake Angle", BuiltInLayouts.kList)
-      .withPosition(0, 0)
-      .withSize(4, 8);
-    layout_1.addDouble("Intake Angle", () -> sIntakeTilt.getPosition() * 360)
-      .withWidget(BuiltInWidgets.kDial)
-      .withProperties(Map.of("min", -110, "max", 110, "show value", true));
-    layout_1.addDouble("Intake Setpoint", () ->
-      ((cIntakeDown.isScheduled()) ? Constants.IntakeConstants.kDownPos :
-      (cAimMid.isScheduled()) ? Constants.IntakeConstants.kMidPos :
-      Constants.IntakeConstants.kUpPos) * 360)
-        .withWidget(BuiltInWidgets.kDial)
-        .withProperties(Map.of("min", -110, "max", 110, "show value", true));
-
-    layout_1.addDouble("Intake Error", () ->
-      (((cIntakeDown.isScheduled()) ? Constants.IntakeConstants.kDownPos :
-      (cAimMid.isScheduled()) ? Constants.IntakeConstants.kMidPos :
-      Constants.IntakeConstants.kUpPos) -
-      sIntakeTilt.getPosition()) * 360)
-        .withWidget(BuiltInWidgets.kNumberBar)
-        .withProperties(Map.of("min", -110, "max", 110, "center", 0));
-
-    ShuffleboardLayout layout_2 = test_tab.getLayout("Intake Status", BuiltInLayouts.kList)
-      .withPosition(4, 0)
-      .withSize(3, 6);
-    layout_2.addBoolean("Upright", () -> sIntakeTilt.getPosition() < Constants.IntakeConstants.kUpPosTolerance)
-      .withWidget(BuiltInWidgets.kBooleanBox);
-    layout_2.addBoolean("PID Enabled", () -> cIntakeDown.isScheduled() || cIntakeUp.isScheduled() || IntakeTilt.isEnabled())
-      .withWidget(BuiltInWidgets.kBooleanBox);
-    layout_2.addDouble("Intake Wheel RPM", sIntakeWheels::getVelocity)
-      .withWidget(BuiltInWidgets.kNumberBar)
-      .withProperties(Map.of("min", -250, "max", 250, "center", 0));
-
-    test_tab.addDouble("TurnToAngle Error", TurnToAngle.m_controller::getPositionError)
-      .withPosition(7, 0)
-      .withSize(4, 2)
-      .withWidget(BuiltInWidgets.kNumberBar)
-      .withProperties(Map.of("min", -180, "max", 180, "center", 0));
-
-    test_tab.addDouble("DriveDistance Error", DriveDistance.m_controller::getPositionError)
-      .withPosition(7, 2)
-      .withSize(4, 2)
-      .withWidget(BuiltInWidgets.kNumberBar)
-      .withProperties(Map.of("min", -150, "max", 150, "center", 0));
-
-    test_tab.add("Drivetrain", Drivetrain.robotDrive)
-      .withPosition(11, 0)
-      .withSize(5, 4)
-      .withWidget(BuiltInWidgets.kDifferentialDrive)
-      .withProperties(Map.of("number of wheels", 6, "wheel diameter", 60, "show velocity vectors", true));
-
-    test_tab.add("Gyro", OI.pigeon)
-      .withPosition(11, 4)
-      .withSize(5, 4)
-      .withWidget(BuiltInWidgets.kGyro)
-      .withProperties(Map.of("major tick spacing", 45, "starting angle", 180, "show tick mark ring", true));
   }
 
   private void configureMatchChecklistTab() {
