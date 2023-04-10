@@ -81,7 +81,7 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     m_autonomousCommand.cancel();
 
-    IntakeTilt.getInstance().enable();
+    IntakeTilt.enable();
   }
 
   /** This function is called periodically during operator control. */

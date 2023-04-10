@@ -11,23 +11,25 @@ import frc.robot.commands.*;
 import frc.robot.subsystems.IntakeWheels;
 
 /** Contains auton starters */
-public class Starters {  
+public class Starters {
+  private static final IntakeWheels sIntakeWheels = IntakeWheels.getInstance();
+
   /** A command to handle a preloaded game piece. Does not move the drivetrain. */
   public static Command getStarter(AutoSelector.Starter starter) {
     switch (starter) {
       case CUBE_SHOOT:
         // Shoot
-        return IntakeWheels.getShootCommand().withTimeout(0.5);
+        return sIntakeWheels.getShootCommand().withTimeout(0.5);
 
       case CUBE_SPIT:
         // Spit
-        return IntakeWheels.getSpitCommand().withTimeout(0.5);
+        return sIntakeWheels.getSpitCommand().withTimeout(0.5);
 
       case CUBE_SHOOT_DOWN:
         // Aim down, shoot, then move intake up
         return new SequentialCommandGroup(
           new AimMid().raceWith(
-            new WaitCommand(IntakeConstants.kAimMidTimer).andThen(IntakeWheels.getShootCommand().withTimeout(0.5))
+            new WaitCommand(IntakeConstants.kAimMidTimer).andThen(sIntakeWheels.getShootCommand().withTimeout(0.5))
           ),
           new IntakeUp()
         );
@@ -36,7 +38,7 @@ public class Starters {
         // Aim down, spit, then move intake up
         return new SequentialCommandGroup(
           new AimMid().raceWith(
-            new WaitCommand(IntakeConstants.kAimMidTimer).andThen(IntakeWheels.getSpitCommand().withTimeout(0.5))
+            new WaitCommand(IntakeConstants.kAimMidTimer).andThen(sIntakeWheels.getSpitCommand().withTimeout(0.5))
           ),
           new IntakeUp()
         );

@@ -35,7 +35,7 @@ public final class AutoSelector {
   public static final SendableChooser<Body> m_bodyChooser = new SendableChooser<Body>();
   public static final SendableChooser<Starter> m_starterChooser = new SendableChooser<Starter>();
   public static final SendableChooser<Ending> m_endChooser = new SendableChooser<Ending>();
-  
+
   public static void initializeChoosers() {
     m_starterChooser.addOption("Shoot", AutoSelector.Starter.CUBE_SHOOT);
     m_starterChooser.addOption("Spit", AutoSelector.Starter.CUBE_SPIT);

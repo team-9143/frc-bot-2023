@@ -44,7 +44,7 @@ public class RobotContainer {
     }
     return m_instance;
   }
-  
+
   // The robot's subsystems and commands are defined here...
   private static final Drivetrain sDrivetrain = Drivetrain.getInstance();
   private static final IntakeWheels sIntakeWheels = IntakeWheels.getInstance();
@@ -54,9 +54,9 @@ public class RobotContainer {
   private final TurnToAngle cTurnToAngle = new TurnToAngle(0);
   private final IntakeDown cIntakeDown = new IntakeDown();
   private final IntakeUp cIntakeUp = new IntakeUp();
-  private final Command cIntake = IntakeWheels.getIntakeCommand();
-  private final Command cShoot = IntakeWheels.getShootCommand();
-  private final Command cSpit = IntakeWheels.getSpitCommand();
+  private final Command cIntake = sIntakeWheels.getIntakeCommand();
+  private final Command cShoot = sIntakeWheels.getShootCommand();
+  private final Command cSpit = sIntakeWheels.getSpitCommand();
   private final Command cAimMid = new AimMid();
   private final Command cManualHold = new StartEndCommand(
     () -> sIntakeWheels.set(Constants.IntakeConstants.kHoldingSpeed),
@@ -66,12 +66,11 @@ public class RobotContainer {
   private static final Command cStop = new RunCommand(() -> {
     Drivetrain.stop();
     IntakeWheels.stop();
-    sIntakeTilt.stop();
-    IntakeWheels.m_holding = false;
+    IntakeTilt.stop();
   }, sDrivetrain, sIntakeWheels, sIntakeTilt)
     .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  /** The container for the robot. Intializes subsystems, teleop commands, and OI devices. */
   private RobotContainer() {
     // Configure Pigeon - make sure to update pitch and roll offsets
     OI.pigeon.configMountPose(0, -0.24665457, -179.574783);
@@ -101,6 +100,9 @@ public class RobotContainer {
     DriveDistance.m_controller.setIntegratorRange(-Constants.DrivetrainConstants.kDistMaxSpeed, Constants.DrivetrainConstants.kDistMaxSpeed);
     DriveDistance.m_controller.setTolerance(Constants.DrivetrainConstants.kDistPosTolerance, Constants.DrivetrainConstants.kDistVelTolerance);
     DriveDistance.m_controller.setSetpoint(0);
+
+    IntakeTilt.m_controller.setIntegratorRange(-Constants.IntakeConstants.kTiltMaxSpeed, Constants.IntakeConstants.kTiltMaxSpeed);
+    IntakeTilt.m_controller.setSetpoint(Constants.IntakeConstants.kUpPos);
 
     IntakeDown.m_controller.setIntegratorRange(-Constants.IntakeConstants.kTiltMaxSpeed, Constants.IntakeConstants.kTiltMaxSpeed);
     IntakeDown.m_controller.setSetpoint(Constants.IntakeConstants.kDownPos);
@@ -151,7 +153,7 @@ public class RobotContainer {
       .withPosition(7, 0)
       .withSize(6, 3)
       .withProperties(Map.of("number of columns", 2, "number of rows", 1));
-    layout_2.addDouble("Intake Angle", () -> sIntakeTilt.getMeasurement() * 360)
+    layout_2.addDouble("Intake Angle", () -> sIntakeTilt.getPosition() * 360)
       .withWidget(BuiltInWidgets.kDial)
       .withProperties(Map.of("min", -110, "max", 110, "show value", true));
     layout_2.addDouble("Intake Setpoint", () ->
@@ -179,7 +181,7 @@ public class RobotContainer {
     ShuffleboardLayout layout_1 = test_tab.getLayout("Intake Angle", BuiltInLayouts.kList)
       .withPosition(0, 0)
       .withSize(4, 8);
-    layout_1.addDouble("Intake Angle", () -> sIntakeTilt.getMeasurement() * 360)
+    layout_1.addDouble("Intake Angle", () -> sIntakeTilt.getPosition() * 360)
       .withWidget(BuiltInWidgets.kDial)
       .withProperties(Map.of("min", -110, "max", 110, "show value", true));
     layout_1.addDouble("Intake Setpoint", () ->
@@ -193,16 +195,16 @@ public class RobotContainer {
       (((cIntakeDown.isScheduled()) ? Constants.IntakeConstants.kDownPos :
       (cAimMid.isScheduled()) ? Constants.IntakeConstants.kMidPos :
       Constants.IntakeConstants.kUpPos) -
-      sIntakeTilt.getMeasurement()) * 360)
+      sIntakeTilt.getPosition()) * 360)
         .withWidget(BuiltInWidgets.kNumberBar)
         .withProperties(Map.of("min", -110, "max", 110, "center", 0));
 
     ShuffleboardLayout layout_2 = test_tab.getLayout("Intake Status", BuiltInLayouts.kList)
       .withPosition(4, 0)
       .withSize(3, 6);
-    layout_2.addBoolean("Upright", () -> sIntakeTilt.getMeasurement() < Constants.IntakeConstants.kUpPosTolerance)
+    layout_2.addBoolean("Upright", () -> sIntakeTilt.getPosition() < Constants.IntakeConstants.kUpPosTolerance)
       .withWidget(BuiltInWidgets.kBooleanBox);
-    layout_2.addBoolean("PID Enabled", () -> cIntakeDown.isScheduled() || cIntakeUp.isScheduled() || sIntakeTilt.isEnabled())
+    layout_2.addBoolean("PID Enabled", () -> cIntakeDown.isScheduled() || cIntakeUp.isScheduled() || IntakeTilt.isEnabled())
       .withWidget(BuiltInWidgets.kBooleanBox);
     layout_2.addDouble("Intake Wheel RPM", sIntakeWheels::getVelocity)
       .withWidget(BuiltInWidgets.kNumberBar)
@@ -404,13 +406,13 @@ public class RobotContainer {
     new JoystickButton(OI.operator_cntlr, OI.Controller.btn.X.val)
     .debounce(1)
       .onTrue(new InstantCommand(() ->
-        sIntakeTilt.resetEncoder()
+        sIntakeTilt.resetEncoders()
       ));
 
     // Button 'Y' will toggle automatic intake control
     new JoystickButton(OI.operator_cntlr, OI.Controller.btn.Y.val)
       .onTrue(new InstantCommand(() -> {
-        if (sIntakeTilt.isEnabled()) {sIntakeTilt.disable();} else {sIntakeTilt.enable();}
+        if (IntakeTilt.isEnabled()) {IntakeTilt.disable();} else {IntakeTilt.enable();}
       }));
 
     // Button 'LB' (hold) will shoot cubes
@@ -426,12 +428,12 @@ public class RobotContainer {
     // Triggers will disable intake and manually move up (LT) and down (RT)
     new Trigger(() -> Math.abs(OI.operator_cntlr.getTriggers()) > 0.05)
       .whileTrue(new FunctionalCommand(
-        sIntakeTilt::disable,
-        () -> sIntakeTilt.useOutput(
+        IntakeTilt::disable,
+        () -> sIntakeTilt.set(
           Math.pow(OI.operator_cntlr.getTriggers(), 2) *
-          ((OI.operator_cntlr.getTriggers() < 0) ? Constants.IntakeConstants.kUpSpeed : Constants.IntakeConstants.kDownSpeed),
-        0),
-        interrupted -> sIntakeTilt.stop(),
+          ((OI.operator_cntlr.getTriggers() < 0) ? Constants.IntakeConstants.kUpSpeed : Constants.IntakeConstants.kDownSpeed)
+        ),
+        interrupted -> IntakeTilt.disable(),
         () -> false,
         sIntakeTilt
       ));

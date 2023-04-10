@@ -14,13 +14,12 @@ public class IntakeUp extends CommandBase {
 
   @Override
   public void initialize() {
-    intakeTilt.disable();
     m_controller.reset();
   }
 
   @Override
   public void execute() {
-    intakeTilt.useOutput(m_controller.calculate(intakeTilt.getMeasurement()), IntakeConstants.kUpPos);
+    intakeTilt.set(m_controller.calculate(intakeTilt.getPosition()));
   }
 
   @Override
@@ -30,7 +29,7 @@ public class IntakeUp extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-    intakeTilt.enable();
+    IntakeTilt.enable();
   }
 
   @Override

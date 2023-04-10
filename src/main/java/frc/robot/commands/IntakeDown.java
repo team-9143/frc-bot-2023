@@ -14,18 +14,18 @@ public class IntakeDown extends CommandBase {
 
   @Override
   public void initialize() {
-    intakeTilt.disable();
+    IntakeTilt.disable();
     m_controller.reset();
   }
 
   @Override
   public void execute() {
-    intakeTilt.useOutput(m_controller.calculate(intakeTilt.getMeasurement()), IntakeConstants.kDownPos);
+    intakeTilt.set(m_controller.calculate(intakeTilt.getPosition()));
   }
 
   @Override
   public void end(boolean interrupted) {
-    intakeTilt.stop();
+    IntakeTilt.disable();
   }
 
   @Override

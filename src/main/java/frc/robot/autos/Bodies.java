@@ -17,6 +17,7 @@ import frc.robot.subsystems.IntakeWheels;
 /** Contains auton bodies */
 public class Bodies {
   private static final Drivetrain sDrivetrain = Drivetrain.getInstance();
+  private static final IntakeWheels sIntakeWheels = IntakeWheels.getInstance();
 
   /** A command handling the main body of an auton. Moves the drivetrain. */
   public static Command getBody(AutoSelector.Body body) {
@@ -61,7 +62,7 @@ public class Bodies {
 
       new ParallelCommandGroup(
         new IntakeDown(),
-        IntakeWheels.getIntakeCommand(),
+        sIntakeWheels.getIntakeCommand(),
         new WaitCommand(2.5).andThen(new RunCommand(() -> sDrivetrain.moveStraight(0.1), sDrivetrain))
       ).until(() -> sDrivetrain.getAvgPosition() >= -125),
 

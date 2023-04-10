@@ -13,22 +13,22 @@ public class AimMid extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    intakeTilt.disable();
+    IntakeTilt.disable();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intakeTilt.useOutput(
-      (Math.abs(intakeTilt.getMeasurement() - IntakeConstants.kMidPos) < IntakeConstants.kMidPosTolerance) ? IntakeConstants.kSteadySpeed :
-      (intakeTilt.getMeasurement() < IntakeConstants.kMidPos) ? IntakeConstants.kDownSpeed : IntakeConstants.kUpSpeed,
-    IntakeConstants.kMidPos);
+    intakeTilt.set(
+      (Math.abs(intakeTilt.getPosition() - IntakeConstants.kMidPos) < IntakeConstants.kMidPosTolerance) ? IntakeConstants.kSteadySpeed :
+      (intakeTilt.getPosition() < IntakeConstants.kMidPos) ? IntakeConstants.kDownSpeed : IntakeConstants.kUpSpeed
+    );
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intakeTilt.disable();
+    IntakeTilt.disable();
   }
 
   @Override
