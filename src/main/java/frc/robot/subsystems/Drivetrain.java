@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.util.sendable.SendableBuilder;
 import frc.robot.OI;
 import frc.robot.Constants.PhysConstants;
 import frc.robot.Constants.DrivetrainConstants;
@@ -13,7 +12,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 
 import edu.wpi.first.wpilibj2.command.RunCommand;
 
@@ -38,21 +36,6 @@ public class Drivetrain extends SubsystemBase {
   private static final RelativeEncoder l_encoder = fl_motor.getEncoder();
   private static final RelativeEncoder r_encoder = fr_motor.getEncoder(); // Position must be inverted when called
 
-  private static final MotorControllerGroup l_motors = new MotorControllerGroup(fl_motor, bl_motor);
-  private static final MotorControllerGroup r_motors = new MotorControllerGroup(fr_motor, br_motor);
-
-  // Inverts the right motors for properly functioning sendable
-  public static final DifferentialDrive robotDrive = new DifferentialDrive(l_motors, r_motors) {
-    @Override
-    public void initSendable(SendableBuilder builder) {
-      builder.setSmartDashboardType("DifferentialDrive");
-      builder.setActuator(true);
-      builder.setSafeState(this::stopMotor);
-      builder.addDoubleProperty("Left Motor Speed", l_motors::get, l_motors::set);
-      builder.addDoubleProperty("Right Motor Speed", () -> -r_motors.get(), x -> r_motors.set(-x));
-    }
-  };
-
   private Drivetrain() {
     // Set the default command for a subsystem here.
     setDefaultCommand(new RunCommand(
@@ -67,7 +50,12 @@ public class Drivetrain extends SubsystemBase {
       },
       this
     ));
+  private static final DifferentialDrive robotDrive = new DifferentialDrive(fl_motor, fr_motor);
 
+  private Drivetrain() {
+    // IMPORTANT: Ensure that motors on the same side have the same output
+    bl_motor.follow(fl_motor);
+    br_motor.follow(fr_motor);
 
     // Sets encoders to measure in inches
     l_encoder.setPositionConversionFactor(PhysConstants.kWheelCircumference * PhysConstants.kDrivetrainGearbox);
@@ -91,6 +79,8 @@ public class Drivetrain extends SubsystemBase {
     robotDrive.tankDrive(speed, -speed, false);
   }
 
+  public double getLeft() {return fl_motor.get();}
+  public double getRight() {return fr_motor.get();}
   public double getPosition() {
     return (l_encoder.getPosition() - r_encoder.getPosition())/2;
   }

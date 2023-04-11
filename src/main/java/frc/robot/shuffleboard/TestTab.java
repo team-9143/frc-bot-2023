@@ -15,6 +15,9 @@ import frc.robot.subsystems.IntakeWheels;
 import frc.robot.commands.TurnToAngle;
 import frc.robot.commands.DriveDistance;
 
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
+
 import frc.robot.OI;
 import frc.robot.Constants.IntakeConstants;
 
@@ -63,14 +66,27 @@ public class TestTab implements ShuffleboardTabBase {
       .withWidget(BuiltInWidgets.kNumberBar)
       .withProperties(Map.of("min", -150, "max", 150, "center", 0));
 
-    test_tab.add("Drivetrain", Drivetrain.robotDrive)
-      .withPosition(11, 0)
+    test_tab.add("Drivetrain", new Sendable() {
+      @Override
+      public void initSendable(SendableBuilder builder) {
+        builder.setSmartDashboardType("DifferentialDrive");
+        builder.setActuator(true);
+        builder.setSafeState(Drivetrain::stop);
+        builder.addDoubleProperty("Left Motor Speed", Drivetrain.getInstance()::getLeft, null);
+        builder.addDoubleProperty("Right Motor Speed", () -> -Drivetrain.getInstance().getRight(), null);
+      }
+    }).withPosition(11, 0)
       .withSize(5, 4)
       .withWidget(BuiltInWidgets.kDifferentialDrive)
       .withProperties(Map.of("number of wheels", 6, "wheel diameter", 60, "show velocity vectors", true));
 
-    test_tab.add("Gyro", OI.pigeon)
-      .withPosition(11, 4)
+    test_tab.add("Gyro", new Sendable() {
+      @Override
+      public void initSendable(SendableBuilder builder) {
+        builder.setSmartDashboardType("Gyro");
+        builder.addDoubleProperty("Value", () -> -OI.pigeon.getYaw() % 360, null);
+      }
+    }).withPosition(11, 4)
       .withSize(5, 4)
       .withWidget(BuiltInWidgets.kGyro)
       .withProperties(Map.of("major tick spacing", 45, "starting angle", 180, "show tick mark ring", true));

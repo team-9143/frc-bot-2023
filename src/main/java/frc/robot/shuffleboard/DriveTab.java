@@ -14,6 +14,9 @@ import frc.robot.subsystems.IntakeWheels;
 import frc.robot.autos.AutoSelector;
 import frc.robot.commands.TurnToAngle;
 
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
+
 import frc.robot.OI;
 import frc.robot.Constants.IntakeConstants;
 
@@ -53,8 +56,13 @@ public class DriveTab implements ShuffleboardTabBase {
     ShuffleboardLayout layout_1 = drive_tab.getLayout("Rotation", BuiltInLayouts.kList)
       .withPosition(0, 0)
       .withSize(4, 5);
-    layout_1.add("Gyro", OI.pigeon)
-      .withWidget(BuiltInWidgets.kGyro)
+    layout_1.add("Gyro", new Sendable() {
+      @Override
+      public void initSendable(SendableBuilder builder) {
+        builder.setSmartDashboardType("Gyro");
+        builder.addDoubleProperty("Value", () -> -OI.pigeon.getYaw() % 360, null);
+      }
+    }).withWidget(BuiltInWidgets.kGyro)
       .withProperties(Map.of("major tick spacing", 45, "starting angle", 180, "show tick mark ring", true));
     layout_1.addBoolean("TurnToAngle Enabled", () -> TurnToAngle.m_enabled)
       .withWidget(BuiltInWidgets.kBooleanBox);
