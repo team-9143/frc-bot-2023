@@ -27,7 +27,7 @@ public class DriveDistance extends CommandBase {
   @Override
   public void execute() {
     drivetrain.moveStraight(Math.max(-DrivetrainConstants.kDistMaxSpeed, Math.min(
-      m_controller.calculate(drivetrain.getAvgPosition(), distance),
+      m_controller.calculate(drivetrain.getPosition(), distance),
     DrivetrainConstants.kDistMaxSpeed)));
   }
 

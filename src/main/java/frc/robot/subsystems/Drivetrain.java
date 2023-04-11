@@ -91,8 +91,7 @@ public class Drivetrain extends SubsystemBase {
     robotDrive.tankDrive(speed, -speed, false);
   }
 
-  // Returns the average of the position of the encoders (in inches)
-  public double getAvgPosition() {
+  public double getPosition() {
     return (l_encoder.getPosition() - r_encoder.getPosition())/2;
   }
 

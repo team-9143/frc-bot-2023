@@ -64,7 +64,7 @@ public class Bodies {
         new IntakeDown(),
         sIntakeWheels.getIntakeCommand(),
         new WaitCommand(2.5).andThen(new RunCommand(() -> sDrivetrain.moveStraight(0.1), sDrivetrain))
-      ).until(() -> sDrivetrain.getAvgPosition() >= -125),
+      ).until(() -> sDrivetrain.getPosition() >= -125),
 
       new IntakeUp()
     );
