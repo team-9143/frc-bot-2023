@@ -53,6 +53,7 @@ public class Drivetrain extends SubsystemBase {
     r_encoder.setMeasurementPeriod(20);
     r_encoder.setPosition(0);
 
+    // Teleop drive: single joystick or turn in place with triggers
     setDefaultCommand(new RunCommand(
       () -> {
         if (Math.abs(OI.driver_cntlr.getTriggers()) > 0.05) {

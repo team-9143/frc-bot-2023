@@ -48,6 +48,7 @@ public class IntakeTilt extends SubsystemBase {
     r_encoder.setMeasurementPeriod(20);
     r_encoder.setPosition(0);
 
+    // If enabled, keep intake in a steady state
     setDefaultCommand(new FunctionalCommand(
       () -> {
         m_controller.reset();

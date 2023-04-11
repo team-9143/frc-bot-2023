@@ -24,6 +24,7 @@ public class IntakeWheels extends SubsystemBase {
     return m_instance;
   }
 
+  /** Used to apply tension if a game piece is being held in the intake. */
   public static boolean m_holding;
 
   private static final CANSparkMax intake_motor = new CANSparkMax(DeviceConstants.kIntakeWheelsID, MotorType.kBrushless);
@@ -36,6 +37,7 @@ public class IntakeWheels extends SubsystemBase {
     intake_encoder.setMeasurementPeriod(20);
     intake_encoder.setPosition(0);
 
+    // If inverted and has a game piece, apply tension to hold in a cone
     setDefaultCommand(startEnd(
       () -> {if (m_holding && isInverted()) {set(IntakeConstants.kHoldingSpeed);}},
       IntakeWheels::stop
