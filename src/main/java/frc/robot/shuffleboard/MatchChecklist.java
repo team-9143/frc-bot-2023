@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.ArrayList;
 import edu.wpi.first.networktables.GenericEntry;
 
+/** Contains match-ready checklists. */
 public class MatchChecklist implements ShuffleboardChecklistBase {
   protected static final ShuffleboardTab match_tab = Shuffleboard.getTab("Match Checklist");
 

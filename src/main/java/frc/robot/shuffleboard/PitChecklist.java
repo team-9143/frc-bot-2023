@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.ArrayList;
 import edu.wpi.first.networktables.GenericEntry;
 
+/** Contains pit-ready checklists. */
 public class PitChecklist implements ShuffleboardChecklistBase {
   protected static final ShuffleboardTab pit_tab = Shuffleboard.getTab("Pit Checklist");
 

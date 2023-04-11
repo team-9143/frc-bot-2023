@@ -17,6 +17,7 @@ import frc.robot.commands.TurnToAngle;
 import frc.robot.OI;
 import frc.robot.Constants.IntakeConstants;
 
+/** Contains auton selector and data for driver and operator. */
 public class DriveTab implements ShuffleboardTabBase {
   protected static final ShuffleboardTab drive_tab = Shuffleboard.getTab("Drive");
 

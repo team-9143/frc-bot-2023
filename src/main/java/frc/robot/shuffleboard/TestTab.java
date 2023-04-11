@@ -18,6 +18,7 @@ import frc.robot.commands.DriveDistance;
 import frc.robot.OI;
 import frc.robot.Constants.IntakeConstants;
 
+/** Contains PID errors and speed of motors. */
 public class TestTab implements ShuffleboardTabBase {
   protected static final ShuffleboardTab test_tab = Shuffleboard.getTab("Test");
 
