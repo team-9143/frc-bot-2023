@@ -12,6 +12,7 @@ import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 
+/** Controls intake tilt motors. */
 public class IntakeTilt extends SubsystemBase {
   private static IntakeTilt m_instance;
 
@@ -62,6 +63,8 @@ public class IntakeTilt extends SubsystemBase {
 
   public void set(double speed) {l_motor.set(speed);}
   public double get() {return l_motor.get();}
+
+  /** @return the average position of the tilt encoders */
   public double getPosition() {
     return (l_encoder.getPosition() + r_encoder.getPosition())/2;
   }
@@ -71,11 +74,13 @@ public class IntakeTilt extends SubsystemBase {
     r_encoder.setPosition(IntakeConstants.kUpPos);
   }
 
+  /** Enables and resets steady PID. */
   public static void enable() {
     m_enabled = true;
     m_controller.reset();
   }
 
+  /** Disables steady PID and stops motors. */
   public static void disable() {
     m_enabled = false;
     stop();

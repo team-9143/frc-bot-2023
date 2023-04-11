@@ -5,6 +5,7 @@ import frc.robot.OI;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 
+/** Contains limelight targeting logic. */
 public class Limelight extends SubsystemBase {
   private static Limelight m_instance;
 

@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 import edu.wpi.first.wpilibj2.command.RunCommand;
 
+/** Controls the robot drivetrain. */
 public class Drivetrain extends SubsystemBase {
   private static Drivetrain m_instance;
 
@@ -33,7 +34,7 @@ public class Drivetrain extends SubsystemBase {
     br_motor = new CANSparkMax(DeviceConstants.kBackRightID, MotorType.kBrushless);
 
   private static final RelativeEncoder l_encoder = fl_motor.getEncoder();
-  private static final RelativeEncoder r_encoder = fr_motor.getEncoder(); // Position must be inverted when called
+  private static final RelativeEncoder r_encoder = fr_motor.getEncoder();
 
   private static final DifferentialDrive robotDrive = new DifferentialDrive(fl_motor, fr_motor);
 
@@ -77,8 +78,12 @@ public class Drivetrain extends SubsystemBase {
     robotDrive.tankDrive(speed, -speed, false);
   }
 
+  /** @return the speed of the left motors */
   public double getLeft() {return fl_motor.get();}
+  /** @return the speed of the right motors */
   public double getRight() {return fr_motor.get();}
+
+  /** @return the average position of the drivetrain encoders */
   public double getPosition() {
     return (l_encoder.getPosition() - r_encoder.getPosition())/2;
   }
@@ -88,7 +93,6 @@ public class Drivetrain extends SubsystemBase {
     r_encoder.setPosition(0);
   }
 
-  // Stops drivetrain motors
   public static void stop() {
     robotDrive.stopMotor();
   }

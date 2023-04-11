@@ -12,6 +12,7 @@ import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 
+/** Controls intake wheels. */
 public class IntakeWheels extends SubsystemBase {
   private static IntakeWheels m_instance;
 
@@ -43,8 +44,10 @@ public class IntakeWheels extends SubsystemBase {
 
   public void set(double speed) {intake_motor.set(speed);}
   public double get() {return intake_motor.get();}
+  
   public double getVelocity() {return intake_encoder.getVelocity();}
 
+  /** Invert intake speeds for cone intake. */
   public static void invert() {
     IntakeConstants.kIntakeSpeed *= -1;
     IntakeConstants.kOuttakeSpeed *= -1;
@@ -61,6 +64,7 @@ public class IntakeWheels extends SubsystemBase {
     intake_motor.stopMotor();
   }
 
+  /** @return a command to intake a game piece */
   public Command getIntakeCommand() {
     return new StartEndCommand(
       () -> {
@@ -72,6 +76,7 @@ public class IntakeWheels extends SubsystemBase {
     );
   }
 
+  /** @return a command to shoot a game piece at full speed */
   public Command getShootCommand() {
     return new StartEndCommand(
       () -> {
@@ -83,6 +88,7 @@ public class IntakeWheels extends SubsystemBase {
     );
   }
 
+  /** @return a command to spit a game piece at partial speed */
   public Command getSpitCommand() {
     return new StartEndCommand(
       () -> {
