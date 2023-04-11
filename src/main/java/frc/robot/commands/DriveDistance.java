@@ -20,12 +20,14 @@ public class DriveDistance extends CommandBase {
     this.distance = distance;
   }
 
+  /** Reset controller and encoders. */
   @Override
   public void initialize() {
     m_controller.reset();
     drivetrain.resetEncoders();
   }
 
+  /** Calculate and clamp controller output to max speed. */
   @Override
   public void execute() {
     drivetrain.moveStraight(Math.max(-DrivetrainConstants.kDistMaxSpeed, Math.min(

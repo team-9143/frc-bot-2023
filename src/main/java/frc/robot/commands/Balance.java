@@ -15,16 +15,14 @@ public class Balance extends CommandBase {
   
   private double previousPitch = -OI.pigeon.getPitch();
 
+  /** Move forward while tilting backward and vice versa. */
   @Override
   public void execute() {
     // Pitch should increases to the back
     double pitch = -OI.pigeon.getPitch();
 
-    if (Math.abs(pitch) > DrivetrainConstants.kBalanceTolerance) {
-      if (Math.abs(pitch - previousPitch) < 3) {
-        // Move forward while tilting backward and vice versa
-        drivetrain.moveStraight(Math.copySign(DrivetrainConstants.kSpeedMult * DrivetrainConstants.kBalanceSpeed, pitch));
-      }
+    if (Math.abs(pitch) > DrivetrainConstants.kBalanceTolerance && Math.abs(pitch - previousPitch) < 3) {
+      drivetrain.moveStraight(Math.copySign(DrivetrainConstants.kSpeedMult * DrivetrainConstants.kBalanceSpeed, pitch));
     } else {
       // Stop movement on a large pitch change (usually denoting a fall) or when stabilized
       Drivetrain.stop();

@@ -48,7 +48,7 @@ public class IntakeTilt extends SubsystemBase {
     r_encoder.setMeasurementPeriod(20);
     r_encoder.setPosition(0);
 
-    // If enabled, keep intake in a steady state
+    // If enabled, keep intake in a steady state at up position
     setDefaultCommand(new FunctionalCommand(
       () -> {
         m_controller.reset();
@@ -61,7 +61,10 @@ public class IntakeTilt extends SubsystemBase {
     ));
   }
 
-  public void set(double speed) {l_motor.set(speed);}
+  /** Clamps input to max speed. */
+  public void set(double speed) {
+    l_motor.set(Math.max(-IntakeConstants.kTiltMaxSpeed, Math.min(speed, IntakeConstants.kTiltMaxSpeed)));
+  }
   public double get() {return l_motor.get();}
 
   /** @return the average position of the tilt encoders */
@@ -74,13 +77,13 @@ public class IntakeTilt extends SubsystemBase {
     r_encoder.setPosition(IntakeConstants.kUpPos);
   }
 
-  /** Enables and resets steady PID. */
+  /** Enables and resets steady intake PID. */
   public static void enable() {
     m_enabled = true;
     m_controller.reset();
   }
 
-  /** Disables steady PID and stops motors. */
+  /** Disables steady intake PID and stops motors. */
   public static void disable() {
     m_enabled = false;
     stop();

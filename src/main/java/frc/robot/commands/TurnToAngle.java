@@ -28,6 +28,7 @@ public class TurnToAngle extends CommandBase {
     m_controller.reset();
   }
 
+  /** Calculate and clamp controller output to max speed. */
   @Override
   public void execute() {
     drivetrain.turnInPlace(Math.max(-DrivetrainConstants.kTurnMaxSpeed, Math.min(

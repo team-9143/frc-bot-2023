@@ -8,12 +8,13 @@ import java.util.Set;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.IntakeTilt;
 
-/** Tilts the intake fully down to pick up game pieces. */
+/** Tilts the intake fully down to pick up game pieces. Disables steady intake. */
 public class IntakeDown extends CommandBase {
   private static final IntakeTilt intakeTilt = IntakeTilt.getInstance();
   private static final Set<Subsystem> m_requirements = Set.of(intakeTilt);
   public static final PIDController m_controller = new PIDController(IntakeConstants.kDownP, IntakeConstants.kDownI, IntakeConstants.kDownD);
 
+  /** Reset controller. */
   @Override
   public void initialize() {
     IntakeTilt.disable();
