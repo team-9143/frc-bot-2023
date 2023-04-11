@@ -8,6 +8,7 @@ import java.util.Set;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.IntakeTilt;
 
+/** Tilts the intake fully down to pick up game pieces. */
 public class IntakeDown extends CommandBase {
   private static final IntakeTilt intakeTilt = IntakeTilt.getInstance();
   private static final Set<Subsystem> m_requirements = Set.of(intakeTilt);

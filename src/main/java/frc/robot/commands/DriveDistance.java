@@ -8,6 +8,7 @@ import java.util.Set;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.Drivetrain;
 
+/** Drives a given distance for autons. Realistically moves about 10% less due to slip. */
 public class DriveDistance extends CommandBase {
   private static final Drivetrain drivetrain = Drivetrain.getInstance();
   private static final Set<Subsystem> m_requirements = Set.of(drivetrain);

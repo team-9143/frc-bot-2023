@@ -8,6 +8,7 @@ import java.util.Set;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.Drivetrain;
 
+/** Adjusts drivetrain to balance on a charge station. */
 public class Balance extends CommandBase {
   private static final Drivetrain drivetrain = Drivetrain.getInstance();
   private static final Set<Subsystem> m_requirements = Set.of(drivetrain);
