@@ -34,17 +34,7 @@ public class IntakeTilt extends SubsystemBase {
   private static final RelativeEncoder r_encoder = r_motor.getEncoder();
 
   private IntakeTilt() {
-    setDefaultCommand(new FunctionalCommand(
-      () -> {
-        m_controller.reset();
-        m_setpoint = IntakeConstants.kUpPos;
-      },
-      () -> {if (m_enabled) {set(m_controller.calculate(getPosition()));}},
-      interrupted -> {},
-      () -> false,
-      m_instance
-    ));
-
+    // IMPORTANT: Ensure that motors have a consistent output
     r_motor.follow(l_motor, true);
 
     l_encoder.setPositionConversionFactor(PhysConstants.kTiltGearbox);
@@ -57,11 +47,21 @@ public class IntakeTilt extends SubsystemBase {
 
     l_encoder.setPosition(0);
     r_encoder.setPosition(0);
+
+    setDefaultCommand(new FunctionalCommand(
+      () -> {
+        m_controller.reset();
+        m_setpoint = IntakeConstants.kUpPos;
+      },
+      () -> {if (m_enabled) {set(m_controller.calculate(getPosition()));}},
+      interrupted -> {},
+      () -> false,
+      m_instance
+    ));
   }
 
   public void set(double speed) {l_motor.set(speed);}
   public double get() {return l_motor.get();}
-
   public double getPosition() {
     return (l_encoder.getPosition() + r_encoder.getPosition())/2;
   }

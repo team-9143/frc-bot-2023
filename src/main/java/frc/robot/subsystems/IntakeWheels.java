@@ -30,20 +30,19 @@ public class IntakeWheels extends SubsystemBase {
   private static final RelativeEncoder intake_encoder = intake_motor.getEncoder();
 
   private IntakeWheels() {
-    setDefaultCommand(startEnd(
-      () -> {if (m_holding && isInverted()) {set(IntakeConstants.kHoldingSpeed);}},
-      IntakeWheels::stop
-    ));
-
     intake_encoder.setPositionConversionFactor(PhysConstants.kTiltGearbox);
     intake_encoder.setVelocityConversionFactor(PhysConstants.kTiltGearbox);
     intake_encoder.setMeasurementPeriod(20);
     intake_encoder.setPosition(0);
+
+    setDefaultCommand(startEnd(
+      () -> {if (m_holding && isInverted()) {set(IntakeConstants.kHoldingSpeed);}},
+      IntakeWheels::stop
+    ));
   }
 
   public void set(double speed) {intake_motor.set(speed);}
   public double get() {return intake_motor.get();}
-
   public double getVelocity() {return intake_encoder.getVelocity();}
 
   public static void invert() {
