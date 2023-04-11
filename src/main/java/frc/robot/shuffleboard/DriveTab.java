@@ -28,12 +28,6 @@ public class DriveTab implements ShuffleboardTabBase {
   private static final IntakeWheels sIntakeWheels = IntakeWheels.getInstance();
 
   public void initialize() {
-    // TODO(? prio): Implement camera
-    // UsbCamera camera = CameraServer.startAutomaticCapture();
-    // Shuffleboard.getTab("Camera Test").addCamera("Camera", camera.getName(), camera.getPath())
-    //   .withWidget(BuiltInWidgets.kCameraStream)
-    //   .withProperties(Map.of("show crosshair", false, "Rotation", "HALF"));
-
     drive_tab.add("Auton Starter", AutoSelector.m_starterChooser)
       .withPosition(3, 5)
       .withSize(3, 2)
