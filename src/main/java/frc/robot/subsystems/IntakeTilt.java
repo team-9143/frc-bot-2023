@@ -92,6 +92,7 @@ public class IntakeTilt extends SubsystemBase {
     l_motor.stopMotor();
   }
 
+  // TODO(low prio): Test and implement autoAlign
   public void getAutoAlignCommand() {
     new FunctionalCommand(
       () -> set(IntakeConstants.kAutoAlignSpeed),

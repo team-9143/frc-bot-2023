@@ -37,7 +37,7 @@ public class RobotContainer {
     return m_instance;
   }
 
-  // The robot's subsystems and commands are defined here...
+  // Initialize subsystems and commands
   private static final Drivetrain sDrivetrain = Drivetrain.getInstance();
   private static final IntakeWheels sIntakeWheels = IntakeWheels.getInstance();
   private static final IntakeTilt sIntakeTilt = IntakeTilt.getInstance();
@@ -68,10 +68,8 @@ public class RobotContainer {
     OI.pigeon.configMountPose(0, -0.24665457, -179.574783);
     OI.pigeon.setYaw(0);
 
-    // Configure PID controllers
-    configureControllers();
+    configurePIDControllers();
 
-    // Configure the trigger bindings
     configureBindings();
 
     // Initialize Shuffleboard
@@ -79,7 +77,8 @@ public class RobotContainer {
     Shuffleboard.disableActuatorWidgets();
   }
 
-  private void configureControllers() {
+  /** Configure settings for PID controllers. */
+  private void configurePIDControllers() {
     TurnToAngle.m_controller.setIntegratorRange(-Constants.DrivetrainConstants.kTurnMaxSpeed, Constants.DrivetrainConstants.kTurnMaxSpeed);
     TurnToAngle.m_controller.setTolerance(Constants.DrivetrainConstants.kTurnPosTolerance, Constants.DrivetrainConstants.kTurnVelTolerance);
     TurnToAngle.m_controller.enableContinuousInput(-180, 180);
@@ -100,15 +99,7 @@ public class RobotContainer {
     IntakeUp.m_controller.setSetpoint(Constants.IntakeConstants.kUpPos);
   }
 
-  /**
-   * Use this method to define your trigger->command mappings. Triggers can be created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
-   * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
-   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-   * joysticks}.
-   */
+  /** Initialize button bindings. */
   private void configureBindings() {
     // Universal:
     // Button 'B' (hold) will continuously stop all movement
@@ -228,7 +219,7 @@ public class RobotContainer {
       .whileTrue(cManualHold);
   }
 
-  /** Stops all motors, disables PID controllers, and cancels commands requiring actuator subsystems */
+  /** Stops all motors, disables PID controllers, and cancels commands requiring actuator subsystems. */
   public static void stop() {
     cStop.execute();
   }
