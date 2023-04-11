@@ -40,13 +40,12 @@ public class IntakeTilt extends SubsystemBase {
 
     l_encoder.setPositionConversionFactor(PhysConstants.kTiltGearbox);
     l_encoder.setVelocityConversionFactor(PhysConstants.kTiltGearbox);
+    l_encoder.setMeasurementPeriod(20);
+    l_encoder.setPosition(0);
+
     r_encoder.setPositionConversionFactor(PhysConstants.kTiltGearbox);
     r_encoder.setVelocityConversionFactor(PhysConstants.kTiltGearbox);
-
-    l_encoder.setMeasurementPeriod(20);
     r_encoder.setMeasurementPeriod(20);
-
-    l_encoder.setPosition(0);
     r_encoder.setPosition(0);
 
     setDefaultCommand(new FunctionalCommand(

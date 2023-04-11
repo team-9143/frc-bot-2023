@@ -43,17 +43,14 @@ public class Drivetrain extends SubsystemBase {
     bl_motor.follow(fl_motor);
     br_motor.follow(fr_motor);
 
-    // Sets encoders to measure in inches
     l_encoder.setPositionConversionFactor(PhysConstants.kWheelCircumference * PhysConstants.kDrivetrainGearbox);
     l_encoder.setVelocityConversionFactor(PhysConstants.kWheelCircumference * PhysConstants.kDrivetrainGearbox / 60);
+    l_encoder.setMeasurementPeriod(20);
+    l_encoder.setPosition(0);
+    
     r_encoder.setPositionConversionFactor(PhysConstants.kWheelCircumference * PhysConstants.kDrivetrainGearbox);
     r_encoder.setVelocityConversionFactor(PhysConstants.kWheelCircumference * PhysConstants.kDrivetrainGearbox / 60);
-
-    // Sets encoder measurement period in time with default loop
-    l_encoder.setMeasurementPeriod(20);
     r_encoder.setMeasurementPeriod(20);
-
-    l_encoder.setPosition(0);
     r_encoder.setPosition(0);
 
     setDefaultCommand(new RunCommand(
