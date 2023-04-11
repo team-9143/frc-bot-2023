@@ -11,6 +11,7 @@ import frc.robot.subsystems.Drivetrain;
 
 public class TurnToAngle extends CommandBase {
   private static final Drivetrain drivetrain = Drivetrain.getInstance();
+  private static final Set<Subsystem> m_requirements = Set.of(drivetrain);
   public static final PIDController m_controller = new PIDController(DrivetrainConstants.kTurnP, DrivetrainConstants.kTurnI, DrivetrainConstants.kTurnD);
 
   /** If TurnToAngle can be used during teleop. */
@@ -47,6 +48,6 @@ public class TurnToAngle extends CommandBase {
 
   @Override
   public Set<Subsystem> getRequirements() {
-    return Set.of(drivetrain);
+    return m_requirements;
   }
 }

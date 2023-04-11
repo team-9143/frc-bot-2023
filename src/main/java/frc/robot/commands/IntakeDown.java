@@ -10,6 +10,7 @@ import frc.robot.subsystems.IntakeTilt;
 
 public class IntakeDown extends CommandBase {
   private static final IntakeTilt intakeTilt = IntakeTilt.getInstance();
+  private static final Set<Subsystem> m_requirements = Set.of(intakeTilt);
   public static final PIDController m_controller = new PIDController(IntakeConstants.kDownP, IntakeConstants.kDownI, IntakeConstants.kDownD);
 
   @Override
@@ -31,6 +32,6 @@ public class IntakeDown extends CommandBase {
 
   @Override
   public Set<Subsystem> getRequirements() {
-    return Set.of(intakeTilt);
+    return m_requirements;
   }
 }

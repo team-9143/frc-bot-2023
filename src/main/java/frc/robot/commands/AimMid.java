@@ -9,6 +9,7 @@ import frc.robot.subsystems.IntakeTilt;
 
 public class AimMid extends CommandBase {
   private static final IntakeTilt intakeTilt = IntakeTilt.getInstance();
+  private static final Set<Subsystem> m_requirements = Set.of(intakeTilt);
 
   @Override
   public void initialize() {
@@ -31,6 +32,6 @@ public class AimMid extends CommandBase {
 
   @Override
   public Set<Subsystem> getRequirements() {
-    return Set.of(intakeTilt);
+    return m_requirements;
   }
 }

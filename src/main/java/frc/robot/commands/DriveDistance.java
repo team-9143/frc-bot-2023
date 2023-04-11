@@ -10,6 +10,7 @@ import frc.robot.subsystems.Drivetrain;
 
 public class DriveDistance extends CommandBase {
   private static final Drivetrain drivetrain = Drivetrain.getInstance();
+  private static final Set<Subsystem> m_requirements = Set.of(drivetrain);
   public static final PIDController m_controller = new PIDController(DrivetrainConstants.kDistP, DrivetrainConstants.kDistI, DrivetrainConstants.kDistD);
 
   private double distance; // UNIT: inches
@@ -43,6 +44,6 @@ public class DriveDistance extends CommandBase {
 
   @Override
   public Set<Subsystem> getRequirements() {
-    return Set.of(drivetrain);
+    return m_requirements;
   }
 }
