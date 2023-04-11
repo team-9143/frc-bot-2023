@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 import frc.robot.commands.*;
 
-/** Contains auton endings */
+/** Contains auton endings. */
 public class Endings {
   /** A command handling the end of an auton. Moves the drivetrain. */
   public static Command getEnding(AutoSelector.Ending end, AutoSelector.Body body) {

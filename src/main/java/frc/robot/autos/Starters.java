@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.*;
 import frc.robot.subsystems.IntakeWheels;
 
-/** Contains auton starters */
+/** Contains auton starters. */
 public class Starters {
   private static final IntakeWheels sIntakeWheels = IntakeWheels.getInstance();
 

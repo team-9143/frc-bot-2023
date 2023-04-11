@@ -14,7 +14,7 @@ import frc.robot.commands.*;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.IntakeWheels;
 
-/** Contains auton bodies */
+/** Contains auton bodies. */
 public class Bodies {
   private static final Drivetrain sDrivetrain = Drivetrain.getInstance();
   private static final IntakeWheels sIntakeWheels = IntakeWheels.getInstance();
@@ -37,7 +37,7 @@ public class Bodies {
     }
   }
 
-  /** Drive backwards out of the community's longer side, then turn around */
+  /** Drive backwards out of the community's longer side, then turn around. */
   private static Command LongEscape() {
     return new SequentialCommandGroup(
       new DriveDistance(-150),
@@ -45,7 +45,7 @@ public class Bodies {
     );
   }
 
-  /** Drive backwards out of the community's shorter side, then turn around */
+  /** Drive backwards out of the community's shorter side, then turn around. */
   private static Command ShortEscape() {
     return new SequentialCommandGroup(
       new DriveDistance(-90),
@@ -53,7 +53,7 @@ public class Bodies {
     );
   }
 
-  /** Turn around and pickup a cone (inverts the intake wheels) */
+  /** Turn around and pickup a cone (inverts the intake wheels). */
   private static Command PickupCone() {
     return new SequentialCommandGroup(
       new DriveDistance(-165), // Move near cone
@@ -70,7 +70,7 @@ public class Bodies {
     );
   }
 
-  /** Drive backwards over the charge station, then drive back and balance */
+  /** Drive backwards over the charge station, then drive back and balance. */
   private static Command CenterOver() {
     return new SequentialCommandGroup(
       // Move back until pitch is greater than 10
@@ -108,7 +108,7 @@ public class Bodies {
     );
   }
 
-  /** Drive backwards to the charge station and balance */
+  /** Drive backwards to the charge station and balance. */
   private static Command CenterSimple() {
     return new SequentialCommandGroup(
       // Move back until pitch is greater than 10

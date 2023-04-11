@@ -32,9 +32,9 @@ public final class AutoSelector {
     NONE
   }
 
-  public static final SendableChooser<Body> m_bodyChooser = new SendableChooser<Body>();
   public static final SendableChooser<Starter> m_starterChooser = new SendableChooser<Starter>();
-  public static final SendableChooser<Ending> m_endChooser = new SendableChooser<Ending>();
+  public static final SendableChooser<Body> m_bodyChooser = new SendableChooser<Body>();
+  public static final SendableChooser<Ending> m_endingChooser = new SendableChooser<Ending>();
 
   public static void initializeChoosers() {
     m_starterChooser.addOption("Shoot", AutoSelector.Starter.CUBE_SHOOT);
@@ -50,12 +50,15 @@ public final class AutoSelector {
     m_bodyChooser.addOption("Center Backward", AutoSelector.Body.CENTER_SIMPLE);
     m_bodyChooser.setDefaultOption("None", AutoSelector.Body.NONE);
 
-    m_endChooser.addOption("Turn Away", AutoSelector.Ending.TURN_AWAY);
-    m_endChooser.addOption("Turn Close", AutoSelector.Ending.TURN_CLOSE);
-    m_endChooser.addOption("Return From Cone", AutoSelector.Ending.RETURN_FROM_CONE);
-    m_endChooser.setDefaultOption("None", AutoSelector.Ending.NONE);
+    m_endingChooser.addOption("Turn Away", AutoSelector.Ending.TURN_AWAY);
+    m_endingChooser.addOption("Turn Close", AutoSelector.Ending.TURN_CLOSE);
+    m_endingChooser.addOption("Return From Cone", AutoSelector.Ending.RETURN_FROM_CONE);
+    m_endingChooser.setDefaultOption("None", AutoSelector.Ending.NONE);
   }
 
+  /**
+   * @return an auton compiled from the starter, body, and ending {@link SendableChooser}
+   */
   public static Command getAuto() {
     // TODO(HIGH prio): Fix auton endings - entails rewriting static headings in TurnToAngle and DriveDistance, as well as allowing for values (ex. current encoder position) to be given to the end module at module initialization, potential create as a new type of command
     // TODO:(mid prio): Attempt to add dynamic secondary body module with values depending on the selected first body module, editing values with a refresh button
@@ -63,7 +66,7 @@ public final class AutoSelector {
       Starters.getStarter(m_starterChooser.getSelected())
         .raceWith(new RunCommand(Drivetrain::stop, Drivetrain.getInstance())),
       Bodies.getBody(m_bodyChooser.getSelected()),
-      Endings.getEnding(m_endChooser.getSelected(), m_bodyChooser.getSelected())
+      Endings.getEnding(m_endingChooser.getSelected(), m_bodyChooser.getSelected())
     );
   }
 }
