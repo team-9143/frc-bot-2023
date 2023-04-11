@@ -55,9 +55,9 @@ public class ShuffleboardManager {
     // TODO(low prio): Test checklists with toggle switches and reset
     m_checklists.add(new MatchChecklist());
     m_checklists.add(new PitChecklist());
+    m_tabs.addAll(m_checklists);
 
     m_tabs.forEach(e -> e.initialize());
-    m_checklists.forEach(e -> e.initialize());
   }
 
   public void reset() {
