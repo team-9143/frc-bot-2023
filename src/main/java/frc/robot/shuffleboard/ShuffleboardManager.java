@@ -22,16 +22,26 @@ public class ShuffleboardManager {
     abstract void reset();
   }
 
-  private static final boolean m_debugging = false;
+  private static final boolean m_debugging = true;
 
-  private static final ArrayList<ShuffleboardTabBase> m_tabs = new ArrayList<>();
+  private static final ArrayList<ShuffleboardTabBase> m_tabs = new ArrayList<ShuffleboardTabBase>();
+  private static final ArrayList<ShuffleboardChecklistBase> m_checklists = new ArrayList<ShuffleboardChecklistBase>();
 
   private ShuffleboardManager() {
-    m_tabs.add(null);
+    m_tabs.add(new DriveTab());
     if (m_debugging) {
-      m_tabs.add(null);
+      m_tabs.add(new TestTab());
     }
 
+    // TODO(low prio): Test checklists with toggle switches and reset
+    m_checklists.add(new MatchChecklist());
+    m_checklists.add(new PitChecklist());
+
     m_tabs.forEach(e -> e.initialize());
+    m_checklists.forEach(e -> e.initialize());
+  }
+
+  public void reset() {
+    m_checklists.forEach(e -> e.reset());
   }
 }
