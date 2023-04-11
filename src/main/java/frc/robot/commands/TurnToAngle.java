@@ -13,6 +13,7 @@ public class TurnToAngle extends CommandBase {
   private static final Drivetrain drivetrain = Drivetrain.getInstance();
   public static final PIDController m_controller = new PIDController(DrivetrainConstants.kTurnP, DrivetrainConstants.kTurnI, DrivetrainConstants.kTurnD);
 
+  /** If TurnToAngle can be used during teleop. */
   public static boolean m_enabled = false;
   private double heading;
 

@@ -10,14 +10,12 @@ import frc.robot.subsystems.IntakeTilt;
 public class AimMid extends CommandBase {
   private static final IntakeTilt intakeTilt = IntakeTilt.getInstance();
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     IntakeTilt.disable();
     IntakeTilt.m_setpoint = IntakeConstants.kMidPos;
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     intakeTilt.set(
@@ -26,7 +24,6 @@ public class AimMid extends CommandBase {
     );
   }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     IntakeTilt.disable();

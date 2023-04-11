@@ -12,10 +12,9 @@ public class Balance extends CommandBase {
   private static final Drivetrain drivetrain = Drivetrain.getInstance();
   private double previousPitch = -OI.pigeon.getPitch();
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // Get pitch that increases to the back
+    // Pitch should increases to the back
     double pitch = -OI.pigeon.getPitch();
 
     if (Math.abs(pitch) > DrivetrainConstants.kBalanceTolerance) {
@@ -31,7 +30,6 @@ public class Balance extends CommandBase {
     previousPitch = pitch;
   }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     Drivetrain.stop();
