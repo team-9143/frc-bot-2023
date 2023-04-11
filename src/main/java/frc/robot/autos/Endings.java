@@ -9,7 +9,7 @@ import frc.robot.commands.*;
 
 /** Contains auton endings. */
 public class Endings {
-  /** A command handling the end of an auton. Moves the drivetrain. */
+  /** @return a command handling the end of an auton. Moves the drivetrain */
   public static Command getEnding(AutoSelector.Ending end, AutoSelector.Body body) {
     switch (end) {
       case TURN_AWAY:

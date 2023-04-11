@@ -19,7 +19,7 @@ public class Bodies {
   private static final Drivetrain sDrivetrain = Drivetrain.getInstance();
   private static final IntakeWheels sIntakeWheels = IntakeWheels.getInstance();
 
-  /** A command handling the main body of an auton. Moves the drivetrain. */
+  /** @return a command handling the main body of an auton. Moves the drivetrain */
   public static Command getBody(AutoSelector.Body body) {
     switch (body) {
       case ESCAPE_LONG:

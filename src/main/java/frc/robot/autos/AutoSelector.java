@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 
 import frc.robot.subsystems.Drivetrain;
 
+/** Contains auto types, choosers, and compiler. */
 public final class AutoSelector {
   public static enum Starter {
     CUBE_SHOOT,
