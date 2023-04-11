@@ -59,7 +59,6 @@ public class IntakeWheels extends SubsystemBase {
     return IntakeConstants.kIntakeSpeed < 0;
   }
 
-  // Stops all motors
   public static void stop() {
     intake_motor.stopMotor();
   }
