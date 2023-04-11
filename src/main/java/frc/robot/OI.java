@@ -15,8 +15,7 @@ public class OI {
   public final static NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
 
   // In proper orientation, Pigeon is flat and facing so that X-axis is forward
-  // Roll increases to the right, pitch to the front, and yaw counter-clockwise
-  // TODO: Test sendable pigeon
+  /** Roll increases to the right, pitch to the front, and yaw counter-clockwise. */
   public final static Pigeon2 pigeon = new Pigeon2(DeviceConstants.kPigeonID);
 
   public static class Controller extends GenericHID {
@@ -70,21 +69,4 @@ public class OI {
     public double getRightX() {return getRawAxis(axis.rightX.val);}
     public double getRightY() {return getRawAxis(axis.rightY.val);}
   }
-
-  // public static class PigeonSendable implements Sendable, AutoCloseable {
-  //   public final Pigeon2 gyro;
-
-  //   public PigeonSendable(Pigeon2 gyro) {
-  //     this.gyro = gyro;
-  //   }
-
-  //   @Override
-  //   public void initSendable(SendableBuilder builder) {
-  //     builder.setSmartDashboardType("Gyro");
-  //     builder.addDoubleProperty("Value", () -> -gyro.getYaw() % 360, null);
-  //   }
-
-  //   @Override
-  //   public void close() {}
-  // }
 }
