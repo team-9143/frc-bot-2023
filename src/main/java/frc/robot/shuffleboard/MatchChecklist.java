@@ -4,9 +4,7 @@ import frc.robot.shuffleboard.ShuffleboardManager.ShuffleboardChecklistBase;
 
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import java.util.Map;
 
 import java.util.ArrayList;
@@ -15,8 +13,8 @@ import edu.wpi.first.networktables.GenericEntry;
 public class MatchChecklist implements ShuffleboardChecklistBase {
   protected static final ShuffleboardTab match_tab = Shuffleboard.getTab("Match Checklist");
 
-  private static final ArrayList<GenericEntry> robot_entries = new ArrayList<GenericEntry>();
-  private static final ArrayList<GenericEntry> station_entries = new ArrayList<GenericEntry>();
+  private static ArrayList<GenericEntry> robot_entries;
+  private static ArrayList<GenericEntry> station_entries;
 
   public void initialize() {
     String[] robot_checklist = new String[]{
@@ -33,21 +31,19 @@ public class MatchChecklist implements ShuffleboardChecklistBase {
       "Joysticks are properly connected"
     };
 
-    ShuffleboardLayout layout_1 = match_tab.getLayout("Robot Checklist", BuiltInLayouts.kList)
+    robot_entries = addChecklist(robot_checklist, 
+      match_tab.getLayout("Robot Checklist", BuiltInLayouts.kList)
       .withPosition(3, 0)
       .withSize(5, 8)
-      .withProperties(Map.of("label position", "LEFT"));
-    for (String e : robot_checklist) {
-      robot_entries.add(layout_1.add(e, false).withWidget(BuiltInWidgets.kToggleSwitch).getEntry());
-    }
+      .withProperties(Map.of("label position", "LEFT"))
+    );
 
-    ShuffleboardLayout layout_2 = match_tab.getLayout("Drive Station Checklist", BuiltInLayouts.kList)
+    station_entries = addChecklist(station_checklist,
+      match_tab.getLayout("Drive Station Checklist", BuiltInLayouts.kList)
       .withPosition(8, 0)
       .withSize(5, 8)
-      .withProperties(Map.of("label position", "LEFT"));
-    for (String e : station_checklist) {
-      station_entries.add(layout_2.add(e, false).withWidget(BuiltInWidgets.kToggleSwitch).getEntry());
-    }
+      .withProperties(Map.of("label position", "LEFT"))
+    );
   }
 
   public void reset() {

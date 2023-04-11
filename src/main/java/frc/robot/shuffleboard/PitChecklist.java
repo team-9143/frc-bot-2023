@@ -4,9 +4,7 @@ import frc.robot.shuffleboard.ShuffleboardManager.ShuffleboardChecklistBase;
 
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import java.util.Map;
 
 import java.util.ArrayList;
@@ -15,12 +13,12 @@ import edu.wpi.first.networktables.GenericEntry;
 public class PitChecklist implements ShuffleboardChecklistBase {
   protected static final ShuffleboardTab pit_tab = Shuffleboard.getTab("Pit Checklist");
 
-  private static final ArrayList<GenericEntry> structural_entries = new ArrayList<GenericEntry>();
-  private static final ArrayList<GenericEntry> electrical_entries = new ArrayList<GenericEntry>();
-  private static final ArrayList<GenericEntry> cart_entries = new ArrayList<GenericEntry>();
+  private static ArrayList<GenericEntry> mechanical_entries;
+  private static ArrayList<GenericEntry> electrical_entries;
+  private static ArrayList<GenericEntry> cart_entries;
 
   public void initialize() {
-    String[] structural_checklist = new String[]{
+    String[] mechanical_checklist = new String[]{
       "All structural components are secured",
       "Bumpers are secured",
       "Bumpers are the correct match color",
@@ -45,33 +43,30 @@ public class PitChecklist implements ShuffleboardChecklistBase {
       "All necessary utility tools available"
     };
 
-    ShuffleboardLayout layout_1 = pit_tab.getLayout("Pre-Match Mechanical", BuiltInLayouts.kList)
+    mechanical_entries = addChecklist(mechanical_checklist,
+      pit_tab.getLayout("Pre-Match Mechanical", BuiltInLayouts.kList)
       .withPosition(1, 0)
       .withSize(5, 8)
-      .withProperties(Map.of("label position", "HIDDEN"));
-    for (String e : structural_checklist) {
-      structural_entries.add(layout_1.add(e, false).withWidget(BuiltInWidgets.kToggleSwitch).getEntry());
-    }
+      .withProperties(Map.of("label position", "HIDDEN"))
+    );
 
-    ShuffleboardLayout layout_2 = pit_tab.getLayout("Pre-Match Electrical", BuiltInLayouts.kList)
+    electrical_entries = addChecklist(electrical_checklist,
+      pit_tab.getLayout("Pre-Match Electrical", BuiltInLayouts.kList)
       .withPosition(6, 0)
       .withSize(5, 8)
-      .withProperties(Map.of("label position", "HIDDEN"));
-    for (String e : electrical_checklist) {
-      electrical_entries.add(layout_2.add(e, false).withWidget(BuiltInWidgets.kToggleSwitch).getEntry());
-    }
+      .withProperties(Map.of("label position", "HIDDEN"))
+    );
 
-    ShuffleboardLayout layout_3 = pit_tab.getLayout("Pre-Match Cart", BuiltInLayouts.kList)
+    cart_entries = addChecklist(cart_checklist,
+      pit_tab.getLayout("Pre-Match Cart", BuiltInLayouts.kList)
       .withPosition(11, 0)
       .withSize(5, 8)
-      .withProperties(Map.of("label position", "HIDDEN"));
-    for (String e : cart_checklist) {
-      cart_entries.add(layout_3.add(e, false).withWidget(BuiltInWidgets.kToggleSwitch).getEntry());
-    }
+      .withProperties(Map.of("label position", "HIDDEN"))
+    );
   }
 
   public void reset() {
-    for (GenericEntry e : structural_entries) {
+    for (GenericEntry e : mechanical_entries) {
       e.setBoolean(false);
     }
 

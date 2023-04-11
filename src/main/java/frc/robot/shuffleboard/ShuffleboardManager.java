@@ -2,7 +2,11 @@ package frc.robot.shuffleboard;
 
 import java.util.ArrayList;
 
-/** Initializes Shuffleboard */
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.networktables.GenericEntry;
+
+/** Controls and initializes Shuffleboard tabs */
 public class ShuffleboardManager {
   private static ShuffleboardManager m_instance;
 
@@ -20,6 +24,21 @@ public class ShuffleboardManager {
 
   public interface ShuffleboardChecklistBase extends ShuffleboardTabBase {
     abstract void reset();
+
+    /**
+     * Adds a checklist to a layout.
+     * 
+     * @param checklist array of items to add
+     * @param layout layout to add items to
+     * @return an {@link ArrayList} of {@link GenericEntry} corresponding to the checklist
+     */
+    default ArrayList<GenericEntry> addChecklist(String[] checklist, ShuffleboardLayout layout) {
+      ArrayList<GenericEntry> entries = new ArrayList<GenericEntry>();
+      for (String e : checklist) {
+        entries.add(layout.add(e, false).withWidget(BuiltInWidgets.kToggleSwitch).getEntry());
+      }
+      return entries;
+    }
   }
 
   private static final boolean m_debugging = true;
