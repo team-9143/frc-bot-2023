@@ -19,11 +19,6 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.shuffleboard.ShuffleboardManager;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import java.util.Map;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a

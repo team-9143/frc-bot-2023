@@ -34,7 +34,6 @@ public class TestTab implements ShuffleboardTabBase {
     layout_1.addDouble("Intake Setpoint", () -> IntakeTilt.m_setpoint * 360)
         .withWidget(BuiltInWidgets.kDial)
         .withProperties(Map.of("min", -110, "max", 110, "show value", true));
-
     layout_1.addDouble("Intake Error", () -> (IntakeTilt.m_setpoint - sIntakeTilt.getPosition()) * 360)
         .withWidget(BuiltInWidgets.kNumberBar)
         .withProperties(Map.of("min", -110, "max", 110, "center", 0));
