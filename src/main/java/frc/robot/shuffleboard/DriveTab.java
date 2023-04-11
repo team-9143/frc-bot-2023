@@ -39,7 +39,7 @@ public class DriveTab implements ShuffleboardTabBase {
       .withPosition(6, 5)
       .withSize(3, 2)
       .withWidget(BuiltInWidgets.kComboBoxChooser);
-    drive_tab.add("Auton Ending", AutoSelector.m_endChooser)
+    drive_tab.add("Auton Ending", AutoSelector.m_endingChooser)
       .withPosition(9, 5)
       .withSize(3, 2)
       .withWidget(BuiltInWidgets.kComboBoxChooser);
