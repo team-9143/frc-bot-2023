@@ -58,7 +58,7 @@ public class Bodies {
     return new SequentialCommandGroup(
       new DriveDistance(-165), // Move near cone
       new TurnToAngle(180),
-      new InstantCommand(() -> {if (IntakeWheels.isInverted()) {IntakeWheels.invert();}}),
+      new InstantCommand(IntakeWheels::toCone),
 
       new ParallelCommandGroup(
         new IntakeDown(),

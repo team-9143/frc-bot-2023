@@ -12,39 +12,49 @@ import frc.robot.subsystems.IntakeWheels;
 
 /** Contains auton starters. */
 public class Starters {
-  private static final IntakeWheels sIntakeWheels = IntakeWheels.getInstance();
-
   /** @return a command to handle a preloaded game piece. Does not move the drivetrain */
   public static Command getStarter(AutoSelector.Starter starter) {
     switch (starter) {
       case CUBE_SHOOT:
-        // Shoot
-        return sIntakeWheels.getShootCommand().withTimeout(0.5);
-
+        return Shoot().beforeStarting(IntakeWheels::toCube);
       case CUBE_SPIT:
-        // Spit
-        return sIntakeWheels.getSpitCommand().withTimeout(0.5);
-
+        return Spit().beforeStarting(IntakeWheels::toCube);
       case CUBE_SHOOT_DOWN:
-        // Aim down, shoot, then move intake up
-        return new SequentialCommandGroup(
-          new AimMid().raceWith(
-            new WaitCommand(IntakeConstants.kAimMidTimer).andThen(sIntakeWheels.getShootCommand().withTimeout(0.5))
-          ),
-          new IntakeUp()
-        );
-
+        return ShootDown().beforeStarting(IntakeWheels::toCube);
       case CUBE_SPIT_DOWN:
-        // Aim down, spit, then move intake up
-        return new SequentialCommandGroup(
-          new AimMid().raceWith(
-            new WaitCommand(IntakeConstants.kAimMidTimer).andThen(sIntakeWheels.getSpitCommand().withTimeout(0.5))
-          ),
-          new IntakeUp()
-        );
-
+        return SpitDown().beforeStarting(IntakeWheels::toCube);
       default:
         return new InstantCommand();
     }
+  }
+
+  /** Shoot a game piece. */
+  public static Command Shoot() {
+    return IntakeWheels.getInstance().getShootCommand().withTimeout(IntakeConstants.kShootTimer);
+  }
+
+  /** Spit a game piece. */
+  public static Command Spit() {
+    return IntakeWheels.getInstance().getSpitCommand().withTimeout(IntakeConstants.kShootTimer);
+  }
+
+  /** Aim down, shoot, then move intake up. */
+  public static Command ShootDown() {
+    return new SequentialCommandGroup(
+      new AimMid().raceWith(
+        new WaitCommand(IntakeConstants.kAimMidTimer).andThen(Shoot())
+      ),
+      new IntakeUp()
+    );
+  }
+
+  /** Aim down, spit, then move intake up. */
+  public static Command SpitDown() {
+    return new SequentialCommandGroup(
+      new AimMid().raceWith(
+        new WaitCommand(IntakeConstants.kAimMidTimer).andThen(Spit())
+      ),
+      new IntakeUp()
+    );
   }
 }
