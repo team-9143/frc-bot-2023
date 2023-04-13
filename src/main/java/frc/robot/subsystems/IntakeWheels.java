@@ -50,7 +50,7 @@ public class IntakeWheels extends SubsystemBase {
   public double getVelocity() {return intake_encoder.getVelocity();}
 
   /** Invert intake speeds for cone intake. */
-  public static void invert() {
+  public static synchronized void invert() {
     IntakeConstants.kIntakeSpeed *= -1;
     IntakeConstants.kShootSpeed *= -1;
     IntakeConstants.kSpitSpeed *= -1;
