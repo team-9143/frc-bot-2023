@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.networktables.GenericEntry;
 import java.util.Map;
 
 import frc.robot.subsystems.IntakeTilt;
@@ -27,8 +28,16 @@ public class DriveTab implements ShuffleboardTabBase {
   private static final IntakeTilt sIntakeTilt = IntakeTilt.getInstance();
   private static final IntakeWheels sIntakeWheels = IntakeWheels.getInstance();
 
+  /** Shuffleboard entry. Should be true if a cube is preloaded. */
+  public static GenericEntry cubeLoaded;
+
   public void initialize() {
     // TODO: Potentially move autons to grid
+    cubeLoaded = drive_tab.add("Cube Preloaded", true)
+      .withPosition(1, 5)
+      .withSize(2, 2)
+      .withWidget(BuiltInWidgets.kToggleSwitch)
+      .getEntry();
     drive_tab.add("Auton Starter", AutoSelector.m_starterChooser)
       .withPosition(3, 5)
       .withSize(3, 2)
@@ -69,8 +78,7 @@ public class DriveTab implements ShuffleboardTabBase {
     layout_2.addDouble("Intake Angle", () -> sIntakeTilt.getPosition() * 360)
       .withWidget(BuiltInWidgets.kDial)
       .withProperties(Map.of("min", -110, "max", 110, "show value", true));
-    layout_2.addDouble("Intake Setpoint", () -> IntakeTilt.m_setpoint * 360
-    )
+    layout_2.addDouble("Intake Setpoint", () -> IntakeTilt.m_setpoint * 360)
       .withWidget(BuiltInWidgets.kDial)
       .withProperties(Map.of("min", -110, "max", 110, "show value", true));
 

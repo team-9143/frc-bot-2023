@@ -7,22 +7,27 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
-import frc.robot.commands.*;
+import frc.robot.commands.AimMid;
+import frc.robot.commands.IntakeUp;
 import frc.robot.subsystems.IntakeWheels;
+
+import frc.robot.shuffleboard.DriveTab;
 
 /** Contains auton starters. */
 public class Starters {
   /** @return a command to handle a preloaded game piece. Does not move the drivetrain */
   public static Command getStarter(AutoSelector.Starter starter) {
+    final Runnable invertForPiece = (DriveTab.cubeLoaded.getBoolean(true)) ? IntakeWheels::toCube : IntakeWheels::toCone;
+
     switch (starter) {
       case SHOOT:
-        return Shoot().beforeStarting(IntakeWheels::toCube);
+        return Shoot().beforeStarting(invertForPiece);
       case SPIT:
-        return Spit().beforeStarting(IntakeWheels::toCube);
+        return Spit().beforeStarting(invertForPiece);
       case SHOOT_DOWN:
-        return ShootDown().beforeStarting(IntakeWheels::toCube);
+        return ShootDown().beforeStarting(invertForPiece);
       case SPIT_DOWN:
-        return SpitDown().beforeStarting(IntakeWheels::toCube);
+        return SpitDown().beforeStarting(invertForPiece);
       default:
         return new InstantCommand();
     }
