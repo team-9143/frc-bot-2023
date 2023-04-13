@@ -49,7 +49,7 @@ public class IntakeWheels extends SubsystemBase {
   
   public double getVelocity() {return intake_encoder.getVelocity();}
 
-  /** Invert intake speeds for cone intake. */
+  /** Invert intake speeds for cones. */
   public static synchronized void invert() {
     IntakeConstants.kIntakeSpeed *= -1;
     IntakeConstants.kShootSpeed *= -1;
@@ -60,6 +60,12 @@ public class IntakeWheels extends SubsystemBase {
   public static boolean isInverted() {
     return IntakeConstants.kIntakeSpeed < 0;
   }
+
+  /** Invert to cubes. */
+  public static void toCube() {if (isInverted()) {invert();}}
+
+  /** Invert to cones. */
+  public static void toCone() {if (!isInverted()) {invert();}}
 
   public static void stop() {
     intake_motor.stopMotor();
