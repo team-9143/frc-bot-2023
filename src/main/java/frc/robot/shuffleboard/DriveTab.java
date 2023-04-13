@@ -28,6 +28,7 @@ public class DriveTab implements ShuffleboardTabBase {
   private static final IntakeWheels sIntakeWheels = IntakeWheels.getInstance();
 
   public void initialize() {
+    // TODO: Potentially move autons to grid
     drive_tab.add("Auton Starter", AutoSelector.m_starterChooser)
       .withPosition(3, 5)
       .withSize(3, 2)

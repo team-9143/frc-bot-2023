@@ -25,7 +25,6 @@ public final class Constants {
   public static class DeviceConstants {
     public static final byte kDriverCntlrPort = 0;
     public static final byte kOperatorCntlrPort = 1;
-    // TOOD: Add new intake tilt motor
     public static final byte
       kFrontLeftID = 3,
       kBackLeftID = 4,
@@ -38,7 +37,7 @@ public final class Constants {
   }
 
   public static class DrivetrainConstants {
-    // Manual driving
+    // Applies to all teleop driving
     public static final double kSpeedMult = 1;
     public static final double kTurnMult = 0.7;
 
@@ -68,6 +67,7 @@ public final class Constants {
   public static class IntakeConstants {
     public static final double kTiltMaxSpeed = 0.7; // TODO(low prio): Lower max tilt motor speed
 
+    // TODO: Move to IntakeWheels?
     // Wheel speed
     public static double kIntakeSpeed = 0.3;
     public static double kShootSpeed = -1;
