@@ -52,7 +52,7 @@ public class IntakeWheels extends SubsystemBase {
   /** Invert intake speeds for cone intake. */
   public static void invert() {
     IntakeConstants.kIntakeSpeed *= -1;
-    IntakeConstants.kOuttakeSpeed *= -1;
+    IntakeConstants.kShootSpeed *= -1;
     IntakeConstants.kSpitSpeed *= -1;
     IntakeConstants.kHoldingSpeed *= -1;
   }
@@ -81,7 +81,7 @@ public class IntakeWheels extends SubsystemBase {
   public Command getShootCommand() {
     return new StartEndCommand(
       () -> {
-        set(IntakeConstants.kOuttakeSpeed);
+        set(IntakeConstants.kShootSpeed);
         m_holding = false;
       },
       IntakeWheels::stop,

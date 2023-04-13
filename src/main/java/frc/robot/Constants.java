@@ -70,9 +70,12 @@ public final class Constants {
 
     // Wheel speed
     public static double kIntakeSpeed = 0.3;
-    public static double kOuttakeSpeed = -1;
+    public static double kShootSpeed = -1;
     public static double kSpitSpeed = -0.5;
     public static double kHoldingSpeed = 0.05;
+
+    // Delay to shoot/spit a game piece
+    public static final double kShootTimer = 0.5;
 
     // Non-PID intake movement
     public static final double kUpSpeed = -0.1;
