@@ -12,10 +12,10 @@ import frc.robot.subsystems.Drivetrain;
 /** Contains auto types, choosers, and compiler. */
 public final class AutoSelector {
   public static enum Starter {
-    CUBE_SHOOT,
-    CUBE_SPIT,
-    CUBE_SHOOT_DOWN,
-    CUBE_SPIT_DOWN,
+    SHOOT,
+    SPIT,
+    SHOOT_DOWN,
+    SPIT_DOWN,
     NONE
   }
   public static enum Body {
@@ -38,10 +38,10 @@ public final class AutoSelector {
   public static final SendableChooser<Ending> m_endingChooser = new SendableChooser<Ending>();
 
   public static void initializeChoosers() {
-    m_starterChooser.addOption("Shoot", AutoSelector.Starter.CUBE_SHOOT);
-    m_starterChooser.addOption("Spit", AutoSelector.Starter.CUBE_SPIT);
-    m_starterChooser.addOption("Shoot Down", AutoSelector.Starter.CUBE_SHOOT_DOWN);
-    m_starterChooser.addOption("Spit Down", AutoSelector.Starter.CUBE_SPIT_DOWN);
+    m_starterChooser.addOption("Shoot", AutoSelector.Starter.SHOOT);
+    m_starterChooser.addOption("Spit", AutoSelector.Starter.SPIT);
+    m_starterChooser.addOption("Shoot Down", AutoSelector.Starter.SHOOT_DOWN);
+    m_starterChooser.addOption("Spit Down", AutoSelector.Starter.SPIT_DOWN);
     m_starterChooser.setDefaultOption("None", AutoSelector.Starter.NONE);
 
     m_bodyChooser.addOption("Long Backward", AutoSelector.Body.ESCAPE_LONG);

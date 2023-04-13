@@ -15,13 +15,13 @@ public class Starters {
   /** @return a command to handle a preloaded game piece. Does not move the drivetrain */
   public static Command getStarter(AutoSelector.Starter starter) {
     switch (starter) {
-      case CUBE_SHOOT:
+      case SHOOT:
         return Shoot().beforeStarting(IntakeWheels::toCube);
-      case CUBE_SPIT:
+      case SPIT:
         return Spit().beforeStarting(IntakeWheels::toCube);
-      case CUBE_SHOOT_DOWN:
+      case SHOOT_DOWN:
         return ShootDown().beforeStarting(IntakeWheels::toCube);
-      case CUBE_SPIT_DOWN:
+      case SPIT_DOWN:
         return SpitDown().beforeStarting(IntakeWheels::toCube);
       default:
         return new InstantCommand();
