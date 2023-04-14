@@ -2,6 +2,7 @@ package frc.robot.autos;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.IntakeConstants;
+import frc.robot.shuffleboard.ShuffleboardManager;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
@@ -9,9 +10,9 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 import frc.robot.commands.AimMid;
 import frc.robot.commands.IntakeUp;
-import frc.robot.subsystems.IntakeWheels;
 
-import frc.robot.shuffleboard.ShuffleboardManager;
+import frc.robot.subsystems.IntakeTilt;
+import frc.robot.subsystems.IntakeWheels;
 
 /** Contains auton starters. */
 public class Starters {

@@ -2,10 +2,11 @@ package frc.robot.autos;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
-import frc.robot.commands.*;
+import frc.robot.subsystems.IntakeWheels;
+
+import frc.robot.commands.TurnToAngle;
 
 /** Contains auton endings. */
 public class Endings {

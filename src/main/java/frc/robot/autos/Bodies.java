@@ -10,7 +10,12 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
-import frc.robot.commands.*;
+import frc.robot.commands.DriveDistance;
+import frc.robot.commands.TurnToAngle;
+import frc.robot.commands.IntakeDown;
+import frc.robot.commands.IntakeUp;
+import frc.robot.commands.Balance;
+
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.IntakeWheels;
 
