@@ -29,9 +29,9 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     RobotContainer.getInstance();
+    AutoSelector.initializeChoosers();
     ShuffleboardManager.getInstance();
     Shuffleboard.disableActuatorWidgets();
-    AutoSelector.initializeChoosers();
   }
 
   @Override
@@ -43,6 +43,7 @@ public class Robot extends TimedRobot {
   public void disabledInit() {
     RobotContainer.stop();
     TurnToAngle.m_enabled = false;
+    ShuffleboardManager.getInstance().reset();
   }
 
   @Override
