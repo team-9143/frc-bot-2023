@@ -85,6 +85,7 @@ public final class Constants {
     // TODO(autoAlign): Test and tune maximum current against NEO specs
     public static final double kMaxCurrent = 80; // For autoAlign
 
+    // TODO: Change all the following into degrees
     // Preset positions and tolerances (UNIT: rotations)
     public static final double kUpPos = 0.003;
     public static final double kMidPos = 0.1;
