@@ -36,28 +36,28 @@ public class DriveTab implements ShuffleboardTabBase {
   public void initialize() {
     // TODO: Potentially move autons to grid
     cubeLoaded = drive_tab.add("Cube Preloaded", true)
-      .withPosition(1, 5)
+      .withPosition(0, 5)
       .withSize(2, 1)
       .withWidget(BuiltInWidgets.kToggleSwitch)
       .getEntry();
     drive_tab.add("Auton Starter", AutoSelector.m_starterChooser)
-      .withPosition(3, 5)
+      .withPosition(2, 5)
       .withSize(3, 2)
       .withWidget(BuiltInWidgets.kComboBoxChooser);
     drive_tab.add("Auton Body", AutoSelector.m_bodyChooser)
-      .withPosition(6, 5)
+      .withPosition(5, 5)
       .withSize(3, 2)
       .withWidget(BuiltInWidgets.kComboBoxChooser);
     drive_tab.add("Auton Secondary", AutoSelector.m_secondaryChooser)
-      .withPosition(9, 5)
+      .withPosition(8, 5)
       .withSize(3, 2)
       .withWidget(BuiltInWidgets.kComboBoxChooser);
     drive_tab.add("Auton Tertiary", AutoSelector.m_tertiaryChooser)
-      .withPosition(12, 5)
+      .withPosition(11, 5)
       .withSize(3, 2)
       .withWidget(BuiltInWidgets.kComboBoxChooser);
     drive_tab.add("Auton Ending", AutoSelector.m_endingChooser)
-      .withPosition(15, 5)
+      .withPosition(14, 5)
       .withSize(2, 2)
       .withWidget(BuiltInWidgets.kComboBoxChooser);
 
