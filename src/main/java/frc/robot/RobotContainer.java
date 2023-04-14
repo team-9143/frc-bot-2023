@@ -17,9 +17,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
-import frc.robot.shuffleboard.ShuffleboardManager;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -71,10 +68,6 @@ public class RobotContainer {
     configurePIDControllers();
 
     configureBindings();
-
-    // Initialize Shuffleboard
-    ShuffleboardManager.getInstance();
-    Shuffleboard.disableActuatorWidgets();
   }
 
   /** Configure settings for PID controllers. */

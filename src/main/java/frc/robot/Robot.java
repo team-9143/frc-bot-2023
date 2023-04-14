@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.subsystems.IntakeTilt;
 import frc.robot.commands.TurnToAngle;
+import frc.robot.shuffleboard.ShuffleboardManager;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -26,6 +28,8 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     RobotContainer.getInstance();
+    ShuffleboardManager.getInstance();
+    Shuffleboard.disableActuatorWidgets();
     AutoSelector.initializeChoosers();
   }
 
