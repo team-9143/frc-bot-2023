@@ -13,7 +13,6 @@ import java.util.Map;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.IntakeTilt;
 import frc.robot.subsystems.IntakeWheels;
-import frc.robot.autos.AutoSelector;
 import frc.robot.commands.TurnToAngle;
 import frc.robot.commands.DriveDistance;
 
@@ -37,35 +36,9 @@ public class SimulationTab implements ShuffleboardTabBase {
 
   protected SimulationTab() {}
 
-  public void initialize() {
-    // TODO: Fix issue with circular dependency in supplier
-    // sim_tab.addBoolean("Cube Preloaded", () -> ShuffleboardManager.getInstance().getCubePreloaded())
-    //   .withPosition(0, 0)
-    //   .withSize(2, 1)
-    //   .withWidget(BuiltInWidgets.kToggleSwitch);
-    sim_tab.add("Auton Starter", AutoSelector.m_starterChooser)
-      .withPosition(2, 0)
-      .withSize(3, 2)
-      .withWidget(BuiltInWidgets.kComboBoxChooser);
-    sim_tab.add("Auton Body", AutoSelector.m_bodyChooser)
-      .withPosition(5, 0)
-      .withSize(3, 2)
-      .withWidget(BuiltInWidgets.kComboBoxChooser);
-    sim_tab.add("Auton Secondary", AutoSelector.m_secondaryChooser)
-      .withPosition(8, 0)
-      .withSize(3, 2)
-      .withWidget(BuiltInWidgets.kComboBoxChooser);
-    sim_tab.add("Auton Tertiary", AutoSelector.m_tertiaryChooser)
-      .withPosition(11, 0)
-      .withSize(3, 2)
-      .withWidget(BuiltInWidgets.kComboBoxChooser);
-    sim_tab.add("Auton Ending", AutoSelector.m_endingChooser)
-      .withPosition(14, 0)
-      .withSize(2, 2)
-      .withWidget(BuiltInWidgets.kComboBoxChooser); 
-    
+  public void initialize() { 
     ShuffleboardLayout layout_1 = sim_tab.getLayout("TurnToAngle", BuiltInLayouts.kList)
-      .withPosition(0, 2)
+      .withPosition(0, 0)
       .withSize(3, 4);
     layout_1.addDouble("Setpoint", TurnToAngle.m_controller::getSetpoint)
       .withWidget(BuiltInWidgets.kNumberBar)
@@ -75,7 +48,7 @@ public class SimulationTab implements ShuffleboardTabBase {
       .withProperties(Map.of("min", -1, "max", 1, "center", 0));
 
     ShuffleboardLayout layout_2 = sim_tab.getLayout("DriveDistance", BuiltInLayouts.kList)
-      .withPosition(3, 2)
+      .withPosition(3, 0)
       .withSize(3, 6);
     layout_2.addDouble("Setpoint", DriveDistance.m_controller::getSetpoint)
       .withWidget(BuiltInWidgets.kNumberBar)
@@ -89,7 +62,7 @@ public class SimulationTab implements ShuffleboardTabBase {
       .withProperties(Map.of("min", -1, "max", 1, "center", 0));
 
     ShuffleboardLayout layout_3 = sim_tab.getLayout("Intake Angle", BuiltInLayouts.kList)
-      .withPosition(6, 2)
+      .withPosition(6, 0)
       .withSize(3, 6);
     layout_3.addDouble("Setpoint", () -> IntakeTilt.m_setpoint * 360)
         .withWidget(BuiltInWidgets.kNumberBar)
@@ -103,7 +76,7 @@ public class SimulationTab implements ShuffleboardTabBase {
         .withProperties(Map.of("min", -1, "max", 1, "center", 0));
     
     ShuffleboardLayout layout_4 = sim_tab.getLayout("Intake Wheels", BuiltInLayouts.kList)
-      .withPosition(9, 2)
+      .withPosition(9, 0)
       .withSize(3, 6);
     layout_4.addBoolean("Inverted", IntakeWheels::isInverted)
       .withWidget(BuiltInWidgets.kBooleanBox);
@@ -113,7 +86,7 @@ public class SimulationTab implements ShuffleboardTabBase {
       .withWidget(BuiltInWidgets.kBooleanBox);
     
     pitch_sim = sim_tab.add("Docking Angle", 0)
-      .withPosition(0, 6)
+      .withPosition(0, 4)
       .withSize(3, 2)
       .withWidget(BuiltInWidgets.kNumberSlider)
       .withProperties(Map.of("min", -45, "max", 45, "block increment", 5))
