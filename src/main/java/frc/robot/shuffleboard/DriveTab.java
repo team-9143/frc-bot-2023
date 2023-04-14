@@ -48,9 +48,17 @@ public class DriveTab implements ShuffleboardTabBase {
       .withPosition(6, 5)
       .withSize(3, 2)
       .withWidget(BuiltInWidgets.kComboBoxChooser);
-    drive_tab.add("Auton Ending", AutoSelector.m_endingChooser)
+    drive_tab.add("Auton Secondary", AutoSelector.m_secondaryChooser)
       .withPosition(9, 5)
       .withSize(3, 2)
+      .withWidget(BuiltInWidgets.kComboBoxChooser);
+    drive_tab.add("Auton Tertiary", AutoSelector.m_tertiaryChooser)
+      .withPosition(12, 5)
+      .withSize(3, 2)
+      .withWidget(BuiltInWidgets.kComboBoxChooser);
+    drive_tab.add("Auton Ending", AutoSelector.m_endingChooser)
+      .withPosition(15, 5)
+      .withSize(2, 2)
       .withWidget(BuiltInWidgets.kComboBoxChooser);
 
     ShuffleboardLayout layout_1 = drive_tab.getLayout("Rotation", BuiltInLayouts.kList)
@@ -86,7 +94,7 @@ public class DriveTab implements ShuffleboardTabBase {
 
     ShuffleboardLayout layout_3 = drive_tab.getLayout("Intake", BuiltInLayouts.kList)
       .withPosition(13, 0)
-      .withSize(4, 6);
+      .withSize(4, 5);
     layout_3.addBoolean("Inverted", IntakeWheels::isInverted)
       .withWidget(BuiltInWidgets.kBooleanBox);
     layout_3.addBoolean("Intaking", () -> (sIntakeWheels.get() * IntakeConstants.kIntakeSpeed) > 0)
