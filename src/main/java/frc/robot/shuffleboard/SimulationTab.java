@@ -25,7 +25,7 @@ import frc.robot.Constants.IntakeConstants;;
 
 /** Contains auton selector and data for driver and operator. */
 public class SimulationTab implements ShuffleboardTabBase {
-  protected static final ShuffleboardTab auton_tab = Shuffleboard.getTab("Auton");
+  protected static final ShuffleboardTab sim_tab = Shuffleboard.getTab("Simulation");
 
   private static final Drivetrain sDrivetrain = Drivetrain.getInstance();
   private static final IntakeTilt sIntakeTilt = IntakeTilt.getInstance();
@@ -39,32 +39,32 @@ public class SimulationTab implements ShuffleboardTabBase {
 
   public void initialize() {
     // TODO: Fix issue with circular dependency in supplier
-    // auton_tab.addBoolean("Cube Preloaded", () -> ShuffleboardManager.getInstance().getCubePreloaded())
+    // sim_tab.addBoolean("Cube Preloaded", () -> ShuffleboardManager.getInstance().getCubePreloaded())
     //   .withPosition(0, 0)
     //   .withSize(2, 1)
     //   .withWidget(BuiltInWidgets.kToggleSwitch);
-    auton_tab.add("Auton Starter", AutoSelector.m_starterChooser)
+    sim_tab.add("Auton Starter", AutoSelector.m_starterChooser)
       .withPosition(2, 0)
       .withSize(3, 2)
       .withWidget(BuiltInWidgets.kComboBoxChooser);
-    auton_tab.add("Auton Body", AutoSelector.m_bodyChooser)
+    sim_tab.add("Auton Body", AutoSelector.m_bodyChooser)
       .withPosition(5, 0)
       .withSize(3, 2)
       .withWidget(BuiltInWidgets.kComboBoxChooser);
-    auton_tab.add("Auton Secondary", AutoSelector.m_secondaryChooser)
+    sim_tab.add("Auton Secondary", AutoSelector.m_secondaryChooser)
       .withPosition(8, 0)
       .withSize(3, 2)
       .withWidget(BuiltInWidgets.kComboBoxChooser);
-    auton_tab.add("Auton Tertiary", AutoSelector.m_tertiaryChooser)
+    sim_tab.add("Auton Tertiary", AutoSelector.m_tertiaryChooser)
       .withPosition(11, 0)
       .withSize(3, 2)
       .withWidget(BuiltInWidgets.kComboBoxChooser);
-    auton_tab.add("Auton Ending", AutoSelector.m_endingChooser)
+    sim_tab.add("Auton Ending", AutoSelector.m_endingChooser)
       .withPosition(14, 0)
       .withSize(2, 2)
       .withWidget(BuiltInWidgets.kComboBoxChooser); 
     
-    ShuffleboardLayout layout_1 = auton_tab.getLayout("TurnToAngle", BuiltInLayouts.kList)
+    ShuffleboardLayout layout_1 = sim_tab.getLayout("TurnToAngle", BuiltInLayouts.kList)
       .withPosition(0, 2)
       .withSize(3, 4);
     layout_1.addDouble("Setpoint", TurnToAngle.m_controller::getSetpoint)
@@ -74,7 +74,7 @@ public class SimulationTab implements ShuffleboardTabBase {
       .withWidget(BuiltInWidgets.kNumberBar)
       .withProperties(Map.of("min", -1, "max", 1, "center", 0));
 
-    ShuffleboardLayout layout_2 = auton_tab.getLayout("DriveDistance", BuiltInLayouts.kList)
+    ShuffleboardLayout layout_2 = sim_tab.getLayout("DriveDistance", BuiltInLayouts.kList)
       .withPosition(3, 2)
       .withSize(3, 6);
     layout_2.addDouble("Setpoint", DriveDistance.m_controller::getSetpoint)
@@ -88,7 +88,7 @@ public class SimulationTab implements ShuffleboardTabBase {
       .withWidget(BuiltInWidgets.kNumberBar)
       .withProperties(Map.of("min", -1, "max", 1, "center", 0));
 
-    ShuffleboardLayout layout_3 = auton_tab.getLayout("Intake Angle", BuiltInLayouts.kList)
+    ShuffleboardLayout layout_3 = sim_tab.getLayout("Intake Angle", BuiltInLayouts.kList)
       .withPosition(6, 2)
       .withSize(3, 6);
     layout_3.addDouble("Setpoint", () -> IntakeTilt.m_setpoint * 360)
@@ -102,7 +102,7 @@ public class SimulationTab implements ShuffleboardTabBase {
         .withWidget(BuiltInWidgets.kNumberBar)
         .withProperties(Map.of("min", -1, "max", 1, "center", 0));
     
-    ShuffleboardLayout layout_4 = auton_tab.getLayout("Intake Wheels", BuiltInLayouts.kList)
+    ShuffleboardLayout layout_4 = sim_tab.getLayout("Intake Wheels", BuiltInLayouts.kList)
       .withPosition(9, 2)
       .withSize(3, 6);
     layout_4.addBoolean("Inverted", IntakeWheels::isInverted)
@@ -112,14 +112,14 @@ public class SimulationTab implements ShuffleboardTabBase {
     layout_4.addBoolean("Shooting", () -> (sIntakeWheels.get() * IntakeConstants.kShootSpeed) > 0)
       .withWidget(BuiltInWidgets.kBooleanBox);
     
-    pitch_sim = auton_tab.add("Docking Angle", 0)
+    pitch_sim = sim_tab.add("Docking Angle", 0)
       .withPosition(0, 6)
-      .withSize(3, 3)
+      .withSize(3, 2)
       .withWidget(BuiltInWidgets.kNumberSlider)
       .withProperties(Map.of("min", -45, "max", 45, "block increment", 5))
       .getEntry();
 
-    auton_tab.add("Drivetrain", new Sendable() {
+    sim_tab.add("Drivetrain", new Sendable() {
       @Override
       public void initSendable(SendableBuilder builder) {
         builder.setSmartDashboardType("DifferentialDrive");
@@ -133,7 +133,7 @@ public class SimulationTab implements ShuffleboardTabBase {
       .withWidget(BuiltInWidgets.kDifferentialDrive)
       .withProperties(Map.of("number of wheels", 6, "wheel diameter", 60, "show velocity vectors", true));
 
-    auton_tab.add("Gyro", new Sendable() {
+    sim_tab.add("Gyro", new Sendable() {
       @Override
       public void initSendable(SendableBuilder builder) {
         builder.setSmartDashboardType("Gyro");
