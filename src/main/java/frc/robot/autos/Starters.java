@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.IntakeConstants;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 import frc.robot.commands.AimMid;
@@ -21,43 +21,47 @@ public class Starters {
 
     switch (starter) {
       case SHOOT:
-        return Shoot().beforeStarting(invertForPiece);
+        return TimedShoot().beforeStarting(invertForPiece);
       case SPIT:
-        return Spit().beforeStarting(invertForPiece);
+        return TimedSpit().beforeStarting(invertForPiece);
       case SHOOT_DOWN:
-        return ShootDown().beforeStarting(invertForPiece);
+        return TimedShootDown().beforeStarting(invertForPiece);
       case SPIT_DOWN:
-        return SpitDown().beforeStarting(invertForPiece);
+        return TimedSpitDown().beforeStarting(invertForPiece);
       default:
         return new InstantCommand();
     }
   }
 
   /** Shoot a game piece. */
-  public static Command Shoot() {
+  public static Command TimedShoot() {
     return IntakeWheels.getInstance().getShootCommand().withTimeout(IntakeConstants.kShootTimer);
   }
 
   /** Spit a game piece. */
-  public static Command Spit() {
+  public static Command TimedSpit() {
     return IntakeWheels.getInstance().getSpitCommand().withTimeout(IntakeConstants.kShootTimer);
   }
 
   /** Aim down, shoot, then move intake up. */
-  public static Command ShootDown() {
+  public static Command TimedShootDown() {
     return new SequentialCommandGroup(
       new AimMid().raceWith(
-        new WaitCommand(IntakeConstants.kAimMidTimer).andThen(Shoot())
+        new WaitUntilCommand(() ->
+          IntakeTilt.getInstance().getPosition() - IntakeConstants.kMidPos < IntakeConstants.kMidPosTolerance
+        ).andThen(TimedShoot())
       ),
       new IntakeUp()
     );
   }
 
   /** Aim down, spit, then move intake up. */
-  public static Command SpitDown() {
+  public static Command TimedSpitDown() {
     return new SequentialCommandGroup(
       new AimMid().raceWith(
-        new WaitCommand(IntakeConstants.kAimMidTimer).andThen(Spit())
+        new WaitUntilCommand(() ->
+          IntakeTilt.getInstance().getPosition() - IntakeConstants.kMidPos < IntakeConstants.kMidPosTolerance
+        ).andThen(TimedSpit())
       ),
       new IntakeUp()
     );
