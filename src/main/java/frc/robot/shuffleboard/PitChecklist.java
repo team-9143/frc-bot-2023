@@ -48,21 +48,21 @@ public class PitChecklist implements ShuffleboardChecklistBase {
       pit_tab.getLayout("Pre-Match Mechanical", BuiltInLayouts.kList)
       .withPosition(1, 0)
       .withSize(5, 8)
-      .withProperties(Map.of("label position", "HIDDEN"))
+      .withProperties(Map.of("label position", "LEFT"))
     );
 
     electrical_entries = addChecklist(electrical_checklist,
       pit_tab.getLayout("Pre-Match Electrical", BuiltInLayouts.kList)
       .withPosition(6, 0)
       .withSize(5, 8)
-      .withProperties(Map.of("label position", "HIDDEN"))
+      .withProperties(Map.of("label position", "LEFT"))
     );
 
     cart_entries = addChecklist(cart_checklist,
       pit_tab.getLayout("Pre-Match Cart", BuiltInLayouts.kList)
       .withPosition(11, 0)
       .withSize(5, 8)
-      .withProperties(Map.of("label position", "HIDDEN"))
+      .withProperties(Map.of("label position", "LEFT"))
     );
   }
 
