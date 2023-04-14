@@ -219,8 +219,8 @@ public class RobotContainer {
       .whileTrue(cManualHold);
   }
 
-  /** Stops all motors, disables PID controllers, and cancels commands requiring actuator subsystems. */
+  /** Stops all motors and disables PID controllers. */
   public static void stop() {
-    cStop.withTimeout(0.1).schedule();
+    cStop.execute();
   }
 }
