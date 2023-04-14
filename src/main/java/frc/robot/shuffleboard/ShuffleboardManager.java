@@ -45,7 +45,8 @@ public class ShuffleboardManager {
     }
   }
 
-  private static final boolean m_debugging = true;
+  /** For editing the robot's sensors. If used, {@link frc.robot.subsystems.IntakeTilt IntakeTilt}.getPosition(), {@link frc.robot.subsystems.Drivetrain Drivetrain}.getPosition(), and {@link frc.robot.OI OI.pigeon}.getYaw(), setYaw(), and getPitch() must be overriden with editable data through NetworkTables. */
+  private static final boolean m_simulation = true;
 
   private static final ArrayList<ShuffleboardTabBase> m_tabs = new ArrayList<ShuffleboardTabBase>();
   private static final ArrayList<ShuffleboardChecklistBase> m_checklists = new ArrayList<ShuffleboardChecklistBase>();
@@ -53,7 +54,8 @@ public class ShuffleboardManager {
   private ShuffleboardManager() {
     m_tabs.add(new DriveTab());
     m_tabs.add(new TestTab());
-    if (m_debugging) {
+    if (m_simulation) {
+      m_tabs.add(new SimulationTab());
     }
 
     // TODO(low prio): Test checklists with toggle switches and reset
