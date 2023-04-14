@@ -10,6 +10,7 @@ import edu.wpi.first.networktables.IntegerTopic;
 import edu.wpi.first.networktables.IntegerPublisher;
 
 import java.util.Map;
+import java.util.LinkedHashMap;
 import java.util.ArrayList;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -27,7 +28,7 @@ public class MutableChooser<V> implements NTSendable, AutoCloseable {
   private static final String INSTANCE = ".instance";
 
   /** A map linking identifiers to their objects. */
-  private final Map<String, V> m_map;
+  private final Map<String, V> m_map = new LinkedHashMap<>();
   private final String m_default;
   private String m_selected;
   
@@ -43,7 +44,7 @@ public class MutableChooser<V> implements NTSendable, AutoCloseable {
   MutableChooser(String name, V obj) {
     m_instance = s_instances++;
     m_default = name;
-    m_map = Map.of(name, obj);
+    m_map.put(name, obj);
     SendableRegistry.add(this, "SendableChooser", m_instance);
   }
 
