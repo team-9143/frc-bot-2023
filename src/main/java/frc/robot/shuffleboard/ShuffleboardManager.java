@@ -30,8 +30,8 @@ public class ShuffleboardManager {
     abstract void reset();
 
     /**
-     * Adds a checklist to a layout.
-     * 
+     * Adds a checklist to a layout with toggle switches.
+     *
      * @param checklist array of items to add
      * @param layout layout to add items to
      * @return an {@link ArrayList} of {@link GenericEntry} corresponding to the checklist
@@ -52,8 +52,8 @@ public class ShuffleboardManager {
 
   private ShuffleboardManager() {
     m_tabs.add(new DriveTab());
+    m_tabs.add(new TestTab());
     if (m_debugging) {
-      m_tabs.add(new TestTab());
     }
 
     // TODO(low prio): Test checklists with toggle switches and reset
@@ -66,5 +66,9 @@ public class ShuffleboardManager {
 
   public void reset() {
     m_checklists.forEach(e -> e.reset());
+  }
+
+  public boolean getCubePreloaded() {
+    return DriveTab.cubeLoaded.getBoolean(true);
   }
 }

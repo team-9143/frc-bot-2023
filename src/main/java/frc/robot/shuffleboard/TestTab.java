@@ -28,6 +28,8 @@ public class TestTab implements ShuffleboardTabBase {
   private static final IntakeTilt sIntakeTilt = IntakeTilt.getInstance();
   private static final IntakeWheels sIntakeWheels = IntakeWheels.getInstance();
 
+  protected TestTab() {}
+
   public void initialize() {
     ShuffleboardLayout layout_1 = test_tab.getLayout("Intake Angle", BuiltInLayouts.kList)
       .withPosition(0, 0)

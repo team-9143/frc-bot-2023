@@ -11,13 +11,13 @@ import frc.robot.commands.AimMid;
 import frc.robot.commands.IntakeUp;
 import frc.robot.subsystems.IntakeWheels;
 
-import frc.robot.shuffleboard.DriveTab;
+import frc.robot.shuffleboard.ShuffleboardManager;
 
 /** Contains auton starters. */
 public class Starters {
   /** @return a command to handle a preloaded game piece. Does not move the drivetrain */
   public static Command getStarter(AutoSelector.Starter starter) {
-    final Runnable invertForPiece = (DriveTab.cubeLoaded.getBoolean(true)) ? IntakeWheels::toCube : IntakeWheels::toCone;
+    final Runnable invertForPiece = (ShuffleboardManager.getInstance().getCubePreloaded()) ? IntakeWheels::toCube : IntakeWheels::toCone;
 
     switch (starter) {
       case SHOOT:

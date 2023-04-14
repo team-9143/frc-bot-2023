@@ -18,6 +18,8 @@ public class PitChecklist implements ShuffleboardChecklistBase {
   private static ArrayList<GenericEntry> electrical_entries;
   private static ArrayList<GenericEntry> cart_entries;
 
+  protected PitChecklist() {}
+
   public void initialize() {
     String[] mechanical_checklist = new String[]{
       "All structural components are secured",

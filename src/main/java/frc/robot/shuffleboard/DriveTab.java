@@ -29,7 +29,9 @@ public class DriveTab implements ShuffleboardTabBase {
   private static final IntakeWheels sIntakeWheels = IntakeWheels.getInstance();
 
   /** Shuffleboard entry. Should be true if a cube is preloaded. */
-  public static GenericEntry cubeLoaded;
+  protected static GenericEntry cubeLoaded;
+
+  protected DriveTab() {}
 
   public void initialize() {
     // TODO: Potentially move autons to grid

@@ -17,6 +17,8 @@ public class MatchChecklist implements ShuffleboardChecklistBase {
   private static ArrayList<GenericEntry> robot_entries;
   private static ArrayList<GenericEntry> station_entries;
 
+  protected MatchChecklist() {}
+
   public void initialize() {
     String[] robot_checklist = new String[]{
       "Bumpers are the correct match color",
@@ -32,7 +34,7 @@ public class MatchChecklist implements ShuffleboardChecklistBase {
       "Joysticks are properly connected"
     };
 
-    robot_entries = addChecklist(robot_checklist, 
+    robot_entries = addChecklist(robot_checklist,
       match_tab.getLayout("Robot Checklist", BuiltInLayouts.kList)
       .withPosition(3, 0)
       .withSize(5, 8)
