@@ -16,7 +16,11 @@ import frc.robot.subsystems.IntakeWheels;
 
 /** Contains auton starters. */
 public class Starters {
-  /** @return a command to handle a preloaded game piece. Does not move the drivetrain */
+  /** A command to handle a preloaded game piece. Does not move the drivetrain.
+   *
+   * @param starter
+   * @return the command
+   */
   public static Command getStarter(AutoSelector.Starter starter) {
     final Runnable invertForPiece = (ShuffleboardManager.getInstance().getCubePreloaded()) ? IntakeWheels::toCube : IntakeWheels::toCone;
 

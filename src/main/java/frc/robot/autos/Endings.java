@@ -8,8 +8,13 @@ import frc.robot.commands.TurnToAngle;
 
 /** Contains auton endings. */
 public class Endings {
-  /** @return a command handling the end of an auton. Moves the drivetrain */
-  public static Command getEnding(AutoSelector.Ending end, AutoSelector.Body body) {
+  /** A command handling the end of an auton. Moves the drivetrain.
+   *
+   * @param end
+   * @param body
+   * @return the command
+   */
+  public static Command getEnding(AutoSelector.Ending end) {
     switch (end) {
       case TURN_AWAY:
         // Turn to face away from the drive station
