@@ -19,6 +19,7 @@ public class Limelight extends SubsystemBase {
 
   private Limelight() {}
 
+  // TODO: Change to type-specific entry or subscribers
   private static final NetworkTableEntry
     tv = OI.limelight.getEntry("tv"),
     tx = OI.limelight.getEntry("tx"),
