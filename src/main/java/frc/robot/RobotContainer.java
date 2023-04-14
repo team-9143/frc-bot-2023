@@ -193,7 +193,7 @@ public class RobotContainer {
     new Trigger(() -> OI.operator_cntlr.getPOV() == 0)
       .whileTrue(cAimMid)
       .onFalse(cIntakeUp)
-    .debounce(Constants.IntakeConstants.kAimMidTimer)
+    .debounce(0.5)
       .whileTrue(cShoot);
 
     // D-pad right will spit
@@ -204,7 +204,7 @@ public class RobotContainer {
     new Trigger(() -> OI.operator_cntlr.getPOV() == 180)
       .whileTrue(cAimMid)
       .onFalse(cIntakeUp)
-    .debounce(Constants.IntakeConstants.kAimMidTimer)
+    .debounce(0.5)
       .whileTrue(cSpit);
 
     // D-pad left will hold pieces

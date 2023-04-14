@@ -81,7 +81,6 @@ public final class Constants {
     public static final double kUpSpeed = -0.1;
     public static final double kDownSpeed = 0.08;
     public static final double kSteadySpeed = -0.01;
-    public static final double kAimMidTimer = 0.5; // Seconds to wait for AimMid command
     public static final double kAutoAlignSpeed = -0.15;
     // TODO(autoAlign): Test and tune maximum current against NEO specs
     public static final double kMaxCurrent = 80; // For autoAlign
