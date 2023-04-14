@@ -51,12 +51,6 @@ public class DriveTab implements ShuffleboardTabBase {
       .withSize(3, 2)
       .withWidget(BuiltInWidgets.kComboBoxChooser);
 
-    drive_tab.addDouble("Docking Angle", OI.pigeon::getPitch)
-      .withPosition(4, 0)
-      .withSize(3, 3)
-      .withWidget(BuiltInWidgets.kDial)
-      .withProperties(Map.of("min", -45, "max", 45, "show value", true));
-
     ShuffleboardLayout layout_1 = drive_tab.getLayout("Rotation", BuiltInLayouts.kList)
       .withPosition(0, 0)
       .withSize(4, 5);
@@ -70,6 +64,12 @@ public class DriveTab implements ShuffleboardTabBase {
       .withProperties(Map.of("major tick spacing", 45, "starting angle", 180, "show tick mark ring", true));
     layout_1.addBoolean("TurnToAngle Enabled", () -> TurnToAngle.m_enabled)
       .withWidget(BuiltInWidgets.kBooleanBox);
+
+    drive_tab.addDouble("Docking Angle", OI.pigeon::getPitch)
+      .withPosition(4, 0)
+      .withSize(3, 3)
+      .withWidget(BuiltInWidgets.kDial)
+      .withProperties(Map.of("min", -45, "max", 45, "show value", true));
 
     ShuffleboardLayout layout_2 = drive_tab.getLayout("Intake Angle", BuiltInLayouts.kGrid)
       .withPosition(7, 0)
