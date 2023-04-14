@@ -57,7 +57,7 @@ public class IntakeTilt extends SubsystemBase {
       () -> {if (m_enabled) {set(m_controller.calculate(getPosition()));}},
       interrupted -> {},
       () -> false,
-      m_instance
+      this
     ));
   }
 
