@@ -6,6 +6,8 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.networktables.GenericEntry;
 
+// TODO: Add controllable encoders in debug mode
+// TODO: Map sendables to their subsystems
 /** Controls and initializes Shuffleboard tabs. */
 public class ShuffleboardManager {
   private static ShuffleboardManager m_instance;
