@@ -75,11 +75,20 @@ public final class AutoSelector {
    */
   public static Command getAuto() {
     // TODO:(mid prio): Attempt to add dynamic secondary body module with values depending on the selected first body module, editing values with a refresh button
+    Starter starter = m_starterChooser.getSelected();
+    Body body = m_bodyChooser.getSelected();
+    Secondary secondary = m_secondaryChooser.getSelected();
+    Tertiary tertiary = m_tertiaryChooser.getSelected();
+    Ending ending = m_endingChooser.getSelected();
+    
     return new SequentialCommandGroup(
-      Starters.getStarter(m_starterChooser.getSelected())
+      Starters.getStarter(starter)
         .raceWith(new RunCommand(Drivetrain::stop, Drivetrain.getInstance())),
-      Bodies.getBody(m_bodyChooser.getSelected()),
-      Endings.getEnding(m_endingChooser.getSelected(), m_bodyChooser.getSelected())
+      Secondaries.getSecondary(secondary, body),
+      Tertiaries.getTertiary(tertiary)
+        .raceWith(new RunCommand(Drivetrain::stop, Drivetrain.getInstance())),
+      Bodies.getBody(body),
+      Endings.getEnding(ending)
     );
   }
 }
