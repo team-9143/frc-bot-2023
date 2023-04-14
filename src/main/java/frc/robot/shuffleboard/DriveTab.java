@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.networktables.GenericEntry;
 import java.util.Map;
 
 import frc.robot.subsystems.IntakeTilt;
@@ -28,14 +27,11 @@ public class DriveTab implements ShuffleboardTabBase {
   private static final IntakeTilt sIntakeTilt = IntakeTilt.getInstance();
   private static final IntakeWheels sIntakeWheels = IntakeWheels.getInstance();
 
-  /** Shuffleboard entry. Should be true if a cube is preloaded. */
-  protected static GenericEntry cubeLoaded;
-
   protected DriveTab() {}
 
   public void initialize() {
     // TODO: Potentially move autons to grid
-    cubeLoaded = drive_tab.add("Cube Preloaded", true)
+    ShuffleboardManager.cubeLoaded = drive_tab.add("Cube Preloaded", true)
       .withPosition(0, 5)
       .withSize(2, 1)
       .withWidget(BuiltInWidgets.kToggleSwitch)
