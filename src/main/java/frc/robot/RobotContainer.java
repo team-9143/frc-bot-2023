@@ -221,6 +221,6 @@ public class RobotContainer {
 
   /** Stops all motors, disables PID controllers, and cancels commands requiring actuator subsystems. */
   public static void stop() {
-    cStop.execute();
+    cStop.withTimeout(0.1).schedule();
   }
 }
