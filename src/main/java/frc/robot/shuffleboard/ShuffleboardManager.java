@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+
 import edu.wpi.first.networktables.GenericEntry;
 
 // TODO: Add controllable encoders in debug mode
@@ -46,7 +47,7 @@ public class ShuffleboardManager {
   }
 
   /** For editing the robot's sensors. If used, {@link frc.robot.subsystems.IntakeTilt IntakeTilt}.getPosition(), {@link frc.robot.subsystems.Drivetrain Drivetrain}.getPosition(), and {@link frc.robot.OI OI.pigeon}.getYaw(), setYaw(), and getPitch() must be overriden with editable data through NetworkTables. */
-  private static final boolean m_simulation = true;
+  public static final boolean m_simulation = true;
 
   private static final ArrayList<ShuffleboardTabBase> m_tabs = new ArrayList<ShuffleboardTabBase>();
   private static final ArrayList<ShuffleboardChecklistBase> m_checklists = new ArrayList<ShuffleboardChecklistBase>();
@@ -70,7 +71,10 @@ public class ShuffleboardManager {
     m_checklists.forEach(e -> e.reset());
   }
 
+  /** Shuffleboard entry. Should be true if a cube is preloaded. */
+  protected static GenericEntry cubeLoaded;
+
   public boolean getCubePreloaded() {
-    return DriveTab.cubeLoaded.getBoolean(true);
+    return cubeLoaded.getBoolean(true);
   }
 }

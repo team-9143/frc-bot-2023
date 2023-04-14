@@ -38,7 +38,7 @@ public class SimulationTab implements ShuffleboardTabBase {
   protected SimulationTab() {}
 
   public void initialize() {
-    auton_tab.addBoolean("Cube Preloaded", () -> ShuffleboardManager.getInstance().getCubePreloaded())
+    auton_tab.addBoolean("Cube Preloaded (sim)", () -> ShuffleboardManager.getInstance().getCubePreloaded())
       .withPosition(0, 0)
       .withSize(2, 1)
       .withWidget(BuiltInWidgets.kToggleSwitch);
@@ -118,7 +118,7 @@ public class SimulationTab implements ShuffleboardTabBase {
       .withProperties(Map.of("min", -45, "max", 45, "block increment", 5))
       .getEntry();
 
-    auton_tab.add("Drivetrain", new Sendable() {
+    auton_tab.add("Drivetrain (sim)", new Sendable() {
       @Override
       public void initSendable(SendableBuilder builder) {
         builder.setSmartDashboardType("DifferentialDrive");
@@ -132,7 +132,7 @@ public class SimulationTab implements ShuffleboardTabBase {
       .withWidget(BuiltInWidgets.kDifferentialDrive)
       .withProperties(Map.of("number of wheels", 6, "wheel diameter", 60, "show velocity vectors", true));
 
-    auton_tab.add("Gyro", new Sendable() {
+    auton_tab.add("Gyro (sim)", new Sendable() {
       @Override
       public void initSendable(SendableBuilder builder) {
         builder.setSmartDashboardType("Gyro");
