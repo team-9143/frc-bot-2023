@@ -50,7 +50,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    // TODO(HIGH prio): Apply teleop offset at the end of auton
     // Reset yaw for autons
     m_autonomousCommand = AutoSelector.getAuto()
       .beforeStarting(() -> OI.pigeon.setYaw(0))
