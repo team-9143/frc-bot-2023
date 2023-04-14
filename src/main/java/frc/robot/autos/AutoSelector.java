@@ -2,8 +2,6 @@ package frc.robot.autos;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 
@@ -33,28 +31,25 @@ public final class AutoSelector {
     NONE
   }
 
-  public static final SendableChooser<Starter> m_starterChooser = new SendableChooser<Starter>();
-  public static final SendableChooser<Body> m_bodyChooser = new SendableChooser<Body>();
-  public static final SendableChooser<Ending> m_endingChooser = new SendableChooser<Ending>();
+  public static final MutableChooser<Starter> m_starterChooser = new MutableChooser<>("None", Starter.NONE);
+  public static final MutableChooser<Body> m_bodyChooser = new MutableChooser<>("None", Body.NONE);
+  public static final MutableChooser<Ending> m_endingChooser = new MutableChooser<>("None", Ending.NONE);
 
   public static void initializeChoosers() {
-    m_starterChooser.addOption("Shoot", AutoSelector.Starter.SHOOT);
-    m_starterChooser.addOption("Spit", AutoSelector.Starter.SPIT);
-    m_starterChooser.addOption("Shoot Down", AutoSelector.Starter.SHOOT_DOWN);
-    m_starterChooser.addOption("Spit Down", AutoSelector.Starter.SPIT_DOWN);
-    m_starterChooser.setDefaultOption("None", AutoSelector.Starter.NONE);
+    m_starterChooser.add("Shoot", AutoSelector.Starter.SHOOT);
+    m_starterChooser.add("Spit", AutoSelector.Starter.SPIT);
+    m_starterChooser.add("Shoot Down", AutoSelector.Starter.SHOOT_DOWN);
+    m_starterChooser.add("Spit Down", AutoSelector.Starter.SPIT_DOWN);
 
-    m_bodyChooser.addOption("Long Backward", AutoSelector.Body.ESCAPE_LONG);
-    m_bodyChooser.addOption("Short Backward", AutoSelector.Body.ESCAPE_SHORT);
-    m_bodyChooser.addOption("Pickup Cone", AutoSelector.Body.PICKUP_CONE);
-    m_bodyChooser.addOption("Center Over Backward", AutoSelector.Body.CENTER_OVER);
-    m_bodyChooser.addOption("Center Backward", AutoSelector.Body.CENTER_SIMPLE);
-    m_bodyChooser.setDefaultOption("None", AutoSelector.Body.NONE);
+    m_bodyChooser.add("Long Backward", AutoSelector.Body.ESCAPE_LONG);
+    m_bodyChooser.add("Short Backward", AutoSelector.Body.ESCAPE_SHORT);
+    m_bodyChooser.add("Pickup Cone", AutoSelector.Body.PICKUP_CONE);
+    m_bodyChooser.add("Center Over Backward", AutoSelector.Body.CENTER_OVER);
+    m_bodyChooser.add("Center Backward", AutoSelector.Body.CENTER_SIMPLE);
 
-    m_endingChooser.addOption("Turn Away", AutoSelector.Ending.TURN_AWAY);
-    m_endingChooser.addOption("Turn Close", AutoSelector.Ending.TURN_CLOSE);
-    m_endingChooser.addOption("Return From Cone", AutoSelector.Ending.RETURN_FROM_CONE);
-    m_endingChooser.setDefaultOption("None", AutoSelector.Ending.NONE);
+    m_endingChooser.add("Turn Away", AutoSelector.Ending.TURN_AWAY);
+    m_endingChooser.add("Turn Close", AutoSelector.Ending.TURN_CLOSE);
+    m_endingChooser.add("Return From Cone", AutoSelector.Ending.RETURN_FROM_CONE);
   }
 
   /**
