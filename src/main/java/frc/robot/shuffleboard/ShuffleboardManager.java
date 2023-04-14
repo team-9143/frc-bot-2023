@@ -46,7 +46,7 @@ public class ShuffleboardManager {
     }
   }
 
-  /** For editing the robot's sensors. If used, {@link frc.robot.subsystems.IntakeTilt IntakeTilt}.getPosition(), {@link frc.robot.subsystems.Drivetrain Drivetrain}.getPosition(), and {@link frc.robot.OI OI.pigeon}.getYaw(), setYaw(), and getPitch() must be overriden with editable data through NetworkTables. */
+  /** For testing while manipulating the robot's sensors. If used, {@link frc.robot.subsystems.IntakeTilt IntakeTilt}.getPosition(), {@link frc.robot.subsystems.Drivetrain Drivetrain}.getPosition(), and {@link frc.robot.OI OI.pigeon}.getYaw(), setYaw(), and getPitch() must be overriden with editable data through NetworkTables. */
   public static final boolean m_simulation = true;
 
   private static final ArrayList<ShuffleboardTabBase> m_tabs = new ArrayList<ShuffleboardTabBase>();

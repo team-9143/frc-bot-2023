@@ -30,9 +30,9 @@ public class SimulationTab implements ShuffleboardTabBase {
   private static final IntakeTilt sIntakeTilt = IntakeTilt.getInstance();
   private static final IntakeWheels sIntakeWheels = IntakeWheels.getInstance();
 
-  protected static GenericEntry drivetrainPos_sim;
-  protected static GenericEntry pitch_sim;
-  protected static GenericEntry intakeAngle_sim;
+  public static GenericEntry drivetrainPos_sim;
+  public static GenericEntry pitch_sim;
+  public static GenericEntry intakeAngle_sim;
 
   protected SimulationTab() {}
 
