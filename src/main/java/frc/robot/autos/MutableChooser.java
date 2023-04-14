@@ -59,12 +59,19 @@ public class MutableChooser<V> implements NTSendable, AutoCloseable {
   }
 
   /**
-   * Removes the given option from the chooser.
+   * Removes the given option from the chooser if it is not currently selected.
    * 
    * @param name the identifier for the option to be removed
    */
   public void remove(String name) {
-    m_map.remove(name);
+    m_lock.lock();
+    try {
+      if (!name.equals((m_selected == null) ? m_default : m_selected)) {
+        m_map.remove(name);
+      }
+    } finally {
+      m_lock.unlock();
+    }
   }
 
   /** Reentrant lock to stop simultaneous editing. */
