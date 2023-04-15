@@ -12,7 +12,7 @@ import edu.wpi.first.networktables.IntegerPublisher;
 import java.util.Map;
 import java.util.LinkedHashMap;
 import java.util.function.BiConsumer;
-import java.util.HashSet;
+import java.util.TreeSet;
 import java.util.ArrayList;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -35,7 +35,7 @@ public class MutableChooser<V> implements NTSendable, AutoCloseable {
   /** A map linking identifiers to their objects. */
   private final Map<String, V> m_linkedOptions = new LinkedHashMap<>();
   /** A set of options that should be removed when the selection changes. */
-  private final HashSet<String> m_toRemove = new HashSet<>(3);
+  private final TreeSet<String> m_toRemove = new TreeSet<>();
   /** A consumer to be called with the new and old selections when the selection changes. */
   private BiConsumer<V, V> m_bindTo = (t, u) -> {};
 
