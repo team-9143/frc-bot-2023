@@ -2,11 +2,12 @@ package frc.robot.autos;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.OI;
+import frc.robot.Constants.IntakeConstants;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
@@ -17,6 +18,7 @@ import frc.robot.commands.IntakeUp;
 import frc.robot.commands.Balance;
 
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.IntakeTilt;
 import frc.robot.subsystems.IntakeWheels;
 
 /** Contains auton bodies. */
@@ -58,7 +60,9 @@ public class Bodies {
       new ParallelCommandGroup(
         new IntakeDown(),
         sIntakeWheels.getIntakeCommand(),
-        new WaitCommand(2.5).andThen(new RunCommand(() -> sDrivetrain.moveStraight(0.1), sDrivetrain))
+        new WaitUntilCommand(() ->
+          IntakeTilt.getInstance().getPosition() < IntakeConstants.kDownPosTolerance
+        ).andThen(new RunCommand(() -> sDrivetrain.moveStraight(0.1), sDrivetrain))
       ).until(() -> sDrivetrain.getPosition() >= -125),
 
       new IntakeUp()

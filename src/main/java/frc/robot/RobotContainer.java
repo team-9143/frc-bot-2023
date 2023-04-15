@@ -88,7 +88,6 @@ public class RobotContainer {
     IntakeDown.m_controller.setSetpoint(Constants.IntakeConstants.kDownPos);
 
     IntakeUp.m_controller.setIntegratorRange(-Constants.IntakeConstants.kTiltMaxSpeed, Constants.IntakeConstants.kTiltMaxSpeed);
-    IntakeUp.m_controller.setTolerance(Constants.IntakeConstants.kUpPosTolerance);
     IntakeUp.m_controller.setSetpoint(Constants.IntakeConstants.kUpPos);
   }
 

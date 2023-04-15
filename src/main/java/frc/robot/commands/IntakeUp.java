@@ -29,7 +29,7 @@ public class IntakeUp extends CommandBase {
   /** Finish when upright, and swap to steady intake. */
   @Override
   public boolean isFinished() {
-    return m_controller.atSetpoint();
+    return m_controller.getPositionError() > IntakeConstants.kUpPosTolerance;
   }
 
   @Override
