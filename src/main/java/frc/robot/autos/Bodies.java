@@ -32,9 +32,11 @@ public class Bodies {
   public static Command getBody(AutoSelector.Body body) {
     switch (body) {
       case ESCAPE_LONG:
-        return LongEscape();
+        // Drive backwards out of the community's longer side
+        return new DriveDistance(-150);
       case ESCAPE_SHORT:
-        return ShortEscape();
+        // Drive backwards out of the community's shorter side
+        return new DriveDistance(-90);
       case PICKUP_CONE:
         return PickupCone();
       case CENTER_OVER:
@@ -44,22 +46,6 @@ public class Bodies {
       default:
         return new InstantCommand();
     }
-  }
-
-  /** Drive backwards out of the community's longer side, then turn around. */
-  private static Command LongEscape() {
-    return new SequentialCommandGroup(
-      new DriveDistance(-150),
-      new TurnToAngle(180)
-    );
-  }
-
-  /** Drive backwards out of the community's shorter side, then turn around. */
-  private static Command ShortEscape() {
-    return new SequentialCommandGroup(
-      new DriveDistance(-90),
-      new TurnToAngle(180)
-    );
   }
 
   /** Turn around and pickup a cone (inverts the intake wheels). */
