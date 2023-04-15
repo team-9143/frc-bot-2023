@@ -13,6 +13,7 @@ import frc.robot.subsystems.Drivetrain;
 public class TurnToAngle extends CommandBase {
   private static final Drivetrain drivetrain = Drivetrain.getInstance();
   private static final Set<Subsystem> m_requirements = Set.of(drivetrain);
+  private static boolean isRunning = false;
   public static final PIDController m_controller = new PIDController(DrivetrainConstants.kTurnP, DrivetrainConstants.kTurnI, DrivetrainConstants.kTurnD);
 
   /** If TurnToAngle can be used during teleop. */
@@ -26,6 +27,7 @@ public class TurnToAngle extends CommandBase {
   @Override
   public void initialize() {
     m_controller.reset();
+    isRunning = true;
   }
 
   /** Calculate and clamp controller output to max speed. */
@@ -45,6 +47,7 @@ public class TurnToAngle extends CommandBase {
   public void end(boolean interrupted) {
     Drivetrain.stop();
     m_controller.setSetpoint(0);
+    isRunning = false;
   }
 
   public void setHeading(double heading) {this.heading = heading;}
@@ -53,4 +56,6 @@ public class TurnToAngle extends CommandBase {
   public Set<Subsystem> getRequirements() {
     return m_requirements;
   }
+
+  public static boolean isRunning() {return isRunning;}
 }

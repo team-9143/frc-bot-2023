@@ -19,6 +19,7 @@ public class IntakeUp extends CommandBase {
   public void initialize() {
     m_controller.reset();
     IntakeTilt.m_setpoint = IntakeConstants.kUpPos;
+    IntakeTilt.setRunning(true);
   }
 
   @Override
@@ -35,6 +36,7 @@ public class IntakeUp extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     IntakeTilt.enable();
+    IntakeTilt.setRunning(false);
   }
 
   @Override

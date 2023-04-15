@@ -47,7 +47,7 @@ public class TestTab implements ShuffleboardTabBase {
     ShuffleboardLayout layout_2 = test_tab.getLayout("Intake Status", BuiltInLayouts.kList)
       .withPosition(4, 0)
       .withSize(3, 6);
-    layout_2.addBoolean("Steady", IntakeTilt::isEnabled)
+    layout_2.addBoolean("Steady", IntakeTilt::isSteadyEnabled)
       .withWidget(BuiltInWidgets.kBooleanBox);
     layout_2.addDouble("Tilt Speed", sIntakeTilt::get)
       .withWidget(BuiltInWidgets.kNumberBar)

@@ -25,8 +25,9 @@ public class IntakeTilt extends SubsystemBase {
   }
 
   public static final PIDController m_controller = new PIDController(IntakeConstants.kSteadyP, IntakeConstants.kSteadyI, IntakeConstants.kSteadyD);
-  private static boolean m_enabled = false;
+  private static boolean m_steadyEnabled = false;
   public static double m_setpoint = IntakeConstants.kUpPos;
+  private static boolean isRunning = false;
 
   private static final CANSparkMax l_motor = new CANSparkMax(DeviceConstants.kIntakeTiltLeftID, MotorType.kBrushless);
   private static final CANSparkMax r_motor = new CANSparkMax(DeviceConstants.kIntakeTiltRightID, MotorType.kBrushless);
@@ -54,7 +55,7 @@ public class IntakeTilt extends SubsystemBase {
         m_controller.reset();
         m_setpoint = IntakeConstants.kUpPos;
       },
-      () -> {if (m_enabled) {set(m_controller.calculate(getPosition()));}},
+      () -> {if (m_steadyEnabled) {set(m_controller.calculate(getPosition()));}},
       interrupted -> {},
       () -> false,
       this
@@ -86,17 +87,20 @@ public class IntakeTilt extends SubsystemBase {
 
   /** Enables and resets steady intake PID. */
   public static void enable() {
-    m_enabled = true;
+    m_steadyEnabled = true;
     m_controller.reset();
   }
 
   /** Disables steady intake PID and stops motors. */
   public static void disable() {
-    m_enabled = false;
+    m_steadyEnabled = false;
     stop();
   }
 
-  public static boolean isEnabled() {return m_enabled;}
+  public static boolean isSteadyEnabled() {return m_steadyEnabled;}
+
+  public static void setRunning(boolean b) {isRunning = b;}
+  public static boolean isRunning() {return isRunning;}
 
   public static void stop() {
     l_motor.stopMotor();

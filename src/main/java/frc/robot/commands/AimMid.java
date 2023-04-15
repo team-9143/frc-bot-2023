@@ -16,6 +16,7 @@ public class AimMid extends CommandBase {
   public void initialize() {
     IntakeTilt.disable();
     IntakeTilt.m_setpoint = IntakeConstants.kMidPos;
+    IntakeTilt.setRunning(true);
   }
 
   /** Moves toward mid position with a static speed, then holds upright. */
@@ -32,6 +33,7 @@ public class AimMid extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     IntakeTilt.disable();
+    IntakeTilt.setRunning(false);
   }
 
   @Override

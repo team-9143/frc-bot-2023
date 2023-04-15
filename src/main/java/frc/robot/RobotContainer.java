@@ -162,7 +162,7 @@ public class RobotContainer {
     // Button 'Y' will toggle automatic intake control
     new JoystickButton(OI.operator_cntlr, OI.Controller.btn.Y.val)
       .onTrue(new InstantCommand(() -> {
-        if (IntakeTilt.isEnabled()) {IntakeTilt.disable();} else {IntakeTilt.enable();}
+        if (IntakeTilt.isSteadyEnabled()) {IntakeTilt.disable();} else {IntakeTilt.enable();}
       }));
 
     // Button 'LB' (hold) will shoot cubes
