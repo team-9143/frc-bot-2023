@@ -19,17 +19,21 @@ public class OI {
   public final static Pigeon2 pigeon = new Pigeon2(DeviceConstants.kPigeonID)
   // For simulation
   {
-    private double yaw = 0;
-
     @Override
     public com.ctre.phoenix.ErrorCode setYaw(double angleDeg) {
-      yaw = angleDeg;
+      if (frc.robot.shuffleboard.SimulationTab.yaw_sim != null) {
+        frc.robot.shuffleboard.SimulationTab.yaw_sim.setDouble(angleDeg);
+      }
       return com.ctre.phoenix.ErrorCode.OK;
     }
 
     @Override
     public double getYaw() {
-      return yaw;
+      if (frc.robot.shuffleboard.SimulationTab.yaw_sim == null) {
+        return 0;
+      } else {
+        return frc.robot.shuffleboard.SimulationTab.yaw_sim.getDouble(0);
+      }
     }
 
     @Override
