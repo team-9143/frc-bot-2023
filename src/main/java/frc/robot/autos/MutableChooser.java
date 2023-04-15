@@ -32,6 +32,7 @@ public class MutableChooser<V> implements NTSendable, AutoCloseable {
   private final Map<String, V> m_map = new LinkedHashMap<>();
   private final String m_default;
   private String m_selected;
+  private ArrayList<String> m_toRemove = new ArrayList<>();
   private BiConsumer<V, V> m_bindTo;
 
   /** List to keep track of publishers. List allows for chooser to be used repeatedly. */
@@ -68,14 +69,17 @@ public class MutableChooser<V> implements NTSendable, AutoCloseable {
 
   /**
    * Removes the given option from the chooser if it is not currently selected.
+   * Do not attempt to remove the default option.
    * 
    * @param name the identifier for the option to be removed
    */
   public void remove(String name) {
     m_lock.lock();
     try {
-      if (!name.equals((m_selected == null) ? m_default : m_selected)) {
+      if (!name.equals(m_selected)) {
         m_map.remove(name);
+      } else {
+        m_toRemove.add(name);
       }
     } finally {
       m_lock.unlock();
@@ -144,6 +148,11 @@ public class MutableChooser<V> implements NTSendable, AutoCloseable {
           m_bindTo.accept(m_map.get(val), m_map.get(m_selected));
           m_selected = val;
           for (StringPublisher pub : m_activePubs) {pub.set(val);};
+          
+          m_toRemove.forEach(e -> {
+            m_toRemove.remove(e);
+            remove(e);
+          });
         } finally {
           m_lock.unlock();
         }
