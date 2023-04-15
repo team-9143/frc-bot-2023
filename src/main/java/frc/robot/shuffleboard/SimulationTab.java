@@ -39,7 +39,7 @@ public class SimulationTab implements ShuffleboardTabBase {
 
   protected SimulationTab() {}
 
-  public void initialize() { 
+  public void initialize() {
     sim_tab.add("Auton Starter", AutoSelector.m_starterChooser)
       .withPosition(0, 0)
       .withSize(3, 2)
@@ -60,10 +60,10 @@ public class SimulationTab implements ShuffleboardTabBase {
       .withPosition(12, 0)
       .withSize(2, 2)
       .withWidget(BuiltInWidgets.kComboBoxChooser);
-    
+
     ShuffleboardLayout layout_1 = sim_tab.getLayout("TurnToAngle", BuiltInLayouts.kList)
       .withPosition(0, 2)
-      .withSize(3, 6);
+      .withSize(3, 8);
     layout_1.addDouble("Setpoint", TurnToAngle.m_controller::getSetpoint)
       .withWidget(BuiltInWidgets.kNumberBar)
       .withProperties(Map.of("min", -180, "max", 180, "center", 0));
@@ -74,10 +74,12 @@ public class SimulationTab implements ShuffleboardTabBase {
     layout_1.addDouble("Speed", () -> (sDrivetrain.getLeft() + sDrivetrain.getRight())/2)
       .withWidget(BuiltInWidgets.kNumberBar)
       .withProperties(Map.of("min", -1, "max", 1, "center", 0));
+    layout_1.addBoolean("Running", TurnToAngle::isRunning)
+      .withWidget(BuiltInWidgets.kBooleanBox);
 
     ShuffleboardLayout layout_2 = sim_tab.getLayout("DriveDistance", BuiltInLayouts.kList)
       .withPosition(3, 2)
-      .withSize(3, 6);
+      .withSize(3, 8);
     layout_2.addDouble("Setpoint", DriveDistance.m_controller::getSetpoint)
       .withWidget(BuiltInWidgets.kNumberBar)
       .withProperties(Map.of("min", -225, "max", 225, "center", 0));
@@ -88,10 +90,12 @@ public class SimulationTab implements ShuffleboardTabBase {
     layout_2.addDouble("Speed", () -> (sDrivetrain.getLeft() - sDrivetrain.getRight())/2)
       .withWidget(BuiltInWidgets.kNumberBar)
       .withProperties(Map.of("min", -1, "max", 1, "center", 0));
+    layout_2.addBoolean("Running", DriveDistance::isRunning)
+      .withWidget(BuiltInWidgets.kBooleanBox);
 
     ShuffleboardLayout layout_3 = sim_tab.getLayout("Intake Angle", BuiltInLayouts.kList)
       .withPosition(6, 2)
-      .withSize(3, 6);
+      .withSize(3, 8);
     layout_3.addDouble("Setpoint", () -> IntakeTilt.m_setpoint * 360)
         .withWidget(BuiltInWidgets.kNumberBar)
         .withProperties(Map.of("min", -110, "max", 110, "center", 0));
@@ -102,7 +106,9 @@ public class SimulationTab implements ShuffleboardTabBase {
     layout_3.addDouble("Speed", sIntakeTilt::get)
         .withWidget(BuiltInWidgets.kNumberBar)
         .withProperties(Map.of("min", -1, "max", 1, "center", 0));
-    
+    layout_3.addBoolean("Running", IntakeTilt::isRunning)
+        .withWidget(BuiltInWidgets.kBooleanBox);
+
     ShuffleboardLayout layout_4 = sim_tab.getLayout("Intake Wheels", BuiltInLayouts.kList)
       .withPosition(9, 2)
       .withSize(3, 6);
@@ -112,7 +118,10 @@ public class SimulationTab implements ShuffleboardTabBase {
       .withWidget(BuiltInWidgets.kBooleanBox);
     layout_4.addBoolean("Shooting", () -> (sIntakeWheels.get() * IntakeConstants.kShootSpeed) > 0)
       .withWidget(BuiltInWidgets.kBooleanBox);
-    
+    layout_4.addDouble("Speed", sIntakeWheels::get)
+      .withWidget(BuiltInWidgets.kNumberBar)
+      .withProperties(Map.of("min", -1, "max", -1, "center", 0));
+
     pitch_sim = sim_tab.add("Docking Angle", 0)
       .withPosition(14, 0)
       .withSize(3, 2)
