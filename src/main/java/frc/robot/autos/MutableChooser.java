@@ -171,11 +171,12 @@ public class MutableChooser<V> implements NTSendable, AutoCloseable {
           m_selected = val;
           for (StringPublisher pub : m_activePubs) {pub.set(val);};
 
-          m_toRemove.forEach(e -> {
+          m_toRemove.removeIf(e -> {
             if (!e.equals(val)) {
               m_linkedOptions.remove(e);
-              m_toRemove.remove(e);
+              return true;
             }
+            return false;
           });
         } finally {
           m_lock.unlock();
