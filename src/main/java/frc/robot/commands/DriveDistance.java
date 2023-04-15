@@ -43,6 +43,7 @@ public class DriveDistance extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     Drivetrain.stop();
+    m_controller.setSetpoint(0);
   }
 
   @Override

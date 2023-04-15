@@ -44,6 +44,7 @@ public class TurnToAngle extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     Drivetrain.stop();
+    m_controller.setSetpoint(0);
   }
 
   public void setHeading(double heading) {this.heading = heading;}
