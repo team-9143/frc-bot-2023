@@ -11,6 +11,7 @@ import edu.wpi.first.networktables.IntegerPublisher;
 
 import java.util.Map;
 import java.util.LinkedHashMap;
+import java.util.function.BiConsumer;
 import java.util.ArrayList;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -31,6 +32,13 @@ public class MutableChooser<V> implements NTSendable, AutoCloseable {
   private final Map<String, V> m_map = new LinkedHashMap<>();
   private final String m_default;
   private String m_selected;
+  private BiConsumer<V, V> m_bindTo;
+
+  /** List to keep track of publishers. List allows for chooser to be used repeatedly. */
+  private final ArrayList<StringPublisher> m_activePubs = new ArrayList<>();
+
+  /** Reentrant lock to stop simultaneous editing. */
+  private final ReentrantLock m_lock = new ReentrantLock();
   
   private final int m_instance;
   private static int s_instances = 0;
@@ -74,9 +82,6 @@ public class MutableChooser<V> implements NTSendable, AutoCloseable {
     }
   }
 
-  /** Reentrant lock to stop simultaneous editing. */
-  private final ReentrantLock m_lock = new ReentrantLock();
-
   /**
    * Returns the selected option, and the default if there is no selection.
    * 
@@ -91,8 +96,15 @@ public class MutableChooser<V> implements NTSendable, AutoCloseable {
     }
   }
 
-  /** List to keep track of publishers. List allows for chooser to be used repeatedly. */
-  private final ArrayList<StringPublisher> m_activePubs = new ArrayList<>();
+  /**
+   * Binds a {@link BiConsumer} to a change in the chooser's selection. The first input is the new option,
+   * and the second input is the old option.
+   * 
+   * @param bindTo the consumer to bind to
+   */
+  public void bindTo(BiConsumer<V, V> bindTo) {
+    m_bindTo = bindTo;
+  }
 
   @Override
   public void initSendable(NTSendableBuilder builder) {
@@ -129,6 +141,7 @@ public class MutableChooser<V> implements NTSendable, AutoCloseable {
       val -> {
         m_lock.lock();
         try {
+          m_bindTo.accept(m_map.get(val), m_map.get(m_selected));
           m_selected = val;
           for (StringPublisher pub : m_activePubs) {pub.set(val);};
         } finally {
