@@ -43,7 +43,7 @@ public class SimulationTab implements ShuffleboardTabBase {
     layout_1.addDouble("Setpoint", TurnToAngle.m_controller::getSetpoint)
       .withWidget(BuiltInWidgets.kNumberBar)
       .withProperties(Map.of("min", -180, "max", 180, "center", 0));
-    layout_1.addDouble("Speed", () -> (sDrivetrain.getLeft() - sDrivetrain.getRight())/2)
+    layout_1.addDouble("Speed", () -> (sDrivetrain.getLeft() + sDrivetrain.getRight())/2)
       .withWidget(BuiltInWidgets.kNumberBar)
       .withProperties(Map.of("min", -1, "max", 1, "center", 0));
 
@@ -57,7 +57,7 @@ public class SimulationTab implements ShuffleboardTabBase {
       .withWidget(BuiltInWidgets.kNumberSlider)
       .withProperties(Map.of("min", -200, "max", 200, "block increment", 2))
       .getEntry();
-    layout_2.addDouble("Speed", () -> (sDrivetrain.getLeft() + sDrivetrain.getRight())/2)
+    layout_2.addDouble("Speed", () -> (sDrivetrain.getLeft() - sDrivetrain.getRight())/2)
       .withWidget(BuiltInWidgets.kNumberBar)
       .withProperties(Map.of("min", -1, "max", 1, "center", 0));
 

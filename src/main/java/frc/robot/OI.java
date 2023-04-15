@@ -16,7 +16,32 @@ public class OI {
 
   // In proper orientation, Pigeon is flat and facing so that X-axis is forward
   /** Roll increases to the right, pitch to the front, and yaw counter-clockwise. */
-  public final static Pigeon2 pigeon = new Pigeon2(DeviceConstants.kPigeonID);
+  public final static Pigeon2 pigeon = new Pigeon2(DeviceConstants.kPigeonID)
+  // For simulation
+  {
+    private double yaw = 0;
+
+    @Override
+    public com.ctre.phoenix.ErrorCode setYaw(double angleDeg) {
+      yaw = angleDeg;
+      return com.ctre.phoenix.ErrorCode.OK;
+    }
+
+    @Override
+    public double getYaw() {
+      return yaw;
+    }
+
+    @Override
+    public double getPitch() {
+      if (frc.robot.shuffleboard.SimulationTab.pitch_sim == null) {
+        return 0;
+      } else {
+        return frc.robot.shuffleboard.SimulationTab.pitch_sim.getDouble(0);
+      }
+    }
+  }
+  ;
 
   public static class Controller extends GenericHID {
     public static enum btn {
