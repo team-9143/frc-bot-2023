@@ -20,7 +20,7 @@ import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 
 import frc.robot.OI;
-import frc.robot.Constants.IntakeConstants;;
+import frc.robot.Constants.IntakeConstants;
 
 /** Contains auton selector and data for driver and operator. */
 public class SimulationTab implements ShuffleboardTabBase {
@@ -67,9 +67,9 @@ public class SimulationTab implements ShuffleboardTabBase {
     layout_3.addDouble("Setpoint", () -> IntakeTilt.m_setpoint * 360)
         .withWidget(BuiltInWidgets.kNumberBar)
         .withProperties(Map.of("min", -110, "max", 110, "center", 0));
-    intakeAngle_sim = layout_3.add("Angle", IntakeConstants.kUpPos)
+    intakeAngle_sim = layout_3.add("Angle", IntakeConstants.kUpPos * 360)
       .withWidget(BuiltInWidgets.kNumberSlider)
-      .withProperties(Map.of("min", -110/360.0, "max", 110/360.0, "block increment", 1/360.0))
+      .withProperties(Map.of("min", -110, "max", 110, "block increment", 1))
       .getEntry();
     layout_3.addDouble("Speed", sIntakeTilt::get)
         .withWidget(BuiltInWidgets.kNumberBar)
