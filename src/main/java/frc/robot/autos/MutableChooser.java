@@ -12,6 +12,7 @@ import edu.wpi.first.networktables.IntegerPublisher;
 import java.util.Map;
 import java.util.LinkedHashMap;
 import java.util.function.BiConsumer;
+import java.util.HashSet;
 import java.util.ArrayList;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -28,56 +29,77 @@ public class MutableChooser<V> implements NTSendable, AutoCloseable {
   /** The key for the instance number. */
   private static final String INSTANCE = ".instance";
 
-  /** A map linking identifiers to their objects. */
-  private final Map<String, V> m_map = new LinkedHashMap<>();
-  private final String m_default;
-  private String m_selected;
-  private ArrayList<String> m_toRemove = new ArrayList<>();
-  private BiConsumer<V, V> m_bindTo = (t, u) -> {};
-
-  /** List to keep track of publishers. List allows for chooser to be used repeatedly. */
-  private final ArrayList<StringPublisher> m_activePubs = new ArrayList<>();
-
   /** Reentrant lock to stop simultaneous editing. */
   private final ReentrantLock m_lock = new ReentrantLock();
-  
+
+  /** A map linking identifiers to their objects. */
+  private final Map<String, V> m_linkedOptions = new LinkedHashMap<>();
+  /** A set of options that should be removed when the selection changes. */
+  private final HashSet<String> m_toRemove = new HashSet<>(3);
+  /** A consumer to be called with the new and old selections when the selection changes. */
+  private BiConsumer<V, V> m_bindTo = (t, u) -> {};
+
+  /** Default selection. */
+  private final String m_default;
+  /** Current selection. */
+  private String m_selected;
+
+  /** List to keep track of publishers. */
+  private final ArrayList<StringPublisher> m_activePubs = new ArrayList<>();
+
+  /** Number of instances. */
   private final int m_instance;
   private static int s_instances = 0;
 
   /**
    * Instantiates a new Chooser with a default option.
-   * 
+   *
    * @param name the identifier for the default option
    * @param obj the default option
    */
   MutableChooser(String name, V obj) {
     m_instance = s_instances++;
-    m_default = name;
-    m_map.put(name, obj);
     SendableRegistry.add(this, "SendableChooser", m_instance);
+
+    m_default = name;
+    m_linkedOptions.put(name, obj);
   }
 
   /**
-   * Adds the given option to the chooser.
-   * 
+   * Adds the given name to the chooser if it does not already contain it.
+   * If it is already in the chooser, dequeues it for removal.
+   *
    * @param name the identifier for the option
    * @param obj the option
    */
   public void add(String name, V obj) {
-    m_map.put(name, obj);
+    m_lock.lock();
+    try {
+      if (m_linkedOptions.containsKey(name)) {
+        m_toRemove.remove(name);
+      } else {
+        m_linkedOptions.put(name, obj);
+      }
+    } finally {
+      m_lock.unlock();
+    }
   }
 
   /**
-   * Removes the given option from the chooser if it is not currently selected.
-   * Do not attempt to remove the default option.
-   * 
+   * Removes the given option from the chooser if it is not the selected or default option.
+   * If it is the selected option, queues it for removal on the next selection change.
+   *
    * @param name the identifier for the option to be removed
    */
   public void remove(String name) {
+    if (name.equals(m_default)) {
+      return;
+    }
+
     m_lock.lock();
     try {
       if (!name.equals(m_selected)) {
-        m_map.remove(name);
+        m_linkedOptions.remove(name);
       } else {
         m_toRemove.add(name);
       }
@@ -88,22 +110,22 @@ public class MutableChooser<V> implements NTSendable, AutoCloseable {
 
   /**
    * Returns the selected option, and the default if there is no selection.
-   * 
+   *
    * @return the selected option
    */
   public V getSelected() {
     m_lock.lock();
     try {
-      return m_map.get((m_selected == null) ? m_default : m_selected);
+      return m_linkedOptions.get((m_selected == null) ? m_default : m_selected);
     } finally {
       m_lock.unlock();
     }
   }
 
   /**
-   * Binds a {@link BiConsumer} to a change in the chooser's selection. The first input is the new option,
-   * and the second input is the old option.
-   * 
+   * Binds a {@link BiConsumer} to a change in the chooser's selection.
+   * The first input is the new option, and the second input is the old option.
+   *
    * @param bindTo the consumer to bind to
    */
   public void bindTo(BiConsumer<V, V> bindTo) {
@@ -117,15 +139,15 @@ public class MutableChooser<V> implements NTSendable, AutoCloseable {
     IntegerPublisher instancePub = new IntegerTopic(builder.getTopic(INSTANCE)).publish();
     instancePub.set(m_instance);
     builder.addCloseable(instancePub);
-    
+
     builder.addStringProperty(DEFAULT, () -> m_default, null);
-    builder.addStringArrayProperty(OPTIONS, () -> m_map.keySet().toArray(new String[0]), null);
-    
+    builder.addStringArrayProperty(OPTIONS, () -> m_linkedOptions.keySet().toArray(new String[0]), null);
+
     builder.addStringProperty(ACTIVE,
       () -> {
         m_lock.lock();
         try {
-          return (m_selected == null) ? m_default : m_selected; 
+          return (m_selected == null) ? m_default : m_selected;
         } finally {
           m_lock.unlock();
         }
@@ -145,13 +167,15 @@ public class MutableChooser<V> implements NTSendable, AutoCloseable {
       val -> {
         m_lock.lock();
         try {
-          m_bindTo.accept(m_map.get(val), m_map.get(m_selected));
+          m_bindTo.accept(m_linkedOptions.get(val), m_linkedOptions.get(m_selected));
           m_selected = val;
           for (StringPublisher pub : m_activePubs) {pub.set(val);};
 
           m_toRemove.forEach(e -> {
-            m_toRemove.remove(e);
-            remove(e);
+            if (!e.equals(val)) {
+              m_linkedOptions.remove(e);
+              m_toRemove.remove(e);
+            }
           });
         } finally {
           m_lock.unlock();
