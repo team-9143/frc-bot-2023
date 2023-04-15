@@ -69,27 +69,30 @@ public final class Constants {
 
     // TODO: Move to IntakeWheels?
     // Wheel speed
-    public static double kIntakeSpeed = 0.3;
-    public static double kShootSpeed = -1;
-    public static double kSpitSpeed = -0.5;
-    public static double kHoldingSpeed = 0.05;
+    public static double
+      kIntakeSpeed = 0.3,
+      kShootSpeed = -1,
+      kSpitSpeed = -0.5,
+      kHoldingSpeed = 0.05;
 
     // Delay to shoot/spit a game piece
     public static final double kShootTimer = 0.5;
 
     // Non-PID intake movement
-    public static final double kUpSpeed = -0.1;
-    public static final double kDownSpeed = 0.08;
-    public static final double kSteadySpeed = -0.01;
+    public static final double
+      kUpSpeed = -0.1,
+      kDownSpeed = 0.08,
+      kSteadySpeed = -0.01;
     public static final double kAutoAlignSpeed = -0.15;
     // TODO(autoAlign): Test and tune maximum current against NEO specs
     public static final double kMaxCurrent = 80; // For autoAlign
 
     // TODO: Change all the following into degrees
     // Preset positions and tolerances (UNIT: rotations)
-    public static final double kUpPos = 0.003;
-    public static final double kMidPos = 0.1;
-    public static final double kDownPos = 0.29;
+    public static final double
+      kUpPos = 0.003,
+      kMidPos = 0.1,
+      kDownPos = 0.29;
     public static final double
       kUpPosTolerance = -0.025, // Should only be checked one way
       kMidPosTolerance = 0.004,
