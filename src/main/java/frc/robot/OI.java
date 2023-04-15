@@ -22,7 +22,7 @@ public class OI {
     @Override
     public com.ctre.phoenix.ErrorCode setYaw(double angleDeg) {
       if (frc.robot.shuffleboard.SimulationTab.yaw_sim != null) {
-        frc.robot.shuffleboard.SimulationTab.yaw_sim.setDouble(angleDeg);
+        frc.robot.shuffleboard.SimulationTab.yaw_sim.setDouble(angleDeg % 360);
       }
       return com.ctre.phoenix.ErrorCode.OK;
     }

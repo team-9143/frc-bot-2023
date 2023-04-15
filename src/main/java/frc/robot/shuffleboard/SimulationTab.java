@@ -65,7 +65,7 @@ public class SimulationTab implements ShuffleboardTabBase {
     layout_1.addDouble("Setpoint", TurnToAngle.m_controller::getSetpoint)
       .withWidget(BuiltInWidgets.kNumberBar)
       .withProperties(Map.of("min", -180, "max", 180, "center", 0));
-    yaw_sim = sim_tab.add("Gyro", 0)
+    yaw_sim = layout_1.add("Gyro", 0)
       .withWidget(BuiltInWidgets.kNumberSlider)
       .withProperties(Map.of("min", -180, "max", 180, "block increment", 1))
       .getEntry();
