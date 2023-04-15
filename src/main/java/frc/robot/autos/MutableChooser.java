@@ -33,7 +33,7 @@ public class MutableChooser<V> implements NTSendable, AutoCloseable {
   private final String m_default;
   private String m_selected;
   private ArrayList<String> m_toRemove = new ArrayList<>();
-  private BiConsumer<V, V> m_bindTo;
+  private BiConsumer<V, V> m_bindTo = (t, u) -> {};
 
   /** List to keep track of publishers. List allows for chooser to be used repeatedly. */
   private final ArrayList<StringPublisher> m_activePubs = new ArrayList<>();
@@ -148,7 +148,7 @@ public class MutableChooser<V> implements NTSendable, AutoCloseable {
           m_bindTo.accept(m_map.get(val), m_map.get(m_selected));
           m_selected = val;
           for (StringPublisher pub : m_activePubs) {pub.set(val);};
-          
+
           m_toRemove.forEach(e -> {
             m_toRemove.remove(e);
             remove(e);
