@@ -84,10 +84,10 @@ public final class AutoSelector {
     return new SequentialCommandGroup(
       Starters.getStarter(starter)
         .raceWith(new RunCommand(Drivetrain::stop, Drivetrain.getInstance())),
+      Bodies.getBody(body),
       Secondaries.getSecondary(secondary, body),
       Tertiaries.getTertiary(tertiary)
         .raceWith(new RunCommand(Drivetrain::stop, Drivetrain.getInstance())),
-      Bodies.getBody(body),
       Endings.getEnding(ending)
     );
   }
