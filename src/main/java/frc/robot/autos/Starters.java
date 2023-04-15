@@ -53,7 +53,7 @@ public class Starters {
     return new SequentialCommandGroup(
       new AimMid().raceWith(
         new WaitUntilCommand(() ->
-          IntakeTilt.getInstance().getPosition() - IntakeConstants.kMidPos < IntakeConstants.kMidPosTolerance
+          Math.abs(IntakeTilt.getInstance().getPosition() - IntakeConstants.kMidPos) < IntakeConstants.kMidPosTolerance
         ).andThen(TimedShoot())
       ),
       new IntakeUp()
@@ -65,7 +65,7 @@ public class Starters {
     return new SequentialCommandGroup(
       new AimMid().raceWith(
         new WaitUntilCommand(() ->
-          IntakeTilt.getInstance().getPosition() - IntakeConstants.kMidPos < IntakeConstants.kMidPosTolerance
+          Math.abs(IntakeTilt.getInstance().getPosition() - IntakeConstants.kMidPos) < IntakeConstants.kMidPosTolerance
         ).andThen(TimedSpit())
       ),
       new IntakeUp()
