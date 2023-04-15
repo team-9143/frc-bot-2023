@@ -52,10 +52,10 @@ public class SimulationTab implements ShuffleboardTabBase {
       .withSize(3, 6);
     layout_2.addDouble("Setpoint", DriveDistance.m_controller::getSetpoint)
       .withWidget(BuiltInWidgets.kNumberBar)
-      .withProperties(Map.of("min", -200, "max", 200, "center", 0));
+      .withProperties(Map.of("min", -225, "max", 225, "center", 0));
     drivetrainPos_sim = layout_2.add("Position", 0)
       .withWidget(BuiltInWidgets.kNumberSlider)
-      .withProperties(Map.of("min", -200, "max", 200, "block increment", 2))
+      .withProperties(Map.of("min", -225, "max", 225, "block increment", 2))
       .getEntry();
     layout_2.addDouble("Speed", () -> (sDrivetrain.getLeft() - sDrivetrain.getRight())/2)
       .withWidget(BuiltInWidgets.kNumberBar)
