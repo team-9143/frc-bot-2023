@@ -12,7 +12,6 @@ import edu.wpi.first.networktables.IntegerPublisher;
 import java.util.Map;
 import java.util.LinkedHashMap;
 import java.util.function.BiConsumer;
-import java.util.TreeSet;
 import java.util.ArrayList;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -34,8 +33,8 @@ public class MutableChooser<V> implements NTSendable, AutoCloseable {
 
   /** A map linking identifiers to their objects. */
   private final Map<String, V> m_linkedOptions = new LinkedHashMap<>();
-  /** A set of options that should be removed when the selection changes. */
-  private final TreeSet<String> m_toRemove = new TreeSet<>();
+  /** The option to be removed when the selection changes. */
+  private String m_toRemove = null;
   /** A consumer to be called with the new and old selections when the selection changes. */
   private BiConsumer<V, V> m_bindTo = (t, u) -> {};
 
@@ -67,7 +66,7 @@ public class MutableChooser<V> implements NTSendable, AutoCloseable {
 
   /**
    * Adds the given name to the chooser if it does not already contain it.
-   * If it is already in the chooser, dequeues it for removal.
+   * If it is already in the chooser and queued for removal, dequeues it for removal.
    *
    * @param name the identifier for the option
    * @param obj the option
@@ -76,7 +75,9 @@ public class MutableChooser<V> implements NTSendable, AutoCloseable {
     m_lock.lock();
     try {
       if (m_linkedOptions.containsKey(name)) {
-        m_toRemove.remove(name);
+        if (m_toRemove.equals(name)) {
+          m_toRemove = null;
+        }
       } else {
         m_linkedOptions.put(name, obj);
       }
@@ -98,10 +99,10 @@ public class MutableChooser<V> implements NTSendable, AutoCloseable {
 
     m_lock.lock();
     try {
-      if (!name.equals(m_selected)) {
-        m_linkedOptions.remove(name);
+      if (name.equals(m_selected)) {
+        m_toRemove = name;
       } else {
-        m_toRemove.add(name);
+        m_linkedOptions.remove(name);
       }
     } finally {
       m_lock.unlock();
@@ -164,23 +165,20 @@ public class MutableChooser<V> implements NTSendable, AutoCloseable {
 
     builder.addStringProperty(SELECTED,
       null,
-      val -> {
+      newSelection -> {
         m_lock.lock();
         try {
-          m_activePubs.forEach(pub -> pub.set(val));
+          m_activePubs.forEach(pub -> pub.set(newSelection));
+
+          if (m_toRemove != null) {
+            m_linkedOptions.remove(m_toRemove);
+            m_toRemove = null;
+          }
 
           m_bindTo.accept(
             m_linkedOptions.get((m_selected == null) ? m_default : m_selected),
-            m_linkedOptions.get(m_selected = val)
+            m_linkedOptions.get(m_selected = newSelection)
           );
-
-          m_toRemove.removeIf(e -> {
-            if (!e.equals(val)) {
-              m_linkedOptions.remove(e);
-              return true;
-            }
-            return false;
-          });
         } finally {
           m_lock.unlock();
         }
