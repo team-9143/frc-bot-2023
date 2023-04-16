@@ -124,7 +124,7 @@ public class MutableChooser<V> implements NTSendable, AutoCloseable {
 
   /**
    * Binds a {@link BiConsumer} to a change in the chooser's selection.
-   * The first input is the new option, and the second input is the old option.
+   * The first input is the old option, and the second input is the new option.
    *
    * @param bindTo the consumer to bind to
    */
@@ -167,9 +167,12 @@ public class MutableChooser<V> implements NTSendable, AutoCloseable {
       val -> {
         m_lock.lock();
         try {
-          m_bindTo.accept(m_linkedOptions.get(val), m_linkedOptions.get(m_selected));
-          m_selected = val;
-          for (StringPublisher pub : m_activePubs) {pub.set(val);};
+          m_activePubs.forEach(pub -> pub.set(val));
+
+          m_bindTo.accept(
+            m_linkedOptions.get((m_selected == null) ? m_default : m_selected),
+            m_linkedOptions.get(m_selected = val)
+          );
 
           m_toRemove.removeIf(e -> {
             if (!e.equals(val)) {
@@ -190,7 +193,7 @@ public class MutableChooser<V> implements NTSendable, AutoCloseable {
     SendableRegistry.remove(this);
     m_lock.lock();
     try {
-      for (StringPublisher pub : m_activePubs) {pub.close();}
+      m_activePubs.forEach(pub -> pub.close());
     } finally {
       m_lock.unlock();
     }

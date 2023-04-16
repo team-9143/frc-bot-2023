@@ -60,11 +60,6 @@ public final class AutoSelector {
     m_bodyChooser.add("Center Backward", Body.CENTER_SIMPLE);
 
     m_secondaryChooser.add("Return From Cone", Secondary.RETURN_FROM_CONE);
-    m_secondaryChooser.bindTo((t, u) -> {
-      System.out.print(t);
-      System.out.print(" and ");
-      System.out.println(u);
-    });
 
     m_tertiaryChooser.add("Cone Shoot", Tertiary.CONE_SHOOT);
     m_tertiaryChooser.add("Cone Spit", Tertiary.CONE_SPIT);
@@ -85,7 +80,7 @@ public final class AutoSelector {
     Secondary secondary = m_secondaryChooser.getSelected();
     Tertiary tertiary = m_tertiaryChooser.getSelected();
     Ending ending = m_endingChooser.getSelected();
-    
+
     return new SequentialCommandGroup(
       Starters.getStarter(starter)
         .raceWith(new RunCommand(Drivetrain::stop, Drivetrain.getInstance())),
