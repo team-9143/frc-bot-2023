@@ -9,7 +9,6 @@ import edu.wpi.first.networktables.StringPublisher;
 import edu.wpi.first.networktables.IntegerTopic;
 import edu.wpi.first.networktables.IntegerPublisher;
 
-import java.util.Map;
 import java.util.LinkedHashMap;
 import java.util.function.BiConsumer;
 import java.util.ArrayList;
@@ -29,10 +28,10 @@ public class MutableChooser<V> implements NTSendable, AutoCloseable {
   private static final String INSTANCE = ".instance";
 
   /** Reentrant lock to stop simultaneous editing. */
-  private final ReentrantLock m_lock = new ReentrantLock();
+  private final ReentrantLock m_lock = new ReentrantLock(true);
 
   /** A map linking identifiers to their objects. */
-  private final Map<String, V> m_linkedOptions = new LinkedHashMap<>();
+  private final LinkedHashMap<String, V> m_linkedOptions = new LinkedHashMap<>();
   /** A consumer to be called with the old and new selections when the selection changes. */
   private BiConsumer<V, V> m_bindTo = (t, u) -> {};
 
