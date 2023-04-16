@@ -90,10 +90,13 @@ public class MutableChooser<V> implements NTSendable, AutoCloseable {
     }
 
     m_lock.lock();
+    System.out.print("Options:");
     try {
       m_linkedOptions.remove(name);
+      m_linkedOptions.keySet().forEach(e -> System.out.print(" " + e));
     } finally {
       m_lock.unlock();
+      System.out.println();
     }
   }
 
@@ -136,6 +139,7 @@ public class MutableChooser<V> implements NTSendable, AutoCloseable {
       () -> {
         m_lock.lock();
         try {
+          System.out.println("Active: " + m_selected);
           return m_selected;
         } finally {
           m_lock.unlock();
@@ -155,14 +159,18 @@ public class MutableChooser<V> implements NTSendable, AutoCloseable {
       null,
       newSelection -> {
         m_lock.lock();
+        String oldSelection = m_selected;
+        System.out.println("Started change: " + oldSelection + " to " + newSelection);
         try {
-          m_activePubs.forEach(pub -> pub.set(newSelection));
-
+          System.out.println("Selected: " + m_selected + " becomes " + newSelection);
+          m_selected = newSelection;
           m_bindTo.accept(
-            m_linkedOptions.get(m_selected),
-            m_linkedOptions.get(m_selected = newSelection)
+            m_linkedOptions.get(oldSelection),
+            m_linkedOptions.get(newSelection)
           );
+          m_activePubs.forEach(pub -> pub.set(newSelection));
         } finally {
+          System.out.println("Ended change: " + m_linkedOptions.get(oldSelection) + " to " + m_linkedOptions.get(newSelection));
           m_lock.unlock();
         }
       }
