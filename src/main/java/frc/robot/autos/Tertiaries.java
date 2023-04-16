@@ -16,13 +16,13 @@ public class Tertiaries {
   public static Command getTertiary(AutoSelector.Tertiary tertiary) {
     switch (tertiary) {
       case CONE_SHOOT:
-        Starters.TimedShoot().beforeStarting(IntakeWheels::toCone);
+        return Starters.TimedShoot().beforeStarting(IntakeWheels::toCone);
       case CONE_SPIT:
-        Starters.TimedSpit().beforeStarting(IntakeWheels::toCone);
+        return Starters.TimedSpit().beforeStarting(IntakeWheels::toCone);
       case CONE_SHOOT_DOWN:
-        Starters.TimedShootDown().beforeStarting(IntakeWheels::toCone);
+        return Starters.TimedShootDown().beforeStarting(IntakeWheels::toCone);
       case CONE_SPIT_DOWN:
-        Starters.TimedShootDown().beforeStarting(IntakeWheels::toCone);
+        return Starters.TimedShootDown().beforeStarting(IntakeWheels::toCone);
       default:
         return new InstantCommand();
     }
