@@ -9,6 +9,7 @@ import frc.robot.subsystems.Drivetrain;
 
 /** Contains auto types, choosers, and compiler. */
 public final class AutoSelector {
+  // TODO: Add constant title for each auto piece
   public static enum Starter {
     SHOOT,
     SPIT,
