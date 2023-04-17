@@ -14,6 +14,7 @@ import java.util.function.BiConsumer;
 import java.util.ArrayList;
 import java.util.concurrent.locks.ReentrantLock;
 
+// TODO: Make removal only possible when on or changing to default option, add warning for reset required
 /** A {@link edu.wpi.first.wpilibj.smartdashboard.SendableChooser SendableChooser}-like class allowing for the removal of options. */
 public class MutableChooser<V> implements NTSendable, AutoCloseable {
   /** The key for the default value. */
