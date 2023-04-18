@@ -33,7 +33,7 @@ public class MutableChooser<V extends Enum<V> & AutoSelector.AutoType> implement
   private final ReentrantLock m_lock = new ReentrantLock(true);
 
   /** A map linking options to their identifiers. */
-  private final LinkedHashMap<String, V> linkedOptions = new LinkedHashMap<>();
+  private final LinkedHashMap<String, V> m_linkedOptions = new LinkedHashMap<>();
   /** Default selection. */
   private final String m_default;
   /** Current selection. */
@@ -60,7 +60,7 @@ public class MutableChooser<V extends Enum<V> & AutoSelector.AutoType> implement
 
     m_default = obj.getName();
     m_selected = m_default;
-    linkedOptions.put(m_default, obj);
+    m_linkedOptions.put(m_default, obj);
   }
 
   /**
@@ -77,7 +77,7 @@ public class MutableChooser<V extends Enum<V> & AutoSelector.AutoType> implement
 
     m_lock.lock();
     try {
-      linkedOptions.put(obj.getName(), obj);
+      m_linkedOptions.put(obj.getName(), obj);
       return true;
     } finally {
       m_lock.unlock();
@@ -109,7 +109,7 @@ public class MutableChooser<V extends Enum<V> & AutoSelector.AutoType> implement
 
     m_lock.lock();
     try {
-      linkedOptions.remove(obj.getName());
+      m_linkedOptions.remove(obj.getName());
       return true;
     } finally {
       m_lock.unlock();
@@ -124,7 +124,7 @@ public class MutableChooser<V extends Enum<V> & AutoSelector.AutoType> implement
   public V getSelected() {
     m_lock.lock();
     try {
-      return linkedOptions.get(m_selected);
+      return m_linkedOptions.get(m_selected);
     } finally {
       m_lock.unlock();
     }
@@ -149,7 +149,7 @@ public class MutableChooser<V extends Enum<V> & AutoSelector.AutoType> implement
     builder.addCloseable(instancePub);
 
     builder.addStringProperty(DEFAULT, () -> m_default, null);
-    builder.addStringArrayProperty(OPTIONS, () -> linkedOptions.keySet().toArray(new String[0]), null);
+    builder.addStringArrayProperty(OPTIONS, () -> m_linkedOptions.keySet().toArray(new String[0]), null);
 
     builder.addStringProperty(ACTIVE,
       () -> {
@@ -175,10 +175,9 @@ public class MutableChooser<V extends Enum<V> & AutoSelector.AutoType> implement
       newSelection -> {
         m_lock.lock();
         try {
-          m_selected = newSelection;
           m_bindTo.accept(
-            linkedOptions.get(m_selected),
-            linkedOptions.get(m_selected = newSelection)
+            m_linkedOptions.get(m_selected),
+            m_linkedOptions.get(m_selected = newSelection)
           );
           m_activePubs.forEach(pub -> pub.set(newSelection));
         } finally {
