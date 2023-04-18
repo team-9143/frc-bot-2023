@@ -73,7 +73,7 @@ public class MutableChooser<V extends Enum<V> & AutoSelector.AutoType> implement
     if (!m_selected.equals(m_default)) {
       return false;
     }
-    
+
     m_lock.lock();
     try {
       linkedOptions.put(obj.getName(), obj);
@@ -81,6 +81,17 @@ public class MutableChooser<V extends Enum<V> & AutoSelector.AutoType> implement
     } finally {
       m_lock.unlock();
     }
+  }
+
+  /**
+   * Adds the given options to the chooser if they are not already contained.
+   * Only for use at initialization.
+   *
+   * @param options array of options to add
+   */
+  @SafeVarargs
+  public final void addAll(V... options) {
+    for (V obj : options) {add(obj);}
   }
 
   /**
