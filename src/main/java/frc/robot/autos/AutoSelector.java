@@ -9,66 +9,89 @@ import frc.robot.subsystems.Drivetrain;
 
 /** Contains auto types, choosers, and compiler. */
 public final class AutoSelector {
-  // TODO: Add constant title for each auto piece
-  public static enum Starter {
-    SHOOT,
-    SPIT,
-    SHOOT_DOWN,
-    SPIT_DOWN,
-    NONE
-  }
-  public static enum Body {
-    ESCAPE_LONG,
-    ESCAPE_SHORT,
-    PICKUP_CONE,
-    CENTER_OVER,
-    CENTER_SIMPLE,
-    NONE
-  }
-  public static enum Secondary {
-    RETURN_FROM_CONE,
-    NONE
-  }
-  public static enum Tertiary {
-    CONE_SHOOT,
-    CONE_SPIT,
-    CONE_SHOOT_DOWN,
-    CONE_SPIT_DOWN,
-    NONE
-  }
-  public static enum Ending {
-    TURN_AWAY,
-    TURN_CLOSE,
-    NONE
+  public static interface AutoType {
+    public String getName();
   }
 
-  public static final MutableChooser<Starter> m_starterChooser = new MutableChooser<>("None", Starter.NONE);
-  public static final MutableChooser<Body> m_bodyChooser = new MutableChooser<>("None", Body.NONE);
-  public static final MutableChooser<Secondary> m_secondaryChooser = new MutableChooser<>("None", Secondary.NONE);
-  public static final MutableChooser<Tertiary> m_tertiaryChooser = new MutableChooser<>("None", Tertiary.NONE);
-  public static final MutableChooser<Ending> m_endingChooser = new MutableChooser<>("None", Ending.NONE);
+  public static enum Starter implements AutoType {
+    SHOOT("Shoot"),
+    SPIT("Spit"),
+    SHOOT_DOWN("Shoot Down"),
+    SPIT_DOWN("Spit Down"),
+    NONE("None");
+
+    private final String name;
+    private Starter(String name) {this.name = name;}
+    public String getName() {return name;}
+  }
+  public static enum Body implements AutoType {
+    LONG_ESCAPE("Long Escape"),
+    SHORT_ESCAPE("Short Escape"),
+    PICKUP_CONE("Pickup Cone"),
+    CENTER_OVER("Center Over"),
+    CENTER_SIMPLE("Center Simple"),
+    NONE("None");
+
+    private final String name;
+    private Body(String name) {this.name = name;}
+    public String getName() {return name;}
+  }
+  public static enum Secondary implements AutoType {
+    RETURN_FROM_CONE("Return From Cone"),
+    NONE("None");
+
+    private final String name;
+    private Secondary(String name) {this.name = name;}
+    public String getName() {return name;}
+  }
+  public static enum Tertiary implements AutoType {
+    CONE_SHOOT("Cone Shoot"),
+    CONE_SPIT("Cone Spit"),
+    CONE_SHOOT_DOWN("Cone Shoot Down"),
+    CONE_SPIT_DOWN("Cone Spit Down"),
+    NONE("None");
+
+    private final String name;
+    private Tertiary(String name) {this.name = name;}
+    public String getName() {return name;}
+  }
+  public static enum Ending implements AutoType {
+    TURN_AWAY("Turn Away"),
+    TURN_CLOSE("Turn Close"),
+    NONE("None");
+
+    private final String name;
+    private Ending(String name) {this.name = name;}
+    public String getName() {return name;}
+  }
+
+  public static final MutableChooser<Starter> m_starterChooser = new MutableChooser<>(Starter.NONE);
+  public static final MutableChooser<Body> m_bodyChooser = new MutableChooser<>(Body.NONE);
+  public static final MutableChooser<Secondary> m_secondaryChooser = new MutableChooser<>(Secondary.NONE);
+  public static final MutableChooser<Tertiary> m_tertiaryChooser = new MutableChooser<>(Tertiary.NONE);
+  public static final MutableChooser<Ending> m_endingChooser = new MutableChooser<>(Ending.NONE);
 
   public static void initializeChoosers() {
-    m_starterChooser.add("Shoot", Starter.SHOOT);
-    m_starterChooser.add("Spit", Starter.SPIT);
-    m_starterChooser.add("Shoot Down", Starter.SHOOT_DOWN);
-    m_starterChooser.add("Spit Down", Starter.SPIT_DOWN);
+    m_starterChooser.add(Starter.SHOOT);
+    m_starterChooser.add(Starter.SPIT);
+    m_starterChooser.add(Starter.SHOOT_DOWN);
+    m_starterChooser.add(Starter.SPIT_DOWN);
 
-    m_bodyChooser.add("Long Backward", Body.ESCAPE_LONG);
-    m_bodyChooser.add("Short Backward", Body.ESCAPE_SHORT);
-    m_bodyChooser.add("Pickup Cone", Body.PICKUP_CONE);
-    m_bodyChooser.add("Center Over Backward", Body.CENTER_OVER);
-    m_bodyChooser.add("Center Backward", Body.CENTER_SIMPLE);
+    m_bodyChooser.add(Body.LONG_ESCAPE);
+    m_bodyChooser.add(Body.SHORT_ESCAPE);
+    m_bodyChooser.add(Body.PICKUP_CONE);
+    m_bodyChooser.add(Body.CENTER_OVER);
+    m_bodyChooser.add(Body.CENTER_SIMPLE);
 
-    m_secondaryChooser.add("Return From Cone", Secondary.RETURN_FROM_CONE);
+    m_secondaryChooser.add(Secondary.RETURN_FROM_CONE);
 
-    m_tertiaryChooser.add("Cone Shoot", Tertiary.CONE_SHOOT);
-    m_tertiaryChooser.add("Cone Spit", Tertiary.CONE_SPIT);
-    m_tertiaryChooser.add("Cone Shoot Down", Tertiary.CONE_SHOOT_DOWN);
-    m_tertiaryChooser.add("Cone Spit Down", Tertiary.CONE_SPIT_DOWN);
+    m_tertiaryChooser.add(Tertiary.CONE_SHOOT);
+    m_tertiaryChooser.add(Tertiary.CONE_SPIT);
+    m_tertiaryChooser.add(Tertiary.CONE_SHOOT_DOWN);
+    m_tertiaryChooser.add(Tertiary.CONE_SPIT_DOWN);
 
-    m_endingChooser.add("Turn Away", Ending.TURN_AWAY);
-    m_endingChooser.add("Turn Close", Ending.TURN_CLOSE);
+    m_endingChooser.add(Ending.TURN_AWAY);
+    m_endingChooser.add(Ending.TURN_CLOSE);
   }
 
   /**

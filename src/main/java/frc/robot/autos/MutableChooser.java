@@ -16,7 +16,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 // TODO: Make removal only possible when on or changing to default option, add warning for reset required
 /** A {@link edu.wpi.first.wpilibj.smartdashboard.SendableChooser SendableChooser}-like class allowing for the removal of options. */
-public class MutableChooser<V> implements NTSendable, AutoCloseable {
+public class MutableChooser<V extends Enum<V> & AutoSelector.AutoType> implements NTSendable, AutoCloseable {
   /** The key for the default value. */
   private static final String DEFAULT = "default";
   /** The key for the selected option. */
@@ -31,15 +31,15 @@ public class MutableChooser<V> implements NTSendable, AutoCloseable {
   /** Reentrant lock to stop simultaneous editing. */
   private final ReentrantLock m_lock = new ReentrantLock(true);
 
-  /** A map linking identifiers to their objects. */
-  private final LinkedHashMap<String, V> m_linkedOptions = new LinkedHashMap<>();
-  /** A consumer to be called with the old and new selections when the selection changes. */
-  private BiConsumer<V, V> m_bindTo = (t, u) -> {};
-
+  /** A map linking options to their identifiers. */
+  private final LinkedHashMap<String, V> linkedOptions = new LinkedHashMap<>();
   /** Default selection. */
   private final String m_default;
   /** Current selection. */
   private String m_selected;
+
+  /** A consumer to be called with the old and new selections when the selection changes. */
+  private BiConsumer<V, V> m_bindTo = (t, u) -> {};
 
   /** List to keep track of publishers. */
   private final ArrayList<StringPublisher> m_activePubs = new ArrayList<>();
@@ -51,53 +51,52 @@ public class MutableChooser<V> implements NTSendable, AutoCloseable {
   /**
    * Instantiates a new Chooser with a default option.
    *
-   * @param name the identifier for the default option
    * @param obj the default option
    */
-  MutableChooser(String name, V obj) {
+  MutableChooser(V obj) {
     m_instance = s_instances++;
     SendableRegistry.add(this, "SendableChooser", m_instance);
 
-    m_default = name;
-    m_selected = name;
-    m_linkedOptions.put(name, obj);
+    m_default = obj.getName();
+    m_selected = m_default;
+    linkedOptions.put(m_default, obj);
   }
 
   /**
-   * Adds the given name to the chooser if it does not already contain it.
+   * Adds the given option to the chooser if it does not already contain it.
    *
-   * @param name the identifier for the option
-   * @param obj the option
+   * @param obj the option to add
    */
-  public void add(String name, V obj) {
+  public void add(V obj) {
     m_lock.lock();
     try {
-      if (!m_linkedOptions.containsKey(name)) {
-        m_linkedOptions.put(name, obj);
-      }
+      linkedOptions.put(obj.getName(), obj);
     } finally {
       m_lock.unlock();
     }
   }
 
   /**
-   * Removes the given option from the chooser if it is not the selected or default option.
+   * Removes the given option from the chooser if it is not the default option.
+   * Only works if the current selection is the default option.
    *
-   * @param name the identifier for the option to be removed
+   * @param obj the option to remove
+   * @return if the option was successfully removed
    */
-  public void remove(String name) {
-    if (name.equals(m_default) || name.equals(m_selected)) {
-      return;
+  public boolean remove(V obj) {
+    if (obj.getName().equals(m_default) || m_selected.equals(m_default)) {
+      return false;
     }
 
     m_lock.lock();
-    System.out.print("Options:");
     try {
-      m_linkedOptions.remove(name);
-      m_linkedOptions.keySet().forEach(e -> System.out.print(" " + e));
-    } finally {
-      m_lock.unlock();
+      System.out.print("Options:");
+      linkedOptions.keySet().forEach(e -> System.out.print(", " + e));
       System.out.println();
+      linkedOptions.remove(obj.getName());
+      return true;
+    } finally {
+      m_lock.unlock();
     }
   }
 
@@ -109,7 +108,7 @@ public class MutableChooser<V> implements NTSendable, AutoCloseable {
   public V getSelected() {
     m_lock.lock();
     try {
-      return m_linkedOptions.get(m_selected);
+      return linkedOptions.get(m_selected);
     } finally {
       m_lock.unlock();
     }
@@ -134,7 +133,7 @@ public class MutableChooser<V> implements NTSendable, AutoCloseable {
     builder.addCloseable(instancePub);
 
     builder.addStringProperty(DEFAULT, () -> m_default, null);
-    builder.addStringArrayProperty(OPTIONS, () -> m_linkedOptions.keySet().toArray(new String[0]), null);
+    builder.addStringArrayProperty(OPTIONS, () -> linkedOptions.keySet().toArray(new String[0]), null);
 
     builder.addStringProperty(ACTIVE,
       () -> {
@@ -160,18 +159,17 @@ public class MutableChooser<V> implements NTSendable, AutoCloseable {
       null,
       newSelection -> {
         m_lock.lock();
-        String oldSelection = m_selected;
-        System.out.println("Started change: " + oldSelection + " to " + newSelection);
+        System.out.println("Started change: " + m_selected + " to " + newSelection);
         try {
           System.out.println("Selected: " + m_selected + " becomes " + newSelection);
           m_selected = newSelection;
           m_bindTo.accept(
-            m_linkedOptions.get(oldSelection),
-            m_linkedOptions.get(newSelection)
+            linkedOptions.get(m_selected),
+            linkedOptions.get(m_selected = newSelection)
           );
           m_activePubs.forEach(pub -> pub.set(newSelection));
         } finally {
-          System.out.println("Ended change: " + m_linkedOptions.get(oldSelection) + " to " + m_linkedOptions.get(newSelection));
+          System.out.println("Ended change to " + newSelection);
           m_lock.unlock();
         }
       }

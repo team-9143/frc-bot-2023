@@ -33,10 +33,10 @@ public class Bodies {
    */
   public static Command getBody(AutoSelector.Body body) {
     switch (body) {
-      case ESCAPE_LONG:
+      case LONG_ESCAPE:
         // Drive backwards out of the community's longer side
         return new DriveDistance(-150);
-      case ESCAPE_SHORT:
+      case SHORT_ESCAPE:
         // Drive backwards out of the community's shorter side
         return new DriveDistance(-90);
       case PICKUP_CONE:
