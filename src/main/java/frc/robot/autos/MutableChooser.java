@@ -97,9 +97,6 @@ public class MutableChooser<V extends Enum<V> & AutoSelector.AutoType> implement
 
     m_lock.lock();
     try {
-      System.out.print("Options:");
-      linkedOptions.keySet().forEach(e -> System.out.print(", " + e));
-      System.out.println();
       linkedOptions.remove(obj.getName());
       return true;
     } finally {
@@ -146,7 +143,6 @@ public class MutableChooser<V extends Enum<V> & AutoSelector.AutoType> implement
       () -> {
         m_lock.lock();
         try {
-          System.out.println("Active: " + m_selected);
           return m_selected;
         } finally {
           m_lock.unlock();
@@ -166,9 +162,7 @@ public class MutableChooser<V extends Enum<V> & AutoSelector.AutoType> implement
       null,
       newSelection -> {
         m_lock.lock();
-        System.out.println("Started change: " + m_selected + " to " + newSelection);
         try {
-          System.out.println("Selected: " + m_selected + " becomes " + newSelection);
           m_selected = newSelection;
           m_bindTo.accept(
             linkedOptions.get(m_selected),
@@ -176,7 +170,6 @@ public class MutableChooser<V extends Enum<V> & AutoSelector.AutoType> implement
           );
           m_activePubs.forEach(pub -> pub.set(newSelection));
         } finally {
-          System.out.println("Ended change to " + newSelection);
           m_lock.unlock();
         }
       }
