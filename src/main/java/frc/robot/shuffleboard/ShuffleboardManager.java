@@ -55,9 +55,10 @@ public class ShuffleboardManager {
 
   private ShuffleboardManager() {
     m_tabs.add(new DriveTab());
-    m_tabs.add(new TestTab());
     if (m_simulation) {
       m_tabs.add(new SimulationTab());
+    } else {
+      m_tabs.add(new TestTab());
     }
 
     m_checklists.add(new MatchChecklist());
