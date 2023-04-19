@@ -33,9 +33,11 @@ public class MutableChooser<V extends Enum<V> & AutoSelector.AutoType> implement
   private final ReentrantLock m_networkLock = new ReentrantLock(true);
   /** A map linking options to their identifiers, for use with shuffleboard. */
   private final LinkedHashMap<String, V> m_linkedOptions = new LinkedHashMap<>();
-  /** Default selection string. */
+  /** Key for the default selection. */
   private final String m_defaultKey;
-  /** Current selection string. */
+  /** Default selection. */
+  private final V m_defaultObj;
+  /** Key for the current selection. */
   private String m_selectedKey;
 
   /** A Lock to stop simulataneous reading and writing to list of updates. */
@@ -64,10 +66,11 @@ public class MutableChooser<V extends Enum<V> & AutoSelector.AutoType> implement
     m_instance = s_instances++;
     SendableRegistry.add(this, "SendableChooser", m_instance);
 
-    m_optionsWanted = EnumSet.noneOf(obj.getDeclaringClass());
-
     m_defaultKey = obj.getName();
+    m_defaultObj = obj;
     m_selectedKey = m_defaultKey;
+    
+    m_optionsWanted = EnumSet.noneOf(obj.getDeclaringClass());
     m_linkedOptions.put(m_defaultKey, obj);
   }
 
@@ -77,13 +80,13 @@ public class MutableChooser<V extends Enum<V> & AutoSelector.AutoType> implement
     try {
       if (!m_selectedKey.equals(m_defaultKey)) {return;}
 
-      m_linkedOptions.keySet().removeIf(k -> !k.equals(m_defaultKey));
-      m_linkedOptions.values().retainAll(m_optionsWanted);
+      m_linkedOptions.clear();
+      m_linkedOptions.put(m_defaultKey, m_defaultObj);
       m_optionsWanted.forEach(e -> m_linkedOptions.put(e.getName(), e));
       m_updateReq = false;
     } finally {
-      m_updateLock.unlock();
       m_networkLock.unlock();
+      m_updateLock.unlock();
     }
   }
 
@@ -160,9 +163,7 @@ public class MutableChooser<V extends Enum<V> & AutoSelector.AutoType> implement
    *
    * @param bindTo the consumer to bind to
    */
-  public void bindTo(BiConsumer<V, V> bindTo) {
-    m_bindTo = bindTo;
-  }
+  public void bindTo(BiConsumer<V, V> bindTo) {m_bindTo = bindTo;}
 
   @Override
   public void initSendable(NTSendableBuilder builder) {
