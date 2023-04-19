@@ -17,9 +17,10 @@ import java.util.function.BiConsumer;
 import java.util.ArrayList;
 import java.util.concurrent.locks.ReentrantLock;
 
-// TODO: Add warning for reset required
+import frc.robot.shuffleboard.ShuffleboardManager;
+
 /** A {@link edu.wpi.first.wpilibj.smartdashboard.SendableChooser SendableChooser}-like class allowing for the removal of options. */
-public class MutableChooser<V extends Enum<V> & AutoSelector.AutoType> implements NTSendable, AutoCloseable {
+public class MutableChooser<V extends Enum<V> & AutoSelector.Named> implements NTSendable, AutoCloseable {
   /** The key for the default value. */
   private static final String DEFAULT = "default";
   /** The key for the selected option. */
@@ -77,6 +78,7 @@ public class MutableChooser<V extends Enum<V> & AutoSelector.AutoType> implement
   }
 
   private void updateOptions() {
+    ShuffleboardManager.getInstance().updateChooserResetReq();
     m_networkLock.lock();
     m_updateLock.lock();
     try {
@@ -90,6 +92,7 @@ public class MutableChooser<V extends Enum<V> & AutoSelector.AutoType> implement
       m_networkLock.unlock();
       m_updateLock.unlock();
     }
+    ShuffleboardManager.getInstance().updateChooserResetReq();
   }
 
   /**
@@ -155,7 +158,14 @@ public class MutableChooser<V extends Enum<V> & AutoSelector.AutoType> implement
    *
    * @return if the chooser needs to be updated
    */
-  public boolean isUpdateReq() {return m_updateReq;}
+  public boolean isUpdateReq() {
+    m_updateLock.lock();
+    try {
+      return m_updateReq;
+    } finally {
+      m_updateLock.unlock();
+    }
+  }
 
   /**
    * Returns the selected option, and the default if there is no selection.

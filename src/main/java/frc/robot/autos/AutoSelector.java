@@ -9,11 +9,11 @@ import frc.robot.subsystems.Drivetrain;
 
 /** Contains auto types, choosers, and compiler. */
 public final class AutoSelector {
-  public static interface AutoType {
+  public static interface Named {
     public String getName();
   }
 
-  public static enum Starter implements AutoType {
+  public static enum Starter implements Named {
     SHOOT("Shoot"),
     SPIT("Spit"),
     SHOOT_DOWN("Shoot Down"),
@@ -24,7 +24,7 @@ public final class AutoSelector {
     private Starter(String name) {this.name = name;}
     public String getName() {return name;}
   }
-  public static enum Body implements AutoType {
+  public static enum Body implements Named {
     LONG_ESCAPE("Long Escape"),
     SHORT_ESCAPE("Short Escape"),
     PICKUP_CONE("Pickup Cone"),
@@ -35,7 +35,7 @@ public final class AutoSelector {
     private Body(String name) {this.name = name;}
     public String getName() {return name;}
   }
-  public static enum Secondary implements AutoType {
+  public static enum Secondary implements Named {
     RETURN_FROM_CONE("Return From Cone"),
     CENTER_ESCAPE("Center Escape"),
     NONE("None");
@@ -44,7 +44,7 @@ public final class AutoSelector {
     private Secondary(String name) {this.name = name;}
     public String getName() {return name;}
   }
-  public static enum Tertiary implements AutoType {
+  public static enum Tertiary implements Named {
     CONE_SHOOT("Cone Shoot"),
     CONE_SPIT("Cone Spit"),
     CONE_SHOOT_DOWN("Cone Shoot Down"),
@@ -55,7 +55,7 @@ public final class AutoSelector {
     private Tertiary(String name) {this.name = name;}
     public String getName() {return name;}
   }
-  public static enum Ending implements AutoType {
+  public static enum Ending implements Named {
     TURN_AWAY("Turn Away"),
     TURN_CLOSE("Turn Close"),
     BALANCE("Balance"),
