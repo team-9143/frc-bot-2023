@@ -22,9 +22,6 @@ import frc.robot.subsystems.IntakeWheels;
 
 /** Contains auton bodies. */
 public class Bodies {
-  private static final Drivetrain sDrivetrain = Drivetrain.getInstance();
-  private static final IntakeWheels sIntakeWheels = IntakeWheels.getInstance();
-
   /** A command handling the main body of an auton. Moves the drivetrain.
    *
    * @param body
@@ -49,6 +46,8 @@ public class Bodies {
 
   /** Turn around and pickup a cone (inverts the intake wheels). */
   private static Command PickupCone() {
+    Drivetrain sDrivetrain = Drivetrain.getInstance();
+
     return new SequentialCommandGroup(
       new DriveDistance(-165), // Move near cone
       new TurnToAngle(180),
@@ -56,7 +55,7 @@ public class Bodies {
 
       new ParallelCommandGroup(
         new IntakeDown(),
-        sIntakeWheels.getIntakeCommand(),
+        IntakeWheels.getInstance().getIntakeCommand(),
         new WaitUntilCommand(() ->
           IntakeTilt.getInstance().getPosition() < IntakeConstants.kDownPosTolerance
         ).andThen(new RunCommand(() -> sDrivetrain.moveStraight(0.1), sDrivetrain))
@@ -68,6 +67,8 @@ public class Bodies {
 
   /** Drive backwards onto the charge station. */
   private static Command CenterClimb() {
+    Drivetrain sDrivetrain = Drivetrain.getInstance();
+
     return new SequentialCommandGroup(
       // Move back until pitch is greater than 10
       new FunctionalCommand(
