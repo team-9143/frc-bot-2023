@@ -70,14 +70,14 @@ public class IntakeTilt extends SubsystemBase {
 
   /** @return the average position of the tilt encoders */
   public double getPosition() {
-    // return (l_encoder.getPosition() + r_encoder.getPosition())/2;
+    return (l_encoder.getPosition() + r_encoder.getPosition())/2;
 
     // For simulation
-    if (frc.robot.shuffleboard.SimulationTab.intakeAngle_sim == null) {
-      return IntakeConstants.kUpPos * 360;
-    } else {
-      return frc.robot.shuffleboard.SimulationTab.intakeAngle_sim.getDouble(IntakeConstants.kUpPos * 360) / 360;
-    }
+    // if (frc.robot.shuffleboard.SimulationTab.intakeAngle_sim == null) {
+    //   return IntakeConstants.kUpPos * 360;
+    // } else {
+    //   return frc.robot.shuffleboard.SimulationTab.intakeAngle_sim.getDouble(IntakeConstants.kUpPos * 360) / 360;
+    // }
   }
 
   public void resetEncoders() {

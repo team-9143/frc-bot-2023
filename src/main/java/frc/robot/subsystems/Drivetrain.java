@@ -83,14 +83,14 @@ public class Drivetrain extends SubsystemBase {
 
   /** @return the average position of the drivetrain encoders */
   public double getPosition() {
-    // return (l_encoder.getPosition() - r_encoder.getPosition())/2;
+    return (l_encoder.getPosition() - r_encoder.getPosition())/2;
 
     // For simulation
-    if (frc.robot.shuffleboard.SimulationTab.drivetrainPos_sim == null) {
-      return 0;
-    } else {
-      return frc.robot.shuffleboard.SimulationTab.drivetrainPos_sim.getDouble(0);
-    }
+    // if (frc.robot.shuffleboard.SimulationTab.drivetrainPos_sim == null) {
+    //   return 0;
+    // } else {
+    //   return frc.robot.shuffleboard.SimulationTab.drivetrainPos_sim.getDouble(0);
+    // }
   }
 
   public void resetEncoders() {
