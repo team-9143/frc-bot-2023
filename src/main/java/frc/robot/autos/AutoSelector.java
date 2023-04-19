@@ -75,8 +75,15 @@ public final class AutoSelector {
     m_starterChooser.setAll(Starter.SHOOT, Starter.SPIT, Starter.SHOOT_DOWN, Starter.SPIT_DOWN);
 
     m_bodyChooser.setAll(Body.LONG_ESCAPE, Body.SHORT_ESCAPE, Body.PICKUP_CONE, Body.CENTER_OVER, Body.CENTER_SIMPLE);
+    m_bodyChooser.bindTo((t, u) -> {
+      if (u == Body.PICKUP_CONE) {
+        m_secondaryChooser.add(Secondary.RETURN_FROM_CONE);
+      } else {
+        m_secondaryChooser.remove(Secondary.RETURN_FROM_CONE);
+      }
+    });
 
-    m_secondaryChooser.setAll(Secondary.RETURN_FROM_CONE);
+    m_secondaryChooser.setAll();
 
     m_tertiaryChooser.setAll(Tertiary.CONE_SHOOT, Tertiary.CONE_SPIT, Tertiary.CONE_SHOOT_DOWN, Tertiary.CONE_SPIT_DOWN);
 
@@ -94,6 +101,7 @@ public final class AutoSelector {
     Tertiary tertiary = m_tertiaryChooser.getSelected();
     Ending ending = m_endingChooser.getSelected();
 
+    // TODO: Move stop drivetrain run commands to classes
     return new SequentialCommandGroup(
       Starters.getStarter(starter)
         .raceWith(new RunCommand(Drivetrain::stop, Drivetrain.getInstance())),
