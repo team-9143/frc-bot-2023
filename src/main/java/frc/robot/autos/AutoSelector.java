@@ -72,15 +72,15 @@ public final class AutoSelector {
   public static final MutableChooser<Ending> m_endingChooser = new MutableChooser<>(Ending.NONE);
 
   public static void initializeChoosers() {
-    m_starterChooser.addAll(Starter.SHOOT, Starter.SPIT, Starter.SHOOT_DOWN, Starter.SPIT_DOWN);
+    m_starterChooser.setAll(Starter.SHOOT, Starter.SPIT, Starter.SHOOT_DOWN, Starter.SPIT_DOWN);
 
-    m_bodyChooser.addAll(Body.LONG_ESCAPE, Body.SHORT_ESCAPE, Body.PICKUP_CONE, Body.CENTER_OVER, Body.CENTER_SIMPLE);
+    m_bodyChooser.setAll(Body.LONG_ESCAPE, Body.SHORT_ESCAPE, Body.PICKUP_CONE, Body.CENTER_OVER, Body.CENTER_SIMPLE);
 
     m_secondaryChooser.add(Secondary.RETURN_FROM_CONE);
 
-    m_tertiaryChooser.addAll(Tertiary.CONE_SHOOT, Tertiary.CONE_SPIT, Tertiary.CONE_SHOOT_DOWN, Tertiary.CONE_SPIT_DOWN);
+    m_tertiaryChooser.setAll(Tertiary.CONE_SHOOT, Tertiary.CONE_SPIT, Tertiary.CONE_SHOOT_DOWN, Tertiary.CONE_SPIT_DOWN);
 
-    m_endingChooser.addAll(Ending.TURN_AWAY, Ending.TURN_CLOSE);
+    m_endingChooser.setAll(Ending.TURN_AWAY, Ending.TURN_CLOSE);
   }
 
   /**

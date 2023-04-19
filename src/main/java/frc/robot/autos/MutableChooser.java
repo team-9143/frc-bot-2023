@@ -10,12 +10,12 @@ import edu.wpi.first.networktables.IntegerTopic;
 import edu.wpi.first.networktables.IntegerPublisher;
 
 import java.util.LinkedHashMap;
+import java.util.EnumSet;
 import java.util.function.BiConsumer;
 import java.util.ArrayList;
 import java.util.concurrent.locks.ReentrantLock;
 
 // TODO: Add warning for reset required
-// TODO: Add refresh bind on option change to none
 /** A {@link edu.wpi.first.wpilibj.smartdashboard.SendableChooser SendableChooser}-like class allowing for the removal of options. */
 public class MutableChooser<V extends Enum<V> & AutoSelector.AutoType> implements NTSendable, AutoCloseable {
   /** The key for the default value. */
@@ -29,20 +29,26 @@ public class MutableChooser<V extends Enum<V> & AutoSelector.AutoType> implement
   /** The key for the instance number. */
   private static final String INSTANCE = ".instance";
 
-  /** Reentrant lock to stop simultaneous editing. */
-  private final ReentrantLock m_lock = new ReentrantLock(true);
-
-  /** A map linking options to their identifiers. */
+  /** A Lock to stop simultaneous editing of shuffleboard options, selection, or selection publishers. */
+  private final ReentrantLock m_networkLock = new ReentrantLock(true);
+  /** A map linking options to their identifiers, for use with shuffleboard. */
   private final LinkedHashMap<String, V> m_linkedOptions = new LinkedHashMap<>();
-  /** Default selection. */
-  private final String m_default;
-  /** Current selection. */
-  private String m_selected;
+  /** Default selection string. */
+  private final String m_defaultKey;
+  /** Current selection string. */
+  private String m_selectedKey;
+
+  /** A Lock to stop simulataneous reading and writing to list of updates. */
+  private final ReentrantLock m_updateLock = new ReentrantLock(true);
+  /** A Set storing the options to be updated on the next update. */
+  private final EnumSet<V> m_optionsWanted;
+  /** If an update is required to sync options on shuffleboard. */
+  private boolean m_updateReq = false;
 
   /** A consumer to be called with the old and new selections when the selection changes. */
-  private BiConsumer<V, V> m_bindTo = (t, u) -> {};
+  private BiConsumer<V, V> m_bindTo = null;
 
-  /** List to keep track of publishers. */
+  /** ArrayList to keep track of publishers. */
   private final ArrayList<StringPublisher> m_activePubs = new ArrayList<>();
 
   /** Number of instances. */
@@ -58,61 +64,79 @@ public class MutableChooser<V extends Enum<V> & AutoSelector.AutoType> implement
     m_instance = s_instances++;
     SendableRegistry.add(this, "SendableChooser", m_instance);
 
-    m_default = obj.getName();
-    m_selected = m_default;
-    m_linkedOptions.put(m_default, obj);
+    m_optionsWanted = EnumSet.noneOf(obj.getDeclaringClass());
+
+    m_defaultKey = obj.getName();
+    m_selectedKey = m_defaultKey;
+    m_linkedOptions.put(m_defaultKey, obj);
   }
 
-  /**
-   * Adds the given option to the chooser if it does not already contain it.
-   * Only works if the current selection is the default option.
-   *
-   * @param obj the option to add
-   * @return if the option was successfully added
-   */
-  public boolean add(V obj) {
-    if (!m_selected.equals(m_default)) {
-      return false;
-    }
-
-    m_lock.lock();
+  private void updateOptions() {
+    m_networkLock.lock();
+    m_updateLock.lock();
     try {
-      m_linkedOptions.put(obj.getName(), obj);
-      return true;
+      if (!m_selectedKey.equals(m_defaultKey)) {return;}
+
+      m_linkedOptions.keySet().removeIf(k -> !k.equals(m_defaultKey));
+      m_linkedOptions.values().retainAll(m_optionsWanted);
+      m_optionsWanted.forEach(e -> m_linkedOptions.put(e.getName(), e));
+      m_updateReq = false;
     } finally {
-      m_lock.unlock();
+      m_updateLock.unlock();
+      m_networkLock.unlock();
     }
   }
 
   /**
-   * Adds the given options to the chooser if they are not already contained.
-   * Only for use at initialization.
+   * Adds an option to the chooser. Takes affect when the selected option is the default.
+   * Attempting to add duplicate options will do nothing.
    *
-   * @param options array of options to add
+   * @param option the option to add
+   */
+  public void add(V option) {
+    m_updateLock.lock();
+    try {
+      m_optionsWanted.add(option);
+      m_updateReq = true;
+      updateOptions();
+    } finally {
+      m_updateLock.unlock();
+    }
+  }
+
+  /**
+   * Removes an option from the chooser. Takes affect when the selected option is the default.
+   * Attempting to remove the default option will do nothing.
+   *
+   * @param option the option to remove
+   */
+  public void remove(V option) {
+    m_updateLock.lock();
+    try {
+      m_optionsWanted.remove(option);
+      m_updateReq = true;
+      updateOptions();
+    } finally {
+      m_updateLock.unlock();
+    }
+  }
+
+  /**
+   * Sets all options in the chooser (not including the default).
+   * Takes affect when the selected option is the default.
+   *
+   * @param options the options to be presented
    */
   @SafeVarargs
-  public final void addAll(V... options) {
-    for (V obj : options) {add(obj);}
-  }
-
-  /**
-   * Removes the given option from the chooser if it is not the default option.
-   * Only works if the current selection is the default option.
-   *
-   * @param obj the option to remove
-   * @return if the option was successfully removed
-   */
-  public boolean remove(V obj) {
-    if (obj.getName().equals(m_default) || !m_selected.equals(m_default)) {
-      return false;
-    }
-
-    m_lock.lock();
+  public final void setAll(V... options) {
+    m_updateLock.lock();
     try {
-      m_linkedOptions.remove(obj.getName());
-      return true;
+      m_optionsWanted.clear();
+      for (V obj : options) {m_optionsWanted.add(obj);}
+      m_updateReq = true;
+      updateOptions();
     } finally {
-      m_lock.unlock();
+      m_updateLock.unlock();
     }
   }
 
@@ -122,11 +146,11 @@ public class MutableChooser<V extends Enum<V> & AutoSelector.AutoType> implement
    * @return the selected option
    */
   public V getSelected() {
-    m_lock.lock();
+    m_networkLock.lock();
     try {
-      return m_linkedOptions.get(m_selected);
+      return m_linkedOptions.get(m_selectedKey);
     } finally {
-      m_lock.unlock();
+      m_networkLock.unlock();
     }
   }
 
@@ -148,40 +172,46 @@ public class MutableChooser<V extends Enum<V> & AutoSelector.AutoType> implement
     instancePub.set(m_instance);
     builder.addCloseable(instancePub);
 
-    builder.addStringProperty(DEFAULT, () -> m_default, null);
+    builder.addStringProperty(DEFAULT, () -> m_defaultKey, null);
     builder.addStringArrayProperty(OPTIONS, () -> m_linkedOptions.keySet().toArray(new String[0]), null);
 
     builder.addStringProperty(ACTIVE,
       () -> {
-        m_lock.lock();
+        m_networkLock.lock();
         try {
-          return m_selected;
+          return m_selectedKey;
         } finally {
-          m_lock.unlock();
+          m_networkLock.unlock();
         }
       },
       null
     );
 
-    m_lock.lock();
+    m_networkLock.lock();
     try {
       m_activePubs.add(new StringTopic(builder.getTopic(ACTIVE)).publish());
     } finally {
-      m_lock.unlock();
+      m_networkLock.unlock();
     }
 
     builder.addStringProperty(SELECTED,
       null,
       newSelection -> {
-        m_lock.lock();
+        V oldSelection;
+
+        m_networkLock.lock();
         try {
-          m_bindTo.accept(
-            m_linkedOptions.get(m_selected),
-            m_linkedOptions.get(m_selected = newSelection)
-          );
+          oldSelection = m_linkedOptions.get(m_selectedKey);
+
           m_activePubs.forEach(pub -> pub.set(newSelection));
+          m_selectedKey = newSelection;
+          if (m_updateReq) {updateOptions();}
         } finally {
-          m_lock.unlock();
+          m_networkLock.unlock();
+        }
+
+        if (m_bindTo != null) {
+          m_bindTo.accept(oldSelection, m_linkedOptions.get(newSelection));
         }
       }
     );
@@ -190,11 +220,11 @@ public class MutableChooser<V extends Enum<V> & AutoSelector.AutoType> implement
   @Override
   public void close() {
     SendableRegistry.remove(this);
-    m_lock.lock();
+    m_networkLock.lock();
     try {
       m_activePubs.forEach(pub -> pub.close());
     } finally {
-      m_lock.unlock();
+      m_networkLock.unlock();
     }
   }
 }
