@@ -76,7 +76,7 @@ public final class AutoSelector {
 
     m_bodyChooser.setAll(Body.LONG_ESCAPE, Body.SHORT_ESCAPE, Body.PICKUP_CONE, Body.CENTER_OVER, Body.CENTER_SIMPLE);
 
-    m_secondaryChooser.add(Secondary.RETURN_FROM_CONE);
+    m_secondaryChooser.setAll(Secondary.RETURN_FROM_CONE);
 
     m_tertiaryChooser.setAll(Tertiary.CONE_SHOOT, Tertiary.CONE_SPIT, Tertiary.CONE_SHOOT_DOWN, Tertiary.CONE_SPIT_DOWN);
 

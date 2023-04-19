@@ -69,7 +69,7 @@ public class MutableChooser<V extends Enum<V> & AutoSelector.AutoType> implement
     m_defaultKey = obj.getName();
     m_defaultObj = obj;
     m_selectedKey = m_defaultKey;
-    
+
     m_optionsWanted = EnumSet.noneOf(obj.getDeclaringClass());
     m_linkedOptions.put(m_defaultKey, obj);
   }
@@ -142,6 +142,14 @@ public class MutableChooser<V extends Enum<V> & AutoSelector.AutoType> implement
       m_updateLock.unlock();
     }
   }
+
+  /**
+   * If the chooser needs to be updated to sync with shuffleboard.
+   * Updates can be performed by selecting the default option on shuffleboard.
+   *
+   * @return if the chooser needs to be updated
+   */
+  public boolean isUpdateReq() {return m_updateReq;}
 
   /**
    * Returns the selected option, and the default if there is no selection.
