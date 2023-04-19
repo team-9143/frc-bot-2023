@@ -12,7 +12,7 @@ import frc.robot.subsystems.Drivetrain;
 public class Balance extends CommandBase {
   private static final Drivetrain drivetrain = Drivetrain.getInstance();
   private static final Set<Subsystem> m_requirements = Set.of(drivetrain);
-  
+
   private double previousPitch = -OI.pigeon.getPitch();
 
   /** Move forward while tilting backward and vice versa. */

@@ -33,10 +33,10 @@ public class Limelight extends SubsystemBase {
   public static double getTx() {return tx.getDouble(0);}
   /** @return vertical angle to target */
   public static double getTy() {return ty.getDouble(0);}
-  
+
   /** @return percent area of target relative to camera */
   public static double getArea() {return ta.getDouble(0);}
-  
+
   /** @return if a target is found */
   public static boolean getValid() {return (tv.getInteger(0) == 1) ? true : false;}
   // TODO(low prio): Add AprilTag and 3D space entries

@@ -77,6 +77,7 @@ public class MutableChooser<V extends Enum<V> & AutoSelector.Named> implements N
     m_linkedOptions.put(m_defaultKey, obj);
   }
 
+  /** Syncs options on shuffleboard if default option is selected. */
   private void updateOptions() {
     ShuffleboardManager.getInstance().updateChoosersSynced();
     m_networkLock.lock();

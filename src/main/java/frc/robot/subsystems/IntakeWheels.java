@@ -46,7 +46,7 @@ public class IntakeWheels extends SubsystemBase {
 
   public void set(double speed) {intake_motor.set(speed);}
   public double get() {return intake_motor.get();}
-  
+
   public double getVelocity() {return intake_encoder.getVelocity();}
 
   /** Invert intake speeds for cones. */

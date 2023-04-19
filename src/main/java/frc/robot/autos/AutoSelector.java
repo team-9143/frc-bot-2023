@@ -102,7 +102,6 @@ public final class AutoSelector {
    * @return an auton compiled from the starter, body, and ending {@link SendableChooser}
    */
   public static Command getAuto() {
-    // TODO:(mid prio): Attempt to add dynamic secondary body module with values depending on the selected first body module, editing values with a refresh button
     Starter starter = m_starterChooser.getSelected();
     Body body = m_bodyChooser.getSelected();
     Secondary secondary = m_secondaryChooser.getSelected();

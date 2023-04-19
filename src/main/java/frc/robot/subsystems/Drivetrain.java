@@ -47,7 +47,7 @@ public class Drivetrain extends SubsystemBase {
     l_encoder.setVelocityConversionFactor(PhysConstants.kWheelCircumference * PhysConstants.kDrivetrainGearbox / 60);
     l_encoder.setMeasurementPeriod(20);
     l_encoder.setPosition(0);
-    
+
     r_encoder.setPositionConversionFactor(PhysConstants.kWheelCircumference * PhysConstants.kDrivetrainGearbox);
     r_encoder.setVelocityConversionFactor(PhysConstants.kWheelCircumference * PhysConstants.kDrivetrainGearbox / 60);
     r_encoder.setMeasurementPeriod(20);
@@ -96,7 +96,7 @@ public class Drivetrain extends SubsystemBase {
   public void resetEncoders() {
     // l_encoder.setPosition(0);
     // r_encoder.setPosition(0);
-    
+
     // For simulation
     frc.robot.shuffleboard.SimulationTab.drivetrainPos_sim.setDouble(0);
   }
