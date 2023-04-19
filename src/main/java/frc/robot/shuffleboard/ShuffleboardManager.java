@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 
 import edu.wpi.first.networktables.GenericEntry;
 
+import frc.robot.autos.AutoSelector;
+
 // TODO: Map sendables to their subsystems
 /** Controls and initializes Shuffleboard tabs. */
 public class ShuffleboardManager {
@@ -72,7 +74,20 @@ public class ShuffleboardManager {
   /** Shuffleboard entry. Should be true if a cube is preloaded. */
   protected static GenericEntry cubeLoaded;
 
+  /** Shuffleboard entry. Should be true if any chooser needs to be updated. */
+  protected static GenericEntry chooserResetReq;
+
   public boolean getCubePreloaded() {
     return cubeLoaded.getBoolean(true);
+  }
+
+  public void updateChooserResetReq() {
+    chooserResetReq.setBoolean(
+      AutoSelector.m_starterChooser.isUpdateReq() ||
+      AutoSelector.m_bodyChooser.isUpdateReq() ||
+      AutoSelector.m_secondaryChooser.isUpdateReq() ||
+      AutoSelector.m_tertiaryChooser.isUpdateReq() ||
+      AutoSelector.m_endingChooser.isUpdateReq()
+    );
   }
 }
