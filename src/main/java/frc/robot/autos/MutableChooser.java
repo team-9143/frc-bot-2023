@@ -11,6 +11,8 @@ import edu.wpi.first.networktables.IntegerPublisher;
 
 import java.util.LinkedHashMap;
 import java.util.EnumSet;
+import java.util.List;
+import java.util.Arrays;
 import java.util.function.BiConsumer;
 import java.util.ArrayList;
 import java.util.concurrent.locks.ReentrantLock;
@@ -99,9 +101,10 @@ public class MutableChooser<V extends Enum<V> & AutoSelector.AutoType> implement
   public void add(V option) {
     m_updateLock.lock();
     try {
-      m_optionsWanted.add(option);
-      m_updateReq = true;
-      updateOptions();
+      if (m_optionsWanted.add(option)) {
+        m_updateReq = true;
+        updateOptions();
+      }
     } finally {
       m_updateLock.unlock();
     }
@@ -116,9 +119,10 @@ public class MutableChooser<V extends Enum<V> & AutoSelector.AutoType> implement
   public void remove(V option) {
     m_updateLock.lock();
     try {
-      m_optionsWanted.remove(option);
-      m_updateReq = true;
-      updateOptions();
+      if (m_optionsWanted.remove(option)) {
+        m_updateReq = true;
+        updateOptions();
+      }
     } finally {
       m_updateLock.unlock();
     }
@@ -132,12 +136,14 @@ public class MutableChooser<V extends Enum<V> & AutoSelector.AutoType> implement
    */
   @SafeVarargs
   public final void setAll(V... options) {
+    List<V> optionList = Arrays.asList(options);
+
     m_updateLock.lock();
     try {
-      m_optionsWanted.clear();
-      for (V obj : options) {m_optionsWanted.add(obj);}
-      m_updateReq = true;
-      updateOptions();
+      if (m_optionsWanted.retainAll(optionList) || m_optionsWanted.addAll(optionList)) {
+        m_updateReq = true;
+        updateOptions();
+      }
     } finally {
       m_updateLock.unlock();
     }
