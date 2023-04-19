@@ -74,20 +74,20 @@ public class ShuffleboardManager {
   /** Shuffleboard entry. Should be true if a cube is preloaded. */
   protected static GenericEntry cubeLoaded;
 
-  /** Shuffleboard entry. Should be true if any chooser needs to be updated. */
-  protected static GenericEntry chooserResetReq;
+  /** Shuffleboard entry. Should be false if any chooser needs to be updated. */
+  protected static GenericEntry choosersSynced;
 
   public boolean getCubePreloaded() {
     return cubeLoaded.getBoolean(true);
   }
 
-  public void updateChooserResetReq() {
-    chooserResetReq.setBoolean(
-      AutoSelector.m_starterChooser.isUpdateReq() ||
+  public void updateChoosersSynced() {
+    choosersSynced.setBoolean(
+      !(AutoSelector.m_starterChooser.isUpdateReq() ||
       AutoSelector.m_bodyChooser.isUpdateReq() ||
       AutoSelector.m_secondaryChooser.isUpdateReq() ||
       AutoSelector.m_tertiaryChooser.isUpdateReq() ||
-      AutoSelector.m_endingChooser.isUpdateReq()
+      AutoSelector.m_endingChooser.isUpdateReq())
     );
   }
 }

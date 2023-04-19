@@ -78,7 +78,7 @@ public class MutableChooser<V extends Enum<V> & AutoSelector.Named> implements N
   }
 
   private void updateOptions() {
-    ShuffleboardManager.getInstance().updateChooserResetReq();
+    ShuffleboardManager.getInstance().updateChoosersSynced();
     m_networkLock.lock();
     m_updateLock.lock();
     try {
@@ -92,7 +92,7 @@ public class MutableChooser<V extends Enum<V> & AutoSelector.Named> implements N
       m_networkLock.unlock();
       m_updateLock.unlock();
     }
-    ShuffleboardManager.getInstance().updateChooserResetReq();
+    ShuffleboardManager.getInstance().updateChoosersSynced();
   }
 
   /**

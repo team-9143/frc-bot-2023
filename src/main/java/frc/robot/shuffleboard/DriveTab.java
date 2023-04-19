@@ -36,7 +36,7 @@ public class DriveTab implements ShuffleboardTabBase {
       .withSize(2, 1)
       .withWidget(BuiltInWidgets.kToggleSwitch)
       .getEntry();
-    ShuffleboardManager.chooserResetReq = drive_tab.add("Auton Update Req", false)
+    ShuffleboardManager.choosersSynced = drive_tab.add("Choosers Synced", true)
       .withPosition(0, 6)
       .withSize(2, 1)
       .withWidget(BuiltInWidgets.kBooleanBox)
