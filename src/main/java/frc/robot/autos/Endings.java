@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 import frc.robot.commands.TurnToAngle;
+import frc.robot.commands.Balance;
 
 /** Contains auton endings. */
 public class Endings {
@@ -22,6 +23,9 @@ public class Endings {
       case TURN_CLOSE:
         // Turn to face the drive station
         return new TurnToAngle(0);
+      case BALANCE:
+        // Balance on the charge station
+        return new Balance();
       default:
         return new InstantCommand();
     }

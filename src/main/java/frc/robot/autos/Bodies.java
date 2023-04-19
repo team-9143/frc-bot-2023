@@ -15,7 +15,6 @@ import frc.robot.commands.DriveDistance;
 import frc.robot.commands.TurnToAngle;
 import frc.robot.commands.IntakeDown;
 import frc.robot.commands.IntakeUp;
-import frc.robot.commands.Balance;
 
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.IntakeTilt;
@@ -41,10 +40,8 @@ public class Bodies {
         return new DriveDistance(-90);
       case PICKUP_CONE:
         return PickupCone();
-      case CENTER_OVER:
-        return CenterOver();
-      case CENTER_SIMPLE:
-        return CenterSimple();
+      case CENTER_CLIMB:
+        return CenterClimb();
       default:
         return new InstantCommand();
     }
@@ -69,8 +66,8 @@ public class Bodies {
     );
   }
 
-  /** Drive backwards over the charge station, then drive back and balance. */
-  private static Command CenterOver() {
+  /** Drive backwards onto the charge station. */
+  private static Command CenterClimb() {
     return new SequentialCommandGroup(
       // Move back until pitch is greater than 10
       new FunctionalCommand(
@@ -81,47 +78,7 @@ public class Bodies {
         sDrivetrain
       ),
 
-      // Move back until pitch is less than -10
-      new FunctionalCommand(
-        () -> {},
-        () -> sDrivetrain.moveStraight(-0.3),
-        interrupted -> {},
-        () -> OI.pigeon.getPitch() < -10,
-        sDrivetrain
-      ),
-
-      // Move back until pitch is close to flat
-      new FunctionalCommand(
-        () -> {},
-        () -> sDrivetrain.moveStraight(-0.3),
-        interrupted -> {},
-        () -> Math.abs(OI.pigeon.getPitch()) < 2,
-        sDrivetrain
-      ),
-
-      new RunCommand(() -> sDrivetrain.moveStraight(-0.45), sDrivetrain).withTimeout(0.1),
-
-      new RunCommand(() -> sDrivetrain.moveStraight(0.45), sDrivetrain).withTimeout(1.5),
-
-      new Balance()
-    );
-  }
-
-  /** Drive backwards to the charge station and balance. */
-  private static Command CenterSimple() {
-    return new SequentialCommandGroup(
-      // Move back until pitch is greater than 10
-      new FunctionalCommand(
-        () -> {},
-        () -> sDrivetrain.moveStraight(-0.45),
-        interrupted -> {},
-        () -> OI.pigeon.getPitch() > 10,
-        sDrivetrain
-      ),
-
-      new RunCommand(() -> sDrivetrain.moveStraight(-0.35), sDrivetrain).withTimeout(1),
-
-      new Balance()
+      new RunCommand(() -> sDrivetrain.moveStraight(-0.35), sDrivetrain).withTimeout(1)
     );
   }
 }

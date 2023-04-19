@@ -28,8 +28,7 @@ public final class AutoSelector {
     LONG_ESCAPE("Long Escape"),
     SHORT_ESCAPE("Short Escape"),
     PICKUP_CONE("Pickup Cone"),
-    CENTER_OVER("Center Over"),
-    CENTER_SIMPLE("Center Simple"),
+    CENTER_CLIMB("Center Climb"),
     NONE("None");
 
     private final String name;
@@ -38,6 +37,7 @@ public final class AutoSelector {
   }
   public static enum Secondary implements AutoType {
     RETURN_FROM_CONE("Return From Cone"),
+    CENTER_ESCAPE("Center Escape"),
     NONE("None");
 
     private final String name;
@@ -58,6 +58,7 @@ public final class AutoSelector {
   public static enum Ending implements AutoType {
     TURN_AWAY("Turn Away"),
     TURN_CLOSE("Turn Close"),
+    BALANCE("Balance"),
     NONE("None");
 
     private final String name;
@@ -74,18 +75,25 @@ public final class AutoSelector {
   public static void initializeChoosers() {
     m_starterChooser.setAll(Starter.SHOOT, Starter.SPIT, Starter.SHOOT_DOWN, Starter.SPIT_DOWN);
 
-    m_bodyChooser.setAll(Body.LONG_ESCAPE, Body.SHORT_ESCAPE, Body.PICKUP_CONE, Body.CENTER_OVER, Body.CENTER_SIMPLE);
+    m_bodyChooser.setAll(Body.LONG_ESCAPE, Body.SHORT_ESCAPE, Body.PICKUP_CONE, Body.CENTER_CLIMB);
     m_bodyChooser.bindTo((t, u) -> {
-      if (u == Body.PICKUP_CONE) {
-        m_secondaryChooser.add(Secondary.RETURN_FROM_CONE);
-      } else {
-        m_secondaryChooser.remove(Secondary.RETURN_FROM_CONE);
+      switch (u) {
+        case PICKUP_CONE:
+          m_secondaryChooser.setAll(Secondary.RETURN_FROM_CONE);
+          m_tertiaryChooser.setAll(Tertiary.CONE_SHOOT, Tertiary.CONE_SPIT, Tertiary.CONE_SHOOT_DOWN, Tertiary.CONE_SPIT_DOWN);
+          m_endingChooser.setAll(Ending.TURN_AWAY, Ending.TURN_CLOSE);
+          break;
+        case CENTER_CLIMB:
+          m_secondaryChooser.setAll(Secondary.CENTER_ESCAPE);
+          m_tertiaryChooser.setAll();
+          m_endingChooser.setAll(Ending.BALANCE);
+          break;
+        default:
+          m_secondaryChooser.setAll();
+          m_tertiaryChooser.setAll();
+          m_endingChooser.setAll(Ending.TURN_AWAY, Ending.TURN_CLOSE);
       }
     });
-
-    m_secondaryChooser.setAll();
-
-    m_tertiaryChooser.setAll(Tertiary.CONE_SHOOT, Tertiary.CONE_SPIT, Tertiary.CONE_SHOOT_DOWN, Tertiary.CONE_SPIT_DOWN);
 
     m_endingChooser.setAll(Ending.TURN_AWAY, Ending.TURN_CLOSE);
   }
