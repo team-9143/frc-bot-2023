@@ -16,8 +16,8 @@ package frc.robot;
 public final class Constants {
   public static class PhysConstants {
     public static final double kDrivetrainGearbox = 1/8.45;
-    public static final double kTiltGearbox = (double) 1/35;
-    public static final double kWheelGearbox = (double) 1/3;
+    public static final double kTiltGearbox = 1/35.0;
+    public static final double kWheelGearbox = 1/3.0;
 
     public static final double kWheelCircumference = 6 * Math.PI; // UNIT: inches
   }
@@ -25,7 +25,6 @@ public final class Constants {
   public static class DeviceConstants {
     public static final byte kDriverCntlrPort = 0;
     public static final byte kOperatorCntlrPort = 1;
-    // TOOD: Add new intake tilt motor
     public static final byte
       kFrontLeftID = 3,
       kBackLeftID = 4,
@@ -38,7 +37,7 @@ public final class Constants {
   }
 
   public static class DrivetrainConstants {
-    // Manual driving
+    // Applies to all teleop driving
     public static final double kSpeedMult = 1;
     public static final double kTurnMult = 0.7;
 
@@ -68,30 +67,36 @@ public final class Constants {
   public static class IntakeConstants {
     public static final double kTiltMaxSpeed = 0.7; // TODO(low prio): Lower max tilt motor speed
 
+    // TODO: Move to IntakeWheels?
     // Wheel speed
-    public static double kIntakeSpeed = 0.3;
-    public static double kOuttakeSpeed = -1;
-    public static double kSpitSpeed = -0.5;
-    public static double kHoldingSpeed = 0.05;
+    public static double
+      kIntakeSpeed = 0.3,
+      kShootSpeed = -1,
+      kSpitSpeed = -0.5,
+      kHoldingSpeed = 0.05;
+
+    // Delay to shoot/spit a game piece
+    public static final double kShootTimer = 0.5;
 
     // Non-PID intake movement
-    public static final double kUpSpeed = -0.1;
-    public static final double kDownSpeed = 0.08;
-    public static final double kSteadySpeed = -0.01;
-    public static final double kAimMidTimer = 0.5; // Seconds to wait for AimMid command
+    public static final double
+      kUpSpeed = -0.1,
+      kDownSpeed = 0.08,
+      kSteadySpeed = -0.01;
     public static final double kAutoAlignSpeed = -0.15;
     // TODO(autoAlign): Test and tune maximum current against NEO specs
     public static final double kMaxCurrent = 80; // For autoAlign
 
+    // TODO: Change all the following into degrees
     // Preset positions and tolerances (UNIT: rotations)
-    public static final double kUpPos = 0.003;
-    public static final double kMidPos = 0.1;
-    public static final double kDownPos = 0.29;
-    public static final double kPosTolerance = 0.025;
-
-    // Maximum threshold to be considered at a position (UNIT: rotations)
-    public static final double kUpPosThreshold = 0.025; // Large to account for play in the up position
-    public static final double kMidPosThreshold = 0.004;
+    public static final double
+      kUpPos = 0.003,
+      kMidPos = 0.1,
+      kDownPos = 0.29;
+    public static final double
+      kUpPosTolerance = -0.025, // Should only be checked one way
+      kMidPosTolerance = 0.004,
+      kDownPosTolerance = 0.0012; // Should only be checked one way
 
     // Intake tilt PID gains
     public static final double

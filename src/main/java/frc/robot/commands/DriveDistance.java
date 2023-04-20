@@ -1,63 +1,58 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj2.command.PIDCommand;
-import edu.wpi.first.util.sendable.SendableRegistry;
 import frc.robot.Constants.DrivetrainConstants;
 
+import java.util.Set;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.Drivetrain;
 
-public class DriveDistance extends PIDCommand {
-  private final Drivetrain drivetrain;
-  private static double m_distance = 0; // In inches
-  private static final PIDController m_controller = new PIDController(DrivetrainConstants.kDistP, DrivetrainConstants.kDistI, DrivetrainConstants.kDistD);
+/** Drives a given distance for autons. Realistically moves about 10% less due to slip. */
+public class DriveDistance extends CommandBase {
+  private static final Drivetrain drivetrain = Drivetrain.getInstance();
+  private static final Set<Subsystem> m_requirements = Set.of(drivetrain);
+  private static boolean isRunning = false;
+  public static final PIDController m_controller = new PIDController(DrivetrainConstants.kDistP, DrivetrainConstants.kDistI, DrivetrainConstants.kDistD);
 
-  public DriveDistance(Drivetrain drivetrain) {
-    super(
-      m_controller,
-      drivetrain::getAvgPosition,
-      () -> m_distance,
-      output -> drivetrain.moveStraight(Math.max(-DrivetrainConstants.kDistMaxSpeed, Math.min(output, DrivetrainConstants.kDistMaxSpeed)))
-    );
+  private double distance; // UNIT: inches
 
-    this.drivetrain = drivetrain;
-
-    addRequirements(drivetrain);
-    SendableRegistry.setSubsystem(m_controller, drivetrain.getSubsystem());
-
-    // Configure additional PID options
-    m_controller.setIntegratorRange(-DrivetrainConstants.kDistMaxSpeed, DrivetrainConstants.kDistMaxSpeed);
-    m_controller.setTolerance(DrivetrainConstants.kDistPosTolerance, DrivetrainConstants.kDistVelTolerance);
-    m_controller.setSetpoint(0);
+  public DriveDistance(double distance) {
+    this.distance = distance;
   }
 
-  public DriveDistance(Drivetrain drivetrain, double fdistance) {
-    this(drivetrain);
-    setDistance(fdistance);
-  }
-
+  /** Reset controller and encoders. */
   @Override
   public void initialize() {
-    super.initialize();
+    m_controller.reset();
     drivetrain.resetEncoders();
+    isRunning = true;
   }
 
-  // Returns true when the command should end.
+  /** Calculate and clamp controller output to max speed. */
+  @Override
+  public void execute() {
+    drivetrain.moveStraight(Math.max(-DrivetrainConstants.kDistMaxSpeed, Math.min(
+      m_controller.calculate(drivetrain.getPosition(), distance),
+    DrivetrainConstants.kDistMaxSpeed)));
+  }
+
   @Override
   public boolean isFinished() {
     return m_controller.atSetpoint();
   }
 
-  /**
-   * Sets target distance
-   *
-   * @param fdistance Target distance (in inches)
-   */
-  public static void setDistance(double fdistance) {
-    m_distance = fdistance;
+  @Override
+  public void end(boolean interrupted) {
+    Drivetrain.stop();
+    m_controller.setSetpoint(0);
+    isRunning = false;
   }
+
+  @Override
+  public Set<Subsystem> getRequirements() {
+    return m_requirements;
+  }
+
+  public static boolean isRunning() {return isRunning;}
 }

@@ -1,51 +1,46 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj2.command.PIDCommand;
-import edu.wpi.first.util.sendable.SendableRegistry;
 import frc.robot.Constants.IntakeConstants;
 
+import java.util.Set;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.IntakeTilt;
 
-public class IntakeUp extends PIDCommand {
-  private final IntakeTilt intakeTilt;
-  private static final PIDController m_controller = new PIDController(IntakeConstants.kUpP, IntakeConstants.kUpI, IntakeConstants.kUpD);
+/** Tilts the intake fully up to store and shoot game pieces. Enables steady intake on finish. */
+public class IntakeUp extends CommandBase {
+  private static final IntakeTilt intakeTilt = IntakeTilt.getInstance();
+  private static final Set<Subsystem> m_requirements = Set.of(intakeTilt);
+  public static final PIDController m_controller = new PIDController(IntakeConstants.kUpP, IntakeConstants.kUpI, IntakeConstants.kUpD);
 
-  public IntakeUp(IntakeTilt intakeTilt) {
-    super(
-      m_controller,
-      intakeTilt::getMeasurement,
-      () -> IntakeConstants.kUpPos,
-      output -> intakeTilt.useOutput(output, IntakeConstants.kUpPos)
-    );
-
-    this.intakeTilt = intakeTilt;
-
-    m_controller.setIntegratorRange(-IntakeConstants.kTiltMaxSpeed, IntakeConstants.kTiltMaxSpeed);
-    m_controller.setTolerance(IntakeConstants.kPosTolerance);
-    m_controller.setSetpoint(IntakeConstants.kUpPos);
-
-    addRequirements(intakeTilt);
-    SendableRegistry.setSubsystem(m_controller, intakeTilt.getSubsystem());
-  }
-
+  /** Reset controller. */
   @Override
   public void initialize() {
-    intakeTilt.disable();
     m_controller.reset();
+    IntakeTilt.m_setpoint = IntakeConstants.kUpPos;
+    IntakeTilt.setRunning(true);
   }
 
   @Override
+  public void execute() {
+    intakeTilt.set(m_controller.calculate(intakeTilt.getPosition()));
+  }
+
+  /** Finish when upright, and swap to steady intake. */
+  @Override
   public boolean isFinished() {
-    return m_controller.atSetpoint();
+    return m_controller.getPositionError() > IntakeConstants.kUpPosTolerance;
   }
 
   @Override
   public void end(boolean interrupted) {
-    intakeTilt.enable();
+    IntakeTilt.enable();
+    IntakeTilt.setRunning(false);
+  }
+
+  @Override
+  public Set<Subsystem> getRequirements() {
+    return m_requirements;
   }
 }

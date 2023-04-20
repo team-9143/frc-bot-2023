@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -16,24 +12,36 @@ import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 
+/** Controls intake wheels. */
 public class IntakeWheels extends SubsystemBase {
+  private static IntakeWheels m_instance;
+
+  /** @return the singleton instance */
+  public static synchronized IntakeWheels getInstance() {
+    if (m_instance == null) {
+      m_instance = new IntakeWheels();
+    }
+    return m_instance;
+  }
+
+  /** Used to apply tension if a game piece is being held in the intake. */
   public static boolean m_holding;
 
   private static final CANSparkMax intake_motor = new CANSparkMax(DeviceConstants.kIntakeWheelsID, MotorType.kBrushless);
 
   private static final RelativeEncoder intake_encoder = intake_motor.getEncoder();
 
-  public IntakeWheels() {
-    setDefaultCommand(new StartEndCommand(
-      () -> {if (m_holding && IntakeConstants.kIntakeSpeed < 0) {intake_motor.set(IntakeConstants.kHoldingSpeed);}},
-      this::stop,
-      this
-    ));
-
+  private IntakeWheels() {
     intake_encoder.setPositionConversionFactor(PhysConstants.kTiltGearbox);
     intake_encoder.setVelocityConversionFactor(PhysConstants.kTiltGearbox);
     intake_encoder.setMeasurementPeriod(20);
     intake_encoder.setPosition(0);
+
+    // If inverted and has a game piece, apply tension to hold in a cone
+    setDefaultCommand(startEnd(
+      () -> {if (m_holding && isInverted()) {set(IntakeConstants.kHoldingSpeed);}},
+      IntakeWheels::stop
+    ));
   }
 
   public void set(double speed) {intake_motor.set(speed);}
@@ -41,45 +49,61 @@ public class IntakeWheels extends SubsystemBase {
 
   public double getVelocity() {return intake_encoder.getVelocity();}
 
-  public void invert() {
+  /** Invert intake speeds for cones. */
+  public static synchronized void invert() {
     IntakeConstants.kIntakeSpeed *= -1;
-    IntakeConstants.kOuttakeSpeed *= -1;
+    IntakeConstants.kShootSpeed *= -1;
     IntakeConstants.kSpitSpeed *= -1;
     IntakeConstants.kHoldingSpeed *= -1;
   }
 
-  // Stops all motors
-  public void stop() {
+  public static boolean isInverted() {
+    return IntakeConstants.kIntakeSpeed < 0;
+  }
+
+  /** Invert to cubes. */
+  public static void toCube() {if (isInverted()) {invert();}}
+
+  /** Invert to cones. */
+  public static void toCone() {if (!isInverted()) {invert();}}
+
+  public static void stop() {
     intake_motor.stopMotor();
   }
 
+  /** @return a command to intake a game piece */
   public Command getIntakeCommand() {
-    return startEnd(
+    return new StartEndCommand(
       () -> {
-        intake_motor.set(IntakeConstants.kIntakeSpeed);
+        set(IntakeConstants.kIntakeSpeed);
         m_holding = true;
       },
-      this::stop
+      IntakeWheels::stop,
+      m_instance
     );
   }
 
+  /** @return a command to shoot a game piece at full speed */
   public Command getShootCommand() {
-    return startEnd(
+    return new StartEndCommand(
       () -> {
-        intake_motor.set(IntakeConstants.kOuttakeSpeed);
+        set(IntakeConstants.kShootSpeed);
         m_holding = false;
       },
-      this::stop
+      IntakeWheels::stop,
+      m_instance
     );
   }
 
+  /** @return a command to spit a game piece at partial speed */
   public Command getSpitCommand() {
-    return startEnd(
+    return new StartEndCommand(
       () -> {
-        intake_motor.set(IntakeConstants.kSpitSpeed);
+        set(IntakeConstants.kSpitSpeed);
         m_holding = false;
       },
-      this::stop
+      IntakeWheels::stop,
+      m_instance
     );
   }
 }

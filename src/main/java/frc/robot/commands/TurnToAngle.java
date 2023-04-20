@@ -1,62 +1,61 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj2.command.PIDCommand;
-import edu.wpi.first.util.sendable.SendableRegistry;
 import frc.robot.OI;
 import frc.robot.Constants.DrivetrainConstants;
 
+import java.util.Set;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.Drivetrain;
 
-public class TurnToAngle extends PIDCommand {
+/** Turns to a given angle. */
+public class TurnToAngle extends CommandBase {
+  private static final Drivetrain drivetrain = Drivetrain.getInstance();
+  private static final Set<Subsystem> m_requirements = Set.of(drivetrain);
+  private static boolean isRunning = false;
+  public static final PIDController m_controller = new PIDController(DrivetrainConstants.kTurnP, DrivetrainConstants.kTurnI, DrivetrainConstants.kTurnD);
+
+  /** If TurnToAngle can be used during teleop. */
   public static boolean m_enabled = false;
-  private static double m_heading = 0;
-  private static final PIDController m_controller = new PIDController(DrivetrainConstants.kTurnP, DrivetrainConstants.kTurnI, DrivetrainConstants.kTurnD);
+  private double heading;
 
-  public TurnToAngle(Drivetrain drivetrain) {
-    super(
-      m_controller,
-      () -> -OI.pigeon.getYaw(),
-      () -> m_heading,
-      output -> drivetrain.turnInPlace(Math.max(-DrivetrainConstants.kTurnMaxSpeed, Math.min(output, DrivetrainConstants.kTurnMaxSpeed)))
-    );
-
-    addRequirements(drivetrain);
-    SendableRegistry.setSubsystem(m_controller, drivetrain.getSubsystem());
-
-    // Configure additional PID options
-    m_controller.setIntegratorRange(-DrivetrainConstants.kTurnMaxSpeed, DrivetrainConstants.kTurnMaxSpeed);
-    m_controller.setTolerance(DrivetrainConstants.kTurnPosTolerance, DrivetrainConstants.kTurnVelTolerance);
-    m_controller.enableContinuousInput(-180, 180);
-    m_controller.setSetpoint(0);
+  public TurnToAngle(double heading) {
+    this.heading = heading;
   }
 
-  public TurnToAngle(Drivetrain drivetrain, double fheading) {
-    this(drivetrain);
-    setHeading(fheading);
+  @Override
+  public void initialize() {
+    m_controller.reset();
+    isRunning = true;
   }
 
-  // Returns true when the command should end.
+  /** Calculate and clamp controller output to max speed. */
+  @Override
+  public void execute() {
+    drivetrain.turnInPlace(Math.max(-DrivetrainConstants.kTurnMaxSpeed, Math.min(
+      m_controller.calculate(-OI.pigeon.getYaw(), heading),
+    DrivetrainConstants.kTurnMaxSpeed)));
+  }
+
   @Override
   public boolean isFinished() {
     return m_controller.atSetpoint();
   }
 
-  /**
-   * Sets target heading and resets PID controller
-   *
-   * @param fheading Target heading (in degrees)
-   */
-  public void setHeading(double fheading) {
-    if (Math.abs(fheading - m_heading) > 50) {
-      m_controller.reset();
-    }
-    m_heading = fheading;
+  @Override
+  public void end(boolean interrupted) {
+    Drivetrain.stop();
+    m_controller.setSetpoint(0);
+    isRunning = false;
   }
 
-  public static double getHeading() {return m_heading;}
+  public void setHeading(double heading) {this.heading = heading;}
+
+  @Override
+  public Set<Subsystem> getRequirements() {
+    return m_requirements;
+  }
+
+  public static boolean isRunning() {return isRunning;}
 }
