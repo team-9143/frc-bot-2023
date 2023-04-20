@@ -20,7 +20,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import frc.robot.shuffleboard.ShuffleboardManager;
 
 /** A {@link edu.wpi.first.wpilibj.smartdashboard.SendableChooser SendableChooser}-like class allowing for the removal of options. */
-public class MutableChooser<V extends Enum<V> & AutoSelector.Named> implements NTSendable, AutoCloseable {
+public class MutableChooser<T extends Enum<T> & AutoSelector.Named> implements NTSendable, AutoCloseable {
   /** The key for the default value. */
   private static final String DEFAULT = "default";
   /** The key for the selected option. */
@@ -35,23 +35,23 @@ public class MutableChooser<V extends Enum<V> & AutoSelector.Named> implements N
   /** A Lock to stop simultaneous editing of shuffleboard options, selection, or selection publishers. */
   private final ReentrantLock m_networkLock = new ReentrantLock(true);
   /** A map linking options to their identifiers, for use with shuffleboard. */
-  private final LinkedHashMap<String, V> m_linkedOptions = new LinkedHashMap<>();
+  private final LinkedHashMap<String, T> m_linkedOptions = new LinkedHashMap<>();
   /** Key for the default selection. */
   private final String m_defaultKey;
   /** Default selection. */
-  private final V m_defaultObj;
+  private final T m_defaultObj;
   /** Key for the current selection. */
   private String m_selectedKey;
 
   /** A Lock to stop simulataneous reading and writing to list of updates. */
   private final ReentrantLock m_updateLock = new ReentrantLock(true);
   /** A Set storing the options to be updated on the next update. */
-  private final EnumSet<V> m_optionsWanted;
+  private final EnumSet<T> m_optionsWanted;
   /** If an update is required to sync options on shuffleboard. */
   private boolean m_updateReq = false;
 
   /** A consumer to be called with the old and new selections when the selection changes. */
-  private BiConsumer<V, V> m_bindTo = null;
+  private BiConsumer<T, T> m_bindTo = null;
 
   /** ArrayList to keep track of publishers. */
   private final ArrayList<StringPublisher> m_activePubs = new ArrayList<>();
@@ -65,7 +65,7 @@ public class MutableChooser<V extends Enum<V> & AutoSelector.Named> implements N
    *
    * @param obj the default option
    */
-  MutableChooser(V obj) {
+  MutableChooser(T obj) {
     m_instance = s_instances++;
     SendableRegistry.add(this, "SendableChooser", m_instance);
 
@@ -102,7 +102,7 @@ public class MutableChooser<V extends Enum<V> & AutoSelector.Named> implements N
    *
    * @param option the option to add
    */
-  public void add(V option) {
+  public void add(T option) {
     m_updateLock.lock();
     try {
       if (m_optionsWanted.add(option)) {
@@ -120,7 +120,7 @@ public class MutableChooser<V extends Enum<V> & AutoSelector.Named> implements N
    *
    * @param option the option to remove
    */
-  public void remove(V option) {
+  public void remove(T option) {
     m_updateLock.lock();
     try {
       if (m_optionsWanted.remove(option)) {
@@ -139,8 +139,8 @@ public class MutableChooser<V extends Enum<V> & AutoSelector.Named> implements N
    * @param options the options to be presented
    */
   @SafeVarargs
-  public final void setAll(V... options) {
-    List<V> optionList = Arrays.asList(options);
+  public final void setAll(T... options) {
+    List<T> optionList = Arrays.asList(options);
 
     m_updateLock.lock();
     try {
@@ -157,7 +157,7 @@ public class MutableChooser<V extends Enum<V> & AutoSelector.Named> implements N
    * If the chooser needs to be updated to sync with shuffleboard.
    * Updates can be performed by selecting the default option on shuffleboard.
    *
-   * @return if the chooser needs to be updated
+   * @return {@code true} if the chooser needs to be updated
    */
   public boolean isUpdateReq() {
     m_updateLock.lock();
@@ -173,7 +173,7 @@ public class MutableChooser<V extends Enum<V> & AutoSelector.Named> implements N
    *
    * @return the selected option
    */
-  public V getSelected() {
+  public T getSelected() {
     m_networkLock.lock();
     try {
       return m_linkedOptions.get(m_selectedKey);
@@ -188,7 +188,7 @@ public class MutableChooser<V extends Enum<V> & AutoSelector.Named> implements N
    *
    * @param bindTo the consumer to bind to
    */
-  public void bindTo(BiConsumer<V, V> bindTo) {m_bindTo = bindTo;}
+  public void bindTo(BiConsumer<T, T> bindTo) {m_bindTo = bindTo;}
 
   @Override
   public void initSendable(NTSendableBuilder builder) {
@@ -222,22 +222,24 @@ public class MutableChooser<V extends Enum<V> & AutoSelector.Named> implements N
 
     builder.addStringProperty(SELECTED,
       null,
-      newSelection -> {
-        V oldSelection;
+      newSelectionKey -> {
+        T oldSelection, newSelection;
 
         m_networkLock.lock();
         try {
           oldSelection = m_linkedOptions.get(m_selectedKey);
+          newSelection = m_linkedOptions.get(newSelectionKey);
 
-          m_activePubs.forEach(pub -> pub.set(newSelection));
-          m_selectedKey = newSelection;
+          m_activePubs.forEach(pub -> pub.set(newSelectionKey));
+          m_selectedKey = newSelectionKey;
+
           if (m_updateReq) {updateOptions();}
         } finally {
           m_networkLock.unlock();
         }
 
         if (m_bindTo != null) {
-          m_bindTo.accept(oldSelection, m_linkedOptions.get(newSelection));
+          m_bindTo.accept(oldSelection, newSelection);
         }
       }
     );
