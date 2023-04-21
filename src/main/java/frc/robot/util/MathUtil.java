@@ -1,5 +1,7 @@
 package frc.robot.util;
 
+import edu.wpi.first.wpilibj.drive.DifferentialDrive.WheelSpeeds;
+
 public class MathUtil {
   private MathUtil() {};
 
@@ -11,18 +13,18 @@ public class MathUtil {
    * @return {@code double[]} containing the speeds for the left motor (index 0) and right motor (index 1)
    * @see https://xiaoxiae.github.io/Robotics-Simplified-Website/drivetrain-control/arcade-drive/
    */
-  public static double[] arcadeDrive(int drive, int rotation) {
+  public static WheelSpeeds arcadeDriveIK(double drive, double rotation) {
     if (drive >= 0) {
       if (rotation >= 0) {
-        return new double[] {Math.max(drive, rotation), drive - rotation};
+        return new WheelSpeeds(Math.max(drive, rotation), drive - rotation);
       } else {
-        return new double[] {drive + rotation, Math.max(drive, -rotation)};
+        return new WheelSpeeds(drive + rotation, Math.max(drive, -rotation));
       }
     } else {
       if (rotation >= 0) {
-        return new double[] {drive + rotation, Math.min(drive, -rotation)};
+        return new WheelSpeeds(drive + rotation, Math.min(drive, -rotation));
       } else {
-        return new double[] {Math.min(drive, rotation), drive - rotation};
+        return new WheelSpeeds(Math.min(drive, rotation), drive - rotation);
       }
     }
   }
