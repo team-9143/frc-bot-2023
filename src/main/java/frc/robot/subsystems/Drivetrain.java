@@ -94,11 +94,11 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void resetEncoders() {
-    // l_encoder.setPosition(0);
-    // r_encoder.setPosition(0);
+    l_encoder.setPosition(0);
+    r_encoder.setPosition(0);
 
     // For simulation
-    frc.robot.shuffleboard.SimulationTab.drivetrainPos_sim.setDouble(0);
+    // frc.robot.shuffleboard.SimulationTab.drivetrainPos_sim.setDouble(0);
   }
 
   public static void stop() {
