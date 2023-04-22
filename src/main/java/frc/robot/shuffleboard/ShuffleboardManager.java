@@ -12,6 +12,9 @@ import frc.robot.autos.AutoSelector;
 // TODO: Map sendables to their subsystems
 /** Controls and initializes Shuffleboard tabs. */
 public class ShuffleboardManager {
+  /** For testing while manipulating the robot's sensors. If used, {@link frc.robot.subsystems.IntakeTilt IntakeTilt}.getPosition(), {@link frc.robot.subsystems.Drivetrain Drivetrain}.getPosition() and resetEncoders(), and {@link frc.robot.OI OI.pigeon}.getYaw(), setYaw(), and getPitch() must be overriden with editable data through NetworkTables. */
+  public static final boolean m_simulation = false;
+
   private static ShuffleboardManager m_instance;
 
   /** @return the singleton instance */
@@ -46,9 +49,6 @@ public class ShuffleboardManager {
       return entries;
     }
   }
-
-  /** For testing while manipulating the robot's sensors. If used, {@link frc.robot.subsystems.IntakeTilt IntakeTilt}.getPosition(), {@link frc.robot.subsystems.Drivetrain Drivetrain}.getPosition() and resetEncoders(), and {@link frc.robot.OI OI.pigeon}.getYaw(), setYaw(), and getPitch() must be overriden with editable data through NetworkTables. */
-  public static final boolean m_simulation = true;
 
   private static final ArrayList<ShuffleboardTabBase> m_tabs = new ArrayList<ShuffleboardTabBase>();
   private static final ArrayList<ShuffleboardChecklistBase> m_checklists = new ArrayList<ShuffleboardChecklistBase>();
