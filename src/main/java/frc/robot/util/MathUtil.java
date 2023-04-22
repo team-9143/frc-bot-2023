@@ -10,10 +10,16 @@ public class MathUtil {
    *
    * @param drive forward speed [-1.0..1.0]
    * @param rotation clockwise rotation [-1.0..1.0]
+   * @param squareInputs if {@code true}, squares other parameters to increase sensitivity
    * @return A {@link WheelSpeeds} containing the speeds for the left motor (index 0) and right motor (index 1)
    * @see https://xiaoxiae.github.io/Robotics-Simplified-Website/drivetrain-control/arcade-drive/
    */
-  public static WheelSpeeds arcadeDriveIK(double drive, double rotation) {
+  public static WheelSpeeds arcadeDriveIK(double drive, double rotation, boolean squareInputs) {
+    if (squareInputs) {
+      drive = Math.copySign(drive * drive, drive);
+      rotation = Math.copySign(rotation * rotation, rotation);
+    }
+
     if (drive >= 0) {
       if (rotation >= 0) {
         return new WheelSpeeds(Math.max(drive, rotation), drive - rotation);
