@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.OI;
+import frc.robot.util.MathUtil;
 import frc.robot.Constants.PhysConstants;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.DeviceConstants;
@@ -10,9 +11,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-
-import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj.MotorSafety;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 
 /** Controls the robot drivetrain. */
 public class Drivetrain extends SubsystemBase {
@@ -24,6 +24,68 @@ public class Drivetrain extends SubsystemBase {
       m_instance = new Drivetrain();
     }
     return m_instance;
+  }
+
+  /** Class to contain left and right values for the speeds of a differential drivetrain. */
+  public static class WheelSpeeds {
+    public final double left;
+    public final double right;
+
+    /**
+     * Creates a new WheelSpeeds.
+     *
+     * @param left the speed for the left side [-1.0...1.0]
+     * @param right the speed for the right side [-1.0...1.0]
+     */
+    public WheelSpeeds(double left, double right) {
+      this.left = left;
+      this.right = right;
+    }
+  }
+
+  /** Class for driving a differential drivetrain and ensuring motor safety with constant updates. */
+  private static class DifferentialDrive extends MotorSafety {
+    private final MotorController l_motor;
+    private final MotorController r_motor;
+
+    /**
+     * Creates a new DifferentialDrive with motor safety enabled.
+     *
+     * @param l_motor the {@link MotorController} for the left side
+     * @param r_motor the {@link MotorController} for the right side
+     */
+    public DifferentialDrive(MotorController l_motor, MotorController r_motor) {
+      this.l_motor = l_motor;
+      this.r_motor = r_motor;
+      setSafetyEnabled(true);
+    }
+
+    /**
+     * Sets the drivetrain's speeds according to the passed {@link WheelSpeeds}.
+     *
+     * @param speeds the speeds to be set inside a {@link WheelSpeeds}
+     */
+    public void drive(WheelSpeeds speeds) {
+      l_motor.set(speeds.left);
+      r_motor.set(speeds.right);
+      feed();
+    }
+
+    /** @return the speed of the left motor */
+    public double getLeft() {return l_motor.get();}
+    /** @return the speed of the right motor */
+    public double getRight() {return r_motor.get();}
+
+    /** Stops all motors. */
+    @Override
+    public void stopMotor() {
+      l_motor.stopMotor();
+      r_motor.stopMotor();
+      feed();
+    }
+
+    @Override
+    public String getDescription() {return "Drivetrain";}
   }
 
   // Initialize motors, encoders, and differential drive
@@ -54,32 +116,32 @@ public class Drivetrain extends SubsystemBase {
     r_encoder.setPosition(0);
 
     // Teleop drive: single joystick or turn in place with triggers
-    setDefaultCommand(new RunCommand(
-      () -> {
-        if (Math.abs(OI.driver_cntlr.getTriggers()) > 0.05) {
-          // Turn in place, input from triggers
-          turnInPlace(DrivetrainConstants.kTurnMult * OI.driver_cntlr.getTriggers());
-        } else {
-          // Regular drive, input from left stick
-          robotDrive.arcadeDrive(DrivetrainConstants.kTurnMult * OI.driver_cntlr.getLeftX(), DrivetrainConstants.kSpeedMult * OI.driver_cntlr.getLeftY(), true);
-        }
-      },
-      this
-    ));
+    setDefaultCommand(run(() -> {
+      if (Math.abs(OI.driver_cntlr.getTriggers()) > 0.05) {
+        // Turn in place, input from triggers
+        turnInPlace(DrivetrainConstants.kTurnMult * OI.driver_cntlr.getTriggers());
+      } else {
+        // Arcade drive, input from left stick
+        robotDrive.drive(MathUtil.arcadeDriveIK(
+          DrivetrainConstants.kSpeedMult * OI.driver_cntlr.getLeftY(),
+          DrivetrainConstants.kTurnMult * OI.driver_cntlr.getLeftX()
+        ));
+      }
+    }));
   }
 
-  public void turnInPlace(double rotationSpeed) {
-    robotDrive.tankDrive(rotationSpeed, rotationSpeed, false);
+  public void turnInPlace(double rotation) {
+    robotDrive.drive(new WheelSpeeds(rotation, rotation));
   }
 
   public void moveStraight(double speed) {
-    robotDrive.tankDrive(speed, -speed, false);
+    robotDrive.drive(new WheelSpeeds(speed, -speed));
   }
 
   /** @return the speed of the left motors */
-  public double getLeft() {return fl_motor.get();}
+  public double getLeft() {return robotDrive.getLeft();}
   /** @return the speed of the right motors */
-  public double getRight() {return fr_motor.get();}
+  public double getRight() {return robotDrive.getRight();}
 
   /** @return the average position of the drivetrain encoders */
   public double getPosition() {
