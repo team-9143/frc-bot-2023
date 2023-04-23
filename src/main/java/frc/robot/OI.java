@@ -81,9 +81,7 @@ public class OI {
       super(port);
     }
 
-    /**
-     * @return The trigger value between -1 and 1, left being subtractive and right being additive
-     */
+    /** @return a double [-1.0..1.0], left trigger subtractive and right trigger additive */
     public double getTriggers() {
       return getRawAxis(axis.rightTrigger.val) - getRawAxis(axis.leftTrigger.val);
     }

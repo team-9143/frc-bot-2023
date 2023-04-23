@@ -14,10 +14,8 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 // TODO: Fix any commands being called in multiple triggers
-// TODO: Create button method in controllers to create button triggers
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -91,8 +89,7 @@ public class RobotContainer {
   private void configureBindings() {
     // Universal:
     // Button 'B' (hold) will continuously stop all movement
-    new JoystickButton(OI.driver_cntlr, OI.Controller.btn.B.val)
-    .or(new JoystickButton(OI.operator_cntlr, OI.Controller.btn.B.val))
+    new Trigger(() -> OI.driver_cntlr.getRawButton(OI.Controller.btn.B.val) || OI.operator_cntlr.getRawButton(OI.Controller.btn.B.val))
       .whileTrue(cStop);
 
     configureDriver();
@@ -100,6 +97,7 @@ public class RobotContainer {
   }
 
   private void configureDriver() {
+    // TOOD: Remove right stick TurnToAngle
     // D-pad and right stick will turn to the specified angle
     new Trigger(() -> TurnToAngle.m_enabled && OI.driver_cntlr.getPOV() != -1)
       .whileTrue(new RunCommand(() -> {
@@ -116,19 +114,19 @@ public class RobotContainer {
         cTurnToAngle.schedule();
       }));
 
-    // Button 'A' (hold) will run auto-balance code
-    new JoystickButton(OI.driver_cntlr, OI.Controller.btn.A.val)
+    // Button 'A' (hold) will auto-balance
+    new Trigger(() -> OI.driver_cntlr.getRawButton(OI.Controller.btn.A.val))
       .whileTrue(cBalance);
 
     // Button 'X' (debounced 1s) will reset gyro
-    new JoystickButton(OI.driver_cntlr, OI.Controller.btn.X.val)
+    new Trigger(() -> OI.driver_cntlr.getRawButton(OI.Controller.btn.X.val))
     .debounce(1)
       .onTrue(new InstantCommand(() ->
         OI.pigeon.setYaw(0)
       ));
 
     // Button 'Y' will toggle TurnToAngle
-    new JoystickButton(OI.driver_cntlr, OI.Controller.btn.Y.val)
+    new Trigger(() -> OI.driver_cntlr.getRawButton(OI.Controller.btn.Y.val))
       .onTrue(new InstantCommand(() -> {
         cTurnToAngle.cancel();
         TurnToAngle.m_enabled ^= true;
@@ -136,29 +134,31 @@ public class RobotContainer {
   }
 
   private void configureOperator() {
-    // Button 'A' will swap intake and outtake (for cones)
-    new JoystickButton(OI.operator_cntlr, OI.Controller.btn.A.val)
-      .onTrue(new InstantCommand(IntakeWheels::invert));
+    // Button 'A' will invert intake wheels (for cones)
+    new Trigger(() -> OI.operator_cntlr.getRawButton(OI.Controller.btn.A.val))
+      .onTrue(new InstantCommand(
+        IntakeWheels::invert
+      ));
 
-    // Button 'X' (debounced 1s) will reset tilt encoder
-    new JoystickButton(OI.operator_cntlr, OI.Controller.btn.X.val)
+    // Button 'X' (debounced 1s) will reset intake tilt encoders
+    new Trigger(() -> OI.operator_cntlr.getRawButton(OI.Controller.btn.X.val))
     .debounce(1)
-      .onTrue(new InstantCommand(() ->
-        sIntakeTilt.resetEncoders()
+      .onTrue(new InstantCommand(
+        sIntakeTilt::resetEncoders
       ));
 
     // Button 'Y' will toggle automatic intake control
-    new JoystickButton(OI.operator_cntlr, OI.Controller.btn.Y.val)
+    new Trigger(() -> OI.operator_cntlr.getRawButton(OI.Controller.btn.Y.val))
       .onTrue(new InstantCommand(() -> {
         if (IntakeTilt.isSteadyEnabled()) {IntakeTilt.disableSteady();} else {IntakeTilt.enableSteady();}
       }));
 
     // Button 'LB' (hold) will shoot cubes
-    new JoystickButton(OI.operator_cntlr, OI.Controller.btn.LB.val)
+    new Trigger(() -> OI.operator_cntlr.getRawButton(OI.Controller.btn.LB.val))
       .whileTrue(cShoot);
 
     // Button 'RB' (hold) will lower and activate intake, then raise on release
-    new JoystickButton(OI.operator_cntlr, OI.Controller.btn.RB.val)
+    new Trigger(() -> OI.operator_cntlr.getRawButton(OI.Controller.btn.RB.val))
       .whileTrue(cIntakeDown)
       .onFalse(cIntakeUp);
 
