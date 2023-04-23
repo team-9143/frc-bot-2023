@@ -12,7 +12,6 @@ import edu.wpi.first.networktables.IntegerPublisher;
 import java.util.LinkedHashMap;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Arrays;
 import java.util.function.BiConsumer;
 import java.util.ArrayList;
 import java.util.concurrent.locks.ReentrantLock;
@@ -140,7 +139,7 @@ public class MutableChooser<T extends Enum<T> & AutoSelector.Named> implements N
    */
   @SafeVarargs
   public final void setAll(T... options) {
-    List<T> optionList = Arrays.asList(options);
+    List<T> optionList = List.of(options);
 
     m_updateLock.lock();
     try {
