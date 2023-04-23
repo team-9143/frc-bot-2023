@@ -66,7 +66,7 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     m_autonomousCommand.cancel();
 
-    IntakeTilt.enable();
+    IntakeTilt.enableSteady();
   }
 
   @Override

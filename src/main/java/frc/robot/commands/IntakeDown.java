@@ -17,7 +17,7 @@ public class IntakeDown extends CommandBase {
   /** Reset controller. */
   @Override
   public void initialize() {
-    IntakeTilt.disable();
+    IntakeTilt.disableSteady();
     m_controller.reset();
     IntakeTilt.m_setpoint = IntakeConstants.kDownPos;
     IntakeTilt.setRunning(true);
@@ -30,7 +30,7 @@ public class IntakeDown extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-    IntakeTilt.disable();
+    IntakeTilt.disableSteady();
     IntakeTilt.setRunning(false);
   }
 

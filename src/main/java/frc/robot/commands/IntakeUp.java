@@ -35,7 +35,7 @@ public class IntakeUp extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-    IntakeTilt.enable();
+    IntakeTilt.enableSteady();
     IntakeTilt.setRunning(false);
   }
 

@@ -14,7 +14,7 @@ public class AimMid extends CommandBase {
 
   @Override
   public void initialize() {
-    IntakeTilt.disable();
+    IntakeTilt.disableSteady();
     IntakeTilt.m_setpoint = IntakeConstants.kMidPos;
     IntakeTilt.setRunning(true);
   }
@@ -32,7 +32,7 @@ public class AimMid extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-    IntakeTilt.disable();
+    IntakeTilt.disableSteady();
     IntakeTilt.setRunning(false);
   }
 

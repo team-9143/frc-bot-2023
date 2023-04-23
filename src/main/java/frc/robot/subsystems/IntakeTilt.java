@@ -36,7 +36,7 @@ public class IntakeTilt extends SubsystemBase {
   private static final RelativeEncoder r_encoder = r_motor.getEncoder();
 
   private IntakeTilt() {
-    // IMPORTANT: Ensure that motors have a consistent output
+    // IMPORTANT: Ensure that motors have an equivalent setpoint
     r_motor.follow(l_motor, true);
 
     l_encoder.setPositionConversionFactor(PhysConstants.kTiltGearbox);
@@ -86,13 +86,13 @@ public class IntakeTilt extends SubsystemBase {
   }
 
   /** Enables and resets steady intake PID. */
-  public static void enable() {
+  public static void enableSteady() {
     m_steadyEnabled = true;
     m_controller.reset();
   }
 
   /** Disables steady intake PID and stops motors. */
-  public static void disable() {
+  public static void disableSteady() {
     m_steadyEnabled = false;
     stop();
   }
