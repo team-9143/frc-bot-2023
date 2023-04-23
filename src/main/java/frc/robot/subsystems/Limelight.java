@@ -1,8 +1,9 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.OI;
 
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 
 /** Contains limelight targeting logic. */
@@ -19,15 +20,17 @@ public class Limelight extends SubsystemBase {
 
   private Limelight() {}
 
+  private final static NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
+
   // TODO: Change to type-specific entry or subscribers
   private static final NetworkTableEntry
-    tv = OI.limelight.getEntry("tv"),
-    tx = OI.limelight.getEntry("tx"),
-    ty = OI.limelight.getEntry("ty"),
-    ta = OI.limelight.getEntry("ta"),
+    tv = limelight.getEntry("tv"),
+    tx = limelight.getEntry("tx"),
+    ty = limelight.getEntry("ty"),
+    ta = limelight.getEntry("ta"),
 
     // Visual testing purposes
-    ledMode = OI.limelight.getEntry("ledMode");
+    ledMode = limelight.getEntry("ledMode");
 
   /** @return horizontal angle to target */
   public static double getTx() {return tx.getDouble(0);}

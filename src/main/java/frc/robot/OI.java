@@ -2,17 +2,12 @@ package frc.robot;
 
 import frc.robot.Constants.DeviceConstants;
 
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
-
 import edu.wpi.first.wpilibj.GenericHID;
 import com.ctre.phoenix.sensors.Pigeon2;
 
 public class OI {
   public final static Controller driver_cntlr = new Controller(DeviceConstants.kDriverCntlrPort);
   public final static Controller operator_cntlr = new Controller(DeviceConstants.kOperatorCntlrPort);
-
-  public final static NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
 
   // In proper orientation, Pigeon is flat and facing so that X-axis is forward
   /** Roll increases to the right, pitch to the front, and yaw counter-clockwise. */
