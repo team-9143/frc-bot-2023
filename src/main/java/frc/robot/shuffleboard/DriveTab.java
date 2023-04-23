@@ -18,7 +18,6 @@ import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 
 import frc.robot.OI;
-import frc.robot.Constants.IntakeConstants;
 
 /** Contains auton selector and data for driver and operator. */
 public class DriveTab implements ShuffleboardTabBase {
@@ -97,9 +96,9 @@ public class DriveTab implements ShuffleboardTabBase {
       .withSize(4, 5);
     layout_3.addBoolean("Inverted", IntakeWheels::isInverted)
       .withWidget(BuiltInWidgets.kBooleanBox);
-    layout_3.addBoolean("Intaking", () -> (sIntakeWheels.get() * IntakeConstants.kIntakeSpeed) > 0)
+    layout_3.addBoolean("Intaking", () -> (Math.signum(IntakeWheels.get()) == (IntakeWheels.isInverted() ? -1.0 : 1.0)))
       .withWidget(BuiltInWidgets.kBooleanBox);
-    layout_3.addBoolean("Shooting", () -> (sIntakeWheels.get() * IntakeConstants.kShootSpeed) > 0)
+    layout_3.addBoolean("Shooting", () -> (Math.signum(IntakeWheels.get()) == (IntakeWheels.isInverted() ? 1.0 : -1.0)))
       .withWidget(BuiltInWidgets.kBooleanBox);
   }
 }

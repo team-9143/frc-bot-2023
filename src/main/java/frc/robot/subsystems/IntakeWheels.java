@@ -4,13 +4,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.PhysConstants;
 import frc.robot.Constants.DeviceConstants;
-import frc.robot.Constants.IntakeConstants;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
-
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
 
 /** Controls intake wheels. */
 public class IntakeWheels extends SubsystemBase {
@@ -24,41 +21,45 @@ public class IntakeWheels extends SubsystemBase {
     return m_instance;
   }
 
+  // Wheel speeds
+  private static double
+    intakeSpeed = 0.3,
+    shootSpeed = -1,
+    spitSpeed = -0.5,
+    holdSpeed = 0.05;
+
   /** Used to apply tension if a game piece is being held in the intake. */
-  public static boolean m_holding;
+  private static boolean m_holding;
 
-  private static final CANSparkMax intake_motor = new CANSparkMax(DeviceConstants.kIntakeWheelsID, MotorType.kBrushless);
+  private static final CANSparkMax m_motor = new CANSparkMax(DeviceConstants.kIntakeWheelsID, MotorType.kBrushless);
 
-  private static final RelativeEncoder intake_encoder = intake_motor.getEncoder();
+  private static final RelativeEncoder m_encoder = m_motor.getEncoder();
 
   private IntakeWheels() {
-    intake_encoder.setPositionConversionFactor(PhysConstants.kTiltGearbox);
-    intake_encoder.setVelocityConversionFactor(PhysConstants.kTiltGearbox);
-    intake_encoder.setMeasurementPeriod(20);
-    intake_encoder.setPosition(0);
+    m_encoder.setPositionConversionFactor(PhysConstants.kTiltGearbox);
+    m_encoder.setVelocityConversionFactor(PhysConstants.kTiltGearbox);
+    m_encoder.setMeasurementPeriod(20);
+    m_encoder.setPosition(0);
 
     // If inverted and has a game piece, apply tension to hold in a cone
     setDefaultCommand(startEnd(
-      () -> {if (m_holding && isInverted()) {set(IntakeConstants.kHoldingSpeed);}},
+      () -> {if (m_holding && isInverted()) {m_motor.set(holdSpeed);}},
       IntakeWheels::stop
     ));
   }
 
-  public void set(double speed) {intake_motor.set(speed);}
-  public double get() {return intake_motor.get();}
-
-  public double getVelocity() {return intake_encoder.getVelocity();}
+  public static double get() {return m_motor.get();}
 
   /** Invert intake speeds for cones. */
   public static synchronized void invert() {
-    IntakeConstants.kIntakeSpeed *= -1;
-    IntakeConstants.kShootSpeed *= -1;
-    IntakeConstants.kSpitSpeed *= -1;
-    IntakeConstants.kHoldingSpeed *= -1;
+    intakeSpeed *= -1;
+    shootSpeed *= -1;
+    spitSpeed *= -1;
+    holdSpeed *= -1;
   }
 
   public static boolean isInverted() {
-    return IntakeConstants.kIntakeSpeed < 0;
+    return intakeSpeed < 0;
   }
 
   /** Invert to cubes. */
@@ -68,42 +69,39 @@ public class IntakeWheels extends SubsystemBase {
   public static void toCone() {if (!isInverted()) {invert();}}
 
   public static void stop() {
-    intake_motor.stopMotor();
+    m_motor.stopMotor();
   }
 
   /** @return a command to intake a game piece */
   public Command getIntakeCommand() {
-    return new StartEndCommand(
+    return startEnd(
       () -> {
-        set(IntakeConstants.kIntakeSpeed);
+        m_motor.set(intakeSpeed);
         m_holding = true;
       },
-      IntakeWheels::stop,
-      m_instance
+      IntakeWheels::stop
     );
   }
 
   /** @return a command to shoot a game piece at full speed */
   public Command getShootCommand() {
-    return new StartEndCommand(
+    return startEnd(
       () -> {
-        set(IntakeConstants.kShootSpeed);
+        m_motor.set(shootSpeed);
         m_holding = false;
       },
-      IntakeWheels::stop,
-      m_instance
+      IntakeWheels::stop
     );
   }
 
   /** @return a command to spit a game piece at partial speed */
   public Command getSpitCommand() {
-    return new StartEndCommand(
+    return startEnd(
       () -> {
-        set(IntakeConstants.kSpitSpeed);
+        m_motor.set(spitSpeed);
         m_holding = false;
       },
-      IntakeWheels::stop,
-      m_instance
+      IntakeWheels::stop
     );
   }
 }

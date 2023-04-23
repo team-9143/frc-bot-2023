@@ -67,14 +67,6 @@ public final class Constants {
   public static class IntakeConstants {
     public static final double kTiltMaxSpeed = 0.7; // TODO(low prio): Lower max tilt motor speed
 
-    // TODO: Move to IntakeWheels?
-    // Wheel speed
-    public static double
-      kIntakeSpeed = 0.3,
-      kShootSpeed = -1,
-      kSpitSpeed = -0.5,
-      kHoldingSpeed = 0.05;
-
     // Delay to shoot/spit a game piece
     public static final double kShootTimer = 0.5;
 

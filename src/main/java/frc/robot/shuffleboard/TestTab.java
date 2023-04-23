@@ -26,7 +26,6 @@ public class TestTab implements ShuffleboardTabBase {
   protected static final ShuffleboardTab test_tab = Shuffleboard.getTab("Test");
 
   private static final IntakeTilt sIntakeTilt = IntakeTilt.getInstance();
-  private static final IntakeWheels sIntakeWheels = IntakeWheels.getInstance();
 
   protected TestTab() {}
 
@@ -52,9 +51,9 @@ public class TestTab implements ShuffleboardTabBase {
     layout_2.addDouble("Tilt Speed", sIntakeTilt::get)
       .withWidget(BuiltInWidgets.kNumberBar)
       .withProperties(Map.of("min", -IntakeConstants.kTiltMaxSpeed, "max", IntakeConstants.kTiltMaxSpeed, "center", 0));
-    layout_2.addDouble("Intake Wheel RPM", sIntakeWheels::getVelocity)
+    layout_2.addDouble("Intake Wheel Speed", IntakeWheels::get)
       .withWidget(BuiltInWidgets.kNumberBar)
-      .withProperties(Map.of("min", -250, "max", 250, "center", 0));
+      .withProperties(Map.of("min", -1, "max", 1, "center", 0));
 
     test_tab.addDouble("TurnToAngle Error", TurnToAngle.m_controller::getPositionError)
       .withPosition(7, 0)

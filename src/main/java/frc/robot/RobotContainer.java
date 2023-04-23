@@ -10,13 +10,14 @@ import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
+// TODO: Fix any commands being called in multiple triggers
+// TODO: Create button method in controllers to create button triggers
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -41,17 +42,12 @@ public class RobotContainer {
 
   private final Balance cBalance = new Balance();
   private final TurnToAngle cTurnToAngle = new TurnToAngle(0);
-  private final IntakeDown cIntakeDown = new IntakeDown();
   private final IntakeUp cIntakeUp = new IntakeUp();
+  private final Command cIntakeDown = new IntakeDown().alongWith(sIntakeWheels.getIntakeCommand());
   private final Command cIntake = sIntakeWheels.getIntakeCommand();
   private final Command cShoot = sIntakeWheels.getShootCommand();
   private final Command cSpit = sIntakeWheels.getSpitCommand();
   private final Command cAimMid = new AimMid();
-  private final Command cManualHold = new StartEndCommand(
-    () -> sIntakeWheels.set(Constants.IntakeConstants.kHoldingSpeed),
-    IntakeWheels::stop,
-    sIntakeWheels
-  );
   private static final Command cStop = new RunCommand(() -> {
     Drivetrain.stop();
     IntakeWheels.stop();
@@ -162,7 +158,7 @@ public class RobotContainer {
     // Button 'Y' will toggle automatic intake control
     new JoystickButton(OI.operator_cntlr, OI.Controller.btn.Y.val)
       .onTrue(new InstantCommand(() -> {
-        if (IntakeTilt.isSteadyEnabled()) {IntakeTilt.disable();} else {IntakeTilt.enable();}
+        if (IntakeTilt.isSteadyEnabled()) {IntakeTilt.disableSteady();} else {IntakeTilt.enableSteady();}
       }));
 
     // Button 'LB' (hold) will shoot cubes
@@ -172,18 +168,17 @@ public class RobotContainer {
     // Button 'RB' (hold) will lower and activate intake, then raise on release
     new JoystickButton(OI.operator_cntlr, OI.Controller.btn.RB.val)
       .whileTrue(cIntakeDown)
-      .whileTrue(cIntake)
       .onFalse(cIntakeUp);
 
     // Triggers will disable intake and manually move up (LT) and down (RT)
     new Trigger(() -> Math.abs(OI.operator_cntlr.getTriggers()) > 0.05)
       .whileTrue(new FunctionalCommand(
-        IntakeTilt::disable,
+        IntakeTilt::disableSteady,
         () -> sIntakeTilt.set(
           Math.pow(OI.operator_cntlr.getTriggers(), 2) *
           ((OI.operator_cntlr.getTriggers() < 0) ? Constants.IntakeConstants.kUpSpeed : Constants.IntakeConstants.kDownSpeed)
         ),
-        interrupted -> IntakeTilt.disable(),
+        interrupted -> IntakeTilt.disableSteady(),
         () -> false,
         sIntakeTilt
       ));
@@ -206,9 +201,9 @@ public class RobotContainer {
     .debounce(0.5)
       .whileTrue(cSpit);
 
-    // D-pad left will hold pieces
+    // D-pad left will intake
     new Trigger(() -> OI.operator_cntlr.getPOV() == 270)
-      .whileTrue(cManualHold);
+      .whileTrue(cIntake);
   }
 
   /** Stops all motors and disables PID controllers. */
