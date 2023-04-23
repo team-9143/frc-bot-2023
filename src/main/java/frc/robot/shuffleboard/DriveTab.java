@@ -24,7 +24,6 @@ public class DriveTab implements ShuffleboardTabBase {
   protected static final ShuffleboardTab drive_tab = Shuffleboard.getTab("Drive");
 
   private static final IntakeTilt sIntakeTilt = IntakeTilt.getInstance();
-  private static final IntakeWheels sIntakeWheels = IntakeWheels.getInstance();
 
   protected DriveTab() {}
 
