@@ -30,7 +30,6 @@ public class DriveTab implements ShuffleboardTabBase {
   protected DriveTab() {}
 
   public void initialize() {
-    // TODO: Potentially move autons to grid
     ShuffleboardManager.cubeLoaded = drive_tab.add("Cube Preloaded", true)
       .withPosition(0, 5)
       .withSize(2, 1)

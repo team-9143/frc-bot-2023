@@ -108,7 +108,7 @@ public final class AutoSelector {
     Tertiary tertiary = m_tertiaryChooser.getSelected();
     Ending ending = m_endingChooser.getSelected();
 
-    // TODO: Move stop drivetrain run commands to classes
+    // TODO: Move stop drivetrain run commands to subclasses
     return new SequentialCommandGroup(
       Starters.getStarter(starter)
         .raceWith(new RunCommand(Drivetrain::stop, Drivetrain.getInstance())),

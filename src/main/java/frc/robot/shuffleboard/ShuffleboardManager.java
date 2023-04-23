@@ -9,7 +9,6 @@ import edu.wpi.first.networktables.GenericEntry;
 
 import frc.robot.autos.AutoSelector;
 
-// TODO: Map sendables to their subsystems
 /** Controls and initializes Shuffleboard tabs. */
 public class ShuffleboardManager {
   /** For testing while manipulating the robot's sensors. If used, {@link frc.robot.subsystems.IntakeTilt IntakeTilt}.getPosition(), {@link frc.robot.subsystems.Drivetrain Drivetrain}.getPosition() and resetEncoders(), and {@link frc.robot.OI OI.pigeon}.getYaw(), setYaw(), and getPitch() must be overriden with editable data through NetworkTables. */
