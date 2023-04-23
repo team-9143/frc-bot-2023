@@ -23,13 +23,14 @@ import frc.robot.Constants.IntakeConstants;
 
 /** Contains PID errors and speed of motors. */
 public class TestTab implements ShuffleboardTabBase {
-  protected static final ShuffleboardTab test_tab = Shuffleboard.getTab("Test");
-
-  private static final IntakeTilt sIntakeTilt = IntakeTilt.getInstance();
-
   protected TestTab() {}
 
   public void initialize() {
+    final ShuffleboardTab test_tab = Shuffleboard.getTab("Test");
+
+    final Drivetrain sDrivetrain = Drivetrain.getInstance();
+    final IntakeTilt sIntakeTilt = IntakeTilt.getInstance();
+
     ShuffleboardLayout layout_1 = test_tab.getLayout("Intake Angle", BuiltInLayouts.kList)
       .withPosition(0, 0)
       .withSize(4, 8);
@@ -73,8 +74,8 @@ public class TestTab implements ShuffleboardTabBase {
         builder.setSmartDashboardType("DifferentialDrive");
         builder.setActuator(true);
         builder.setSafeState(Drivetrain::stop);
-        builder.addDoubleProperty("Left Motor Speed", Drivetrain.getInstance()::getLeft, null);
-        builder.addDoubleProperty("Right Motor Speed", () -> -Drivetrain.getInstance().getRight(), null);
+        builder.addDoubleProperty("Left Motor Speed", sDrivetrain::getLeft, null);
+        builder.addDoubleProperty("Right Motor Speed", () -> -sDrivetrain.getRight(), null);
       }
     }).withPosition(11, 0)
       .withSize(5, 4)

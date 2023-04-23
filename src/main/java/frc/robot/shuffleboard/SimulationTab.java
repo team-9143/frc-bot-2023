@@ -25,11 +25,6 @@ import frc.robot.Constants.IntakeConstants;
 // TODO: Copy data over to test tab, reduce height
 /** Contains auton selector and data for driver and operator. */
 public class SimulationTab implements ShuffleboardTabBase {
-  protected static final ShuffleboardTab sim_tab = Shuffleboard.getTab("Simulation");
-
-  private static final Drivetrain sDrivetrain = Drivetrain.getInstance();
-  private static final IntakeTilt sIntakeTilt = IntakeTilt.getInstance();
-
   public static GenericEntry yaw_sim;
   public static GenericEntry drivetrainPos_sim;
   public static GenericEntry intakeAngle_sim;
@@ -38,6 +33,11 @@ public class SimulationTab implements ShuffleboardTabBase {
   protected SimulationTab() {}
 
   public void initialize() {
+    final ShuffleboardTab sim_tab = Shuffleboard.getTab("Simulation");
+
+    final Drivetrain sDrivetrain = Drivetrain.getInstance();
+    final IntakeTilt sIntakeTilt = IntakeTilt.getInstance();
+
     sim_tab.add("Auton Starter", AutoSelector.m_starterChooser)
       .withPosition(0, 0)
       .withSize(3, 2)
@@ -127,7 +127,7 @@ public class SimulationTab implements ShuffleboardTabBase {
         builder.setSmartDashboardType("Motor Controller");
         builder.setActuator(true);
         builder.setSafeState(IntakeTilt::stop);
-        builder.addDoubleProperty("Value", sIntakeTilt::get, sIntakeTilt::set);
+        builder.addDoubleProperty("Value", sIntakeTilt::get, null);
       }
     }).withWidget(BuiltInWidgets.kMotorController)
       .withProperties(Map.of("orientation", "HORIZONTAL"));

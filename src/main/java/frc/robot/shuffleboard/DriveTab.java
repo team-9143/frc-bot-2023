@@ -21,13 +21,13 @@ import frc.robot.OI;
 
 /** Contains auton selector and data for driver and operator. */
 public class DriveTab implements ShuffleboardTabBase {
-  protected static final ShuffleboardTab drive_tab = Shuffleboard.getTab("Drive");
-
-  private static final IntakeTilt sIntakeTilt = IntakeTilt.getInstance();
-
   protected DriveTab() {}
 
   public void initialize() {
+    final ShuffleboardTab drive_tab = Shuffleboard.getTab("Drive");
+
+    final IntakeTilt sIntakeTilt = IntakeTilt.getInstance();
+
     ShuffleboardManager.cubeLoaded = drive_tab.add("Cube Preloaded", true)
       .withPosition(0, 5)
       .withSize(2, 1)
