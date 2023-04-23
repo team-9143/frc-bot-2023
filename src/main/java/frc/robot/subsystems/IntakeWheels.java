@@ -52,6 +52,12 @@ public class IntakeWheels extends SubsystemBase {
 
   /** Invert intake speeds for cones. */
   public static synchronized void invert() {
+    getInstance().getDefaultCommand().cancel();
+    if (m_motor.get() * intakeSpeed > 0) {
+      // If intaking, invert the speed of the wheels.
+      m_motor.set(-m_motor.get());
+    }
+
     intakeSpeed *= -1;
     shootSpeed *= -1;
     spitSpeed *= -1;

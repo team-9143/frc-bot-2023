@@ -138,15 +138,7 @@ public class RobotContainer {
   private void configureOperator() {
     // Button 'A' will swap intake and outtake (for cones)
     new JoystickButton(OI.operator_cntlr, OI.Controller.btn.A.val)
-      .onTrue(new InstantCommand(() -> {
-        IntakeWheels.invert();
-
-        if (cIntake.isScheduled() || cManualHold.isScheduled()) {
-          sIntakeWheels.set(-sIntakeWheels.get());
-        } else if (!(cShoot.isScheduled() || cSpit.isScheduled())) {
-          IntakeWheels.stop();
-        }
-      }));
+      .onTrue(new InstantCommand(IntakeWheels::invert));
 
     // Button 'X' (debounced 1s) will reset tilt encoder
     new JoystickButton(OI.operator_cntlr, OI.Controller.btn.X.val)
