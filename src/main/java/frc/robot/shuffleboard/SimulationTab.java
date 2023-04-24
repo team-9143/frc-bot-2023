@@ -114,10 +114,10 @@ public class SimulationTab implements ShuffleboardTabBase {
     ShuffleboardLayout layout_3 = sim_tab.getLayout("Intake Angle", BuiltInLayouts.kList)
       .withPosition(6, 2)
       .withSize(3, 8);
-    layout_3.addDouble("Setpoint", () -> IntakeTilt.m_setpoint * 360)
+    layout_3.addDouble("Setpoint", IntakeTilt::getSetpoint)
       .withWidget(BuiltInWidgets.kNumberBar)
       .withProperties(Map.of("min", -110, "max", 110, "center", 0));
-    intakeAngle_sim = layout_3.add("Angle", IntakeConstants.kUpPos * 360)
+    intakeAngle_sim = layout_3.add("Angle", IntakeConstants.kUpPos)
       .withWidget(BuiltInWidgets.kNumberSlider)
       .withProperties(Map.of("min", -110, "max", 110, "block increment", 1))
       .getEntry();

@@ -15,7 +15,7 @@ public class AimMid extends CommandBase {
   @Override
   public void initialize() {
     IntakeTilt.disableSteady();
-    IntakeTilt.m_setpoint = IntakeConstants.kMidPos;
+    IntakeTilt.setSetpoint(IntakeConstants.kMidPos);
     IntakeTilt.setRunning(true);
   }
 

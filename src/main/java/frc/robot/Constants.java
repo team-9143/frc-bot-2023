@@ -77,32 +77,31 @@ public final class Constants {
       kSteadySpeed = PhysConstants.kTiltGearbox * -0.35;
 
     public static final double kAutoAlignSpeed = PhysConstants.kTiltGearbox * -2.5;
-    // TODO(autoAlign): Test and tune maximum current against NEO specs
+    // TODO(auto align): Test and tune maximum current against NEO specs
     public static final double kMaxCurrent = 80; // For autoAlign
 
-    // TODO: Change all the following into degrees
-    // Preset positions and tolerances (UNIT: rotations)
+    // Preset positions and tolerances (UNIT: degrees)
     public static final double
-      kUpPos = 0.003,
-      kMidPos = 0.1,
-      kDownPos = 0.29;
+      kUpPos = 1.08,
+      kMidPos = 36,
+      kDownPos = 104.4;
     public static final double
-      kUpPosTolerance = -0.025, // Should only be checked one way
-      kMidPosTolerance = 0.004,
-      kDownPosTolerance = 0.0012; // Should only be checked one way
+      kUpPosTolerance = -9, // Check as error > tolerance
+      kMidPosTolerance = 1.5, // Check as abs(error) > tolerance
+      kDownPosTolerance = 2; // Check as error < tolerance
 
     // Intake tilt PID gains
     public static final double
-      kDownP = PhysConstants.kTiltGearbox * 29,
-      kDownI = PhysConstants.kTiltGearbox * 22,
-      kDownD = PhysConstants.kTiltGearbox * 11;
+      kDownP = PhysConstants.kTiltGearbox * 0.0806,
+      kDownI = PhysConstants.kTiltGearbox * 0.0612,
+      kDownD = PhysConstants.kTiltGearbox * 0.0305;
     public static final double
-      kUpP = PhysConstants.kTiltGearbox * 31,
-      kUpI = PhysConstants.kTiltGearbox * 21,
-      kUpD = PhysConstants.kTiltGearbox * 10;
+      kUpP = PhysConstants.kTiltGearbox * 0.0862,
+      kUpI = PhysConstants.kTiltGearbox * 0.0584,
+      kUpD = PhysConstants.kTiltGearbox * 0.0277;
     public static final double
-      kSteadyP = PhysConstants.kTiltGearbox * 33,
-      kSteadyI = PhysConstants.kTiltGearbox * 23,
-      kSteadyD = PhysConstants.kTiltGearbox * 7;
+      kSteadyP = PhysConstants.kTiltGearbox * 0.0917,
+      kSteadyI = PhysConstants.kTiltGearbox * 0.0639,
+      kSteadyD = PhysConstants.kTiltGearbox * 0.0194;
   }
 }

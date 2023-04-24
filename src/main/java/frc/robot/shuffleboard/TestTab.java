@@ -34,13 +34,13 @@ public class TestTab implements ShuffleboardTabBase {
     ShuffleboardLayout layout_1 = test_tab.getLayout("Intake Angle", BuiltInLayouts.kList)
       .withPosition(0, 0)
       .withSize(4, 8);
-    layout_1.addDouble("Intake Angle", () -> sIntakeTilt.getPosition() * 360)
+    layout_1.addDouble("Intake Angle", sIntakeTilt::getPosition)
       .withWidget(BuiltInWidgets.kDial)
       .withProperties(Map.of("min", -110, "max", 110, "show value", true));
-    layout_1.addDouble("Intake Setpoint", () -> IntakeTilt.m_setpoint * 360)
+    layout_1.addDouble("Intake Setpoint", IntakeTilt::getSetpoint)
         .withWidget(BuiltInWidgets.kDial)
         .withProperties(Map.of("min", -110, "max", 110, "show value", true));
-    layout_1.addDouble("Intake Error", () -> (IntakeTilt.m_setpoint - sIntakeTilt.getPosition()) * 360)
+    layout_1.addDouble("Intake Error", () -> IntakeTilt.getSetpoint() - sIntakeTilt.getPosition())
         .withWidget(BuiltInWidgets.kNumberBar)
         .withProperties(Map.of("min", -110, "max", 110, "center", 0));
 

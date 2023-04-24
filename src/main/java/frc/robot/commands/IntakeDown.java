@@ -19,7 +19,7 @@ public class IntakeDown extends CommandBase {
   public void initialize() {
     IntakeTilt.disableSteady();
     m_controller.reset();
-    IntakeTilt.m_setpoint = IntakeConstants.kDownPos;
+    IntakeTilt.setSetpoint(IntakeConstants.kDownPos);
     IntakeTilt.setRunning(true);
   }
 

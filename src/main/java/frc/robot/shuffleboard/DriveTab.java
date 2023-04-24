@@ -83,10 +83,10 @@ public class DriveTab implements ShuffleboardTabBase {
       .withPosition(7, 0)
       .withSize(6, 3)
       .withProperties(Map.of("number of columns", 2, "number of rows", 1));
-    layout_2.addDouble("Intake Angle", () -> sIntakeTilt.getPosition() * 360)
+    layout_2.addDouble("Intake Angle", sIntakeTilt::getPosition)
       .withWidget(BuiltInWidgets.kDial)
       .withProperties(Map.of("min", -110, "max", 110, "show value", true));
-    layout_2.addDouble("Intake Setpoint", () -> IntakeTilt.m_setpoint * 360)
+    layout_2.addDouble("Intake Setpoint", IntakeTilt::getSetpoint)
       .withWidget(BuiltInWidgets.kDial)
       .withProperties(Map.of("min", -110, "max", 110, "show value", true));
 

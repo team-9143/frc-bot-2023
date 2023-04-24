@@ -25,9 +25,9 @@ public class IntakeTilt extends SubsystemBase {
   }
 
   public static final PIDController m_controller = new PIDController(IntakeConstants.kSteadyP, IntakeConstants.kSteadyI, IntakeConstants.kSteadyD);
+  private static double m_setpoint = IntakeConstants.kUpPos;
   private static boolean m_steadyEnabled = false;
-  public static double m_setpoint = IntakeConstants.kUpPos;
-  private static boolean isRunning = false;
+  private static boolean m_running = false;
 
   private static final CANSparkMax l_motor = new CANSparkMax(DeviceConstants.kIntakeTiltLeftID, MotorType.kBrushless);
   private static final CANSparkMax r_motor = new CANSparkMax(DeviceConstants.kIntakeTiltRightID, MotorType.kBrushless);
@@ -39,13 +39,13 @@ public class IntakeTilt extends SubsystemBase {
     // IMPORTANT: Ensure that motors have an equivalent setpoint
     r_motor.follow(l_motor, true);
 
-    l_encoder.setPositionConversionFactor(PhysConstants.kTiltGearbox);
-    l_encoder.setVelocityConversionFactor(PhysConstants.kTiltGearbox);
+    l_encoder.setPositionConversionFactor(PhysConstants.kTiltGearbox * 360); // UNIT: degrees
+    l_encoder.setVelocityConversionFactor(PhysConstants.kTiltGearbox * (360 / 60)); // UNIT: degrees/s
     l_encoder.setMeasurementPeriod(20);
     l_encoder.setPosition(0);
 
-    r_encoder.setPositionConversionFactor(PhysConstants.kTiltGearbox);
-    r_encoder.setVelocityConversionFactor(PhysConstants.kTiltGearbox);
+    r_encoder.setPositionConversionFactor(PhysConstants.kTiltGearbox * 360); // UNIT: degrees
+    r_encoder.setVelocityConversionFactor(PhysConstants.kTiltGearbox * (360 / 60)); // UNIT: degrees/s
     r_encoder.setMeasurementPeriod(20);
     r_encoder.setPosition(0);
 
@@ -97,10 +97,21 @@ public class IntakeTilt extends SubsystemBase {
     stop();
   }
 
+  /** @return {@code true} if currently trying to stay upright */
   public static boolean isSteadyEnabled() {return m_steadyEnabled;}
 
-  public static void setRunning(boolean b) {isRunning = b;}
-  public static boolean isRunning() {return isRunning;}
+  /** @param b {@code true} if tilt motor is being moved by a command */
+  public static void setRunning(boolean b) {m_running = b;}
+  /** @return {@code true} if tilt motor is being moved by a command */
+  public static boolean isRunning() {return m_running;}
+
+  /**
+   * Sets the setpoint of the intake for the dashboard.
+   * 
+   * @param setpoint new setpoint (UNIT: degrees)
+   */
+  public static void setSetpoint(double setpoint) {m_setpoint = setpoint;}
+  public static double getSetpoint() {return m_setpoint;}
 
   public static void stop() {
     l_motor.stopMotor();
