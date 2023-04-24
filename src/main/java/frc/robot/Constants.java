@@ -72,10 +72,11 @@ public final class Constants {
 
     // Non-PID intake movement
     public static final double
-      kUpSpeed = -0.1,
-      kDownSpeed = 0.08,
-      kSteadySpeed = -0.01;
-    public static final double kAutoAlignSpeed = -0.15;
+      kUpSpeed = PhysConstants.kTiltGearbox * -3.5,
+      kDownSpeed = PhysConstants.kTiltGearbox * 2.8,
+      kSteadySpeed = PhysConstants.kTiltGearbox * -0.35;
+
+    public static final double kAutoAlignSpeed = PhysConstants.kTiltGearbox * -2.5;
     // TODO(autoAlign): Test and tune maximum current against NEO specs
     public static final double kMaxCurrent = 80; // For autoAlign
 
