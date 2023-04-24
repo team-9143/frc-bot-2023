@@ -36,8 +36,8 @@ public class IntakeWheels extends SubsystemBase {
   private static final RelativeEncoder m_encoder = m_motor.getEncoder();
 
   private IntakeWheels() {
-    m_encoder.setPositionConversionFactor(PhysConstants.kTiltGearbox);
-    m_encoder.setVelocityConversionFactor(PhysConstants.kTiltGearbox);
+    m_encoder.setPositionConversionFactor(PhysConstants.kTiltGearbox); // UNIT: rotations
+    m_encoder.setVelocityConversionFactor(PhysConstants.kTiltGearbox); // UNIT: rpm
     m_encoder.setMeasurementPeriod(20);
     m_encoder.setPosition(0);
 
