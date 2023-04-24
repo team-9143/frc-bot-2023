@@ -117,13 +117,13 @@ public class IntakeTilt extends SubsystemBase {
     l_motor.stopMotor();
   }
 
-  // TODO(low prio): Test and implement autoAlign
+  // TODO(auto align): Test and implement autoAlign
   public void getAutoAlignCommand() {
     new FunctionalCommand(
       () -> set(IntakeConstants.kAutoAlignSpeed),
       () -> {},
       interrupted -> {
-        // TODO(autoAlign): Test and tune up position offset (currently 9 degrees back)
+        // TODO(auto align): Test and tune up position offset (currently 9 degrees back)
         l_encoder.setPosition(IntakeConstants.kUpPos - 0.025);
         r_encoder.setPosition(IntakeConstants.kUpPos - 0.025);
       },

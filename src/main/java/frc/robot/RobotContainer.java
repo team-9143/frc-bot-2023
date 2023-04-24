@@ -53,7 +53,7 @@ public class RobotContainer {
   }, sDrivetrain, sIntakeWheels, sIntakeTilt)
     .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
 
-  /** The container for the robot. Intializes subsystems, teleop commands, and OI devices. */
+  /** The container for the robot. Intializes subsystems, teleop command bindings, and OI devices. */
   private RobotContainer() {
     // Configure Pigeon - make sure to update pitch and roll offsets
     OI.pigeon.configMountPose(0, -0.24665457, -179.574783);
@@ -97,7 +97,7 @@ public class RobotContainer {
   }
 
   private void configureDriver() {
-    // TOOD: Remove right stick TurnToAngle
+    // TODO: Remove right stick TurnToAngle
     // D-pad and right stick will turn to the specified angle
     new Trigger(() -> TurnToAngle.m_enabled && OI.driver_cntlr.getPOV() != -1)
       .whileTrue(new RunCommand(() -> {
