@@ -49,7 +49,7 @@ public class RobotContainer {
   private static final Command cStop = new RunCommand(() -> {
     Drivetrain.stop();
     IntakeWheels.stop();
-    IntakeTilt.stop();
+    IntakeTilt.disableSteady();
   }, sDrivetrain, sIntakeWheels, sIntakeTilt)
     .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
 
