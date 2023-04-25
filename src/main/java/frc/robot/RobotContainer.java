@@ -33,24 +33,20 @@ public class RobotContainer {
     return m_instance;
   }
 
-  // Initialize subsystems and commands
-  private static final Drivetrain sDrivetrain = Drivetrain.getInstance();
-  private static final IntakeWheels sIntakeWheels = IntakeWheels.getInstance();
-  private static final IntakeTilt sIntakeTilt = IntakeTilt.getInstance();
-
+  // Initialize commands
   private final Balance cBalance = new Balance();
   private final TurnToAngle cTurnToAngle = new TurnToAngle(0);
   private final IntakeUp cIntakeUp = new IntakeUp();
-  private final Command cIntakeDown = new IntakeDown().alongWith(sIntakeWheels.getIntakeCommand());
-  private final Command cIntake = sIntakeWheels.getIntakeCommand();
-  private final Command cShoot = sIntakeWheels.getShootCommand();
-  private final Command cSpit = sIntakeWheels.getSpitCommand();
-  private final Command cAimMid = new AimMid();
+  private final Command cIntakeDown = new IntakeDown().alongWith(IntakeWheels.getInstance().getIntakeCommand());
+  private final Command cIntake = IntakeWheels.getInstance().getIntakeCommand();
+  private final Command cShoot = IntakeWheels.getInstance().getShootCommand();
+  private final Command cSpit = IntakeWheels.getInstance().getSpitCommand();
+  private final AimMid cAimMid = new AimMid();
   private static final Command cStop = new RunCommand(() -> {
     Drivetrain.stop();
     IntakeWheels.stop();
     IntakeTilt.disableSteady();
-  }, sDrivetrain, sIntakeWheels, sIntakeTilt)
+  }, Drivetrain.getInstance(), IntakeWheels.getInstance(), IntakeTilt.getInstance())
     .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
 
   /** The container for the robot. Intializes subsystems, teleop command bindings, and OI devices. */
@@ -144,7 +140,7 @@ public class RobotContainer {
     new Trigger(() -> OI.operator_cntlr.getRawButton(OI.Controller.btn.X.val))
     .debounce(1)
       .onTrue(new InstantCommand(
-        sIntakeTilt::resetEncoders
+        IntakeTilt.getInstance()::resetEncoders
       ));
 
     // Button 'Y' will toggle automatic intake control
@@ -166,13 +162,13 @@ public class RobotContainer {
     new Trigger(() -> Math.abs(OI.operator_cntlr.getTriggers()) > 0.05)
       .whileTrue(new FunctionalCommand(
         IntakeTilt::disableSteady,
-        () -> sIntakeTilt.set(
+        () -> IntakeTilt.getInstance().set(
           Math.pow(OI.operator_cntlr.getTriggers(), 2) *
           ((OI.operator_cntlr.getTriggers() < 0) ? Constants.IntakeConstants.kUpSpeed : Constants.IntakeConstants.kDownSpeed)
         ),
         interrupted -> IntakeTilt.disableSteady(),
         () -> false,
-        sIntakeTilt
+        IntakeTilt.getInstance()
       ));
 
     // D-pad up will angle down, then shoot
