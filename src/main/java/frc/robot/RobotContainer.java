@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
-// TODO: Fix any commands being called in multiple triggers
+// TODO: Combine triggers so that commands cannot be independently scheduled from different triggers
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -34,14 +34,6 @@ public class RobotContainer {
   }
 
   // Initialize commands
-  private final Balance cBalance = new Balance();
-  private final TurnToAngle cTurnToAngle = new TurnToAngle(0);
-  private final IntakeUp cIntakeUp = new IntakeUp();
-  private final Command cIntakeDown = new IntakeDown().alongWith(IntakeWheels.getInstance().getIntakeCommand());
-  private final Command cIntake = IntakeWheels.getInstance().getIntakeCommand();
-  private final Command cShoot = IntakeWheels.getInstance().getShootCommand();
-  private final Command cSpit = IntakeWheels.getInstance().getSpitCommand();
-  private final AimMid cAimMid = new AimMid();
   private static final Command cStop = new RunCommand(() -> {
     Drivetrain.stop();
     IntakeWheels.stop();
@@ -93,6 +85,8 @@ public class RobotContainer {
   }
 
   private void configureDriver() {
+    final TurnToAngle cTurnToAngle = new TurnToAngle(0);
+
     // D-pad will turn to the specified angle
     new Trigger(() -> TurnToAngle.m_enabled && OI.driver_cntlr.getPOV() != -1)
       .whileTrue(new RunCommand(() -> {
@@ -102,7 +96,7 @@ public class RobotContainer {
 
     // Button 'A' (hold) will auto-balance
     new Trigger(() -> OI.driver_cntlr.getRawButton(OI.Controller.btn.A.val))
-      .whileTrue(cBalance);
+      .whileTrue(new Balance());
 
     // Button 'X' (debounced 1s) will reset gyro
     new Trigger(() -> OI.driver_cntlr.getRawButton(OI.Controller.btn.X.val))
@@ -120,6 +114,8 @@ public class RobotContainer {
   }
 
   private void configureOperator() {
+    final IntakeUp cIntakeUp = new IntakeUp();
+
     // Button 'A' will invert intake wheels (for cones)
     new Trigger(() -> OI.operator_cntlr.getRawButton(OI.Controller.btn.A.val))
       .onTrue(new InstantCommand(
@@ -141,11 +137,11 @@ public class RobotContainer {
 
     // Button 'LB' (hold) will shoot cubes
     new Trigger(() -> OI.operator_cntlr.getRawButton(OI.Controller.btn.LB.val))
-      .whileTrue(cShoot);
+      .whileTrue(IntakeWheels.getInstance().getShootCommand());
 
     // Button 'RB' (hold) will lower and activate intake, then raise on release
     new Trigger(() -> OI.operator_cntlr.getRawButton(OI.Controller.btn.RB.val))
-      .whileTrue(cIntakeDown)
+      .whileTrue(new IntakeDown().alongWith(IntakeWheels.getInstance().getIntakeCommand()))
       .onFalse(cIntakeUp);
 
     // Triggers will disable intake and manually move up (LT) and down (RT)
@@ -163,25 +159,25 @@ public class RobotContainer {
 
     // D-pad up will angle down, then shoot
     new Trigger(() -> OI.operator_cntlr.getPOV() == 0)
-      .whileTrue(cAimMid)
+      .whileTrue(new AimMid())
       .onFalse(cIntakeUp)
     .debounce(0.5)
-      .whileTrue(cShoot);
+      .whileTrue(IntakeWheels.getInstance().getShootCommand());
 
     // D-pad right will spit
     new Trigger(() -> OI.operator_cntlr.getPOV() == 90)
-      .whileTrue(cSpit);
+      .whileTrue(IntakeWheels.getInstance().getSpitCommand());
 
     // D-pad down will angle down, then spit
     new Trigger(() -> OI.operator_cntlr.getPOV() == 180)
-      .whileTrue(cAimMid)
+      .whileTrue(new AimMid())
       .onFalse(cIntakeUp)
     .debounce(0.5)
-      .whileTrue(cSpit);
+      .whileTrue(IntakeWheels.getInstance().getSpitCommand());
 
     // D-pad left will intake
     new Trigger(() -> OI.operator_cntlr.getPOV() == 270)
-      .whileTrue(cIntake);
+      .whileTrue(IntakeWheels.getInstance().getIntakeCommand());
   }
 
   /** Stops all motors and disables PID controllers. */
