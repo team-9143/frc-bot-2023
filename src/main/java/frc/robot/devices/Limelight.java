@@ -18,6 +18,7 @@ public class Limelight {
     tx_sub = limelight.getDoubleTopic("tx").subscribe(0),
     ty_sub = limelight.getDoubleTopic("ty").subscribe(0),
     ta_sub = limelight.getDoubleTopic("ta").subscribe(0),
+    tid_sub = limelight.getDoubleTopic("tid").subscribe(0),
     pipeline_sub = limelight.getDoubleTopic("getpipe").subscribe(0);
 
   private static final IntegerPublisher
@@ -32,6 +33,8 @@ public class Limelight {
   public static double getArea() {return ta_sub.getAsDouble();}
   /** @return {@code true} if a valid target exists */
   public static boolean getValid() {return (tv_sub.getAsDouble() == 1) ? true : false;}
+  /** @return ID of the targeted AprilTag */
+  public static int getTid() {return (int) tid_sub.getAsDouble();}
 
   /** @return active pipeline index [0..9] */
   public static int getPipeline() {return (int) pipeline_sub.getAsDouble();}
