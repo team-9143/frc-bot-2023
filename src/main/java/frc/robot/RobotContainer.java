@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.devices.CustomController.btn;
 
 // TODO: Combine triggers so that commands cannot be independently scheduled from different triggers
 /**
@@ -77,7 +78,7 @@ public class RobotContainer {
   private void configureBindings() {
     // Universal:
     // Button 'B' (hold) will continuously stop all movement
-    new Trigger(() -> OI.driver_cntlr.getRawButton(OI.Controller.btn.B.val) || OI.operator_cntlr.getRawButton(OI.Controller.btn.B.val))
+    new Trigger(() -> OI.driver_cntlr.getRawButton(btn.B.val) || OI.operator_cntlr.getRawButton(btn.B.val))
       .whileTrue(cStop);
 
     configureDriver();
@@ -95,18 +96,18 @@ public class RobotContainer {
       }));
 
     // Button 'A' (hold) will auto-balance
-    new Trigger(() -> OI.driver_cntlr.getRawButton(OI.Controller.btn.A.val))
+    new Trigger(() -> OI.driver_cntlr.getRawButton(btn.A.val))
       .whileTrue(new Balance());
 
     // Button 'X' (debounced 1s) will reset gyro
-    new Trigger(() -> OI.driver_cntlr.getRawButton(OI.Controller.btn.X.val))
+    new Trigger(() -> OI.driver_cntlr.getRawButton(btn.X.val))
     .debounce(1)
       .onTrue(new InstantCommand(() ->
         OI.pigeon.setYaw(0)
       ));
 
     // Button 'Y' will toggle TurnToAngle
-    new Trigger(() -> OI.driver_cntlr.getRawButton(OI.Controller.btn.Y.val))
+    new Trigger(() -> OI.driver_cntlr.getRawButton(btn.Y.val))
       .onTrue(new InstantCommand(() -> {
         cTurnToAngle.cancel();
         TurnToAngle.m_enabled ^= true;
@@ -117,30 +118,30 @@ public class RobotContainer {
     final IntakeUp cIntakeUp = new IntakeUp();
 
     // Button 'A' will invert intake wheels (for cones)
-    new Trigger(() -> OI.operator_cntlr.getRawButton(OI.Controller.btn.A.val))
+    new Trigger(() -> OI.operator_cntlr.getRawButton(btn.A.val))
       .onTrue(new InstantCommand(
         IntakeWheels::invert
       ));
 
     // Button 'X' (debounced 1s) will reset intake tilt encoders
-    new Trigger(() -> OI.operator_cntlr.getRawButton(OI.Controller.btn.X.val))
+    new Trigger(() -> OI.operator_cntlr.getRawButton(btn.X.val))
     .debounce(1)
       .onTrue(new InstantCommand(
         IntakeTilt.getInstance()::resetEncoders
       ));
 
     // Button 'Y' will toggle automatic intake control
-    new Trigger(() -> OI.operator_cntlr.getRawButton(OI.Controller.btn.Y.val))
+    new Trigger(() -> OI.operator_cntlr.getRawButton(btn.Y.val))
       .onTrue(new InstantCommand(() -> {
         if (IntakeTilt.isSteadyEnabled()) {IntakeTilt.disableSteady();} else {IntakeTilt.enableSteady();}
       }));
 
     // Button 'LB' (hold) will shoot cubes
-    new Trigger(() -> OI.operator_cntlr.getRawButton(OI.Controller.btn.LB.val))
+    new Trigger(() -> OI.operator_cntlr.getRawButton(btn.LB.val))
       .whileTrue(IntakeWheels.getInstance().getShootCommand());
 
     // Button 'RB' (hold) will lower and activate intake, then raise on release
-    new Trigger(() -> OI.operator_cntlr.getRawButton(OI.Controller.btn.RB.val))
+    new Trigger(() -> OI.operator_cntlr.getRawButton(btn.RB.val))
       .whileTrue(new IntakeDown().alongWith(IntakeWheels.getInstance().getIntakeCommand()))
       .onFalse(cIntakeUp);
 
