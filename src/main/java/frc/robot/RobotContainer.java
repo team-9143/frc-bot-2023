@@ -93,20 +93,10 @@ public class RobotContainer {
   }
 
   private void configureDriver() {
-    // TODO: Remove right stick TurnToAngle
-    // D-pad and right stick will turn to the specified angle
+    // D-pad will turn to the specified angle
     new Trigger(() -> TurnToAngle.m_enabled && OI.driver_cntlr.getPOV() != -1)
       .whileTrue(new RunCommand(() -> {
         cTurnToAngle.setHeading(OI.driver_cntlr.getPOV());
-        cTurnToAngle.schedule();
-      }));
-
-    new Trigger(() ->
-      TurnToAngle.m_enabled && OI.driver_cntlr.getPOV() == -1 &&
-      (Math.abs(OI.driver_cntlr.getRightX()) > 0.2 || Math.abs(OI.driver_cntlr.getRightY()) > 0.2)
-    )
-      .whileTrue(new RunCommand(() -> {
-        cTurnToAngle.setHeading(Math.toDegrees(Math.atan2(OI.driver_cntlr.getRightY(), OI.driver_cntlr.getRightX())) + 90);
         cTurnToAngle.schedule();
       }));
 

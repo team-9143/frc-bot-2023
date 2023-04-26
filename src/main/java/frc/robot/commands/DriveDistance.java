@@ -15,7 +15,7 @@ public class DriveDistance extends CommandBase {
   private static boolean isRunning = false;
   public static final PIDController m_controller = new PIDController(DrivetrainConstants.kDistP, DrivetrainConstants.kDistI, DrivetrainConstants.kDistD);
 
-  private double distance; // UNIT: inches
+  private final double distance; // UNIT: inches
 
   public DriveDistance(double distance) {
     this.distance = distance;
