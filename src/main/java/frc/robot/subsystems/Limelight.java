@@ -4,7 +4,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
+
+import edu.wpi.first.networktables.DoubleSubscriber;
+import edu.wpi.first.networktables.IntegerSubscriber;
+import edu.wpi.first.networktables.IntegerPublisher;
 
 /** Contains limelight targeting logic. */
 public class Limelight extends SubsystemBase {
@@ -18,30 +21,28 @@ public class Limelight extends SubsystemBase {
     return m_instance;
   }
 
-  private Limelight() {}
-
   private final static NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
 
-  // TODO: Change to type-specific entry or subscribers
-  private static final NetworkTableEntry
-    tv = limelight.getEntry("tv"),
-    tx = limelight.getEntry("tx"),
-    ty = limelight.getEntry("ty"),
-    ta = limelight.getEntry("ta"),
+  private static final DoubleSubscriber
+    tv_sub = limelight.getDoubleTopic("tv").subscribe(0),
+    tx_sub = limelight.getDoubleTopic("tx").subscribe(0),
+    ty_sub = limelight.getDoubleTopic("ty").subscribe(0),
+    ta_sub = limelight.getDoubleTopic("ta").subscribe(0);
+  private static final IntegerSubscriber led_sub = limelight.getIntegerTopic("ledMode").subscribe(0);
+  private static final IntegerPublisher led_pub = limelight.getIntegerTopic("ledMod").publish();
 
-    // Visual testing purposes
-    ledMode = limelight.getEntry("ledMode");
+  private Limelight() {}
 
   /** @return horizontal angle to target */
-  public static double getTx() {return tx.getDouble(0);}
+  public static double getTx() {return tx_sub.get();}
   /** @return vertical angle to target */
-  public static double getTy() {return ty.getDouble(0);}
+  public static double getTy() {return ty_sub.get();}
 
   /** @return percent area of target relative to camera */
-  public static double getArea() {return ta.getDouble(0);}
+  public static double getArea() {return ta_sub.get();}
 
   /** @return if a target is found */
-  public static boolean getValid() {return (tv.getInteger(0) == 1) ? true : false;}
+  public static boolean getValid() {return (tv_sub.get() == 1) ? true : false;}
   // TODO(low prio): Add AprilTag and 3D space entries
 
   // Visual testing purposes
@@ -56,8 +57,8 @@ public class Limelight extends SubsystemBase {
    *
    * @param mode new led setting
    */
-  public void setLedMode(int mode) {ledMode.setInteger(mode);}
+  public static void setLedMode(int mode) {led_pub.set(mode);}
 
   /** @return current led setting */
-  public int getLedMode() {return (int) ledMode.getInteger(0);}
+  public static int getLedMode() {return (int) led_sub.get(0);}
 }
