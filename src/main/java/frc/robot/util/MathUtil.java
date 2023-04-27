@@ -1,7 +1,5 @@
 package frc.robot.util;
 
-import frc.robot.subsystems.Drivetrain.WheelSpeeds;
-
 public class MathUtil {
   private MathUtil() {};
 
@@ -14,7 +12,7 @@ public class MathUtil {
    * @return A differential drive {@link WheelSpeeds}
    * @see https://xiaoxiae.github.io/Robotics-Simplified-Website/drivetrain-control/arcade-drive/
    */
-  public static WheelSpeeds arcadeDriveIK(double drive, double rotation, boolean squareInputs) {
+  public static DifferentialDrive.WheelSpeeds arcadeDriveIK(double drive, double rotation, boolean squareInputs) {
     if (squareInputs) {
       drive = Math.copySign(drive * drive, drive);
       rotation = Math.copySign(rotation * rotation, rotation);
@@ -22,15 +20,15 @@ public class MathUtil {
 
     if (drive >= 0) {
       if (rotation >= 0) {
-        return new WheelSpeeds(Math.max(drive, rotation), drive - rotation);
+        return new DifferentialDrive.WheelSpeeds(Math.max(drive, rotation), drive - rotation);
       } else {
-        return new WheelSpeeds(drive + rotation, Math.max(drive, -rotation));
+        return new DifferentialDrive.WheelSpeeds(drive + rotation, Math.max(drive, -rotation));
       }
     } else {
       if (rotation >= 0) {
-        return new WheelSpeeds(drive + rotation, Math.min(drive, -rotation));
+        return new DifferentialDrive.WheelSpeeds(drive + rotation, Math.min(drive, -rotation));
       } else {
-        return new WheelSpeeds(Math.min(drive, rotation), drive - rotation);
+        return new DifferentialDrive.WheelSpeeds(Math.min(drive, rotation), drive - rotation);
       }
     }
   }

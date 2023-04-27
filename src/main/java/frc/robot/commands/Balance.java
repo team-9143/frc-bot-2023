@@ -22,7 +22,7 @@ public class Balance extends CommandBase {
     double pitch = -OI.pigeon.getPitch();
 
     if (Math.abs(pitch) > DrivetrainConstants.kBalanceTolerance && Math.abs(pitch - previousPitch) < 3) {
-      drivetrain.moveStraight(Math.copySign(DrivetrainConstants.kSpeedMult * DrivetrainConstants.kBalanceSpeed, pitch));
+      drivetrain.moveStraight(Math.copySign(DrivetrainConstants.kBalanceSpeed, pitch));
     } else {
       // Stop movement on a large pitch change (usually denoting a fall) or when stabilized
       Drivetrain.stop();
