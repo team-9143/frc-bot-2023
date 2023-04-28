@@ -11,33 +11,33 @@ public class OI {
 
   // In proper orientation, Pigeon is flat and facing so that X-axis is forward
   /** Roll increases to the right, pitch to the front, and yaw counter-clockwise. */
-  public final static Pigeon2 pigeon = new Pigeon2(DeviceConstants.kPigeonID)
-  // For simulation
-  {
-    @Override
-    public com.ctre.phoenix.ErrorCode setYaw(double angleDeg) {
-      if (frc.robot.shuffleboard.SimulationTab.yaw_sim != null) {
-        frc.robot.shuffleboard.SimulationTab.yaw_sim.setDouble(angleDeg % 360);
+  public final static Pigeon2 pigeon = (!frc.robot.shuffleboard.ShuffleboardManager.m_simulation) ? new Pigeon2(DeviceConstants.kPigeonID) :
+    // If in simulation mode, simulates the pigeon with data from the shuffleboard simulation tab
+    new Pigeon2(DeviceConstants.kPigeonID) {
+      @Override
+      public com.ctre.phoenix.ErrorCode setYaw(double angleDeg) {
+        if (frc.robot.shuffleboard.SimulationTab.yaw_sim != null) {
+          frc.robot.shuffleboard.SimulationTab.yaw_sim.setDouble(angleDeg % 360);
+        }
+        return com.ctre.phoenix.ErrorCode.OK;
       }
-      return com.ctre.phoenix.ErrorCode.OK;
-    }
 
-    @Override
-    public double getYaw() {
-      if (frc.robot.shuffleboard.SimulationTab.yaw_sim == null) {
-        return 0;
-      } else {
-        return frc.robot.shuffleboard.SimulationTab.yaw_sim.getDouble(0);
+      @Override
+      public double getYaw() {
+        if (frc.robot.shuffleboard.SimulationTab.yaw_sim == null) {
+          return 0;
+        } else {
+          return frc.robot.shuffleboard.SimulationTab.yaw_sim.getDouble(0);
+        }
       }
-    }
 
-    @Override
-    public double getPitch() {
-      if (frc.robot.shuffleboard.SimulationTab.pitch_sim == null) {
-        return 0;
-      } else {
-        return frc.robot.shuffleboard.SimulationTab.pitch_sim.getDouble(0);
+      @Override
+      public double getPitch() {
+        if (frc.robot.shuffleboard.SimulationTab.pitch_sim == null) {
+          return 0;
+        } else {
+          return frc.robot.shuffleboard.SimulationTab.pitch_sim.getDouble(0);
+        }
       }
-    }
-  };
+    };
 }
