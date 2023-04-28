@@ -57,7 +57,9 @@ public class Drivetrain extends SubsystemBase {
     setDefaultCommand(run(() -> {
       if (Math.abs(OI.driver_cntlr.getTriggers()) > 0.05) {
         // Turn in place, input from triggers
-        turnInPlace(DrivetrainConstants.kTurnMult * OI.driver_cntlr.getTriggers());
+        robotDrive.drive(MathUtil.arcadeDriveIK(0,
+          DrivetrainConstants.kTurnMult * OI.driver_cntlr.getTriggers(),
+        true));
       } else {
         // Arcade drive, input from left stick
         robotDrive.drive(MathUtil.arcadeDriveIK(
