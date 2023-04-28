@@ -20,8 +20,8 @@ public final class AutoSelector {
     SPIT_DOWN("Spit Down"),
     NONE("None");
 
-    private final String name;
-    private Starter(String name) {this.name = name;}
+    final String name;
+    Starter(String name) {this.name = name;}
     public String getName() {return name;}
   }
   public static enum Body implements Named {
@@ -31,8 +31,8 @@ public final class AutoSelector {
     CENTER_CLIMB("Center Climb"),
     NONE("None");
 
-    private final String name;
-    private Body(String name) {this.name = name;}
+    final String name;
+    Body(String name) {this.name = name;}
     public String getName() {return name;}
   }
   public static enum Secondary implements Named {
@@ -40,8 +40,8 @@ public final class AutoSelector {
     CENTER_ESCAPE("Center Escape"),
     NONE("None");
 
-    private final String name;
-    private Secondary(String name) {this.name = name;}
+    final String name;
+    Secondary(String name) {this.name = name;}
     public String getName() {return name;}
   }
   public static enum Tertiary implements Named {
@@ -51,8 +51,8 @@ public final class AutoSelector {
     CONE_SPIT_DOWN("Cone Spit Down"),
     NONE("None");
 
-    private final String name;
-    private Tertiary(String name) {this.name = name;}
+    final String name;
+    Tertiary(String name) {this.name = name;}
     public String getName() {return name;}
   }
   public static enum Ending implements Named {
@@ -61,8 +61,8 @@ public final class AutoSelector {
     BALANCE("Balance"),
     NONE("None");
 
-    private final String name;
-    private Ending(String name) {this.name = name;}
+    final String name;
+    Ending(String name) {this.name = name;}
     public String getName() {return name;}
   }
 
