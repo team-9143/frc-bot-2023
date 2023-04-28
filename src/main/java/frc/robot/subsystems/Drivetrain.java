@@ -63,7 +63,7 @@ public class Drivetrain extends SubsystemBase {
       } else {
         // Arcade drive, input from left stick
         robotDrive.drive(MathUtil.arcadeDriveIK(
-          DrivetrainConstants.kSpeedMult * OI.driver_cntlr.getLeftY(),
+          DrivetrainConstants.kSpeedMult * -OI.driver_cntlr.getLeftY(),
           DrivetrainConstants.kTurnMult * OI.driver_cntlr.getLeftX(),
           true
         ));
