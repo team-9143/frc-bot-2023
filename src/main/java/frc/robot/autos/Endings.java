@@ -15,7 +15,12 @@ public class Endings {
    * @param body
    * @return the command
    */
-  public static Command getEnding(AutoSelector.Ending end) {
+  public static Command getEnding(AutoSelector.Ending end, AutoSelector.Body body) {
+    if (body == AutoSelector.Body.CENTER_CLIMB) {
+      // If climbing the charge station, balance
+      return new Balance();
+    }
+
     switch (end) {
       case TURN_AWAY:
         // Turn to face away from the drive station
@@ -23,9 +28,6 @@ public class Endings {
       case TURN_CLOSE:
         // Turn to face the drive station
         return new TurnToAngle(0);
-      case BALANCE:
-        // Balance on the charge station
-        return new Balance();
       default:
         return new InstantCommand();
     }

@@ -58,7 +58,6 @@ public final class AutoSelector {
   public static enum Ending implements Named {
     TURN_AWAY("Turn Away"),
     TURN_CLOSE("Turn Close"),
-    BALANCE("Balance"),
     NONE("None");
 
     final String name;
@@ -81,17 +80,14 @@ public final class AutoSelector {
         case PICKUP_CONE:
           m_secondaryChooser.setAll(Secondary.RETURN_FROM_CONE);
           m_tertiaryChooser.setAll(Tertiary.CONE_SHOOT, Tertiary.CONE_SPIT, Tertiary.CONE_SHOOT_DOWN, Tertiary.CONE_SPIT_DOWN);
-          m_endingChooser.setAll(Ending.TURN_AWAY, Ending.TURN_CLOSE);
           break;
         case CENTER_CLIMB:
           m_secondaryChooser.setAll(Secondary.CENTER_ESCAPE);
           m_tertiaryChooser.setAll();
-          m_endingChooser.setAll(Ending.BALANCE);
           break;
         default:
           m_secondaryChooser.setAll();
           m_tertiaryChooser.setAll();
-          m_endingChooser.setAll(Ending.TURN_AWAY, Ending.TURN_CLOSE);
       }
     });
 
@@ -116,7 +112,7 @@ public final class AutoSelector {
       Secondaries.getSecondary(secondary, body),
       Tertiaries.getTertiary(tertiary)
         .raceWith(new RunCommand(Drivetrain::stop, Drivetrain.getInstance())),
-      Endings.getEnding(ending)
+      Endings.getEnding(ending, body)
     );
   }
 }
