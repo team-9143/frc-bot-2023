@@ -22,7 +22,7 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 
 import frc.robot.Constants.IntakeConstants;
 
-// TODO: Copy data over to test tab, reduce height
+// TODO: Copy data over to test tab, make 16x7
 /** Contains auton selector and data for driver and operator. */
 public class SimulationTab implements ShuffleboardTabBase {
   public static GenericEntry yaw_sim;

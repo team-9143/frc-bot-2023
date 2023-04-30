@@ -29,7 +29,7 @@ public class IntakeWheels extends SubsystemBase {
     holdSpeed = 0.05;
 
   /** Used to apply tension if a game piece is being held in the intake. */
-  private static boolean m_holding;
+  private static boolean m_holding = false;
 
   private static final CANSparkMax m_motor = new CANSparkMax(DeviceConstants.kIntakeWheelsID, MotorType.kBrushless);
 
