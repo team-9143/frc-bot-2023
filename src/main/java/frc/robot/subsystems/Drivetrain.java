@@ -12,7 +12,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 
 import frc.robot.util.DifferentialDrive;
-import frc.robot.util.DifferentialDrive.WheelSpeeds;;
+import frc.robot.util.DifferentialDrive.WheelSpeeds;
 
 /** Controls the robot drivetrain. */
 public class Drivetrain extends SubsystemBase {
@@ -55,17 +55,17 @@ public class Drivetrain extends SubsystemBase {
 
     // Teleop drive: single joystick or turn in place with triggers
     setDefaultCommand(run(() -> {
-      if (Math.abs(OI.driver_cntlr.getTriggers()) > 0.05) {
+      double triggers = OI.driver_cntlr.getTriggers();
+      if (Math.abs(triggers) > 0.05) {
         // Turn in place, input from triggers
-        robotDrive.drive(MathUtil.arcadeDriveIK(0,
-          DrivetrainConstants.kTurnMult * OI.driver_cntlr.getTriggers(),
-        true));
+        turnInPlace(DrivetrainConstants.kTurnMult * Math.copySign(triggers * triggers, triggers));
       } else {
+        double drive = OI.driver_cntlr.getLeftY();
+        double rotation = OI.driver_cntlr.getLeftX();
         // Arcade drive, input from left stick
         robotDrive.drive(MathUtil.arcadeDriveIK(
-          DrivetrainConstants.kSpeedMult * -OI.driver_cntlr.getLeftY(),
-          DrivetrainConstants.kTurnMult * OI.driver_cntlr.getLeftX(),
-          true
+          DrivetrainConstants.kSpeedMult * Math.copySign(drive * drive, -drive),
+          DrivetrainConstants.kTurnMult * Math.copySign(rotation * rotation, rotation)
         ));
       }
     }));
