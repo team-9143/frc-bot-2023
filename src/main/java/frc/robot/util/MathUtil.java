@@ -12,20 +12,20 @@ public class MathUtil {
    * @return A differential drive {@link WheelSpeeds}
    * @see https://xiaoxiae.github.io/Robotics-Simplified-Website/drivetrain-control/arcade-drive/
    */
-  public static DifferentialDrive.WheelSpeeds arcadeDriveIK(double drive, double rotation) {
-    // Right side is inverted to work with non-inverted right motors
-    if (drive >= 0) {
-      if (rotation >= 0) {
-        return new DifferentialDrive.WheelSpeeds(Math.max(drive, rotation), -(drive - rotation));
-      } else {
-        return new DifferentialDrive.WheelSpeeds(drive + rotation, -Math.max(drive, -rotation));
-      }
-    } else {
-      if (rotation >= 0) {
-        return new DifferentialDrive.WheelSpeeds(drive + rotation, -Math.min(drive, -rotation));
-      } else {
-        return new DifferentialDrive.WheelSpeeds(Math.min(drive, rotation), -(drive - rotation));
-      }
-    }
-  }
+  // public static WheelSpeeds arcadeDriveIK(double drive, double rotation) {
+  //   // Right side is inverted to work with non-inverted right motors
+  //   if (drive >= 0) {
+  //     if (rotation >= 0) {
+  //       return new DifferentialDrive.WheelSpeeds(Math.max(drive, rotation), -(drive - rotation));
+  //     } else {
+  //       return new DifferentialDrive.WheelSpeeds(drive + rotation, -Math.max(drive, -rotation));
+  //     }
+  //   } else {
+  //     if (rotation >= 0) {
+  //       return new DifferentialDrive.WheelSpeeds(drive + rotation, -Math.min(drive, -rotation));
+  //     } else {
+  //       return new DifferentialDrive.WheelSpeeds(Math.min(drive, rotation), -(drive - rotation));
+  //     }
+  //   }
+  // }
 }

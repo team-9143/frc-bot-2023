@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.OI;
-import frc.robot.util.MathUtil;
 import frc.robot.Constants.PhysConstants;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.DeviceConstants;
@@ -11,8 +10,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 
-import frc.robot.util.DifferentialDrive;
-import frc.robot.util.DifferentialDrive.WheelSpeeds;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive.WheelSpeeds;
 
 /** Controls the robot drivetrain. */
 public class Drivetrain extends SubsystemBase {
@@ -36,7 +35,7 @@ public class Drivetrain extends SubsystemBase {
   private static final RelativeEncoder l_encoder = fl_motor.getEncoder();
   private static final RelativeEncoder r_encoder = fr_motor.getEncoder();
 
-  private static final DifferentialDrive robotDrive = new DifferentialDrive(fl_motor, fr_motor);
+  private static final frc.robot.util.DifferentialDrive robotDrive = new frc.robot.util.DifferentialDrive(fl_motor, fr_motor);
 
   private Drivetrain() {
     // IMPORTANT: Ensure that motors on the same side have the same output
@@ -60,12 +59,11 @@ public class Drivetrain extends SubsystemBase {
         // Turn in place, input from triggers
         turnInPlace(DrivetrainConstants.kTurnMult * Math.copySign(triggers * triggers, triggers));
       } else {
-        double drive = OI.driver_cntlr.getLeftY();
-        double rotation = OI.driver_cntlr.getLeftX();
         // Arcade drive, input from left stick
-        robotDrive.drive(MathUtil.arcadeDriveIK(
-          DrivetrainConstants.kSpeedMult * Math.copySign(drive * drive, -drive),
-          DrivetrainConstants.kTurnMult * Math.copySign(rotation * rotation, rotation)
+        robotDrive.drive(DifferentialDrive.arcadeDriveIK(
+          DrivetrainConstants.kSpeedMult * OI.driver_cntlr.getLeftY(),
+          DrivetrainConstants.kTurnMult * OI.driver_cntlr.getLeftX(),
+          true
         ));
       }
     }));
