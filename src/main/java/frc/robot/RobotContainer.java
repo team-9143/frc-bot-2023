@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.devices.CustomController.btn;
 
@@ -89,11 +90,12 @@ public class RobotContainer {
     final TurnToAngle cTurnToAngle = new TurnToAngle(0);
 
     // D-pad will turn to the specified angle
-    new Trigger(() -> TurnToAngle.m_enabled && OI.driver_cntlr.getPOV() != -1)
-      .whileTrue(new RunCommand(() -> {
+    CommandScheduler.getInstance().getDefaultButtonLoop().bind(() -> {
+      if (TurnToAngle.m_enabled && OI.driver_cntlr.getPOV() != -1) {
         cTurnToAngle.setHeading(OI.driver_cntlr.getPOV());
         cTurnToAngle.schedule();
-      }));
+      }
+    });
 
     // Button 'A' (hold) will auto-balance
     new Trigger(() -> OI.driver_cntlr.getRawButton(btn.A.val))
