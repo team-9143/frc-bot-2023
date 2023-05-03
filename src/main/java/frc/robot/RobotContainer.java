@@ -97,7 +97,7 @@ public class RobotContainer {
 
     // Button 'A' (hold) will auto-balance
     new Trigger(() -> OI.driver_cntlr.getRawButton(btn.A.val))
-      .whileTrue(new Balance());
+      .whileTrue(Drivetrain.getInstance().getBalanceCommand());
 
     // Button 'X' (debounced 1s) will reset gyro
     new Trigger(() -> OI.driver_cntlr.getRawButton(btn.X.val))

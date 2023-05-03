@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 import frc.robot.commands.TurnToAngle;
-import frc.robot.commands.Balance;
+import frc.robot.subsystems.Drivetrain;
 
 /** Contains auton endings. */
 public class Endings {
@@ -18,7 +18,7 @@ public class Endings {
   public static Command getEnding(AutoSelector.Ending end, AutoSelector.Body body) {
     if (body == AutoSelector.Body.CENTER_CLIMB) {
       // If climbing the charge station, balance
-      return new Balance();
+      return Drivetrain.getInstance().getBalanceCommand();
     }
 
     switch (end) {

@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.Command;
+import java.lang.Runnable;
 import frc.robot.OI;
 import frc.robot.Constants.PhysConstants;
 import frc.robot.Constants.DrivetrainConstants;
@@ -104,5 +106,29 @@ public class Drivetrain extends SubsystemBase {
 
   public static void stop() {
     robotDrive.stopMotor();
+  }
+
+  /** @return an auto-balance command */
+  public Command getBalanceCommand() {
+    return runEnd(
+      new Runnable() {
+        private double previousPitch = -OI.pigeon.getPitch();
+
+        public void run() {
+          // Pitch should increase to the back
+          double pitch = -OI.pigeon.getPitch();
+
+          if (Math.abs(pitch) > DrivetrainConstants.kBalanceTolerance && Math.abs(pitch - previousPitch) < 3) {
+            moveStraight(Math.copySign(DrivetrainConstants.kBalanceSpeed, pitch));
+          } else {
+            // Stop movement on a large pitch change (usually denoting a fall) or when stabilized
+            stop();
+          }
+
+          previousPitch = pitch;
+        }
+      },
+      Drivetrain::stop
+    );
   }
 }
