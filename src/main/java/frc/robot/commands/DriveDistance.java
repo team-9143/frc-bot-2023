@@ -10,8 +10,8 @@ import frc.robot.subsystems.Drivetrain;
 
 /** Drives a given distance for autons. Realistically moves about 10% less due to slip. */
 public class DriveDistance extends CommandBase {
-  private static final Drivetrain drivetrain = Drivetrain.getInstance();
-  private static final Set<Subsystem> m_requirements = Set.of(drivetrain);
+  private static final Drivetrain sDrivetrain = Drivetrain.getInstance();
+  private static final Set<Subsystem> m_requirements = Set.of(sDrivetrain);
   private static boolean isRunning = false;
   public static final PIDController m_controller = new PIDController(DrivetrainConstants.kDistP, DrivetrainConstants.kDistI, DrivetrainConstants.kDistD);
 
@@ -25,15 +25,15 @@ public class DriveDistance extends CommandBase {
   @Override
   public void initialize() {
     m_controller.reset();
-    drivetrain.resetEncoders();
+    sDrivetrain.resetEncoders();
     isRunning = true;
   }
 
   /** Calculate and clamp controller output to max speed. */
   @Override
   public void execute() {
-    drivetrain.moveStraight(Math.max(-DrivetrainConstants.kDistMaxSpeed, Math.min(
-      m_controller.calculate(drivetrain.getPosition(), distance),
+    sDrivetrain.moveStraight(Math.max(-DrivetrainConstants.kDistMaxSpeed, Math.min(
+      m_controller.calculate(sDrivetrain.getPosition(), distance),
     DrivetrainConstants.kDistMaxSpeed)));
   }
 

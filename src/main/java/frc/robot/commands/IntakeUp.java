@@ -10,8 +10,8 @@ import frc.robot.subsystems.IntakeTilt;
 
 /** Tilts the intake fully up to store and shoot game pieces. Enables steady intake on finish. */
 public class IntakeUp extends CommandBase {
-  private static final IntakeTilt intakeTilt = IntakeTilt.getInstance();
-  private static final Set<Subsystem> m_requirements = Set.of(intakeTilt);
+  private static final IntakeTilt sIntakeTilt = IntakeTilt.getInstance();
+  private static final Set<Subsystem> m_requirements = Set.of(sIntakeTilt);
   public static final PIDController m_controller = new PIDController(IntakeConstants.kUpP, IntakeConstants.kUpI, IntakeConstants.kUpD);
 
   /** Reset controller. */
@@ -24,7 +24,7 @@ public class IntakeUp extends CommandBase {
 
   @Override
   public void execute() {
-    intakeTilt.set(m_controller.calculate(intakeTilt.getPosition()));
+    sIntakeTilt.set(m_controller.calculate(sIntakeTilt.getPosition()));
   }
 
   /** Finish when upright, and swap to steady intake. */
