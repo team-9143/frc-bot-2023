@@ -29,16 +29,24 @@ public class IntakeTilt extends SubsystemBase {
   private static boolean m_steadyEnabled = false;
   private static boolean m_running = false;
 
-  private static final CANSparkMax l_motor = new CANSparkMax(DeviceConstants.kIntakeTiltLeftID, MotorType.kBrushless);
-  private static final CANSparkMax r_motor = new CANSparkMax(DeviceConstants.kIntakeTiltRightID, MotorType.kBrushless);
+  private static final CANSparkMax m_motor;
 
-  private static final RelativeEncoder l_encoder = l_motor.getEncoder();
-  private static final RelativeEncoder r_encoder = r_motor.getEncoder();
+  private static final RelativeEncoder l_encoder;
+  private static final RelativeEncoder r_encoder;
+
+  static {
+    final CANSparkMax l_motor = new CANSparkMax(DeviceConstants.kIntakeTiltLeftID, MotorType.kBrushless);
+    @SuppressWarnings("resource")
+    final CANSparkMax r_motor = new CANSparkMax(DeviceConstants.kIntakeTiltRightID, MotorType.kBrushless);
+
+    r_motor.follow(l_motor, true);
+    m_motor = l_motor;
+
+    l_encoder = l_motor.getEncoder();
+    r_encoder = r_motor.getEncoder();
+  }
 
   private IntakeTilt() {
-    // IMPORTANT: Ensure that motors have an equivalent setpoint
-    r_motor.follow(l_motor, true);
-
     l_encoder.setPositionConversionFactor(PhysConstants.kTiltGearbox * 360); // UNIT: degrees
     l_encoder.setVelocityConversionFactor(PhysConstants.kTiltGearbox * (360 / 60)); // UNIT: degrees/s
     l_encoder.setMeasurementPeriod(20);
@@ -64,9 +72,9 @@ public class IntakeTilt extends SubsystemBase {
 
   /** Clamps input to max speed. */
   public void set(double speed) {
-    l_motor.set(Math.max(-IntakeConstants.kTiltMaxSpeed, Math.min(speed, IntakeConstants.kTiltMaxSpeed)));
+    m_motor.set(Math.max(-IntakeConstants.kTiltMaxSpeed, Math.min(speed, IntakeConstants.kTiltMaxSpeed)));
   }
-  public double get() {return l_motor.get();}
+  public double get() {return m_motor.get();}
 
   /** @return the average position of the tilt encoders */
   public double getPosition() {
@@ -107,14 +115,14 @@ public class IntakeTilt extends SubsystemBase {
 
   /**
    * Sets the setpoint of the intake for the dashboard.
-   * 
+   *
    * @param setpoint new setpoint (UNIT: degrees)
    */
   public static void setSetpoint(double setpoint) {m_setpoint = setpoint;}
   public static double getSetpoint() {return m_setpoint;}
 
   public static void stop() {
-    l_motor.stopMotor();
+    m_motor.stopMotor();
   }
 
   // TODO(auto align): Test and implement autoAlign
@@ -127,7 +135,7 @@ public class IntakeTilt extends SubsystemBase {
         l_encoder.setPosition(IntakeConstants.kUpPos - 0.025);
         r_encoder.setPosition(IntakeConstants.kUpPos - 0.025);
       },
-      () -> (l_motor.getOutputCurrent() > IntakeConstants.kMaxCurrent) || (r_motor.getOutputCurrent() > IntakeConstants.kMaxCurrent),
+      () -> m_motor.getOutputCurrent() > IntakeConstants.kMaxCurrent,
       m_instance
     );
   }
