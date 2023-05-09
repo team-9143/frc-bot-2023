@@ -30,6 +30,7 @@ public class TestTab implements ShuffleboardTabBase {
 
     final Drivetrain sDrivetrain = Drivetrain.getInstance();
     final IntakeTilt sIntakeTilt = IntakeTilt.getInstance();
+    final IntakeWheels sIntakeWheels = IntakeWheels.getInstance();
 
     ShuffleboardLayout layout_1 = test_tab.getLayout("Intake Angle", BuiltInLayouts.kList)
       .withPosition(0, 0)
@@ -52,7 +53,7 @@ public class TestTab implements ShuffleboardTabBase {
     layout_2.addDouble("Tilt Speed", sIntakeTilt::get)
       .withWidget(BuiltInWidgets.kNumberBar)
       .withProperties(Map.of("min", -IntakeConstants.kTiltMaxSpeed, "max", IntakeConstants.kTiltMaxSpeed, "center", 0));
-    layout_2.addDouble("Intake Wheel Speed", IntakeWheels::get)
+    layout_2.addDouble("Intake Wheel Speed", sIntakeWheels::get)
       .withWidget(BuiltInWidgets.kNumberBar)
       .withProperties(Map.of("min", -1, "max", 1, "center", 0));
 

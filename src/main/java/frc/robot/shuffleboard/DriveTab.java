@@ -27,6 +27,7 @@ public class DriveTab implements ShuffleboardTabBase {
     final ShuffleboardTab drive_tab = Shuffleboard.getTab("Drive");
 
     final IntakeTilt sIntakeTilt = IntakeTilt.getInstance();
+    final IntakeWheels sIntakeWheels = IntakeWheels.getInstance();
 
     ShuffleboardManager.cubeLoaded = drive_tab.add("Cube Preloaded", true)
       .withPosition(0, 5)
@@ -95,9 +96,9 @@ public class DriveTab implements ShuffleboardTabBase {
       .withSize(4, 5);
     layout_3.addBoolean("Inverted", IntakeWheels::isInverted)
       .withWidget(BuiltInWidgets.kBooleanBox);
-    layout_3.addBoolean("Intaking", () -> (Math.signum(IntakeWheels.get()) == (IntakeWheels.isInverted() ? -1.0 : 1.0)))
+    layout_3.addBoolean("Intaking", () -> (Math.signum(sIntakeWheels.get()) == (IntakeWheels.isInverted() ? -1.0 : 1.0)))
       .withWidget(BuiltInWidgets.kBooleanBox);
-    layout_3.addBoolean("Shooting", () -> (Math.signum(IntakeWheels.get()) == (IntakeWheels.isInverted() ? 1.0 : -1.0)))
+    layout_3.addBoolean("Shooting", () -> (Math.signum(sIntakeWheels.get()) == (IntakeWheels.isInverted() ? 1.0 : -1.0)))
       .withWidget(BuiltInWidgets.kBooleanBox);
   }
 }
