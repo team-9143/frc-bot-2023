@@ -8,7 +8,6 @@ import frc.robot.Constants.PhysConstants;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.DeviceConstants;
 
-import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
@@ -35,13 +34,17 @@ public class Drivetrain extends SubsystemBase {
   private static final RobotDrive m_drive;
 
   static {
+    @SuppressWarnings("resource")
     final CANSparkMax
       fl_motor = new CANSparkMax(DeviceConstants.kFrontLeftID, MotorType.kBrushless),
       bl_motor = new CANSparkMax(DeviceConstants.kBackLeftID, MotorType.kBrushless),
       fr_motor = new CANSparkMax(DeviceConstants.kFrontRightID, MotorType.kBrushless),
       br_motor = new CANSparkMax(DeviceConstants.kBackRightID, MotorType.kBrushless);
 
-    m_drive = new RobotDrive(new MotorControllerGroup(fl_motor, bl_motor), new MotorControllerGroup(fr_motor, br_motor));
+    bl_motor.follow(fl_motor, false);
+    br_motor.follow(fr_motor, false);
+    m_drive = new RobotDrive(fl_motor, fr_motor);
+
     l_encoder = fl_motor.getEncoder();
     r_encoder = fr_motor.getEncoder();
   }
