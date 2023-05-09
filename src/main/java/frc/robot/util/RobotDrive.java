@@ -5,8 +5,8 @@ import edu.wpi.first.wpilibj.MotorSafety;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive.WheelSpeeds;;
 
-/** Class for driving a differential drivetrain and ensuring motor safety with constant updates. */
-public class DifferentialDrive extends MotorSafety {
+/** Class for driving the robot drivetrain and ensuring motor safety with constant updates. */
+public class RobotDrive extends MotorSafety {
   private final MotorController l_motor;
   private final MotorController r_motor;
 
@@ -16,7 +16,7 @@ public class DifferentialDrive extends MotorSafety {
    * @param l_motor the {@link MotorController} for the left side
    * @param r_motor the {@link MotorController} for the right side
    */
-  public DifferentialDrive(MotorController l_motor, MotorController r_motor) {
+  public RobotDrive(MotorController l_motor, MotorController r_motor) {
     this.l_motor = l_motor;
     this.r_motor = r_motor;
     setSafetyEnabled(true);

@@ -12,6 +12,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 
+import frc.robot.util.RobotDrive;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive.WheelSpeeds;
 
@@ -62,7 +63,7 @@ public class Drivetrain extends SubsystemBase {
         turnInPlace(DrivetrainConstants.kTurnMult * Math.copySign(triggers * triggers, triggers));
       } else {
         // Arcade drive, input from left stick
-        robotDrive.drive(DifferentialDrive.arcadeDriveIK(
+        m_drive.drive(DifferentialDrive.arcadeDriveIK(
           DrivetrainConstants.kSpeedMult * OI.driver_cntlr.getLeftY(),
           DrivetrainConstants.kTurnMult * OI.driver_cntlr.getLeftX(),
           true
@@ -72,17 +73,17 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void turnInPlace(double rotation) {
-    robotDrive.drive(new WheelSpeeds(rotation, rotation));
+    m_drive.drive(new WheelSpeeds(rotation, rotation));
   }
 
   public void moveStraight(double speed) {
-    robotDrive.drive(new WheelSpeeds(speed, -speed));
+    m_drive.drive(new WheelSpeeds(speed, -speed));
   }
 
   /** @return the speed of the left motors */
-  public double getLeft() {return robotDrive.getLeft();}
+  public double getLeft() {return m_drive.getLeft();}
   /** @return the speed of the right motors */
-  public double getRight() {return robotDrive.getRight();}
+  public double getRight() {return m_drive.getRight();}
 
   /** @return the average position of the drivetrain encoders */
   public double getPosition() {
@@ -105,7 +106,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public static void stop() {
-    robotDrive.stopMotor();
+    m_drive.stopMotor();
   }
 
   /** @return an auto-balance command */
