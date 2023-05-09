@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.MotorSafety;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive.WheelSpeeds;;
 
-/** Class for driving the robot drivetrain and ensuring motor safety with constant updates. */
+/** Class for controlling the robot drivetrain and ensuring motor safety with constant updates. */
 public class RobotDrive extends MotorSafety {
   private final MotorController l_motor;
   private final MotorController r_motor;
