@@ -72,6 +72,7 @@ public class TestTab implements ShuffleboardTabBase {
       .withProperties(Map.of("major tick spacing", 45, "starting angle", 180, "show tick mark ring", true));
   }
 
+  // Intake angle
   private void initLayout1() {
     ShuffleboardLayout layout_1 = test_tab.getLayout("Intake Angle", BuiltInLayouts.kList)
       .withPosition(0, 0)
@@ -90,6 +91,7 @@ public class TestTab implements ShuffleboardTabBase {
       .withProperties(Map.of("min", -110, "max", 110, "center", 0));
   }
 
+  // Intake status and speed
   private void initLayout2() {
     ShuffleboardLayout layout_2 = test_tab.getLayout("Intake Status", BuiltInLayouts.kList)
       .withPosition(4, 0)

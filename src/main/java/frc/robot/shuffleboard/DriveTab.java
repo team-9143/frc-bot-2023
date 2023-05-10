@@ -73,6 +73,7 @@ public class DriveTab implements ShuffleboardTabBase {
     initLayout3();
   }
 
+  // Gyro and turn to angle
   private void initLayout1() {
     ShuffleboardLayout layout_1 = drive_tab.getLayout("Rotation", BuiltInLayouts.kList)
       .withPosition(0, 0)
@@ -91,6 +92,7 @@ public class DriveTab implements ShuffleboardTabBase {
       .withWidget(BuiltInWidgets.kBooleanBox);
   }
 
+  // Intake angle
   private void initLayout2() {
     ShuffleboardLayout layout_2 = drive_tab.getLayout("Intake Angle", BuiltInLayouts.kGrid)
       .withPosition(7, 0)
@@ -106,6 +108,7 @@ public class DriveTab implements ShuffleboardTabBase {
       .withProperties(Map.of("min", -110, "max", 110, "show value", true));
   }
 
+  // Intake wheel status
   private void initLayout3() {
     ShuffleboardLayout layout_3 = drive_tab.getLayout("Intake", BuiltInLayouts.kList)
       .withPosition(13, 0)
