@@ -21,7 +21,6 @@ import frc.robot.Constants.IntakeConstants;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 
-// TODO: Copy data over to test tab, make 16x7
 /** Contains auton selector and data for driver and operator. */
 public class SimulationTab implements ShuffleboardTabBase {
   private final ShuffleboardTab sim_tab;
