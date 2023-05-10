@@ -98,11 +98,11 @@ public class TestTab implements ShuffleboardTabBase {
     layout_2.addBoolean("Steady", IntakeTilt::isSteadyEnabled)
       .withWidget(BuiltInWidgets.kBooleanBox);
 
-    layout_2.addDouble("Tilt Speed", sIntakeTilt::get)
+    layout_2.addDouble("Tilt Speed", sIntakeTilt::getSpeed)
       .withWidget(BuiltInWidgets.kNumberBar)
       .withProperties(Map.of("min", -IntakeConstants.kTiltMaxSpeed, "max", IntakeConstants.kTiltMaxSpeed, "center", 0));
 
-    layout_2.addDouble("Intake Wheel Speed", sIntakeWheels::get)
+    layout_2.addDouble("Intake Wheel Speed", sIntakeWheels::getSpeed)
       .withWidget(BuiltInWidgets.kNumberBar)
       .withProperties(Map.of("min", -1, "max", 1, "center", 0));
   }

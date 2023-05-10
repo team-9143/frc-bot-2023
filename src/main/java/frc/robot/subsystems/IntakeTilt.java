@@ -92,7 +92,7 @@ public class IntakeTilt extends SubsystemBase {
   public void set(double speed) {
     m_motor.set(Math.max(-IntakeConstants.kTiltMaxSpeed, Math.min(speed, IntakeConstants.kTiltMaxSpeed)));
   }
-  public double get() {return m_motor.get();}
+  public double getSpeed() {return m_motor.get();}
 
   /** @return the average position of the tilt encoders */
   public double getPosition() {

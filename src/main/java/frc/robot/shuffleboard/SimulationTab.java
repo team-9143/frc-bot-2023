@@ -151,7 +151,7 @@ public class SimulationTab implements ShuffleboardTabBase {
       @Override
       public void initSendable(SendableBuilder builder) {
         builder.setSmartDashboardType("Motor Controller");
-        builder.addDoubleProperty("Value", sIntakeTilt::get, null);
+        builder.addDoubleProperty("Value", sIntakeTilt::getSpeed, null);
       }
     }).withWidget(BuiltInWidgets.kMotorController)
       .withProperties(Map.of("orientation", "HORIZONTAL"));
@@ -169,17 +169,17 @@ public class SimulationTab implements ShuffleboardTabBase {
     layout_4.addBoolean("Inverted", IntakeWheels::isInverted)
       .withWidget(BuiltInWidgets.kBooleanBox);
 
-    layout_4.addBoolean("Intaking", () -> (Math.signum(sIntakeWheels.get()) == (IntakeWheels.isInverted() ? -1.0 : 1.0)))
+    layout_4.addBoolean("Intaking", () -> (Math.signum(sIntakeWheels.getSpeed()) == (IntakeWheels.isInverted() ? -1.0 : 1.0)))
       .withWidget(BuiltInWidgets.kBooleanBox);
 
-    layout_4.addBoolean("Shooting", () -> (Math.signum(sIntakeWheels.get()) == (IntakeWheels.isInverted() ? 1.0 : -1.0)))
+    layout_4.addBoolean("Shooting", () -> (Math.signum(sIntakeWheels.getSpeed()) == (IntakeWheels.isInverted() ? 1.0 : -1.0)))
       .withWidget(BuiltInWidgets.kBooleanBox);
 
     layout_4.add("Speed", new Sendable() {
       @Override
       public void initSendable(SendableBuilder builder) {
         builder.setSmartDashboardType("Motor Controller");
-        builder.addDoubleProperty("Value", sIntakeWheels::get, null);
+        builder.addDoubleProperty("Value", sIntakeWheels::getSpeed, null);
       }
     }).withWidget(BuiltInWidgets.kMotorController)
       .withProperties(Map.of("orientation", "HORIZONTAL"));

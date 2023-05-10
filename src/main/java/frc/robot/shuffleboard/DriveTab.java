@@ -114,10 +114,10 @@ public class DriveTab implements ShuffleboardTabBase {
     layout_3.addBoolean("Inverted", IntakeWheels::isInverted)
       .withWidget(BuiltInWidgets.kBooleanBox);
 
-    layout_3.addBoolean("Intaking", () -> (Math.signum(sIntakeWheels.get()) == (IntakeWheels.isInverted() ? -1.0 : 1.0)))
+    layout_3.addBoolean("Intaking", () -> (Math.signum(sIntakeWheels.getSpeed()) == (IntakeWheels.isInverted() ? -1.0 : 1.0)))
       .withWidget(BuiltInWidgets.kBooleanBox);
 
-    layout_3.addBoolean("Shooting", () -> (Math.signum(sIntakeWheels.get()) == (IntakeWheels.isInverted() ? 1.0 : -1.0)))
+    layout_3.addBoolean("Shooting", () -> (Math.signum(sIntakeWheels.getSpeed()) == (IntakeWheels.isInverted() ? 1.0 : -1.0)))
       .withWidget(BuiltInWidgets.kBooleanBox);
   }
 }
