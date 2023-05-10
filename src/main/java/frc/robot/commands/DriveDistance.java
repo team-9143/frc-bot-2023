@@ -13,7 +13,13 @@ public class DriveDistance extends CommandBase {
   private static final Drivetrain sDrivetrain = Drivetrain.getInstance();
   private static final Set<Subsystem> m_requirements = Set.of(sDrivetrain);
   private static boolean isRunning = false;
+
   public static final PIDController m_controller = new PIDController(DrivetrainConstants.kDistP, DrivetrainConstants.kDistI, DrivetrainConstants.kDistD);
+  static {
+    m_controller.setIntegratorRange(-DrivetrainConstants.kDistMaxSpeed, DrivetrainConstants.kDistMaxSpeed);
+    m_controller.setTolerance(DrivetrainConstants.kDistPosTolerance, DrivetrainConstants.kDistVelTolerance);
+    m_controller.setSetpoint(0);
+  }
 
   private final double distance; // UNIT: inches
 

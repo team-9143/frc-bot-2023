@@ -42,6 +42,11 @@ public class IntakeTilt extends SubsystemBase {
   }
 
   public static final PIDController m_controller = new PIDController(IntakeConstants.kSteadyP, IntakeConstants.kSteadyI, IntakeConstants.kSteadyD);
+  static {
+    m_controller.setIntegratorRange(-IntakeConstants.kTiltMaxSpeed, IntakeConstants.kTiltMaxSpeed);
+    m_controller.setSetpoint(IntakeConstants.kUpPos);
+  }
+
   private static double m_setpoint = IntakeConstants.kUpPos;
   private static boolean m_steadyEnabled = false;
   private static boolean m_running = false;

@@ -49,30 +49,7 @@ public class RobotContainer {
     OI.pigeon.configMountPose(0, -0.24665457, -179.574783);
     OI.pigeon.setYaw(0);
 
-    configurePIDControllers();
-
     configureBindings();
-  }
-
-  /** Configure settings for PID controllers. */
-  private void configurePIDControllers() {
-    TurnToAngle.m_controller.setIntegratorRange(-Constants.DrivetrainConstants.kTurnMaxSpeed, Constants.DrivetrainConstants.kTurnMaxSpeed);
-    TurnToAngle.m_controller.setTolerance(Constants.DrivetrainConstants.kTurnPosTolerance, Constants.DrivetrainConstants.kTurnVelTolerance);
-    TurnToAngle.m_controller.enableContinuousInput(-180, 180);
-    TurnToAngle.m_controller.setSetpoint(0);
-
-    DriveDistance.m_controller.setIntegratorRange(-Constants.DrivetrainConstants.kDistMaxSpeed, Constants.DrivetrainConstants.kDistMaxSpeed);
-    DriveDistance.m_controller.setTolerance(Constants.DrivetrainConstants.kDistPosTolerance, Constants.DrivetrainConstants.kDistVelTolerance);
-    DriveDistance.m_controller.setSetpoint(0);
-
-    IntakeTilt.m_controller.setIntegratorRange(-Constants.IntakeConstants.kTiltMaxSpeed, Constants.IntakeConstants.kTiltMaxSpeed);
-    IntakeTilt.m_controller.setSetpoint(Constants.IntakeConstants.kUpPos);
-
-    IntakeDown.m_controller.setIntegratorRange(-Constants.IntakeConstants.kTiltMaxSpeed, Constants.IntakeConstants.kTiltMaxSpeed);
-    IntakeDown.m_controller.setSetpoint(Constants.IntakeConstants.kDownPos);
-
-    IntakeUp.m_controller.setIntegratorRange(-Constants.IntakeConstants.kTiltMaxSpeed, Constants.IntakeConstants.kTiltMaxSpeed);
-    IntakeUp.m_controller.setSetpoint(Constants.IntakeConstants.kUpPos);
   }
 
   /** Initialize button bindings. */

@@ -12,7 +12,12 @@ import frc.robot.subsystems.IntakeTilt;
 public class IntakeUp extends CommandBase {
   private static final IntakeTilt sIntakeTilt = IntakeTilt.getInstance();
   private static final Set<Subsystem> m_requirements = Set.of(sIntakeTilt);
+
   public static final PIDController m_controller = new PIDController(IntakeConstants.kUpP, IntakeConstants.kUpI, IntakeConstants.kUpD);
+  static {
+    m_controller.setIntegratorRange(-IntakeConstants.kTiltMaxSpeed, IntakeConstants.kTiltMaxSpeed);
+    m_controller.setSetpoint(IntakeConstants.kUpPos);
+  }
 
   /** Reset controller. */
   @Override
