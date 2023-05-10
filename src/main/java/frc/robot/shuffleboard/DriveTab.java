@@ -14,10 +14,10 @@ import frc.robot.subsystems.IntakeWheels;
 import frc.robot.autos.AutoSelector;
 import frc.robot.commands.TurnToAngle;
 
+import frc.robot.OI;
+
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
-
-import frc.robot.OI;
 
 /** Contains auton selector and data for driver and operator. */
 public class DriveTab implements ShuffleboardTabBase {

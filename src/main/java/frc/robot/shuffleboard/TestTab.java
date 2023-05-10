@@ -15,11 +15,10 @@ import frc.robot.subsystems.IntakeWheels;
 import frc.robot.commands.TurnToAngle;
 import frc.robot.commands.DriveDistance;
 
+import frc.robot.OI;
+
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
-
-import frc.robot.OI;
-import frc.robot.Constants.IntakeConstants;
 
 /** Contains PID errors and speed of motors. */
 public class TestTab implements ShuffleboardTabBase {
@@ -89,6 +88,15 @@ public class TestTab implements ShuffleboardTabBase {
     layout_1.addDouble("Intake Error", () -> IntakeTilt.getSetpoint() - sIntakeTilt.getPosition())
       .withWidget(BuiltInWidgets.kNumberBar)
       .withProperties(Map.of("min", -110, "max", 110, "center", 0));
+
+    layout_1.add("Tilt Speed", new Sendable() {
+      @Override
+      public void initSendable(SendableBuilder builder) {
+        builder.setSmartDashboardType("Motor Controller");
+        builder.addDoubleProperty("Value", sIntakeTilt::getSpeed, null);
+      }
+    }).withWidget(BuiltInWidgets.kMotorController)
+      .withProperties(Map.of("orientation", "HORIZONTAL"));
   }
 
   // Intake status and speed
@@ -99,10 +107,6 @@ public class TestTab implements ShuffleboardTabBase {
 
     layout_2.addBoolean("Steady", IntakeTilt::isSteadyEnabled)
       .withWidget(BuiltInWidgets.kBooleanBox);
-
-    layout_2.addDouble("Tilt Speed", sIntakeTilt::getSpeed)
-      .withWidget(BuiltInWidgets.kNumberBar)
-      .withProperties(Map.of("min", -IntakeConstants.kTiltMaxSpeed, "max", IntakeConstants.kTiltMaxSpeed, "center", 0));
 
     layout_2.addDouble("Intake Wheel Speed", sIntakeWheels::getSpeed)
       .withWidget(BuiltInWidgets.kNumberBar)

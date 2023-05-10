@@ -16,10 +16,10 @@ import frc.robot.subsystems.IntakeWheels;
 import frc.robot.commands.TurnToAngle;
 import frc.robot.commands.DriveDistance;
 
+import frc.robot.Constants.IntakeConstants;
+
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
-
-import frc.robot.Constants.IntakeConstants;
 
 // TODO: Copy data over to test tab, make 16x7
 /** Contains auton selector and data for driver and operator. */
@@ -51,13 +51,13 @@ public class SimulationTab implements ShuffleboardTabBase {
         builder.addDoubleProperty("Left Motor Speed", sDrivetrain::getLeft, null);
         builder.addDoubleProperty("Right Motor Speed", () -> -sDrivetrain.getRight(), null);
       }
-    }).withPosition(12, 0)
+    }).withPosition(11, 0)
       .withSize(5, 4)
       .withWidget(BuiltInWidgets.kDifferentialDrive)
       .withProperties(Map.of("number of wheels", 6, "wheel diameter", 60, "show velocity vectors", true));
 
     pitch_sim = sim_tab.add("Docking Angle", 0)
-      .withPosition(12, 4)
+      .withPosition(11, 4)
       .withSize(3, 2)
       .withWidget(BuiltInWidgets.kNumberSlider)
       .withProperties(Map.of("min", -45, "max", 45, "block increment", 2))
@@ -164,7 +164,7 @@ public class SimulationTab implements ShuffleboardTabBase {
   private void initLayout4() {
     ShuffleboardLayout layout_4 = sim_tab.getLayout("Intake Wheels", BuiltInLayouts.kList)
       .withPosition(9, 0)
-      .withSize(3, 8);
+      .withSize(2, 8);
 
     layout_4.addBoolean("Inverted", IntakeWheels::isInverted)
       .withWidget(BuiltInWidgets.kBooleanBox);
