@@ -40,7 +40,8 @@ public class CustomController extends GenericHID {
     super(port);
   }
 
-  public double applyDeadband(double value) {
+  /** Applies a 0.02 to 1.00 deadband to the passed value. */
+  public static double deadband(double value) {
     if (Math.abs(value) > kDeadband) {
       return (value - Math.copySign(kDeadband, value)) / (1 - kDeadband);
     }
@@ -49,13 +50,13 @@ public class CustomController extends GenericHID {
 
   /** @return left trigger subtractive and right trigger additive [-1.0..1.0] */
   public double getTriggers() {
-    return applyDeadband(getRawAxis(axis.rightTrigger.val) - getRawAxis(axis.leftTrigger.val));
+    return deadband(getRawAxis(axis.rightTrigger.val)) - deadband(getRawAxis(axis.leftTrigger.val));
   }
 
-  public double getLeftX() {return applyDeadband(getRawAxis(axis.leftX.val));}
-  public double getLeftY() {return applyDeadband(getRawAxis(axis.leftY.val));}
-  public double getRightX() {return applyDeadband(getRawAxis(axis.rightX.val));}
-  public double getRightY() {return applyDeadband(getRawAxis(axis.rightY.val));}
+  public double getLeftX() {return deadband(getRawAxis(axis.leftX.val));}
+  public double getLeftY() {return deadband(getRawAxis(axis.leftY.val));}
+  public double getRightX() {return deadband(getRawAxis(axis.rightX.val));}
+  public double getRightY() {return deadband(getRawAxis(axis.rightY.val));}
 
   public void onTrue(int btn, Runnable run) {
     onTrue(btn, run, CommandScheduler.getInstance().getDefaultButtonLoop());
