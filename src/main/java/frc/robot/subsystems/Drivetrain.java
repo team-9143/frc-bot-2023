@@ -1,12 +1,13 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.Command;
-import java.lang.Runnable;
 import frc.robot.OI;
 import frc.robot.Constants.PhysConstants;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.DeviceConstants;
+
+import edu.wpi.first.wpilibj2.command.Command;
+import java.lang.Runnable;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -16,14 +17,37 @@ import frc.robot.util.RobotDrive;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive.WheelSpeeds;
 
+import frc.robot.shuffleboard.ShuffleboardManager;
+import frc.robot.shuffleboard.SimulationTab;
+
 /** Controls the robot drivetrain. */
 public class Drivetrain extends SubsystemBase {
   private static Drivetrain m_instance;
 
   /** @return the singleton instance */
+  @SuppressWarnings("unused")
   public static synchronized Drivetrain getInstance() {
     if (m_instance == null) {
-      m_instance = new Drivetrain();
+      if (!(ShuffleboardManager.m_simulation && ShuffleboardManager.m_simulatedDrive)) {
+        m_instance = new Drivetrain();
+      } else {
+        m_instance = new Drivetrain() {
+          @Override
+          public double getPosition() {
+            if (SimulationTab.drivetrainPos_sim != null) {
+              return SimulationTab.drivetrainPos_sim.getDouble(0);
+            }
+            return 0;
+          }
+
+          @Override
+          public void resetEncoders() {
+            if (SimulationTab.drivetrainPos_sim != null) {
+              SimulationTab.drivetrainPos_sim.setDouble(0);
+            }
+          }
+        };
+      }
     }
     return m_instance;
   }
@@ -94,21 +118,11 @@ public class Drivetrain extends SubsystemBase {
   /** @return the average position of the drivetrain encoders */
   public double getPosition() {
     return (l_encoder.getPosition() - r_encoder.getPosition())/2;
-
-    // For simulation
-    // if (frc.robot.shuffleboard.SimulationTab.drivetrainPos_sim == null) {
-    //   return 0;
-    // } else {
-    //   return frc.robot.shuffleboard.SimulationTab.drivetrainPos_sim.getDouble(0);
-    // }
   }
 
   public void resetEncoders() {
     l_encoder.setPosition(0);
     r_encoder.setPosition(0);
-
-    // For simulation
-    // frc.robot.shuffleboard.SimulationTab.drivetrainPos_sim.setDouble(0);
   }
 
   public static void stop() {

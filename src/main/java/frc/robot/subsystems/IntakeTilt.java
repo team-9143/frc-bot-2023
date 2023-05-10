@@ -1,10 +1,11 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.math.controller.PIDController;
 import frc.robot.Constants.PhysConstants;
 import frc.robot.Constants.DeviceConstants;
 import frc.robot.Constants.IntakeConstants;
+
+import edu.wpi.first.math.controller.PIDController;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -12,14 +13,30 @@ import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 
+import frc.robot.shuffleboard.ShuffleboardManager;
+import frc.robot.shuffleboard.SimulationTab;
+
 /** Controls intake tilt motors. */
 public class IntakeTilt extends SubsystemBase {
   private static IntakeTilt m_instance;
 
   /** @return the singleton instance */
+  @SuppressWarnings("unused")
   public static synchronized IntakeTilt getInstance() {
     if (m_instance == null) {
-      m_instance = new IntakeTilt();
+      if (!(ShuffleboardManager.m_simulation && ShuffleboardManager.m_simulatedTilt)) {
+        m_instance = new IntakeTilt();
+      } else {
+        m_instance = new IntakeTilt() {
+          @Override
+          public double getPosition() {
+            if (SimulationTab.intakeAngle_sim != null) {
+              return SimulationTab.intakeAngle_sim.getDouble(IntakeConstants.kUpPos);
+            }
+            return IntakeConstants.kUpPos;
+          }
+        };
+      }
     }
     return m_instance;
   }
@@ -80,13 +97,6 @@ public class IntakeTilt extends SubsystemBase {
   /** @return the average position of the tilt encoders */
   public double getPosition() {
     return (l_encoder.getPosition() + r_encoder.getPosition())/2;
-
-    // For simulation
-    // if (frc.robot.shuffleboard.SimulationTab.intakeAngle_sim == null) {
-    //   return IntakeConstants.kUpPos * 360;
-    // } else {
-    //   return frc.robot.shuffleboard.SimulationTab.intakeAngle_sim.getDouble(IntakeConstants.kUpPos * 360) / 360;
-    // }
   }
 
   public void resetEncoders() {
@@ -127,6 +137,7 @@ public class IntakeTilt extends SubsystemBase {
   }
 
   // TODO(auto align): Test and implement autoAlign
+  /*
   public void getAutoAlignCommand() {
     new FunctionalCommand(
       () -> set(IntakeConstants.kAutoAlignSpeed),
@@ -140,4 +151,5 @@ public class IntakeTilt extends SubsystemBase {
       m_instance
     );
   }
+  */
 }

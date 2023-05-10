@@ -11,8 +11,14 @@ import frc.robot.autos.AutoSelector;
 
 /** Controls and initializes Shuffleboard tabs. */
 public class ShuffleboardManager {
-  /** For testing while manipulating the robot's sensors. If used, {@link frc.robot.subsystems.IntakeTilt IntakeTilt}.getPosition(), {@link frc.robot.subsystems.Drivetrain Drivetrain}.getPosition() and resetEncoders(), and {@link frc.robot.OI OI.pigeon}.getYaw(), setYaw(), and getPitch() must be overriden with editable data through NetworkTables. */
+  /** For testing while manipulating the robot's sensors. If used, automatically simulates {@link frc.robot.OI OI.pigeon}.getYaw(), setYaw(), and getPitch() through Shuffleboard. */
   public static final boolean m_simulation = false;
+
+  /** If {@code true} while in simulation, simulates {@link frc.robot.subsystems.Drivetrain Drivetrain}.getPosition() and resetEncoders() through Shuffleboard. */
+  public static final boolean m_simulatedDrive = false;
+
+  /** If {@code true} while in simulation, simulates {@link frc.robot.subsystems.IntakeTilt IntakeTilt}.getPosition() through Shuffleboard. */
+  public static final boolean m_simulatedTilt = false;
 
   private static ShuffleboardManager m_instance;
 
@@ -26,12 +32,12 @@ public class ShuffleboardManager {
 
   public interface ShuffleboardTabBase {
     /** Creates all widgets. */
-    abstract void initialize();
+    public void initialize();
   }
 
   public interface ShuffleboardChecklistBase extends ShuffleboardTabBase {
     /** Resets all checklist objects to false. */
-    abstract void reset();
+    public void reset();
 
     /**
      * Adds a checklist to a layout with toggle switches.
