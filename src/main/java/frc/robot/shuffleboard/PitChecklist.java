@@ -69,16 +69,8 @@ public class PitChecklist implements ShuffleboardChecklistBase {
   }
 
   public void reset() {
-    for (GenericEntry e : mechanical_entries) {
-      e.setBoolean(false);
-    }
-
-    for (GenericEntry e : electrical_entries) {
-      e.setBoolean(false);
-    }
-
-    for (GenericEntry e : cart_entries) {
-      e.setBoolean(false);
-    }
+    mechanical_entries.forEach(e -> e.setBoolean(false));
+    electrical_entries.forEach(e -> e.setBoolean(false));
+    cart_entries.forEach(e -> e.setBoolean(false));
   }
 }

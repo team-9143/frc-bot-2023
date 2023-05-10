@@ -50,12 +50,7 @@ public class MatchChecklist implements ShuffleboardChecklistBase {
   }
 
   public void reset() {
-    for (GenericEntry e : robot_entries) {
-      e.setBoolean(false);
-    }
-
-    for (GenericEntry e : station_entries) {
-      e.setBoolean(false);
-    }
+    robot_entries.forEach(e -> e.setBoolean(false));
+    station_entries.forEach(e -> e.setBoolean(false));
   }
 }
