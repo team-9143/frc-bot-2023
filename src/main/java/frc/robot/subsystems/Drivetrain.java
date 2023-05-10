@@ -14,8 +14,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 
 import frc.robot.util.RobotDrive;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive.WheelSpeeds;
+import frc.robot.util.RobotDrive.WheelSpeeds;
 
 import frc.robot.shuffleboard.ShuffleboardManager;
 import frc.robot.shuffleboard.SimulationTab;
@@ -93,11 +92,10 @@ public class Drivetrain extends SubsystemBase {
         turnInPlace(DrivetrainConstants.kTurnMult * Math.copySign(triggers * triggers, triggers));
       } else {
         // Arcade drive, input from left stick
-        m_drive.drive(DifferentialDrive.arcadeDriveIK(
+        m_drive.arcadeDrive(
           DrivetrainConstants.kSpeedMult * OI.driver_cntlr.getLeftY(),
-          DrivetrainConstants.kTurnMult * OI.driver_cntlr.getLeftX(),
-          true
-        ));
+          DrivetrainConstants.kTurnMult * OI.driver_cntlr.getLeftX()
+        );
       }
     }));
   }
