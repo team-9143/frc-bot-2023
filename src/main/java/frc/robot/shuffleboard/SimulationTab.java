@@ -48,8 +48,6 @@ public class SimulationTab implements ShuffleboardTabBase {
       @Override
       public void initSendable(SendableBuilder builder) {
         builder.setSmartDashboardType("DifferentialDrive");
-        builder.setActuator(true);
-        builder.setSafeState(Drivetrain::stop);
         builder.addDoubleProperty("Left Motor Speed", sDrivetrain::getLeft, null);
         builder.addDoubleProperty("Right Motor Speed", () -> -sDrivetrain.getRight(), null);
       }
