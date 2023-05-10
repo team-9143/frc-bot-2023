@@ -2,7 +2,10 @@ package frc.robot.devices;
 
 import edu.wpi.first.wpilibj.GenericHID;
 
-// TODO: Write trigger-like method to allow for efficient binding with RawButtonPressed and RawButtonReleased
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj.event.EventLoop;
+
+// TODO: Apply deadbands to axes
 public class CustomController extends GenericHID {
   public static enum btn {
     A(1),
@@ -45,4 +48,34 @@ public class CustomController extends GenericHID {
   public double getLeftY() {return getRawAxis(axis.leftY.val);}
   public double getRightX() {return getRawAxis(axis.rightX.val);}
   public double getRightY() {return getRawAxis(axis.rightY.val);}
+
+  public void onTrue(int btn, Runnable run) {
+    onTrue(btn, run, CommandScheduler.getInstance().getDefaultButtonLoop());
+  }
+
+  public void onTrue(int btn, Runnable run, EventLoop loop) {
+    loop.bind(() -> {
+      if (getRawButtonPressed(btn)) {run.run();}
+    });
+  }
+
+  public void onFalse(int btn, Runnable run) {
+    onFalse(btn, run, CommandScheduler.getInstance().getDefaultButtonLoop());
+  }
+
+  public void onFalse(int btn, Runnable run, EventLoop loop) {
+    loop.bind(() -> {
+      if (getRawButtonReleased(btn)) {run.run();}
+    });
+  }
+
+  public void whileTrue(int btn, Runnable run) {
+    whileTrue(btn, run, CommandScheduler.getInstance().getDefaultButtonLoop());
+  }
+
+  public void whileTrue(int btn, Runnable run, EventLoop loop) {
+    loop.bind(() -> {
+      if (getRawButton(btn)) {run.run();}
+    });
+  }
 }
