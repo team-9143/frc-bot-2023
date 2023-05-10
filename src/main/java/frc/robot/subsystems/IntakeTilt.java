@@ -35,6 +35,13 @@ public class IntakeTilt extends SubsystemBase {
             }
             return IntakeConstants.kUpPos;
           }
+
+          @Override
+          public void resetEncoders() {
+            if (SimulationTab.intakeAngle_sim != null) {
+              SimulationTab.intakeAngle_sim.setDouble(IntakeConstants.kUpPos);
+            }
+          }
         };
       }
     }

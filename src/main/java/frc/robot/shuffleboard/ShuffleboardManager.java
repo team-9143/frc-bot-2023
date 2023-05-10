@@ -17,7 +17,7 @@ public class ShuffleboardManager {
   /** If {@code true} while in simulation, simulates {@link frc.robot.subsystems.Drivetrain Drivetrain}.getPosition() and resetEncoders() through Shuffleboard. */
   public static final boolean m_simulatedDrive = false;
 
-  /** If {@code true} while in simulation, simulates {@link frc.robot.subsystems.IntakeTilt IntakeTilt}.getPosition() through Shuffleboard. */
+  /** If {@code true} while in simulation, simulates {@link frc.robot.subsystems.IntakeTilt IntakeTilt}.getPosition() and resetEncoders() through Shuffleboard. */
   public static final boolean m_simulatedTilt = false;
 
   private static ShuffleboardManager m_instance;
