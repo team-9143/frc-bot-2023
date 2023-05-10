@@ -148,7 +148,7 @@ public class RobotContainer {
     });
 
     // Triggers will disable intake and manually move up (LT) and down (RT)
-    new Trigger(() -> Math.abs(OI.operator_cntlr.getTriggers()) > 0.05)
+    new Trigger(() -> OI.operator_cntlr.getTriggers() != 0.0)
       .whileTrue(new FunctionalCommand(
         IntakeTilt::disableSteady,
         () -> {
