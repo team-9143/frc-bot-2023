@@ -98,8 +98,9 @@ public class RobotContainer {
     });
 
     // Button 'A' (hold) will auto-balance
-    new Trigger(() -> OI.driver_cntlr.getRawButton(btn.A.val))
-      .whileTrue(Drivetrain.getInstance().getBalanceCommand());
+    final Command cBalance = Drivetrain.getInstance().getBalanceCommand();
+    OI.driver_cntlr.onTrue(btn.A.val, cBalance::schedule);
+    OI.driver_cntlr.onFalse(btn.A.val, cBalance::cancel);
 
     // Button 'X' (debounced 1s) will reset gyro
     new Trigger(() -> OI.driver_cntlr.getRawButton(btn.X.val))
@@ -109,11 +110,9 @@ public class RobotContainer {
       ));
 
     // Button 'Y' will toggle TurnToAngle
-    CommandScheduler.getInstance().getDefaultButtonLoop().bind(() -> {
-      if (OI.driver_cntlr.getRawButtonPressed(btn.Y.val)) {
-        cTurnToAngle.cancel();
-        TurnToAngle.m_enabled ^= true;
-      }
+    OI.driver_cntlr.onTrue(btn.Y.val, () -> {
+      cTurnToAngle.cancel();
+      TurnToAngle.m_enabled ^= true;
     });
   }
 
@@ -121,11 +120,7 @@ public class RobotContainer {
     final IntakeUp cIntakeUp = new IntakeUp();
 
     // Button 'A' will invert intake wheels (for cones)
-    CommandScheduler.getInstance().getDefaultButtonLoop().bind(() -> {
-      if (OI.operator_cntlr.getRawButtonPressed(btn.A.val)) {
-        IntakeWheels.invert();
-      }
-    });
+    OI.operator_cntlr.onTrue(btn.A.val, IntakeWheels::invert);
 
     // Button 'X' (debounced 1s) will reset intake tilt encoders
     new Trigger(() -> OI.operator_cntlr.getRawButton(btn.X.val))
@@ -135,29 +130,31 @@ public class RobotContainer {
       ));
 
     // Button 'Y' will toggle automatic intake control
-    CommandScheduler.getInstance().getDefaultButtonLoop().bind(() -> {
-      if (OI.operator_cntlr.getRawButtonPressed(btn.Y.val)) {
-        if (IntakeTilt.isSteadyEnabled()) {IntakeTilt.disableSteady();} else {IntakeTilt.enableSteady();}
-      }
+    OI.operator_cntlr.onTrue(btn.Y.val, () -> {
+      if (IntakeTilt.isSteadyEnabled()) {IntakeTilt.disableSteady();} else {IntakeTilt.enableSteady();}
     });
 
     // Button 'LB' (hold) will shoot cubes
-    new Trigger(() -> OI.operator_cntlr.getRawButton(btn.LB.val))
-      .whileTrue(IntakeWheels.getInstance().getShootCommand());
+    final Command cShoot = IntakeWheels.getInstance().getShootCommand();
+    OI.operator_cntlr.onTrue(btn.LB.val, cShoot::schedule);
+    OI.operator_cntlr.onFalse(btn.LB.val, cShoot::cancel);
 
     // Button 'RB' (hold) will lower and activate intake, then raise on release
-    new Trigger(() -> OI.operator_cntlr.getRawButton(btn.RB.val))
-      .whileTrue(new IntakeDown().alongWith(IntakeWheels.getInstance().getIntakeCommand()))
-      .onFalse(cIntakeUp);
+    final Command cActivateIntake = new IntakeDown().alongWith(IntakeWheels.getInstance().getIntakeCommand());
+    OI.operator_cntlr.onTrue(btn.RB.val, cActivateIntake::schedule);
+    OI.operator_cntlr.onFalse(btn.RB.val, () -> {
+      cActivateIntake.cancel();
+      cIntakeUp.schedule();
+    });
 
     // Triggers will disable intake and manually move up (LT) and down (RT)
     new Trigger(() -> Math.abs(OI.operator_cntlr.getTriggers()) > 0.05)
       .whileTrue(new FunctionalCommand(
         IntakeTilt::disableSteady,
-        () -> IntakeTilt.getInstance().set(
-          Math.pow(OI.operator_cntlr.getTriggers(), 2) *
-          ((OI.operator_cntlr.getTriggers() < 0) ? Constants.IntakeConstants.kUpSpeed : Constants.IntakeConstants.kDownSpeed)
-        ),
+        () -> {
+          double triggers = OI.operator_cntlr.getTriggers();
+          IntakeTilt.getInstance().set(triggers * triggers * ((triggers < 0) ? Constants.IntakeConstants.kUpSpeed : Constants.IntakeConstants.kDownSpeed));
+        },
         interrupted -> IntakeTilt.disableSteady(),
         () -> false,
         IntakeTilt.getInstance()
