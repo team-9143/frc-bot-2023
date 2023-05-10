@@ -24,14 +24,19 @@ import frc.robot.Constants.IntakeConstants;
 // TODO: Copy data over to test tab, make 16x7
 /** Contains auton selector and data for driver and operator. */
 public class SimulationTab implements ShuffleboardTabBase {
-  final ShuffleboardTab sim_tab = Shuffleboard.getTab("Simulation");
+  private final ShuffleboardTab sim_tab;
+  private final Drivetrain sDrivetrain = Drivetrain.getInstance();
+  private final IntakeTilt sIntakeTilt = IntakeTilt.getInstance();
+  private final IntakeWheels sIntakeWheels = IntakeWheels.getInstance();
 
   public static GenericEntry yaw_sim;
   public static GenericEntry drivetrainPos_sim;
   public static GenericEntry intakeAngle_sim;
   public static GenericEntry pitch_sim;
 
-  protected SimulationTab() {}
+  protected SimulationTab() {
+    sim_tab = Shuffleboard.getTab("Simulation");
+  }
 
   public void initialize() {
     initLayout1();
@@ -45,8 +50,8 @@ public class SimulationTab implements ShuffleboardTabBase {
         builder.setSmartDashboardType("DifferentialDrive");
         builder.setActuator(true);
         builder.setSafeState(Drivetrain::stop);
-        builder.addDoubleProperty("Left Motor Speed", Drivetrain.getInstance()::getLeft, null);
-        builder.addDoubleProperty("Right Motor Speed", () -> -Drivetrain.getInstance().getRight(), null);
+        builder.addDoubleProperty("Left Motor Speed", sDrivetrain::getLeft, null);
+        builder.addDoubleProperty("Right Motor Speed", () -> -sDrivetrain.getRight(), null);
       }
     }).withPosition(12, 0)
       .withSize(5, 4)
@@ -61,10 +66,11 @@ public class SimulationTab implements ShuffleboardTabBase {
       .getEntry();
   }
 
+  // Turn to angle
   private void initLayout1() {
     ShuffleboardLayout layout_1 = sim_tab.getLayout("TurnToAngle", BuiltInLayouts.kList)
       .withPosition(0, 0)
-      .withSize(3, 7);
+      .withSize(3, 8);
 
     layout_1.addDouble("Setpoint", TurnToAngle.m_controller::getSetpoint)
       .withWidget(BuiltInWidgets.kNumberBar)
@@ -79,7 +85,7 @@ public class SimulationTab implements ShuffleboardTabBase {
       @Override
       public void initSendable(SendableBuilder builder) {
         builder.setSmartDashboardType("Motor Controller");
-        builder.addDoubleProperty("Value", () -> (TurnToAngle.isRunning()) ? Drivetrain.getInstance().getLeft() : 0, null);
+        builder.addDoubleProperty("Value", () -> (TurnToAngle.isRunning()) ? sDrivetrain.getLeft() : 0, null);
       }
     }).withWidget(BuiltInWidgets.kMotorController)
       .withProperties(Map.of("orientation", "HORIZONTAL"));
@@ -88,10 +94,11 @@ public class SimulationTab implements ShuffleboardTabBase {
       .withWidget(BuiltInWidgets.kBooleanBox);
   }
 
+  // Drive distance
   private void initLayout2() {
     ShuffleboardLayout layout_2 = sim_tab.getLayout("DriveDistance", BuiltInLayouts.kList)
       .withPosition(3, 0)
-      .withSize(3, 7);
+      .withSize(3, 8);
 
     layout_2.addDouble("Setpoint", DriveDistance.m_controller::getSetpoint)
       .withWidget(BuiltInWidgets.kNumberBar)
@@ -103,7 +110,7 @@ public class SimulationTab implements ShuffleboardTabBase {
         .withProperties(Map.of("min", -225, "max", 225, "block increment", 3))
         .getEntry();
     } else {
-      layout_2.addDouble("Position", Drivetrain.getInstance()::getPosition)
+      layout_2.addDouble("Position", sDrivetrain::getPosition)
         .withWidget(BuiltInWidgets.kNumberBar)
         .withProperties(Map.of("min", -225, "max", 225, "center", 0));
     }
@@ -112,7 +119,7 @@ public class SimulationTab implements ShuffleboardTabBase {
       @Override
       public void initSendable(SendableBuilder builder) {
         builder.setSmartDashboardType("Motor Controller");
-        builder.addDoubleProperty("Value", () -> (DriveDistance.isRunning()) ? Drivetrain.getInstance().getLeft() : 0, null);
+        builder.addDoubleProperty("Value", () -> (DriveDistance.isRunning()) ? sDrivetrain.getLeft() : 0, null);
       }
     }).withWidget(BuiltInWidgets.kMotorController)
       .withProperties(Map.of("orientation", "HORIZONTAL"));
@@ -121,10 +128,11 @@ public class SimulationTab implements ShuffleboardTabBase {
       .withWidget(BuiltInWidgets.kBooleanBox);
   }
 
+  // Intake angle
   private void initLayout3() {
     ShuffleboardLayout layout_3 = sim_tab.getLayout("Intake Angle", BuiltInLayouts.kList)
       .withPosition(6, 0)
-      .withSize(3, 7);
+      .withSize(3, 8);
 
     layout_3.addDouble("Setpoint", IntakeTilt::getSetpoint)
       .withWidget(BuiltInWidgets.kNumberBar)
@@ -136,7 +144,7 @@ public class SimulationTab implements ShuffleboardTabBase {
         .withProperties(Map.of("min", -110, "max", 110, "block increment", 4))
         .getEntry();
     } else {
-      layout_3.addDouble("Angle", IntakeTilt.getInstance()::getPosition)
+      layout_3.addDouble("Angle", sIntakeTilt::getPosition)
         .withWidget(BuiltInWidgets.kNumberBar)
         .withProperties(Map.of("min", -110, "max", 110, "center", 0));
     }
@@ -145,7 +153,7 @@ public class SimulationTab implements ShuffleboardTabBase {
       @Override
       public void initSendable(SendableBuilder builder) {
         builder.setSmartDashboardType("Motor Controller");
-        builder.addDoubleProperty("Value", IntakeTilt.getInstance()::get, null);
+        builder.addDoubleProperty("Value", sIntakeTilt::get, null);
       }
     }).withWidget(BuiltInWidgets.kMotorController)
       .withProperties(Map.of("orientation", "HORIZONTAL"));
@@ -154,25 +162,26 @@ public class SimulationTab implements ShuffleboardTabBase {
       .withWidget(BuiltInWidgets.kBooleanBox);
   }
 
+  // Intake wheels
   private void initLayout4() {
     ShuffleboardLayout layout_4 = sim_tab.getLayout("Intake Wheels", BuiltInLayouts.kList)
       .withPosition(9, 0)
-      .withSize(3, 7);
+      .withSize(3, 8);
 
     layout_4.addBoolean("Inverted", IntakeWheels::isInverted)
       .withWidget(BuiltInWidgets.kBooleanBox);
 
-    layout_4.addBoolean("Intaking", () -> (Math.signum(IntakeWheels.getInstance().get()) == (IntakeWheels.isInverted() ? -1.0 : 1.0)))
+    layout_4.addBoolean("Intaking", () -> (Math.signum(sIntakeWheels.get()) == (IntakeWheels.isInverted() ? -1.0 : 1.0)))
       .withWidget(BuiltInWidgets.kBooleanBox);
 
-    layout_4.addBoolean("Shooting", () -> (Math.signum(IntakeWheels.getInstance().get()) == (IntakeWheels.isInverted() ? 1.0 : -1.0)))
+    layout_4.addBoolean("Shooting", () -> (Math.signum(sIntakeWheels.get()) == (IntakeWheels.isInverted() ? 1.0 : -1.0)))
       .withWidget(BuiltInWidgets.kBooleanBox);
 
     layout_4.add("Speed", new Sendable() {
       @Override
       public void initSendable(SendableBuilder builder) {
         builder.setSmartDashboardType("Motor Controller");
-        builder.addDoubleProperty("Value", IntakeWheels.getInstance()::get, null);
+        builder.addDoubleProperty("Value", sIntakeWheels::get, null);
       }
     }).withWidget(BuiltInWidgets.kMotorController)
       .withProperties(Map.of("orientation", "HORIZONTAL"));

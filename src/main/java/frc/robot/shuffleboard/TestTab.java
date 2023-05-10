@@ -23,39 +23,18 @@ import frc.robot.Constants.IntakeConstants;
 
 /** Contains PID errors and speed of motors. */
 public class TestTab implements ShuffleboardTabBase {
-  protected TestTab() {}
+  private final ShuffleboardTab test_tab;
+  private final Drivetrain sDrivetrain = Drivetrain.getInstance();
+  private final IntakeTilt sIntakeTilt = IntakeTilt.getInstance();
+  private final IntakeWheels sIntakeWheels = IntakeWheels.getInstance();
+
+  protected TestTab() {
+    test_tab = Shuffleboard.getTab("Test");
+  }
 
   public void initialize() {
-    final ShuffleboardTab test_tab = Shuffleboard.getTab("Test");
-
-    final Drivetrain sDrivetrain = Drivetrain.getInstance();
-    final IntakeTilt sIntakeTilt = IntakeTilt.getInstance();
-    final IntakeWheels sIntakeWheels = IntakeWheels.getInstance();
-
-    ShuffleboardLayout layout_1 = test_tab.getLayout("Intake Angle", BuiltInLayouts.kList)
-      .withPosition(0, 0)
-      .withSize(4, 8);
-    layout_1.addDouble("Intake Angle", sIntakeTilt::getPosition)
-      .withWidget(BuiltInWidgets.kDial)
-      .withProperties(Map.of("min", -110, "max", 110, "show value", true));
-    layout_1.addDouble("Intake Setpoint", IntakeTilt::getSetpoint)
-        .withWidget(BuiltInWidgets.kDial)
-        .withProperties(Map.of("min", -110, "max", 110, "show value", true));
-    layout_1.addDouble("Intake Error", () -> IntakeTilt.getSetpoint() - sIntakeTilt.getPosition())
-        .withWidget(BuiltInWidgets.kNumberBar)
-        .withProperties(Map.of("min", -110, "max", 110, "center", 0));
-
-    ShuffleboardLayout layout_2 = test_tab.getLayout("Intake Status", BuiltInLayouts.kList)
-      .withPosition(4, 0)
-      .withSize(3, 6);
-    layout_2.addBoolean("Steady", IntakeTilt::isSteadyEnabled)
-      .withWidget(BuiltInWidgets.kBooleanBox);
-    layout_2.addDouble("Tilt Speed", sIntakeTilt::get)
-      .withWidget(BuiltInWidgets.kNumberBar)
-      .withProperties(Map.of("min", -IntakeConstants.kTiltMaxSpeed, "max", IntakeConstants.kTiltMaxSpeed, "center", 0));
-    layout_2.addDouble("Intake Wheel Speed", sIntakeWheels::get)
-      .withWidget(BuiltInWidgets.kNumberBar)
-      .withProperties(Map.of("min", -1, "max", 1, "center", 0));
+    initLayout1();
+    initLayout2();
 
     test_tab.addDouble("TurnToAngle Error", TurnToAngle.m_controller::getPositionError)
       .withPosition(7, 0)
@@ -93,5 +72,40 @@ public class TestTab implements ShuffleboardTabBase {
       .withSize(5, 4)
       .withWidget(BuiltInWidgets.kGyro)
       .withProperties(Map.of("major tick spacing", 45, "starting angle", 180, "show tick mark ring", true));
+  }
+
+  private void initLayout1() {
+    ShuffleboardLayout layout_1 = test_tab.getLayout("Intake Angle", BuiltInLayouts.kList)
+      .withPosition(0, 0)
+      .withSize(4, 8);
+
+    layout_1.addDouble("Intake Angle", sIntakeTilt::getPosition)
+      .withWidget(BuiltInWidgets.kDial)
+      .withProperties(Map.of("min", -110, "max", 110, "show value", true));
+
+    layout_1.addDouble("Intake Setpoint", IntakeTilt::getSetpoint)
+      .withWidget(BuiltInWidgets.kDial)
+      .withProperties(Map.of("min", -110, "max", 110, "show value", true));
+
+    layout_1.addDouble("Intake Error", () -> IntakeTilt.getSetpoint() - sIntakeTilt.getPosition())
+      .withWidget(BuiltInWidgets.kNumberBar)
+      .withProperties(Map.of("min", -110, "max", 110, "center", 0));
+  }
+
+  private void initLayout2() {
+    ShuffleboardLayout layout_2 = test_tab.getLayout("Intake Status", BuiltInLayouts.kList)
+      .withPosition(4, 0)
+      .withSize(3, 6);
+
+    layout_2.addBoolean("Steady", IntakeTilt::isSteadyEnabled)
+      .withWidget(BuiltInWidgets.kBooleanBox);
+
+    layout_2.addDouble("Tilt Speed", sIntakeTilt::get)
+      .withWidget(BuiltInWidgets.kNumberBar)
+      .withProperties(Map.of("min", -IntakeConstants.kTiltMaxSpeed, "max", IntakeConstants.kTiltMaxSpeed, "center", 0));
+
+    layout_2.addDouble("Intake Wheel Speed", sIntakeWheels::get)
+      .withWidget(BuiltInWidgets.kNumberBar)
+      .withProperties(Map.of("min", -1, "max", 1, "center", 0));
   }
 }
