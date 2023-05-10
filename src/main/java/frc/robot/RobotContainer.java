@@ -109,21 +109,23 @@ public class RobotContainer {
       ));
 
     // Button 'Y' will toggle TurnToAngle
-    new Trigger(() -> OI.driver_cntlr.getRawButton(btn.Y.val))
-      .onTrue(new InstantCommand(() -> {
+    CommandScheduler.getInstance().getDefaultButtonLoop().bind(() -> {
+      if (OI.driver_cntlr.getRawButtonPressed(btn.Y.val)) {
         cTurnToAngle.cancel();
         TurnToAngle.m_enabled ^= true;
-      }));
+      }
+    });
   }
 
   private void configureOperator() {
     final IntakeUp cIntakeUp = new IntakeUp();
 
     // Button 'A' will invert intake wheels (for cones)
-    new Trigger(() -> OI.operator_cntlr.getRawButton(btn.A.val))
-      .onTrue(new InstantCommand(
-        IntakeWheels::invert
-      ));
+    CommandScheduler.getInstance().getDefaultButtonLoop().bind(() -> {
+      if (OI.operator_cntlr.getRawButtonPressed(btn.A.val)) {
+        IntakeWheels.invert();
+      }
+    });
 
     // Button 'X' (debounced 1s) will reset intake tilt encoders
     new Trigger(() -> OI.operator_cntlr.getRawButton(btn.X.val))
@@ -133,10 +135,11 @@ public class RobotContainer {
       ));
 
     // Button 'Y' will toggle automatic intake control
-    new Trigger(() -> OI.operator_cntlr.getRawButton(btn.Y.val))
-      .onTrue(new InstantCommand(() -> {
+    CommandScheduler.getInstance().getDefaultButtonLoop().bind(() -> {
+      if (OI.operator_cntlr.getRawButtonPressed(btn.Y.val)) {
         if (IntakeTilt.isSteadyEnabled()) {IntakeTilt.disableSteady();} else {IntakeTilt.enableSteady();}
-      }));
+      }
+    });
 
     // Button 'LB' (hold) will shoot cubes
     new Trigger(() -> OI.operator_cntlr.getRawButton(btn.LB.val))

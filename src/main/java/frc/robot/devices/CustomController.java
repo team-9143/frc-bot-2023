@@ -2,6 +2,7 @@ package frc.robot.devices;
 
 import edu.wpi.first.wpilibj.GenericHID;
 
+// TODO: Write trigger-like method to allow for efficient binding with RawButtonPressed and RawButtonReleased
 public class CustomController extends GenericHID {
   public static enum btn {
     A(1),
