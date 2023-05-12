@@ -68,12 +68,12 @@ public class IntakeTilt extends SubsystemBase {
     @SuppressWarnings("resource")
     final CANSparkMax r_motor = new CANSparkMax(DeviceConstants.kIntakeTiltRightID, MotorType.kBrushless);
 
+    l_encoder = l_motor.getEncoder();
+    r_encoder = r_motor.getEncoder();
+
     // IMPORTANT: Ensures motors mirror output
     r_motor.follow(l_motor, true);
     m_motor = l_motor;
-
-    l_encoder = l_motor.getEncoder();
-    r_encoder = r_motor.getEncoder();
   }
 
   private IntakeTilt() {
