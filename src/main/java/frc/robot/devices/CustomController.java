@@ -20,8 +20,8 @@ public class CustomController extends GenericHID {
     Back(7),
     Start(8);
 
-    public final int val;
-    btn (int val) {this.val = val;}
+    public final byte val;
+    btn (int val) {this.val = (byte) val;}
   }
 
   public static enum axis {
@@ -32,8 +32,8 @@ public class CustomController extends GenericHID {
     leftTrigger(2),
     rightTrigger(3);
 
-    public final int val;
-    axis (int val) {this.val = val;}
+    public final byte val;
+    axis (int val) {this.val = (byte) val;}
   }
 
   public CustomController(int port) {
@@ -58,33 +58,33 @@ public class CustomController extends GenericHID {
   public double getRightX() {return deadband(getRawAxis(axis.rightX.val));}
   public double getRightY() {return deadband(getRawAxis(axis.rightY.val));}
 
-  public void onTrue(int btn, Runnable run) {
+  public void onTrue(btn btn, Runnable run) {
     onTrue(btn, run, CommandScheduler.getInstance().getDefaultButtonLoop());
   }
 
-  public void onTrue(int btn, Runnable run, EventLoop loop) {
+  public void onTrue(btn btn, Runnable run, EventLoop loop) {
     loop.bind(() -> {
-      if (getRawButtonPressed(btn)) {run.run();}
+      if (getRawButtonPressed(btn.val)) {run.run();}
     });
   }
 
-  public void onFalse(int btn, Runnable run) {
+  public void onFalse(btn btn, Runnable run) {
     onFalse(btn, run, CommandScheduler.getInstance().getDefaultButtonLoop());
   }
 
-  public void onFalse(int btn, Runnable run, EventLoop loop) {
+  public void onFalse(btn btn, Runnable run, EventLoop loop) {
     loop.bind(() -> {
-      if (getRawButtonReleased(btn)) {run.run();}
+      if (getRawButtonReleased(btn.val)) {run.run();}
     });
   }
 
-  public void whileTrue(int btn, Runnable run) {
+  public void whileTrue(btn btn, Runnable run) {
     whileTrue(btn, run, CommandScheduler.getInstance().getDefaultButtonLoop());
   }
 
-  public void whileTrue(int btn, Runnable run, EventLoop loop) {
+  public void whileTrue(btn btn, Runnable run, EventLoop loop) {
     loop.bind(() -> {
-      if (getRawButton(btn)) {run.run();}
+      if (getRawButton(btn.val)) {run.run();}
     });
   }
 }

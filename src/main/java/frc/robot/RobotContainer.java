@@ -76,8 +76,8 @@ public class RobotContainer {
 
     // Button 'A' (hold) will auto-balance
     final Command cBalance = Drivetrain.getInstance().getBalanceCommand();
-    OI.driver_cntlr.onTrue(btn.A.val, cBalance::schedule);
-    OI.driver_cntlr.onFalse(btn.A.val, cBalance::cancel);
+    OI.driver_cntlr.onTrue(btn.A, cBalance::schedule);
+    OI.driver_cntlr.onFalse(btn.A, cBalance::cancel);
 
     // Button 'X' (debounced 1s) will reset gyro
     new Trigger(() -> OI.driver_cntlr.getRawButton(btn.X.val))
@@ -87,7 +87,7 @@ public class RobotContainer {
       ));
 
     // Button 'Y' will toggle TurnToAngle
-    OI.driver_cntlr.onTrue(btn.Y.val, () -> {
+    OI.driver_cntlr.onTrue(btn.Y, () -> {
       cTurnToAngle.cancel();
       TurnToAngle.m_enabled ^= true;
     });
@@ -97,7 +97,7 @@ public class RobotContainer {
     final IntakeUp cIntakeUp = new IntakeUp();
 
     // Button 'A' will invert intake wheels (for cones)
-    OI.operator_cntlr.onTrue(btn.A.val, IntakeWheels::invert);
+    OI.operator_cntlr.onTrue(btn.A, IntakeWheels::invert);
 
     // Button 'X' (debounced 1s) will reset intake tilt encoders
     new Trigger(() -> OI.operator_cntlr.getRawButton(btn.X.val))
@@ -107,19 +107,19 @@ public class RobotContainer {
       ));
 
     // Button 'Y' will toggle automatic intake control
-    OI.operator_cntlr.onTrue(btn.Y.val, () -> {
+    OI.operator_cntlr.onTrue(btn.Y, () -> {
       if (IntakeTilt.isSteadyEnabled()) {IntakeTilt.disableSteady();} else {IntakeTilt.enableSteady();}
     });
 
     // Button 'LB' (hold) will shoot cubes
     final Command cShoot = IntakeWheels.getInstance().getShootCommand();
-    OI.operator_cntlr.onTrue(btn.LB.val, cShoot::schedule);
-    OI.operator_cntlr.onFalse(btn.LB.val, cShoot::cancel);
+    OI.operator_cntlr.onTrue(btn.LB, cShoot::schedule);
+    OI.operator_cntlr.onFalse(btn.LB, cShoot::cancel);
 
     // Button 'RB' (hold) will lower and activate intake, then raise on release
     final Command cActivateIntake = new IntakeDown().alongWith(IntakeWheels.getInstance().getIntakeCommand());
-    OI.operator_cntlr.onTrue(btn.RB.val, cActivateIntake::schedule);
-    OI.operator_cntlr.onFalse(btn.RB.val, () -> {
+    OI.operator_cntlr.onTrue(btn.RB, cActivateIntake::schedule);
+    OI.operator_cntlr.onFalse(btn.RB, () -> {
       cActivateIntake.cancel();
       cIntakeUp.schedule();
     });
