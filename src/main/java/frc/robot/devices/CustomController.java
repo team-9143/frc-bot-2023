@@ -1,13 +1,16 @@
 package frc.robot.devices;
 
-import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.DriverStation;
 
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj.event.EventLoop;
 
-public class CustomController extends GenericHID {
-  public final static double kDeadband = 0.02;
-
+/**
+ * Class to communicate with a controller through the drive station.
+ *
+ * @see edu.wpi.first.wpilibj.GenericHID
+ */
+public class CustomController {
   public static enum btn {
     A(1),
     B(2),
@@ -36,27 +39,42 @@ public class CustomController extends GenericHID {
     axis (int val) {this.val = (byte) val;}
   }
 
+  private final byte m_port;
+
   public CustomController(int port) {
-    super(port);
+    m_port = (byte) port;
   }
 
   /** Applies a 0.02 to 1.00 deadband to the passed value. */
   public static double deadband(double value) {
-    if (Math.abs(value) > kDeadband) {
-      return (value - Math.copySign(kDeadband, value)) / (1 - kDeadband);
+    if (Math.abs(value) > 0.02) {
+      return (value - Math.copySign(0.02, value)) / 0.98;
     }
     return 0;
   }
 
-  /** @return left trigger subtractive and right trigger additive [-1.0..1.0] */
-  public double getTriggers() {
-    return deadband(getRawAxis(axis.rightTrigger.val)) - deadband(getRawAxis(axis.leftTrigger.val));
+  public boolean getButton(btn btn) {
+    return DriverStation.getStickButton(m_port, btn.val);
   }
 
-  public double getLeftX() {return deadband(getRawAxis(axis.leftX.val));}
-  public double getLeftY() {return deadband(getRawAxis(axis.leftY.val));}
-  public double getRightX() {return deadband(getRawAxis(axis.rightX.val));}
-  public double getRightY() {return deadband(getRawAxis(axis.rightY.val));}
+  public double getAxis(axis axis) {
+    return DriverStation.getStickAxis(m_port, axis.val);
+  }
+
+  /** POV indexes start at 0. */
+  public int getPOV(int pov) {
+    return DriverStation.getStickPOV(m_port, pov);
+  }
+
+  /** @return left trigger subtractive and right trigger additive [-1.0..1.0] */
+  public double getTriggers() {
+    return deadband(getAxis(axis.rightTrigger)) - deadband(getAxis(axis.leftTrigger));
+  }
+
+  public double getLeftX() {return deadband(getAxis(axis.leftX));}
+  public double getLeftY() {return deadband(getAxis(axis.leftY));}
+  public double getRightX() {return deadband(getAxis(axis.rightX));}
+  public double getRightY() {return deadband(getAxis(axis.rightY));}
 
   public void onTrue(btn btn, Runnable run) {
     onTrue(btn, run, CommandScheduler.getInstance().getDefaultButtonLoop());
@@ -64,7 +82,7 @@ public class CustomController extends GenericHID {
 
   public void onTrue(btn btn, Runnable run, EventLoop loop) {
     loop.bind(() -> {
-      if (getRawButtonPressed(btn.val)) {run.run();}
+      if (DriverStation.getStickButtonPressed(m_port, btn.val)) {run.run();}
     });
   }
 
@@ -74,7 +92,7 @@ public class CustomController extends GenericHID {
 
   public void onFalse(btn btn, Runnable run, EventLoop loop) {
     loop.bind(() -> {
-      if (getRawButtonReleased(btn.val)) {run.run();}
+      if (DriverStation.getStickButtonReleased(m_port, btn.val)) {run.run();}
     });
   }
 
@@ -84,7 +102,7 @@ public class CustomController extends GenericHID {
 
   public void whileTrue(btn btn, Runnable run, EventLoop loop) {
     loop.bind(() -> {
-      if (getRawButton(btn.val)) {run.run();}
+      if (getButton(btn)) {run.run();}
     });
   }
 }

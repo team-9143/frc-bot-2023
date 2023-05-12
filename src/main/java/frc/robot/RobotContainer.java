@@ -56,7 +56,7 @@ public class RobotContainer {
   private void configureBindings() {
     // Universal:
     // Button 'B' (hold) will continuously stop all movement
-    new Trigger(() -> OI.driver_cntlr.getRawButton(btn.B.val) || OI.operator_cntlr.getRawButton(btn.B.val))
+    new Trigger(() -> OI.driver_cntlr.getButton(btn.B) || OI.operator_cntlr.getButton(btn.B))
       .whileTrue(cStop);
 
     configureDriver();
@@ -68,8 +68,8 @@ public class RobotContainer {
 
     // D-pad will turn to the specified angle
     CommandScheduler.getInstance().getDefaultButtonLoop().bind(() -> {
-      if (TurnToAngle.m_enabled && OI.driver_cntlr.getPOV() != -1) {
-        cTurnToAngle.setHeading(OI.driver_cntlr.getPOV());
+      if (TurnToAngle.m_enabled && OI.driver_cntlr.getPOV(0) != -1) {
+        cTurnToAngle.setHeading(OI.driver_cntlr.getPOV(0));
         cTurnToAngle.schedule();
       }
     });
@@ -80,7 +80,7 @@ public class RobotContainer {
     OI.driver_cntlr.onFalse(btn.A, cBalance::cancel);
 
     // Button 'X' (debounced 1s) will reset gyro
-    new Trigger(() -> OI.driver_cntlr.getRawButton(btn.X.val))
+    new Trigger(() -> OI.driver_cntlr.getButton(btn.X))
     .debounce(1)
       .onTrue(new InstantCommand(() ->
         OI.pigeon.setYaw(0)
@@ -100,7 +100,7 @@ public class RobotContainer {
     OI.operator_cntlr.onTrue(btn.A, IntakeWheels::invert);
 
     // Button 'X' (debounced 1s) will reset intake tilt encoders
-    new Trigger(() -> OI.operator_cntlr.getRawButton(btn.X.val))
+    new Trigger(() -> OI.operator_cntlr.getButton(btn.X))
     .debounce(1)
       .onTrue(new InstantCommand(
         IntakeTilt.getInstance()::resetEncoders
@@ -138,25 +138,25 @@ public class RobotContainer {
       ));
 
     // D-pad up will angle down, then shoot
-    new Trigger(() -> OI.operator_cntlr.getPOV() == 0)
+    new Trigger(() -> OI.operator_cntlr.getPOV(0) == 0)
       .whileTrue(new AimMid())
       .onFalse(cIntakeUp)
     .debounce(0.5)
       .whileTrue(IntakeWheels.getInstance().getShootCommand());
 
     // D-pad right will spit
-    new Trigger(() -> OI.operator_cntlr.getPOV() == 90)
+    new Trigger(() -> OI.operator_cntlr.getPOV(0) == 90)
       .whileTrue(IntakeWheels.getInstance().getSpitCommand());
 
     // D-pad down will angle down, then spit
-    new Trigger(() -> OI.operator_cntlr.getPOV() == 180)
+    new Trigger(() -> OI.operator_cntlr.getPOV(0) == 180)
       .whileTrue(new AimMid())
       .onFalse(cIntakeUp)
     .debounce(0.5)
       .whileTrue(IntakeWheels.getInstance().getSpitCommand());
 
     // D-pad left will intake
-    new Trigger(() -> OI.operator_cntlr.getPOV() == 270)
+    new Trigger(() -> OI.operator_cntlr.getPOV(0) == 270)
       .whileTrue(IntakeWheels.getInstance().getIntakeCommand());
   }
 
