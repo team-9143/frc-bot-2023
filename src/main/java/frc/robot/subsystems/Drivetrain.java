@@ -93,8 +93,8 @@ public class Drivetrain extends SubsystemBase {
       } else {
         // Arcade drive, input from left stick
         m_drive.arcadeDrive(
-          DrivetrainConstants.kSpeedMult * OI.driver_cntlr.getLeftY(),
-          DrivetrainConstants.kTurnMult * OI.driver_cntlr.getLeftX()
+          DrivetrainConstants.kTurnMult * OI.driver_cntlr.getLeftX(),
+          DrivetrainConstants.kSpeedMult * OI.driver_cntlr.getLeftY()
         );
       }
     }));
