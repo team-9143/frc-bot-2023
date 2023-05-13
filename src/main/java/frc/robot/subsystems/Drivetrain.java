@@ -64,13 +64,13 @@ public class Drivetrain extends SubsystemBase {
       fr_motor = new CANSparkMax(DeviceConstants.kFrontRightID, MotorType.kBrushless),
       br_motor = new CANSparkMax(DeviceConstants.kBackRightID, MotorType.kBrushless);
 
+    l_encoder = fl_motor.getEncoder();
+    r_encoder = fr_motor.getEncoder();
+
     // IMPORTANT: Ensures motors have consistent output
     bl_motor.follow(fl_motor, false);
     br_motor.follow(fr_motor, false);
     m_drive = new RobotDrive(fl_motor, fr_motor);
-
-    l_encoder = fl_motor.getEncoder();
-    r_encoder = fr_motor.getEncoder();
   }
 
   private Drivetrain() {
