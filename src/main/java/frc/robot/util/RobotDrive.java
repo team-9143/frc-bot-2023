@@ -4,8 +4,6 @@ import edu.wpi.first.wpilibj.MotorSafety;
 
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-
 /** Class for controlling the robot drivetrain and ensuring motor safety with constant updates. */
 public class RobotDrive extends MotorSafety {
   private final MotorController l_motor;
@@ -46,12 +44,12 @@ public class RobotDrive extends MotorSafety {
 
   /**
    * Classic arcade drive, squaring inputs to increase sensitivity.
-   * 
-   * @param speed backward speed [-1.0..1.0]
+   *
+   * @param drive forward speed [-1.0..1.0]
    * @param rotation clockwise rotation [-1.0..1.0]
    */
-  public void arcadeDrive(double speed, double rotation) {
-    DifferentialDrive.WheelSpeeds speeds = DifferentialDrive.arcadeDriveIK(speed, rotation, true);
+  public void arcadeDrive(double drive, double rotation) {
+    WheelSpeeds speeds = MathUtil.arcadeDriveIK(drive, rotation);
     l_motor.set(speeds.left);
     r_motor.set(speeds.right);
     feed();
