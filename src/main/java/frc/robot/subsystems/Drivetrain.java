@@ -87,15 +87,15 @@ public class Drivetrain extends SubsystemBase {
     // Teleop drive: single joystick or turn in place with triggers
     setDefaultCommand(run(() -> {
       double triggers = OI.driver_cntlr.getTriggers();
-      if (triggers != 0.0) {
-        // Turn in place, input from triggers
-        turnInPlace(DrivetrainConstants.kTurnMult * Math.copySign(triggers * triggers, triggers));
-      } else {
-        // Arcade drive, input from left stick
+      if (triggers == 0.0) {
+        // Arcade drive, input from left stick (higher priority)
         m_drive.arcadeDrive(
           -DrivetrainConstants.kSpeedMult * OI.driver_cntlr.getLeftY(),
           DrivetrainConstants.kTurnMult * OI.driver_cntlr.getLeftX()
         );
+      } else {
+        // Turn in place, input from triggers (lower priority)
+        turnInPlace(DrivetrainConstants.kTurnMult * Math.copySign(triggers * triggers, triggers));
       }
     }));
   }
