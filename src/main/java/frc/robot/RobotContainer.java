@@ -10,13 +10,14 @@ import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.devices.CustomController.btn;
 
+// TODO: Combine triggers so that commands cannot be independently scheduled from different triggers
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -34,69 +35,28 @@ public class RobotContainer {
     return m_instance;
   }
 
-  // Initialize subsystems and commands
-  private static final Drivetrain sDrivetrain = Drivetrain.getInstance();
-  private static final IntakeWheels sIntakeWheels = IntakeWheels.getInstance();
-  private static final IntakeTilt sIntakeTilt = IntakeTilt.getInstance();
-
-  private final Balance cBalance = new Balance();
-  private final TurnToAngle cTurnToAngle = new TurnToAngle(0);
-  private final IntakeDown cIntakeDown = new IntakeDown();
-  private final IntakeUp cIntakeUp = new IntakeUp();
-  private final Command cIntake = sIntakeWheels.getIntakeCommand();
-  private final Command cShoot = sIntakeWheels.getShootCommand();
-  private final Command cSpit = sIntakeWheels.getSpitCommand();
-  private final Command cAimMid = new AimMid();
-  private final Command cManualHold = new StartEndCommand(
-    () -> sIntakeWheels.set(Constants.IntakeConstants.kHoldingSpeed),
-    IntakeWheels::stop,
-    sIntakeWheels
-  );
+  // Initialize commands
   private static final Command cStop = new RunCommand(() -> {
     Drivetrain.stop();
     IntakeWheels.stop();
-    IntakeTilt.stop();
-  }, sDrivetrain, sIntakeWheels, sIntakeTilt)
+    IntakeTilt.disableSteady();
+  }, Drivetrain.getInstance(), IntakeWheels.getInstance(), IntakeTilt.getInstance())
     .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
 
-  /** The container for the robot. Intializes subsystems, teleop commands, and OI devices. */
+  /** The container for the robot. Intializes subsystems, teleop command bindings, and OI devices. */
   private RobotContainer() {
     // Configure Pigeon - make sure to update pitch and roll offsets
     OI.pigeon.configMountPose(0, -0.24665457, -179.574783);
     OI.pigeon.setYaw(0);
 
-    configurePIDControllers();
-
     configureBindings();
-  }
-
-  /** Configure settings for PID controllers. */
-  private void configurePIDControllers() {
-    TurnToAngle.m_controller.setIntegratorRange(-Constants.DrivetrainConstants.kTurnMaxSpeed, Constants.DrivetrainConstants.kTurnMaxSpeed);
-    TurnToAngle.m_controller.setTolerance(Constants.DrivetrainConstants.kTurnPosTolerance, Constants.DrivetrainConstants.kTurnVelTolerance);
-    TurnToAngle.m_controller.enableContinuousInput(-180, 180);
-    TurnToAngle.m_controller.setSetpoint(0);
-
-    DriveDistance.m_controller.setIntegratorRange(-Constants.DrivetrainConstants.kDistMaxSpeed, Constants.DrivetrainConstants.kDistMaxSpeed);
-    DriveDistance.m_controller.setTolerance(Constants.DrivetrainConstants.kDistPosTolerance, Constants.DrivetrainConstants.kDistVelTolerance);
-    DriveDistance.m_controller.setSetpoint(0);
-
-    IntakeTilt.m_controller.setIntegratorRange(-Constants.IntakeConstants.kTiltMaxSpeed, Constants.IntakeConstants.kTiltMaxSpeed);
-    IntakeTilt.m_controller.setSetpoint(Constants.IntakeConstants.kUpPos);
-
-    IntakeDown.m_controller.setIntegratorRange(-Constants.IntakeConstants.kTiltMaxSpeed, Constants.IntakeConstants.kTiltMaxSpeed);
-    IntakeDown.m_controller.setSetpoint(Constants.IntakeConstants.kDownPos);
-
-    IntakeUp.m_controller.setIntegratorRange(-Constants.IntakeConstants.kTiltMaxSpeed, Constants.IntakeConstants.kTiltMaxSpeed);
-    IntakeUp.m_controller.setSetpoint(Constants.IntakeConstants.kUpPos);
   }
 
   /** Initialize button bindings. */
   private void configureBindings() {
     // Universal:
     // Button 'B' (hold) will continuously stop all movement
-    new JoystickButton(OI.driver_cntlr, OI.Controller.btn.B.val)
-    .or(new JoystickButton(OI.operator_cntlr, OI.Controller.btn.B.val))
+    new Trigger(() -> OI.driver_cntlr.getButton(btn.B) || OI.operator_cntlr.getButton(btn.B))
       .whileTrue(cStop);
 
     configureDriver();
@@ -104,111 +64,100 @@ public class RobotContainer {
   }
 
   private void configureDriver() {
-    // D-pad and right stick will turn to the specified angle
-    new Trigger(() -> TurnToAngle.m_enabled && OI.driver_cntlr.getPOV() != -1)
-      .whileTrue(new RunCommand(() -> {
-        cTurnToAngle.setHeading(OI.driver_cntlr.getPOV());
-        cTurnToAngle.schedule();
-      }));
+    final TurnToAngle cTurnToAngle = new TurnToAngle(0);
 
-    new Trigger(() ->
-      TurnToAngle.m_enabled && OI.driver_cntlr.getPOV() == -1 &&
-      (Math.abs(OI.driver_cntlr.getRightX()) > 0.2 || Math.abs(OI.driver_cntlr.getRightY()) > 0.2)
-    )
-      .whileTrue(new RunCommand(() -> {
-        cTurnToAngle.setHeading(Math.toDegrees(Math.atan2(OI.driver_cntlr.getRightY(), OI.driver_cntlr.getRightX())) + 90);
+    // D-pad will turn to the specified angle
+    CommandScheduler.getInstance().getDefaultButtonLoop().bind(() -> {
+      if (TurnToAngle.m_enabled && OI.driver_cntlr.getPOV(0) != -1) {
+        cTurnToAngle.setHeading(OI.driver_cntlr.getPOV(0));
         cTurnToAngle.schedule();
-      }));
+      }
+    });
 
-    // Button 'A' (hold) will run auto-balance code
-    new JoystickButton(OI.driver_cntlr, OI.Controller.btn.A.val)
-      .whileTrue(cBalance);
+    // Button 'A' (hold) will auto-balance
+    final Command cBalance = Drivetrain.getInstance().getBalanceCommand();
+    OI.driver_cntlr.onTrue(btn.A, cBalance::schedule);
+    OI.driver_cntlr.onFalse(btn.A, cBalance::cancel);
 
     // Button 'X' (debounced 1s) will reset gyro
-    new JoystickButton(OI.driver_cntlr, OI.Controller.btn.X.val)
+    new Trigger(() -> OI.driver_cntlr.getButton(btn.X))
     .debounce(1)
       .onTrue(new InstantCommand(() ->
         OI.pigeon.setYaw(0)
       ));
 
     // Button 'Y' will toggle TurnToAngle
-    new JoystickButton(OI.driver_cntlr, OI.Controller.btn.Y.val)
-      .onTrue(new InstantCommand(() -> {
-        cTurnToAngle.cancel();
-        TurnToAngle.m_enabled ^= true;
-      }));
+    OI.driver_cntlr.onTrue(btn.Y, () -> {
+      cTurnToAngle.cancel();
+      TurnToAngle.m_enabled ^= true;
+    });
   }
 
   private void configureOperator() {
-    // Button 'A' will swap intake and outtake (for cones)
-    new JoystickButton(OI.operator_cntlr, OI.Controller.btn.A.val)
-      .onTrue(new InstantCommand(() -> {
-        IntakeWheels.invert();
+    final IntakeUp cIntakeUp = new IntakeUp();
 
-        if (cIntake.isScheduled() || cManualHold.isScheduled()) {
-          sIntakeWheels.set(-sIntakeWheels.get());
-        } else if (!(cShoot.isScheduled() || cSpit.isScheduled())) {
-          IntakeWheels.stop();
-        }
-      }));
+    // Button 'A' will invert intake wheels (for cones)
+    OI.operator_cntlr.onTrue(btn.A, IntakeWheels::invert);
 
-    // Button 'X' (debounced 1s) will reset tilt encoder
-    new JoystickButton(OI.operator_cntlr, OI.Controller.btn.X.val)
+    // Button 'X' (debounced 1s) will reset intake tilt encoders
+    new Trigger(() -> OI.operator_cntlr.getButton(btn.X))
     .debounce(1)
-      .onTrue(new InstantCommand(() ->
-        sIntakeTilt.resetEncoders()
+      .onTrue(new InstantCommand(
+        IntakeTilt.getInstance()::resetEncoders
       ));
 
     // Button 'Y' will toggle automatic intake control
-    new JoystickButton(OI.operator_cntlr, OI.Controller.btn.Y.val)
-      .onTrue(new InstantCommand(() -> {
-        if (IntakeTilt.isSteadyEnabled()) {IntakeTilt.disable();} else {IntakeTilt.enable();}
-      }));
+    OI.operator_cntlr.onTrue(btn.Y, () -> {
+      if (IntakeTilt.isSteadyEnabled()) {IntakeTilt.disableSteady();} else {IntakeTilt.enableSteady();}
+    });
 
     // Button 'LB' (hold) will shoot cubes
-    new JoystickButton(OI.operator_cntlr, OI.Controller.btn.LB.val)
-      .whileTrue(cShoot);
+    final Command cShoot = IntakeWheels.getInstance().getShootCommand();
+    OI.operator_cntlr.onTrue(btn.LB, cShoot::schedule);
+    OI.operator_cntlr.onFalse(btn.LB, cShoot::cancel);
 
     // Button 'RB' (hold) will lower and activate intake, then raise on release
-    new JoystickButton(OI.operator_cntlr, OI.Controller.btn.RB.val)
-      .whileTrue(cIntakeDown)
-      .whileTrue(cIntake)
-      .onFalse(cIntakeUp);
+    final Command cActivateIntake = new IntakeDown().alongWith(IntakeWheels.getInstance().getIntakeCommand());
+    OI.operator_cntlr.onTrue(btn.RB, cActivateIntake::schedule);
+    OI.operator_cntlr.onFalse(btn.RB, () -> {
+      cActivateIntake.cancel();
+      cIntakeUp.schedule();
+    });
 
     // Triggers will disable intake and manually move up (LT) and down (RT)
-    new Trigger(() -> Math.abs(OI.operator_cntlr.getTriggers()) > 0.05)
+    new Trigger(() -> OI.operator_cntlr.getTriggers() != 0.0)
       .whileTrue(new FunctionalCommand(
-        IntakeTilt::disable,
-        () -> sIntakeTilt.set(
-          Math.pow(OI.operator_cntlr.getTriggers(), 2) *
-          ((OI.operator_cntlr.getTriggers() < 0) ? Constants.IntakeConstants.kUpSpeed : Constants.IntakeConstants.kDownSpeed)
-        ),
-        interrupted -> IntakeTilt.disable(),
+        IntakeTilt::disableSteady,
+        () -> {
+          double triggers = OI.operator_cntlr.getTriggers();
+          IntakeTilt.getInstance().set(triggers * triggers * ((triggers < 0) ? Constants.IntakeConstants.kUpSpeed : Constants.IntakeConstants.kDownSpeed));
+        },
+        interrupted -> IntakeTilt.disableSteady(),
         () -> false,
-        sIntakeTilt
+        IntakeTilt.getInstance()
       ));
 
     // D-pad up will angle down, then shoot
-    new Trigger(() -> OI.operator_cntlr.getPOV() == 0)
-      .whileTrue(cAimMid)
+    new Trigger(() -> OI.operator_cntlr.getPOV(0) == 0)
+      .whileTrue(new AimMid())
       .onFalse(cIntakeUp)
     .debounce(0.5)
-      .whileTrue(cShoot);
+      .whileTrue(IntakeWheels.getInstance().getShootCommand());
 
     // D-pad right will spit
-    new Trigger(() -> OI.operator_cntlr.getPOV() == 90)
-      .whileTrue(cSpit);
+    new Trigger(() -> OI.operator_cntlr.getPOV(0) == 90)
+      .whileTrue(IntakeWheels.getInstance().getSpitCommand());
 
     // D-pad down will angle down, then spit
-    new Trigger(() -> OI.operator_cntlr.getPOV() == 180)
-      .whileTrue(cAimMid)
+    new Trigger(() -> OI.operator_cntlr.getPOV(0) == 180)
+      .whileTrue(new AimMid())
       .onFalse(cIntakeUp)
     .debounce(0.5)
-      .whileTrue(cSpit);
+      .whileTrue(IntakeWheels.getInstance().getSpitCommand());
 
-    // D-pad left will hold pieces
-    new Trigger(() -> OI.operator_cntlr.getPOV() == 270)
-      .whileTrue(cManualHold);
+    // D-pad left will intake
+    new Trigger(() -> OI.operator_cntlr.getPOV(0) == 270)
+      .whileTrue(IntakeWheels.getInstance().getIntakeCommand());
   }
 
   /** Stops all motors and disables PID controllers. */

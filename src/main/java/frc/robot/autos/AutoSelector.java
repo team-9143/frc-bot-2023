@@ -20,8 +20,8 @@ public final class AutoSelector {
     SPIT_DOWN("Spit Down"),
     NONE("None");
 
-    private final String name;
-    private Starter(String name) {this.name = name;}
+    final String name;
+    Starter(String name) {this.name = name;}
     public String getName() {return name;}
   }
   public static enum Body implements Named {
@@ -31,8 +31,8 @@ public final class AutoSelector {
     CENTER_CLIMB("Center Climb"),
     NONE("None");
 
-    private final String name;
-    private Body(String name) {this.name = name;}
+    final String name;
+    Body(String name) {this.name = name;}
     public String getName() {return name;}
   }
   public static enum Secondary implements Named {
@@ -40,8 +40,8 @@ public final class AutoSelector {
     CENTER_ESCAPE("Center Escape"),
     NONE("None");
 
-    private final String name;
-    private Secondary(String name) {this.name = name;}
+    final String name;
+    Secondary(String name) {this.name = name;}
     public String getName() {return name;}
   }
   public static enum Tertiary implements Named {
@@ -51,18 +51,17 @@ public final class AutoSelector {
     CONE_SPIT_DOWN("Cone Spit Down"),
     NONE("None");
 
-    private final String name;
-    private Tertiary(String name) {this.name = name;}
+    final String name;
+    Tertiary(String name) {this.name = name;}
     public String getName() {return name;}
   }
   public static enum Ending implements Named {
     TURN_AWAY("Turn Away"),
     TURN_CLOSE("Turn Close"),
-    BALANCE("Balance"),
     NONE("None");
 
-    private final String name;
-    private Ending(String name) {this.name = name;}
+    final String name;
+    Ending(String name) {this.name = name;}
     public String getName() {return name;}
   }
 
@@ -81,17 +80,14 @@ public final class AutoSelector {
         case PICKUP_CONE:
           m_secondaryChooser.setAll(Secondary.RETURN_FROM_CONE);
           m_tertiaryChooser.setAll(Tertiary.CONE_SHOOT, Tertiary.CONE_SPIT, Tertiary.CONE_SHOOT_DOWN, Tertiary.CONE_SPIT_DOWN);
-          m_endingChooser.setAll(Ending.TURN_AWAY, Ending.TURN_CLOSE);
           break;
         case CENTER_CLIMB:
           m_secondaryChooser.setAll(Secondary.CENTER_ESCAPE);
           m_tertiaryChooser.setAll();
-          m_endingChooser.setAll(Ending.BALANCE);
           break;
         default:
           m_secondaryChooser.setAll();
           m_tertiaryChooser.setAll();
-          m_endingChooser.setAll(Ending.TURN_AWAY, Ending.TURN_CLOSE);
       }
     });
 
@@ -108,7 +104,7 @@ public final class AutoSelector {
     Tertiary tertiary = m_tertiaryChooser.getSelected();
     Ending ending = m_endingChooser.getSelected();
 
-    // TODO: Move stop drivetrain run commands to classes
+    // TODO: Move stop drivetrain run commands to subclasses
     return new SequentialCommandGroup(
       Starters.getStarter(starter)
         .raceWith(new RunCommand(Drivetrain::stop, Drivetrain.getInstance())),
@@ -116,7 +112,7 @@ public final class AutoSelector {
       Secondaries.getSecondary(secondary, body),
       Tertiaries.getTertiary(tertiary)
         .raceWith(new RunCommand(Drivetrain::stop, Drivetrain.getInstance())),
-      Endings.getEnding(ending)
+      Endings.getEnding(ending, body)
     );
   }
 }

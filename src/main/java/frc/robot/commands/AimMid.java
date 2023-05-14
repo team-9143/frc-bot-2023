@@ -9,30 +9,30 @@ import frc.robot.subsystems.IntakeTilt;
 
 /** Tilts the intake roughly parallel to the ground. Disables steady intake. */
 public class AimMid extends CommandBase {
-  private static final IntakeTilt intakeTilt = IntakeTilt.getInstance();
-  private static final Set<Subsystem> m_requirements = Set.of(intakeTilt);
+  private static final IntakeTilt sIntakeTilt = IntakeTilt.getInstance();
+  private static final Set<Subsystem> m_requirements = Set.of(sIntakeTilt);
 
   @Override
   public void initialize() {
-    IntakeTilt.disable();
-    IntakeTilt.m_setpoint = IntakeConstants.kMidPos;
+    IntakeTilt.disableSteady();
+    IntakeTilt.setSetpoint(IntakeConstants.kMidPos);
     IntakeTilt.setRunning(true);
   }
 
   /** Moves toward mid position with a static speed, then holds upright. */
   @Override
   public void execute() {
-    intakeTilt.set(
-      (Math.abs(intakeTilt.getPosition() - IntakeConstants.kMidPos) < IntakeConstants.kMidPosTolerance) ?
+    sIntakeTilt.set(
+      (Math.abs(sIntakeTilt.getPosition() - IntakeConstants.kMidPos) < IntakeConstants.kMidPosTolerance) ?
         IntakeConstants.kSteadySpeed :
-      (intakeTilt.getPosition() < IntakeConstants.kMidPos) ?
+      (sIntakeTilt.getPosition() < IntakeConstants.kMidPos) ?
         IntakeConstants.kDownSpeed : IntakeConstants.kUpSpeed
     );
   }
 
   @Override
   public void end(boolean interrupted) {
-    IntakeTilt.disable();
+    IntakeTilt.disableSteady();
     IntakeTilt.setRunning(false);
   }
 

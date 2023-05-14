@@ -12,14 +12,14 @@ import edu.wpi.first.networktables.GenericEntry;
 
 /** Contains match-ready checklists. */
 public class MatchChecklist implements ShuffleboardChecklistBase {
-  protected static final ShuffleboardTab match_tab = Shuffleboard.getTab("Match Checklist");
-
   private static ArrayList<GenericEntry> robot_entries;
   private static ArrayList<GenericEntry> station_entries;
 
   protected MatchChecklist() {}
 
   public void initialize() {
+    final ShuffleboardTab match_tab = Shuffleboard.getTab("Match Checklist");
+
     String[] robot_checklist = new String[]{
       "Bumpers are the correct match color",
       "Electrical pull test successful",
@@ -50,12 +50,7 @@ public class MatchChecklist implements ShuffleboardChecklistBase {
   }
 
   public void reset() {
-    for (GenericEntry e : robot_entries) {
-      e.setBoolean(false);
-    }
-
-    for (GenericEntry e : station_entries) {
-      e.setBoolean(false);
-    }
+    robot_entries.forEach(e -> e.setBoolean(false));
+    station_entries.forEach(e -> e.setBoolean(false));
   }
 }

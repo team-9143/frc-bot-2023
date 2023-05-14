@@ -67,49 +67,41 @@ public final class Constants {
   public static class IntakeConstants {
     public static final double kTiltMaxSpeed = 0.7; // TODO(low prio): Lower max tilt motor speed
 
-    // TODO: Move to IntakeWheels?
-    // Wheel speed
-    public static double
-      kIntakeSpeed = 0.3,
-      kShootSpeed = -1,
-      kSpitSpeed = -0.5,
-      kHoldingSpeed = 0.05;
-
     // Delay to shoot/spit a game piece
     public static final double kShootTimer = 0.5;
 
     // Non-PID intake movement
     public static final double
-      kUpSpeed = -0.1,
-      kDownSpeed = 0.08,
-      kSteadySpeed = -0.01;
-    public static final double kAutoAlignSpeed = -0.15;
-    // TODO(autoAlign): Test and tune maximum current against NEO specs
+      kUpSpeed = PhysConstants.kTiltGearbox * -3.5,
+      kDownSpeed = PhysConstants.kTiltGearbox * 2.8,
+      kSteadySpeed = PhysConstants.kTiltGearbox * -0.35;
+
+    public static final double kAutoAlignSpeed = PhysConstants.kTiltGearbox * -2.5;
+    // TODO(auto align): Test and tune maximum current against NEO specs
     public static final double kMaxCurrent = 80; // For autoAlign
 
-    // TODO: Change all the following into degrees
-    // Preset positions and tolerances (UNIT: rotations)
+    // Preset positions and tolerances (UNIT: degrees)
     public static final double
-      kUpPos = 0.003,
-      kMidPos = 0.1,
-      kDownPos = 0.29;
+      kUpPos = 1.08,
+      kMidPos = 36,
+      kDownPos = 104.4;
     public static final double
-      kUpPosTolerance = -0.025, // Should only be checked one way
-      kMidPosTolerance = 0.004,
-      kDownPosTolerance = 0.0012; // Should only be checked one way
+      kUpPosTolerance = -9, // Check as error > tolerance
+      kMidPosTolerance = 1.5, // Check as abs(error) > tolerance
+      kDownPosTolerance = 2; // Check as error < tolerance
 
     // Intake tilt PID gains
     public static final double
-      kDownP = PhysConstants.kTiltGearbox * 29,
-      kDownI = PhysConstants.kTiltGearbox * 22,
-      kDownD = PhysConstants.kTiltGearbox * 11;
+      kDownP = PhysConstants.kTiltGearbox * 0.0806,
+      kDownI = PhysConstants.kTiltGearbox * 0.0612,
+      kDownD = PhysConstants.kTiltGearbox * 0.0305;
     public static final double
-      kUpP = PhysConstants.kTiltGearbox * 31,
-      kUpI = PhysConstants.kTiltGearbox * 21,
-      kUpD = PhysConstants.kTiltGearbox * 10;
+      kUpP = PhysConstants.kTiltGearbox * 0.0862,
+      kUpI = PhysConstants.kTiltGearbox * 0.0584,
+      kUpD = PhysConstants.kTiltGearbox * 0.0277;
     public static final double
-      kSteadyP = PhysConstants.kTiltGearbox * 33,
-      kSteadyI = PhysConstants.kTiltGearbox * 23,
-      kSteadyD = PhysConstants.kTiltGearbox * 7;
+      kSteadyP = PhysConstants.kTiltGearbox * 0.0917,
+      kSteadyI = PhysConstants.kTiltGearbox * 0.0639,
+      kSteadyD = PhysConstants.kTiltGearbox * 0.0194;
   }
 }

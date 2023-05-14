@@ -1,10 +1,11 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.math.controller.PIDController;
 import frc.robot.Constants.PhysConstants;
 import frc.robot.Constants.DeviceConstants;
 import frc.robot.Constants.IntakeConstants;
+
+import edu.wpi.first.math.controller.PIDController;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -12,40 +13,77 @@ import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 
+import frc.robot.shuffleboard.ShuffleboardManager;
+import frc.robot.shuffleboard.SimulationTab;
+
 /** Controls intake tilt motors. */
 public class IntakeTilt extends SubsystemBase {
   private static IntakeTilt m_instance;
 
   /** @return the singleton instance */
+  @SuppressWarnings("unused")
   public static synchronized IntakeTilt getInstance() {
     if (m_instance == null) {
-      m_instance = new IntakeTilt();
+      if (!(ShuffleboardManager.m_simulation && ShuffleboardManager.m_simulatedTilt)) {
+        m_instance = new IntakeTilt();
+      } else {
+        m_instance = new IntakeTilt() {
+          @Override
+          public double getPosition() {
+            if (SimulationTab.intakeAngle_sim != null) {
+              return SimulationTab.intakeAngle_sim.getDouble(IntakeConstants.kUpPos);
+            }
+            return IntakeConstants.kUpPos;
+          }
+
+          @Override
+          public void resetEncoders() {
+            if (SimulationTab.intakeAngle_sim != null) {
+              SimulationTab.intakeAngle_sim.setDouble(IntakeConstants.kUpPos);
+            }
+          }
+        };
+      }
     }
     return m_instance;
   }
 
   public static final PIDController m_controller = new PIDController(IntakeConstants.kSteadyP, IntakeConstants.kSteadyI, IntakeConstants.kSteadyD);
+  static {
+    m_controller.setIntegratorRange(-IntakeConstants.kTiltMaxSpeed, IntakeConstants.kTiltMaxSpeed);
+    m_controller.setSetpoint(IntakeConstants.kUpPos);
+  }
+
+  private static double m_setpoint = IntakeConstants.kUpPos;
   private static boolean m_steadyEnabled = false;
-  public static double m_setpoint = IntakeConstants.kUpPos;
-  private static boolean isRunning = false;
+  private static boolean m_running = false;
 
-  private static final CANSparkMax l_motor = new CANSparkMax(DeviceConstants.kIntakeTiltLeftID, MotorType.kBrushless);
-  private static final CANSparkMax r_motor = new CANSparkMax(DeviceConstants.kIntakeTiltRightID, MotorType.kBrushless);
+  private static final CANSparkMax m_motor;
 
-  private static final RelativeEncoder l_encoder = l_motor.getEncoder();
-  private static final RelativeEncoder r_encoder = r_motor.getEncoder();
+  private static final RelativeEncoder l_encoder;
+  private static final RelativeEncoder r_encoder;
+
+  static {
+    final CANSparkMax l_motor = new CANSparkMax(DeviceConstants.kIntakeTiltLeftID, MotorType.kBrushless);
+    @SuppressWarnings("resource")
+    final CANSparkMax r_motor = new CANSparkMax(DeviceConstants.kIntakeTiltRightID, MotorType.kBrushless);
+
+    l_encoder = l_motor.getEncoder();
+    r_encoder = r_motor.getEncoder();
+
+    // IMPORTANT: Ensures motors mirror output
+    r_motor.follow(l_motor, true);
+    m_motor = l_motor;
+  }
 
   private IntakeTilt() {
-    // IMPORTANT: Ensure that motors have a consistent output
-    r_motor.follow(l_motor, true);
-
-    l_encoder.setPositionConversionFactor(PhysConstants.kTiltGearbox);
-    l_encoder.setVelocityConversionFactor(PhysConstants.kTiltGearbox);
+    l_encoder.setPositionConversionFactor(PhysConstants.kTiltGearbox * 360); // UNIT: degrees
+    l_encoder.setVelocityConversionFactor(PhysConstants.kTiltGearbox * (360 / 60)); // UNIT: degrees/s
     l_encoder.setMeasurementPeriod(20);
     l_encoder.setPosition(0);
 
-    r_encoder.setPositionConversionFactor(PhysConstants.kTiltGearbox);
-    r_encoder.setVelocityConversionFactor(PhysConstants.kTiltGearbox);
+    r_encoder.setPositionConversionFactor(PhysConstants.kTiltGearbox * 360); // UNIT: degrees
+    r_encoder.setVelocityConversionFactor(PhysConstants.kTiltGearbox * (360 / 60)); // UNIT: degrees/s
     r_encoder.setMeasurementPeriod(20);
     r_encoder.setPosition(0);
 
@@ -64,20 +102,13 @@ public class IntakeTilt extends SubsystemBase {
 
   /** Clamps input to max speed. */
   public void set(double speed) {
-    l_motor.set(Math.max(-IntakeConstants.kTiltMaxSpeed, Math.min(speed, IntakeConstants.kTiltMaxSpeed)));
+    m_motor.set(Math.max(-IntakeConstants.kTiltMaxSpeed, Math.min(speed, IntakeConstants.kTiltMaxSpeed)));
   }
-  public double get() {return l_motor.get();}
+  public double getSpeed() {return m_motor.get();}
 
   /** @return the average position of the tilt encoders */
   public double getPosition() {
     return (l_encoder.getPosition() + r_encoder.getPosition())/2;
-
-    // For simulation
-    // if (frc.robot.shuffleboard.SimulationTab.intakeAngle_sim == null) {
-    //   return IntakeConstants.kUpPos * 360;
-    // } else {
-    //   return frc.robot.shuffleboard.SimulationTab.intakeAngle_sim.getDouble(IntakeConstants.kUpPos * 360) / 360;
-    // }
   }
 
   public void resetEncoders() {
@@ -86,38 +117,51 @@ public class IntakeTilt extends SubsystemBase {
   }
 
   /** Enables and resets steady intake PID. */
-  public static void enable() {
+  public static void enableSteady() {
     m_steadyEnabled = true;
     m_controller.reset();
   }
 
   /** Disables steady intake PID and stops motors. */
-  public static void disable() {
+  public static void disableSteady() {
     m_steadyEnabled = false;
     stop();
   }
 
+  /** @return {@code true} if currently trying to stay upright */
   public static boolean isSteadyEnabled() {return m_steadyEnabled;}
 
-  public static void setRunning(boolean b) {isRunning = b;}
-  public static boolean isRunning() {return isRunning;}
+  /** @param b {@code true} if tilt motor is being moved by a command */
+  public static void setRunning(boolean b) {m_running = b;}
+  /** @return {@code true} if tilt motor is being moved by a command */
+  public static boolean isRunning() {return m_running;}
+
+  /**
+   * Sets the setpoint of the intake for the dashboard.
+   *
+   * @param setpoint new setpoint (UNIT: degrees)
+   */
+  public static void setSetpoint(double setpoint) {m_setpoint = setpoint;}
+  public static double getSetpoint() {return m_setpoint;}
 
   public static void stop() {
-    l_motor.stopMotor();
+    m_motor.stopMotor();
   }
 
-  // TODO(low prio): Test and implement autoAlign
+  // TODO(auto align): Test and implement autoAlign
+  /*
   public void getAutoAlignCommand() {
     new FunctionalCommand(
       () -> set(IntakeConstants.kAutoAlignSpeed),
       () -> {},
       interrupted -> {
-        // TODO(autoAlign): Test and tune up position offset (currently 9 degrees back)
+        // TODO(auto align): Test and tune up position offset (currently 9 degrees back)
         l_encoder.setPosition(IntakeConstants.kUpPos - 0.025);
         r_encoder.setPosition(IntakeConstants.kUpPos - 0.025);
       },
-      () -> (l_motor.getOutputCurrent() > IntakeConstants.kMaxCurrent) || (r_motor.getOutputCurrent() > IntakeConstants.kMaxCurrent),
+      () -> m_motor.getOutputCurrent() > IntakeConstants.kMaxCurrent,
       m_instance
     );
   }
+  */
 }

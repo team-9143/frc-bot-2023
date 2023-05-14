@@ -12,8 +12,6 @@ import edu.wpi.first.networktables.GenericEntry;
 
 /** Contains pit-ready checklists. */
 public class PitChecklist implements ShuffleboardChecklistBase {
-  protected static final ShuffleboardTab pit_tab = Shuffleboard.getTab("Pit Checklist");
-
   private static ArrayList<GenericEntry> mechanical_entries;
   private static ArrayList<GenericEntry> electrical_entries;
   private static ArrayList<GenericEntry> cart_entries;
@@ -21,6 +19,8 @@ public class PitChecklist implements ShuffleboardChecklistBase {
   protected PitChecklist() {}
 
   public void initialize() {
+    final ShuffleboardTab pit_tab = Shuffleboard.getTab("Pit Checklist");
+
     String[] mechanical_checklist = new String[]{
       "All structural components are secured",
       "Bumpers are secured",
@@ -69,16 +69,8 @@ public class PitChecklist implements ShuffleboardChecklistBase {
   }
 
   public void reset() {
-    for (GenericEntry e : mechanical_entries) {
-      e.setBoolean(false);
-    }
-
-    for (GenericEntry e : electrical_entries) {
-      e.setBoolean(false);
-    }
-
-    for (GenericEntry e : cart_entries) {
-      e.setBoolean(false);
-    }
+    mechanical_entries.forEach(e -> e.setBoolean(false));
+    electrical_entries.forEach(e -> e.setBoolean(false));
+    cart_entries.forEach(e -> e.setBoolean(false));
   }
 }
