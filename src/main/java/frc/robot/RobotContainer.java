@@ -9,7 +9,6 @@ import frc.robot.commands.*;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -143,8 +142,9 @@ public class RobotContainer {
 
     // D-pad up will angle down, then shoot
     new Trigger(() -> OI.operator_cntlr.getPOV(0) == 0)
-      .whileTrue(new SequentialCommandGroup(new AimMid(), new WaitCommand(0.5), IntakeWheels.getInstance().getShootCommand())
-        .finallyDo(interrupted -> cIntakeUp.schedule()));
+      .whileTrue(
+        new AimMid().alongWith(new WaitCommand(0.5).andThen(IntakeWheels.getInstance().getShootCommand()))
+          .finallyDo(interrupted -> cIntakeUp.schedule()));
 
     // D-pad right will spit
     new Trigger(() -> OI.operator_cntlr.getPOV(0) == 90)
@@ -152,15 +152,16 @@ public class RobotContainer {
 
     // D-pad down will angle down, then spit
     new Trigger(() -> OI.operator_cntlr.getPOV(0) == 180)
-      .whileTrue(new SequentialCommandGroup(new AimMid(), new WaitCommand(0.5), IntakeWheels.getInstance().getSpitCommand())
-        .finallyDo(interrupted -> cIntakeUp.schedule()));
+      .whileTrue(
+        new AimMid().alongWith(new WaitCommand(0.5).andThen(IntakeWheels.getInstance().getSpitCommand()))
+          .finallyDo(interrupted -> cIntakeUp.schedule()));
 
     // D-pad left will intake
     new Trigger(() -> OI.operator_cntlr.getPOV(0) == 270)
       .whileTrue(IntakeWheels.getInstance().getIntakeCommand());
   }
 
-  /** Stops all motors and disables PID controllers. */
+  /** Stops all motors and disables PID controllers. May not override other commands. */
   public static void stop() {
     cStop.execute();
   }
