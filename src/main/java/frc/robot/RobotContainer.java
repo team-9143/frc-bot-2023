@@ -9,7 +9,9 @@ import frc.robot.commands.*;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
@@ -139,10 +141,8 @@ public class RobotContainer {
 
     // D-pad up will angle down, then shoot
     new Trigger(() -> OI.operator_cntlr.getPOV(0) == 0)
-      .whileTrue(new AimMid())
-      .onFalse(cIntakeUp)
-    .debounce(0.5)
-      .whileTrue(IntakeWheels.getInstance().getShootCommand());
+      .whileTrue(new SequentialCommandGroup(new AimMid(), new WaitCommand(0.5), IntakeWheels.getInstance().getShootCommand())
+        .finallyDo(interrupted -> cIntakeUp.schedule()));
 
     // D-pad right will spit
     new Trigger(() -> OI.operator_cntlr.getPOV(0) == 90)
@@ -150,10 +150,8 @@ public class RobotContainer {
 
     // D-pad down will angle down, then spit
     new Trigger(() -> OI.operator_cntlr.getPOV(0) == 180)
-      .whileTrue(new AimMid())
-      .onFalse(cIntakeUp)
-    .debounce(0.5)
-      .whileTrue(IntakeWheels.getInstance().getSpitCommand());
+      .whileTrue(new SequentialCommandGroup(new AimMid(), new WaitCommand(0.5), IntakeWheels.getInstance().getSpitCommand())
+        .finallyDo(interrupted -> cIntakeUp.schedule()));
 
     // D-pad left will intake
     new Trigger(() -> OI.operator_cntlr.getPOV(0) == 270)
