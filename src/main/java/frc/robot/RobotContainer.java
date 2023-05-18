@@ -84,9 +84,10 @@ public class RobotContainer {
     // Button 'X' (debounced 1s) will reset gyro
     new Trigger(() -> OI.driver_cntlr.getButton(btn.X))
     .debounce(1)
-      .onTrue(new InstantCommand(() ->
-        OI.pigeon.setYaw(0)
-      ));
+      .onTrue(new InstantCommand(() -> {
+        OI.pigeon.setYaw(0);
+        OI.driver_cntlr.getRumbleCommand(0.5, 0.5, 0.25).schedule();
+      }));
 
     // Button 'Y' will toggle TurnToAngle
     OI.driver_cntlr.onTrue(btn.Y, () -> {
@@ -104,9 +105,10 @@ public class RobotContainer {
     // Button 'X' (debounced 1s) will reset intake tilt encoders
     new Trigger(() -> OI.operator_cntlr.getButton(btn.X))
     .debounce(1)
-      .onTrue(new InstantCommand(
-        IntakeTilt.getInstance()::resetEncoders
-      ));
+      .onTrue(new InstantCommand(() -> {
+        IntakeTilt.getInstance().resetEncoders();
+        OI.operator_cntlr.getRumbleCommand(0.5, 0.5, 0.25).schedule();
+      }));
 
     // Button 'Y' will toggle automatic intake control
     OI.operator_cntlr.onTrue(btn.Y, () -> {
