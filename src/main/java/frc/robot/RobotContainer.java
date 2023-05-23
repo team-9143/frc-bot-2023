@@ -10,6 +10,7 @@ import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
@@ -17,7 +18,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.devices.CustomController.btn;
 
-// TODO: Combine triggers so that commands cannot be independently scheduled from different triggers
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -80,11 +80,13 @@ public class RobotContainer {
     OI.driver_cntlr.onFalse(btn.A, cBalance::cancel);
 
     // Button 'X' (debounced 1s) will reset gyro
+    final Command cRumble = OI.driver_cntlr.getRumbleCommand(0.5, 0.5, 0.25);
     new Trigger(() -> OI.driver_cntlr.getButton(btn.X))
     .debounce(1)
-      .onTrue(new InstantCommand(() ->
-        OI.pigeon.setYaw(0)
-      ));
+      .onTrue(new InstantCommand(() -> {
+        OI.pigeon.setYaw(0);
+        cRumble.schedule();
+      }));
 
     // Button 'Y' will toggle TurnToAngle
     OI.driver_cntlr.onTrue(btn.Y, () -> {
@@ -100,11 +102,13 @@ public class RobotContainer {
     OI.operator_cntlr.onTrue(btn.A, IntakeWheels::invert);
 
     // Button 'X' (debounced 1s) will reset intake tilt encoders
+    final Command cRumble = OI.operator_cntlr.getRumbleCommand(0.5, 0.5, 0.25);
     new Trigger(() -> OI.operator_cntlr.getButton(btn.X))
     .debounce(1)
-      .onTrue(new InstantCommand(
-        IntakeTilt.getInstance()::resetEncoders
-      ));
+      .onTrue(new InstantCommand(() -> {
+        IntakeTilt.getInstance().resetEncoders();
+        cRumble.schedule();
+      }));
 
     // Button 'Y' will toggle automatic intake control
     OI.operator_cntlr.onTrue(btn.Y, () -> {
@@ -139,10 +143,9 @@ public class RobotContainer {
 
     // D-pad up will angle down, then shoot
     new Trigger(() -> OI.operator_cntlr.getPOV(0) == 0)
-      .whileTrue(new AimMid())
-      .onFalse(cIntakeUp)
-    .debounce(0.5)
-      .whileTrue(IntakeWheels.getInstance().getShootCommand());
+      .whileTrue(
+        new AimMid().alongWith(new WaitCommand(0.5).andThen(IntakeWheels.getInstance().getShootCommand()))
+          .finallyDo(interrupted -> cIntakeUp.schedule()));
 
     // D-pad right will spit
     new Trigger(() -> OI.operator_cntlr.getPOV(0) == 90)
@@ -150,17 +153,16 @@ public class RobotContainer {
 
     // D-pad down will angle down, then spit
     new Trigger(() -> OI.operator_cntlr.getPOV(0) == 180)
-      .whileTrue(new AimMid())
-      .onFalse(cIntakeUp)
-    .debounce(0.5)
-      .whileTrue(IntakeWheels.getInstance().getSpitCommand());
+      .whileTrue(
+        new AimMid().alongWith(new WaitCommand(0.5).andThen(IntakeWheels.getInstance().getSpitCommand()))
+          .finallyDo(interrupted -> cIntakeUp.schedule()));
 
     // D-pad left will intake
     new Trigger(() -> OI.operator_cntlr.getPOV(0) == 270)
       .whileTrue(IntakeWheels.getInstance().getIntakeCommand());
   }
 
-  /** Stops all motors and disables PID controllers. */
+  /** Stops all motors and disables PID controllers. May not override other commands. */
   public static void stop() {
     cStop.execute();
   }

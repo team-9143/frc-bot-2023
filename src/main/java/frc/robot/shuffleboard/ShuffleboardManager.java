@@ -84,16 +84,21 @@ public class ShuffleboardManager {
   protected static GenericEntry choosersSynced;
 
   public boolean getCubePreloaded() {
-    return cubeLoaded.getBoolean(true);
+    if (cubeLoaded != null) {
+      return cubeLoaded.getBoolean(true);
+    }
+    return true;
   }
 
   public void updateChoosersSynced() {
-    choosersSynced.setBoolean(
-      !(AutoSelector.m_starterChooser.isUpdateReq() ||
-      AutoSelector.m_bodyChooser.isUpdateReq() ||
-      AutoSelector.m_secondaryChooser.isUpdateReq() ||
-      AutoSelector.m_tertiaryChooser.isUpdateReq() ||
-      AutoSelector.m_endingChooser.isUpdateReq())
-    );
+    if (choosersSynced != null) {
+      choosersSynced.setBoolean(
+        !(AutoSelector.m_starterChooser.isUpdateReq() ||
+        AutoSelector.m_bodyChooser.isUpdateReq() ||
+        AutoSelector.m_secondaryChooser.isUpdateReq() ||
+        AutoSelector.m_tertiaryChooser.isUpdateReq() ||
+        AutoSelector.m_endingChooser.isUpdateReq())
+      );
+    }
   }
 }

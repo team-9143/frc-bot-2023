@@ -6,6 +6,9 @@ import edu.wpi.first.hal.DriverStationJNI;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj.event.EventLoop;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
+
 /**
  * Class to communicate with a controller through the drive station.
  *
@@ -101,6 +104,20 @@ public class CustomController {
     short m_leftRumble = (short) (Math.max(0, Math.min(left, 1)) * 65535);
     short m_rightRumble = (short) (Math.max(0, Math.min(right, 1)) * 65535);
     DriverStationJNI.setJoystickOutputs(m_port, m_outputs, m_leftRumble, m_rightRumble);
+  }
+
+  /**
+   * A command to set the HID rumble for a specified amount of time.
+   *
+   * @param left left rumble [0.0..1.0]
+   * @param right right rumble [0.0..1.0]
+   * @param seconds duration to rumble for
+   */
+  public Command getRumbleCommand(double left, double right, double seconds) {
+    return new StartEndCommand(
+      () -> setRumble(left, right),
+      () -> setRumble(0, 0)
+    ).withTimeout(seconds);
   }
 
   public void onTrue(btn btn, Runnable run) {

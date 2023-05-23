@@ -53,7 +53,6 @@ public class Limelight {
    */
   public static void setDriverCam(boolean isDriverCam) {cam_pub.accept(isDriverCam ? 1 : 0);}
 
-  // TODO(remove): Visual testing purposes
   private static final edu.wpi.first.networktables.DoublePublisher led_pub = limelight.getDoubleTopic("ledMode").publish();
   /**
    * Sets the limelight LED state.

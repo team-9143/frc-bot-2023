@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-// TODO(HIGH prio): DriveDistance and TurnToAngle gains must be tuned
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -65,7 +64,7 @@ public final class Constants {
   }
 
   public static class IntakeConstants {
-    public static final double kTiltMaxSpeed = 0.7; // TODO(low prio): Lower max tilt motor speed
+    public static final double kTiltMaxSpeed = 0.45;
 
     // Delay to shoot/spit a game piece
     public static final double kShootTimer = 0.5;
@@ -75,10 +74,6 @@ public final class Constants {
       kUpSpeed = PhysConstants.kTiltGearbox * -3.5,
       kDownSpeed = PhysConstants.kTiltGearbox * 2.8,
       kSteadySpeed = PhysConstants.kTiltGearbox * -0.35;
-
-    public static final double kAutoAlignSpeed = PhysConstants.kTiltGearbox * -2.5;
-    // TODO(auto align): Test and tune maximum current against NEO specs
-    public static final double kMaxCurrent = 80; // For autoAlign
 
     // Preset positions and tolerances (UNIT: degrees)
     public static final double
