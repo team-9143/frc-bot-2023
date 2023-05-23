@@ -75,10 +75,6 @@ public final class Constants {
       kDownSpeed = PhysConstants.kTiltGearbox * 2.8,
       kSteadySpeed = PhysConstants.kTiltGearbox * -0.35;
 
-    public static final double kAutoAlignSpeed = PhysConstants.kTiltGearbox * -2.5;
-    // TODO(auto align): Test and tune maximum current against NEO specs
-    public static final double kMaxCurrent = 80; // For autoAlign
-
     // Preset positions and tolerances (UNIT: degrees)
     public static final double
       kUpPos = 1.08,
