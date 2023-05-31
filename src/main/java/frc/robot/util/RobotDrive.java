@@ -37,6 +37,7 @@ public class RobotDrive extends MotorSafety {
    * @param speeds the speeds to be set inside a {@link WheelSpeeds}
    */
   public void drive(WheelSpeeds speeds) {
+    speeds = MathUtil.desaturateWheelSpeeds(speeds);
     l_motor.set(speeds.left);
     r_motor.set(speeds.right);
     feed();
@@ -49,10 +50,7 @@ public class RobotDrive extends MotorSafety {
    * @param rotation clockwise rotation [-1.0..1.0]
    */
   public void arcadeDrive(double drive, double rotation) {
-    WheelSpeeds speeds = MathUtil.arcadeDriveIK(drive, rotation);
-    l_motor.set(speeds.left);
-    r_motor.set(speeds.right);
-    feed();
+    drive(MathUtil.arcadeDriveIK(drive, rotation));
   }
 
   /** @return the speed of the left motor */
