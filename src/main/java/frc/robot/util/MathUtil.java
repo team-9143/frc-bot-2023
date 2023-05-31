@@ -31,4 +31,18 @@ public class MathUtil {
       }
     }
   }
+
+  /**
+   * Renormalizes wheel speeds so that no individual speed is above the maximum of 1.
+   *
+   * @param speeds original speeds
+   * @return speeds bound to maximum
+   */
+  public static RobotDrive.WheelSpeeds desaturateWheelSpeeds(RobotDrive.WheelSpeeds speeds) {
+    if (Math.abs(speeds.left) > 1 || Math.abs(speeds.right) > 1) {
+      double saturation = 1 / Math.max(Math.abs(speeds.left), Math.abs(speeds.right));
+      return new RobotDrive.WheelSpeeds(speeds.left / saturation, speeds.right / saturation);
+    }
+    return speeds;
+  }
 }
