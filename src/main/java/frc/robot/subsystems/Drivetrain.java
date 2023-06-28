@@ -95,7 +95,7 @@ public class Drivetrain extends SubsystemBase {
         );
       } else {
         // Turn in place, input from triggers (lower priority)
-        turnInPlace(DrivetrainConstants.kTurnMult * Math.copySign(triggers * triggers, triggers));
+        turnInPlace(DrivetrainConstants.kTurnMult * DrivetrainConstants.kTurnMult * Math.copySign(triggers * triggers, triggers));
       }
     }));
   }
