@@ -74,15 +74,10 @@ public class RobotContainer {
       }
     });
 
-    // Button 'A' (hold) Accelerate
-    OI.driver_cntlr.onTrue(btn.A, () -> {
-      Constants.DrivetrainConstants.kSpeedMult = 1;
-      Constants.DrivetrainConstants.kTurnMult = 0.7;
-    });
-    OI.driver_cntlr.onFalse(btn.A, () -> {
-      Constants.DrivetrainConstants.kSpeedMult = 0.4;
-      Constants.DrivetrainConstants.kTurnMult = 0.4;
-    });
+    // Button 'A' (hold) will auto-balance
+    final Command cBalance = Drivetrain.getInstance().getBalanceCommand();
+    OI.driver_cntlr.onTrue(btn.A, cBalance::schedule);
+    OI.driver_cntlr.onFalse(btn.A, cBalance::cancel);
 
     // Button 'X' (debounced 1s) will reset gyro
     final Command cRumble = OI.driver_cntlr.getRumbleCommand(0.5, 0.5, 0.25);
