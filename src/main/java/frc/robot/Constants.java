@@ -25,14 +25,14 @@ public final class Constants {
     public static final byte kDriverCntlrPort = 0;
     public static final byte kOperatorCntlrPort = 1;
     public static final byte
-      kFrontLeftID = 3,
-      kBackLeftID = 4,
+      kFrontLeftID = 1,
       kFrontRightID = 2,
-      kBackRightID = 1,
+      kBackLeftID = 3,
+      kBackRightID = 4,
       kPigeonID = 5,
       kIntakeWheelsID = 6,
-      kIntakeTiltRightID = 7,
-      kIntakeTiltLeftID = 8;
+      kIntakeTiltLeftID = 7,
+      kIntakeTiltRightID = 8;
   }
 
   public static class DrivetrainConstants {
