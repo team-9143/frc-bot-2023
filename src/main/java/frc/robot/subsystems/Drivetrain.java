@@ -60,10 +60,10 @@ public class Drivetrain extends SubsystemBase {
     @SuppressWarnings("resource")
     // IMPORTANT: For use with brushed motors like CIM's - not for NEO's
     final CANSparkMax
-      fl_motor = new CANSparkMax(DeviceConstants.kFrontLeftID, MotorType.kBrushless),
-      bl_motor = new CANSparkMax(DeviceConstants.kBackLeftID, MotorType.kBrushless),
-      fr_motor = new CANSparkMax(DeviceConstants.kFrontRightID, MotorType.kBrushless),
-      br_motor = new CANSparkMax(DeviceConstants.kBackRightID, MotorType.kBrushless);
+      fl_motor = new CANSparkMax(DeviceConstants.kFrontLeftID, MotorType.kBrushed),
+      bl_motor = new CANSparkMax(DeviceConstants.kBackLeftID, MotorType.kBrushed),
+      fr_motor = new CANSparkMax(DeviceConstants.kFrontRightID, MotorType.kBrushed),
+      br_motor = new CANSparkMax(DeviceConstants.kBackRightID, MotorType.kBrushed);
 
     // l_encoder = fl_motor.getEncoder();
     // r_encoder = fr_motor.getEncoder();
