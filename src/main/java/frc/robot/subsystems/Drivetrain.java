@@ -92,7 +92,7 @@ public class Drivetrain extends SubsystemBase {
         // Arcade drive, input from left stick (higher priority)
         m_drive.arcadeDrive(
           -DrivetrainConstants.kSpeedMult * OI.driver_cntlr.getLeftY(),
-          DrivetrainConstants.kTurnMult * OI.driver_cntlr.getLeftX()
+          DrivetrainConstants.kTurnMult * OI.driver_cntlr.getRightX()
         );
       } else {
         // Turn in place, input from triggers (lower priority)
