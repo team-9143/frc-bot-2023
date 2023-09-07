@@ -27,8 +27,8 @@ public class Secondaries {
         // If picking up a cone, turn and return to the grid
         if (body == AutoSelector.Body.PICKUP_CONE) {
           return new SequentialCommandGroup(
-            new TurnToAngle(0),
-            new DriveDistance(205)
+            // new TurnToAngle(0),
+            // new DriveDistance(205)
           );
         };
 

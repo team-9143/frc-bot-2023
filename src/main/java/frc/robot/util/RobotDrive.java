@@ -38,8 +38,9 @@ public class RobotDrive extends MotorSafety {
    */
   public void drive(WheelSpeeds speeds) {
     speeds = MathUtil.desaturateWheelSpeeds(speeds);
-    l_motor.set(speeds.left);
-    r_motor.set(speeds.right);
+    // Inverted speeds to adjust for CIM inversion relative to NEOs
+    l_motor.set(-speeds.left);
+    r_motor.set(-speeds.right);
     feed();
   }
 
