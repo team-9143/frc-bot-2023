@@ -14,7 +14,7 @@ package frc.robot;
  */
 public final class Constants {
   public static class PhysConstants {
-    public static final double kDrivetrainGearbox = 1/8.45;
+    public static final double kDrivetrainGearbox = 1/7.31;
     public static final double kTiltGearbox = 1/35.0;
     public static final double kWheelGearbox = 1/3.0;
 
