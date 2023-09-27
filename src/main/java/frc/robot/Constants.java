@@ -14,7 +14,7 @@ package frc.robot;
  */
 public final class Constants {
   public static class PhysConstants {
-    public static final double kDrivetrainGearbox = 1/8.45;
+    public static final double kDrivetrainGearbox = 1/7.31;
     public static final double kTiltGearbox = 1/35.0;
     public static final double kWheelGearbox = 1/3.0;
 
@@ -36,9 +36,9 @@ public final class Constants {
   }
 
   public static class DrivetrainConstants {
-    // Applies to all teleop driving (exponential)
-    public static final double kSpeedMult = 1; // Change this value to change driving speed [0..1]
-    public static final double kTurnMult = Math.sqrt(0.85); // Change this value to change turning speed [0..1]
+    // Applies to all teleop driving
+    public static final double kSpeedMult = 1; // Change driving speed [0..1] (squared before application)
+    public static final double kTurnMult = Math.sqrt(0.85); // Change turning speed [0..1] (squared before application)
 
     // TurnToAngle
     public static final double kTurnPosTolerance = 0.75; // UNIT: degrees

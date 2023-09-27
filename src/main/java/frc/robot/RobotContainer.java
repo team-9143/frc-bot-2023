@@ -64,15 +64,15 @@ public class RobotContainer {
   }
 
   private void configureDriver() {
-    // final TurnToAngle cTurnToAngle = new TurnToAngle(0);
+    final TurnToAngle cTurnToAngle = new TurnToAngle(0);
 
     // D-pad will turn to the specified angle
-    // CommandScheduler.getInstance().getDefaultButtonLoop().bind(() -> {
-    //   if (TurnToAngle.m_enabled && OI.driver_cntlr.getPOV(0) != -1) {
-    //     cTurnToAngle.setHeading(OI.driver_cntlr.getPOV(0));
-    //     cTurnToAngle.schedule();
-    //   }
-    // });
+    CommandScheduler.getInstance().getDefaultButtonLoop().bind(() -> {
+      if (TurnToAngle.m_enabled && OI.driver_cntlr.getPOV(0) != -1) {
+        cTurnToAngle.setHeading(OI.driver_cntlr.getPOV(0));
+        cTurnToAngle.schedule();
+      }
+    });
 
     // Button 'A' (hold) will auto-balance
     final Command cBalance = Drivetrain.getInstance().getBalanceCommand();
@@ -90,7 +90,7 @@ public class RobotContainer {
 
     // Button 'Y' will toggle TurnToAngle
     OI.driver_cntlr.onTrue(btn.Y, () -> {
-      // cTurnToAngle.cancel();
+      cTurnToAngle.cancel();
       TurnToAngle.m_enabled ^= true;
     });
   }

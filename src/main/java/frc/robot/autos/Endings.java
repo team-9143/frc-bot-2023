@@ -24,10 +24,10 @@ public class Endings {
     switch (end) {
       case TURN_AWAY:
         // Turn to face away from the drive station
-        // return new TurnToAngle(180);
+        return new TurnToAngle(180);
       case TURN_CLOSE:
         // Turn to face the drive station
-        // return new TurnToAngle(0);
+        return new TurnToAngle(0);
       default:
         return new InstantCommand();
     }
