@@ -23,10 +23,9 @@ public class DriveDistance extends CommandBase {
 
   private final double distance; // UNIT: inches
 
-  private DriveDistance() {distance = 0;}
-  // public DriveDistance(double distance) {
-  //   this.distance = distance;
-  // }
+  public DriveDistance(double distance) {
+    this.distance = distance;
+  }
 
   /** Reset controller and encoders. */
   @Override

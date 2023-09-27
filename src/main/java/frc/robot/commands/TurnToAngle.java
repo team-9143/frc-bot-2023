@@ -27,10 +27,9 @@ public class TurnToAngle extends CommandBase {
   public static boolean m_enabled = false;
   private double heading;
 
-  private TurnToAngle() {}
-  // public TurnToAngle(double heading) {
-  //   this.heading = heading;
-  // }
+  public TurnToAngle(double heading) {
+    this.heading = heading;
+  }
 
   @Override
   public void initialize() {
