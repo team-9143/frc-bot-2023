@@ -88,13 +88,13 @@ public class Drivetrain extends SubsystemBase {
     setDefaultCommand(run(() -> {
       double triggers = OI.driver_cntlr.getTriggers();
       if (triggers == 0.0) {
-        // Arcade drive, input from left stick (higher priority)
+        // Arcade drive, input from left (front/back) and right (left/right) joysticks (lower priority)
         m_drive.arcadeDrive(
           -DrivetrainConstants.kSpeedMult * OI.driver_cntlr.getLeftY(),
-          DrivetrainConstants.kTurnMult * OI.driver_cntlr.getLeftX()
+          DrivetrainConstants.kTurnMult * OI.driver_cntlr.getRightX()
         );
       } else {
-        // Turn in place, input from triggers (lower priority)
+        // Turn in place, input from triggers (higher priority)
         turnInPlace(DrivetrainConstants.kTurnMult * DrivetrainConstants.kTurnMult * Math.copySign(triggers * triggers, triggers));
       }
     }));
