@@ -38,7 +38,7 @@ public final class Constants {
   public static class DrivetrainConstants {
     // Applies to all teleop driving
     public static final double kSpeedMult = 1; // Change driving speed [0..1] (squared before application)
-    public static final double kTurnMult = Math.sqrt(0.7); // Change turning speed [0..1] (squared before application)
+    public static final double kTurnMult = Math.sqrt(0.85); // Change turning speed [0..1] (squared before application)
 
     // TurnToAngle
     public static final double kTurnPosTolerance = 0.75; // UNIT: degrees

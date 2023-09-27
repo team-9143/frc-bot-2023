@@ -2,7 +2,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.OI;
-import frc.robot.Constants.PhysConstants;
+// import frc.robot.Constants.PhysConstants;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.DeviceConstants;
 
@@ -11,7 +11,7 @@ import java.lang.Runnable;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.RelativeEncoder;
+// import com.revrobotics.RelativeEncoder;
 
 import frc.robot.util.RobotDrive;
 import frc.robot.util.RobotDrive.WheelSpeeds;
@@ -51,21 +51,22 @@ public class Drivetrain extends SubsystemBase {
     return m_instance;
   }
 
-  // Initialize motors, encoders, and differential drive
-  private static final RelativeEncoder l_encoder;
-  private static final RelativeEncoder r_encoder;
+  // Initialize motors and differential drive
+  // private static final RelativeEncoder l_encoder;
+  // private static final RelativeEncoder r_encoder;
   private static final RobotDrive m_drive;
 
   static {
     @SuppressWarnings("resource")
+    // IMPORTANT: For use with brushed motors like CIM's - not for NEO's
     final CANSparkMax
-      fl_motor = new CANSparkMax(DeviceConstants.kFrontLeftID, MotorType.kBrushless),
-      bl_motor = new CANSparkMax(DeviceConstants.kBackLeftID, MotorType.kBrushless),
-      fr_motor = new CANSparkMax(DeviceConstants.kFrontRightID, MotorType.kBrushless),
-      br_motor = new CANSparkMax(DeviceConstants.kBackRightID, MotorType.kBrushless);
+      fl_motor = new CANSparkMax(DeviceConstants.kFrontLeftID, MotorType.kBrushed),
+      bl_motor = new CANSparkMax(DeviceConstants.kBackLeftID, MotorType.kBrushed),
+      fr_motor = new CANSparkMax(DeviceConstants.kFrontRightID, MotorType.kBrushed),
+      br_motor = new CANSparkMax(DeviceConstants.kBackRightID, MotorType.kBrushed);
 
-    l_encoder = fl_motor.getEncoder();
-    r_encoder = fr_motor.getEncoder();
+    // l_encoder = fl_motor.getEncoder();
+    // r_encoder = fr_motor.getEncoder();
 
     // IMPORTANT: Ensures motors have consistent output
     bl_motor.follow(fl_motor, false);
@@ -74,15 +75,15 @@ public class Drivetrain extends SubsystemBase {
   }
 
   private Drivetrain() {
-    l_encoder.setPositionConversionFactor(PhysConstants.kWheelCircumference * PhysConstants.kDrivetrainGearbox); // UNIT: inches
-    l_encoder.setVelocityConversionFactor(PhysConstants.kWheelCircumference * PhysConstants.kDrivetrainGearbox / 60); // UNIT: inches/s
-    l_encoder.setMeasurementPeriod(20);
-    l_encoder.setPosition(0);
+    // l_encoder.setPositionConversionFactor(PhysConstants.kWheelCircumference * PhysConstants.kDrivetrainGearbox); // UNIT: inches
+    // l_encoder.setVelocityConversionFactor(PhysConstants.kWheelCircumference * PhysConstants.kDrivetrainGearbox / 60); // UNIT: inches/s
+    // l_encoder.setMeasurementPeriod(20);
+    // l_encoder.setPosition(0);
 
-    r_encoder.setPositionConversionFactor(PhysConstants.kWheelCircumference * PhysConstants.kDrivetrainGearbox); // UNIT: inches
-    r_encoder.setVelocityConversionFactor(PhysConstants.kWheelCircumference * PhysConstants.kDrivetrainGearbox / 60); // UNIT: inches/s
-    r_encoder.setMeasurementPeriod(20);
-    r_encoder.setPosition(0);
+    // r_encoder.setPositionConversionFactor(PhysConstants.kWheelCircumference * PhysConstants.kDrivetrainGearbox); // UNIT: inches
+    // r_encoder.setVelocityConversionFactor(PhysConstants.kWheelCircumference * PhysConstants.kDrivetrainGearbox / 60); // UNIT: inches/s
+    // r_encoder.setMeasurementPeriod(20);
+    // r_encoder.setPosition(0);
 
     // Teleop drive: single joystick or turn in place with triggers
     setDefaultCommand(run(() -> {
@@ -115,12 +116,13 @@ public class Drivetrain extends SubsystemBase {
 
   /** @return the average position of the drivetrain encoders */
   public double getPosition() {
-    return (l_encoder.getPosition() - r_encoder.getPosition())/2;
+    // return (l_encoder.getPosition() - r_encoder.getPosition())/2;
+    return 0;
   }
 
   public void resetEncoders() {
-    l_encoder.setPosition(0);
-    r_encoder.setPosition(0);
+    // l_encoder.setPosition(0);
+    // r_encoder.setPosition(0);
   }
 
   public static void stop() {
