@@ -65,6 +65,7 @@ public final class Constants {
     public static final TunableNumber kBalanceSpeed = new TunableNumber("BalanceSpeed", 0.08);
   }
 
+  // TODO: Move wheel speeds here and use boolean conditional instead of `*= -1` for inversion
   public static class IntakeConstants {
     public static final double kTiltMaxSpeed = 0.45;
 
