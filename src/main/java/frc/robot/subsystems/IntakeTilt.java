@@ -48,8 +48,11 @@ public class IntakeTilt extends SubsystemBase {
     return m_instance;
   }
 
-  public static final PIDController m_controller = new PIDController(IntakeConstants.kSteadyP, IntakeConstants.kSteadyI, IntakeConstants.kSteadyD);
+  public static final PIDController m_controller = new PIDController(IntakeConstants.kSteadyP.getAsDouble(), IntakeConstants.kSteadyI.getAsDouble(), IntakeConstants.kSteadyD.getAsDouble());
   static {
+    IntakeConstants.kSteadyP.bindTo(m_controller::setP);
+    IntakeConstants.kSteadyI.bindTo(m_controller::setI);
+    IntakeConstants.kSteadyD.bindTo(m_controller::setD);
     m_controller.setIntegratorRange(-IntakeConstants.kTiltMaxSpeed, IntakeConstants.kTiltMaxSpeed);
     m_controller.setSetpoint(IntakeConstants.kUpPos);
   }

@@ -15,8 +15,11 @@ public class TurnToAngle extends CommandBase {
   private static final Set<Subsystem> m_requirements = Set.of(sDrivetrain);
   private static boolean isRunning = false;
 
-  public static final PIDController m_controller = new PIDController(DrivetrainConstants.kTurnP, DrivetrainConstants.kTurnI, DrivetrainConstants.kTurnD);
+  public static final PIDController m_controller = new PIDController(DrivetrainConstants.kTurnP.getAsDouble(), DrivetrainConstants.kTurnI.getAsDouble(), DrivetrainConstants.kTurnD.getAsDouble());
   static {
+    DrivetrainConstants.kTurnP.bindTo(m_controller::setP);
+    DrivetrainConstants.kTurnI.bindTo(m_controller::setI);
+    DrivetrainConstants.kTurnD.bindTo(m_controller::setD);
     m_controller.setIntegratorRange(-DrivetrainConstants.kTurnMaxSpeed, DrivetrainConstants.kTurnMaxSpeed);
     m_controller.setTolerance(DrivetrainConstants.kTurnPosTolerance, DrivetrainConstants.kTurnVelTolerance);
     m_controller.setSetpoint(0);
