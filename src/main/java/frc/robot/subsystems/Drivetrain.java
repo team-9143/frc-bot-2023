@@ -138,7 +138,7 @@ public class Drivetrain extends SubsystemBase {
           double pitch = -OI.pigeon.getPitch();
 
           if (Math.abs(pitch) > DrivetrainConstants.kBalanceTolerance && Math.abs(pitch - previousPitch) < 3) {
-            moveStraight(Math.copySign(DrivetrainConstants.kBalanceSpeed, pitch));
+            moveStraight(Math.copySign(DrivetrainConstants.kBalanceSpeed.getAsDouble(), pitch));
           } else {
             // Stop movement on a large pitch change (usually denoting a fall) or when stabilized
             stop();

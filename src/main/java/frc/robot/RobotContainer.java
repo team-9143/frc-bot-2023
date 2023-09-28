@@ -134,7 +134,9 @@ public class RobotContainer {
         IntakeTilt::disableSteady,
         () -> {
           double triggers = OI.operator_cntlr.getTriggers();
-          IntakeTilt.getInstance().set(triggers * triggers * ((triggers < 0) ? Constants.IntakeConstants.kUpSpeed : Constants.IntakeConstants.kDownSpeed));
+          IntakeTilt.getInstance().set(triggers * triggers *
+            ((triggers < 0) ? Constants.IntakeConstants.kUpSpeed.getAsDouble() : Constants.IntakeConstants.kDownSpeed.getAsDouble())
+          );
         },
         interrupted -> IntakeTilt.disableSteady(),
         () -> false,
