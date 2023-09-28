@@ -84,7 +84,7 @@ public class Robot extends TimedRobot {
       elem.setMutable(true);
 
       if (!elem.visible) {
-        Shuffleboard.getTab("Tunables").add(elem.m_name, new Sendable() {
+        Shuffleboard.getTab("Tunables").add(elem.m_group + "-" + elem.m_name, new Sendable() {
           @Override
           public void initSendable(SendableBuilder builder) {
             builder.setSmartDashboardType("Motor Controller");
