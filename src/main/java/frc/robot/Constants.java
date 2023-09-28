@@ -70,12 +70,12 @@ public final class Constants {
     public static final double kTiltMaxSpeed = 0.45;
 
     // Delay to shoot/spit a game piece
-    public static final double kShootTimer = 0.5;
+    public static final double kShootTimer = 0.2;
 
     // Non-PID intake movement
     public static final TunableNumber
       kUpSpeed = new TunableNumber("Up", PhysConstants.kTiltGearbox * -3.5, "IntakeAim"),
-      kDownSpeed = new TunableNumber("Down", PhysConstants.kTiltGearbox * 2.8, "IntakeAim"),
+      kDownSpeed = new TunableNumber("Down", PhysConstants.kTiltGearbox * 3, "IntakeAim"),
       kSteadySpeed = new TunableNumber("Steady", PhysConstants.kTiltGearbox * -0.35, "IntakeAim");
 
     // Preset positions and tolerances (UNIT: degrees)

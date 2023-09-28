@@ -25,7 +25,7 @@ public class IntakeWheels extends SubsystemBase {
   private static double
     intakeSpeed = 0.3,
     shootSpeed = -1,
-    spitSpeed = -0.5,
+    spitSpeed = -0.35,
     holdSpeed = 0.05;
 
   /** Used to apply tension if a game piece is being held in the intake. */
