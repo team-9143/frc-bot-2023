@@ -16,6 +16,11 @@ import frc.robot.subsystems.IntakeTilt;
 import frc.robot.commands.TurnToAngle;
 import frc.robot.shuffleboard.ShuffleboardManager;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.util.sendable.Sendable;
+
+import frc.robot.util.TunableNumber;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -74,8 +79,23 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testInit() {
-    // Cancels all running commands at the start of test mode.
-    CommandScheduler.getInstance().cancelAll();
+    for (var elem : TunableNumber.getAllInstances()) {
+      // Make all tunables mutable and add them to shuffleboard
+      elem.setMutable(true);
+
+      if (!elem.visible) {
+        Shuffleboard.getTab("Tunables").add(elem.m_name, new Sendable() {
+          @Override
+          public void initSendable(SendableBuilder builder) {
+            builder.setSmartDashboardType("Motor Controller");
+            builder.addDoubleProperty("Value", elem::getAsDouble, elem::accept);
+          }
+        }).withWidget(BuiltInWidgets.kTextView)
+          .withSize(2, 1);
+
+        elem.visible = true;
+      }
+    }
   }
 
   @Override
