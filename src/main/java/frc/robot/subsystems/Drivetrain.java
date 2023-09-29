@@ -6,9 +6,21 @@ import frc.robot.Constants.PhysConstants;
 import frc.robot.Constants.DrivetrainConstants;
 import frc.robot.Constants.DeviceConstants;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.RamseteController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Command;
 import java.lang.Runnable;
 
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.PPRamseteCommand;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
@@ -54,7 +66,10 @@ public class Drivetrain extends SubsystemBase {
   // Initialize motors, encoders, and differential drive
   private static final RelativeEncoder l_encoder;
   private static final RelativeEncoder r_encoder;
+  private static DifferentialDriveOdometry m_odometry;
+  private DifferentialDriveKinematics kinematics;
   private static final RobotDrive m_drive;
+  public static Double[] volts;
 
   static {
     @SuppressWarnings("resource")
@@ -71,6 +86,7 @@ public class Drivetrain extends SubsystemBase {
     bl_motor.follow(fl_motor, false);
     br_motor.follow(fr_motor, false);
     m_drive = new RobotDrive(fl_motor, fr_motor);
+    volts = new Double[] {fl_motor.getBusVoltage(), fr_motor.getBusVoltage()};
   }
 
   private Drivetrain() {
@@ -118,10 +134,32 @@ public class Drivetrain extends SubsystemBase {
     return (l_encoder.getPosition() - r_encoder.getPosition())/2;
   }
 
+  public Pose2d getPose() {
+    return m_odometry.getPoseMeters();
+  }
+
+  public Double[] getVolts(){
+    return volts;
+  }
+
+  public DifferentialDriveWheelSpeeds wheelSpeeds(){
+    return new DifferentialDriveWheelSpeeds(
+      getRight(), 
+      getLeft()
+      );
+  }
+
   public void resetEncoders() {
     l_encoder.setPosition(0);
     r_encoder.setPosition(0);
   }
+  
+  public void resetOdometry(Pose2d pose) {
+    resetEncoders();
+    m_odometry.resetPosition(
+      Rotation2d.fromDegrees(OI.pigeon.getYaw()), l_encoder.getPosition(), r_encoder.getPosition(), pose);
+  }
+
 
   public static void stop() {
     m_drive.stopMotor();
@@ -148,6 +186,30 @@ public class Drivetrain extends SubsystemBase {
         }
       },
       Drivetrain::stop
+    );
+  }
+  
+  public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
+    return new SequentialCommandGroup(
+        new InstantCommand(() -> {
+          // Reset odometry for the first path you run during auto
+          if(isFirstPath){
+              this.resetOdometry(traj.getInitialPose());
+          }
+        }),
+        new PPRamseteCommand(
+            traj, 
+            this::getPose,
+            new RamseteController(),
+            new SimpleMotorFeedforward(0, 0, 0),
+            this.kinematics,
+            this::wheelSpeeds,
+            new PIDController(0, 0, 0),
+            new PIDController(0, 0, 0),
+            (lVolts, rVolts) -> this.getVolts(),
+            true,
+            this
+        )
     );
   }
 }

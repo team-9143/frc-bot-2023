@@ -4,6 +4,13 @@
 
 package frc.robot;
 
+import java.util.Map;
+
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.AimMid;
+import frc.robot.commands.IntakeDown;
+import frc.robot.commands.IntakeUp;
+import frc.robot.subsystems.IntakeWheels;
 import frc.robot.util.TunableNumber;
 
 /**
@@ -101,5 +108,13 @@ public final class Constants {
       kSteadyP = new TunableNumber("P", PhysConstants.kTiltGearbox * 0.0917, "IntakeSteady"),
       kSteadyI = new TunableNumber("I", PhysConstants.kTiltGearbox * 0.0639, "IntakeSteady"),
       kSteadyD = new TunableNumber("D", PhysConstants.kTiltGearbox * 0.0194, "IntakeSteady");
+  }
+    public static class AutoConstants{
+    public static final Map<String, Command> eventMap = Map.of(
+      "IntakeDown", new IntakeDown().alongWith(IntakeWheels.getInstance().getIntakeCommand()),
+      "IntakeUp", new IntakeUp(),
+      "AimMid", new AimMid(),
+      "Shoot", IntakeWheels.getInstance().getShootCommand()
+    );
   }
 }
