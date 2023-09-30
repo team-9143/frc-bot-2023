@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.PhysConstants;
 import frc.robot.Constants.DeviceConstants;
+import frc.robot.Constants.IntakeConstants;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -21,12 +22,8 @@ public class IntakeWheels extends SubsystemBase {
     return m_instance;
   }
 
-  // Wheel speeds
-  private static double
-    intakeSpeed = 0.3,
-    shootSpeed = -1,
-    spitSpeed = -0.35,
-    holdSpeed = 0.05;
+  /** {@code true} to invert wheel speeds for cones */
+  private static boolean m_inverted = false;
 
   /** Used to apply tension if a game piece is being held in the intake. */
   private static boolean m_holding = false;
@@ -43,7 +40,7 @@ public class IntakeWheels extends SubsystemBase {
 
     // If inverted and has a game piece, apply tension to hold in a cone
     setDefaultCommand(startEnd(
-      () -> {if (m_holding && isInverted()) {m_motor.set(holdSpeed);}},
+      () -> {if (m_holding && m_inverted) {m_motor.set(IntakeConstants.kHoldSpeed);}},
       IntakeWheels::stop
     ));
   }
@@ -53,19 +50,16 @@ public class IntakeWheels extends SubsystemBase {
   /** Invert intake speeds for cones. */
   public static synchronized void invert() {
     getInstance().getDefaultCommand().cancel();
-    if (m_motor.get() * intakeSpeed > 0) {
+    if ((m_inverted ^ m_motor.get() > 0)) {
       // If intaking, invert the speed of the wheels.
       m_motor.set(-m_motor.get());
     }
 
-    intakeSpeed *= -1;
-    shootSpeed *= -1;
-    spitSpeed *= -1;
-    holdSpeed *= -1;
+    m_inverted ^= true;
   }
 
   public static boolean isInverted() {
-    return intakeSpeed < 0;
+    return m_inverted;
   }
 
   /** Invert to cubes. */
@@ -82,7 +76,7 @@ public class IntakeWheels extends SubsystemBase {
   public Command getIntakeCommand() {
     return startEnd(
       () -> {
-        m_motor.set(intakeSpeed);
+        m_motor.set(m_inverted ? -IntakeConstants.kIntakeSpeed : IntakeConstants.kIntakeSpeed);
         m_holding = true;
       },
       IntakeWheels::stop
@@ -93,7 +87,7 @@ public class IntakeWheels extends SubsystemBase {
   public Command getShootCommand() {
     return startEnd(
       () -> {
-        m_motor.set(shootSpeed);
+        m_motor.set(m_inverted ? -IntakeConstants.kShootSpeed : IntakeConstants.kShootSpeed);
         m_holding = false;
       },
       IntakeWheels::stop
@@ -104,7 +98,7 @@ public class IntakeWheels extends SubsystemBase {
   public Command getSpitCommand() {
     return startEnd(
       () -> {
-        m_motor.set(spitSpeed);
+        m_motor.set(m_inverted ? -IntakeConstants.kSpitSpeed : IntakeConstants.kSpitSpeed);
         m_holding = false;
       },
       IntakeWheels::stop

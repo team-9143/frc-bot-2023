@@ -65,11 +65,16 @@ public final class Constants {
     public static final TunableNumber kBalanceSpeed = new TunableNumber("BalanceSpeed", 0.07);
   }
 
-  // TODO: Move wheel speeds here and use boolean conditional instead of `*= -1` for inversion
   public static class IntakeConstants {
     public static final double kTiltMaxSpeed = 0.45;
 
-    // Delay to shoot/spit a game piece
+    // Intake wheel speeds
+    public static final double kIntakeSpeed = 0.3;
+    public static final double kShootSpeed = -1;
+    public static final double kSpitSpeed = -0.35;
+    public static final double kHoldSpeed = -0.05; // Only for cones, never inverted
+
+    // Runtime to shoot/spit a game piece
     public static final double kShootTimer = 0.5;
 
     // Non-PID intake movement
