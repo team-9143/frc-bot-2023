@@ -4,6 +4,7 @@ import java.util.function.DoubleSupplier;
 import java.util.function.DoubleConsumer;
 
 import java.util.ArrayList;
+import edu.wpi.first.networktables.GenericEntry;
 
 /** Represents a double that can be changed during runtime. */
 public class TunableNumber implements DoubleSupplier, DoubleConsumer {
@@ -12,9 +13,6 @@ public class TunableNumber implements DoubleSupplier, DoubleConsumer {
   /** Index of this instance for use with dashboards. Begins at zero. */
   public final int m_index;
 
-  /** Helper variable, should be set to true if the number is visible on the dashboard. */
-  public boolean visible = false;
-
   /** Descriptor of the TunableNumber for use with dashboards. */
   public final String m_name;
   /** Descriptor of associated TunableNumbers for use with dashboards. */
@@ -22,6 +20,9 @@ public class TunableNumber implements DoubleSupplier, DoubleConsumer {
 
   /** Value of the TunableNumber. */
   private double m_value;
+
+  /** NetworkTables entry of the number. */
+  private GenericEntry m_entry;
 
   /** True if the value of the number can be changed. */
   private boolean m_mutable = false;
@@ -58,26 +59,48 @@ public class TunableNumber implements DoubleSupplier, DoubleConsumer {
 
   /** @return an array of all instances for class-wide changes (e.g. making all numbers mutable) */
   public static TunableNumber[] getAllInstances() {
-    synchronized (TunableNumber.class) {
-      return s_instances.toArray(new TunableNumber[s_instances.size()]);
-    }
+    return s_instances.toArray(new TunableNumber[s_instances.size()]);
   }
 
   /**
    * Get all instances within a specified group.
    *
-   * @param group group to look for (case sensitive)
+   * @param group group of instances to return (case sensitive)
    * @return an array of all instances in the group
    */
   public static TunableNumber[] getFromGroup(String group) {
     final ArrayList<TunableNumber> allInGroup = new ArrayList<TunableNumber>();
 
-    synchronized (TunableNumber.class) {
-      allInGroup.addAll(s_instances);
-    }
+    allInGroup.addAll(s_instances);
 
     allInGroup.removeIf(e -> !e.m_group.equals(group));
     return allInGroup.toArray(new TunableNumber[allInGroup.size()]);
+  }
+
+  /** Update all numbers with values from NetworkTables, if provided. */
+  public static void updateAll() {
+    s_instances.forEach(e -> e.update());
+  }
+
+  /**
+   * Sets NetworkTables entry to allow for updates through NetworkTables.
+   *
+   * @param entry new entry
+   */
+  public void setEntry(GenericEntry entry) {
+    m_entry = entry;
+  }
+
+  /** @return {@code true} if the number is bound to a NetworkTables entry */
+  public boolean hasEntry() {
+    return m_entry != null;
+  }
+
+  /** Update number with value from NetworkTables entry, if provided. */
+  public void update() {
+    if (m_entry != null) {
+      accept(m_entry.getDouble(m_value));
+    }
   }
 
   /** @return {@code true} if the number is mutable */
@@ -106,7 +129,7 @@ public class TunableNumber implements DoubleSupplier, DoubleConsumer {
   }
 
   /**
-   * Change the value. Only works if the number is mutable.
+   * Change the value, ignoring duplicates. Only works if the number is mutable.
    *
    * @param val new value
    *
@@ -115,13 +138,11 @@ public class TunableNumber implements DoubleSupplier, DoubleConsumer {
    */
   @Override
   public void accept(double val) {
-    if (!m_mutable) {
-      return;
-    }
-
-    m_value = val;
-    if (m_bindOnChange != null) {
-      m_bindOnChange.accept(m_value);
+    if (m_mutable && m_value != val) {
+      m_value = val;
+      if (m_bindOnChange != null) {
+        m_bindOnChange.accept(m_value);
+      }
     }
   }
 }

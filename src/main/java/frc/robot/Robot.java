@@ -17,8 +17,6 @@ import frc.robot.commands.TurnToAngle;
 import frc.robot.shuffleboard.ShuffleboardManager;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.util.sendable.SendableBuilder;
-import edu.wpi.first.util.sendable.Sendable;
 
 import frc.robot.util.TunableNumber;
 
@@ -79,27 +77,29 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testInit() {
+    // Enable command scheduling in test mode
+    CommandScheduler.getInstance().enable();
+
     for (var elem : TunableNumber.getAllInstances()) {
       // Make all tunables mutable and add them to shuffleboard
       elem.setMutable(true);
 
-      if (!elem.visible) {
-        Shuffleboard.getTab("Tunables").add(elem.m_group + "-" + elem.m_name, new Sendable() {
-          @Override
-          public void initSendable(SendableBuilder builder) {
-            builder.setSmartDashboardType("Motor Controller");
-            builder.addDoubleProperty("Value", elem::getAsDouble, elem::accept);
-          }
-        }).withWidget(BuiltInWidgets.kTextView)
-          .withSize(2, 1);
-
-        elem.visible = true;
+      if (!elem.hasEntry()) {
+        elem.setEntry(
+          Shuffleboard.getTab("Tunables").add(elem.m_group + "-" + elem.m_name, elem.getAsDouble())
+            .withWidget(BuiltInWidgets.kTextView)
+            .withSize(2, 2)
+            .getEntry()
+        );
       }
     }
   }
 
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+    // Update all tunable numbers
+    TunableNumber.updateAll();
+  }
 
   @Override
   public void simulationInit() {}
