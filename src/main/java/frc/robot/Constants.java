@@ -85,7 +85,7 @@ public final class Constants {
       kDownPos = 104.4;
     public static final double
       kUpPosTolerance = -9, // Check as error > tolerance
-      kMidPosTolerance = 1.5, // Check as abs(error) > tolerance
+      kMidPosTolerance = 15, // Check as abs(error) > tolerance
       kDownPosTolerance = 2; // Check as error < tolerance
 
     // Intake tilt PID gains
