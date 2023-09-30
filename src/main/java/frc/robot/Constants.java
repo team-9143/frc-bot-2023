@@ -70,7 +70,7 @@ public final class Constants {
     public static final double kTiltMaxSpeed = 0.45;
 
     // Delay to shoot/spit a game piece
-    public static final double kShootTimer = 0.2;
+    public static final double kShootTimer = 0.5;
 
     // Non-PID intake movement
     public static final TunableNumber
