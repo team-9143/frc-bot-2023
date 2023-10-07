@@ -47,18 +47,18 @@ public final class Constants {
     public static final double kTurnVelTolerance = kTurnPosTolerance; // UNIT: degrees/s
     public static final double kTurnMaxSpeed = 0.3;
     public static final TunableNumber
-      kTurnP = new TunableNumber("P", 0.018, "TurnToAngle"),
-      kTurnI = new TunableNumber("I", 0.0006, "TurnToAngle"),
-      kTurnD = new TunableNumber("D", 0.0045, "TurnToAngle");
+      kTurnP = new TunableNumber("P", PhysConstants.kDrivetrainGearbox * 0.153, "TurnToAngle"),
+      kTurnI = new TunableNumber("I", PhysConstants.kDrivetrainGearbox * 0.00507, "TurnToAngle"),
+      kTurnD = new TunableNumber("D", PhysConstants.kDrivetrainGearbox * 0.0381, "TurnToAngle");
 
     // DriveDistance
     public static final double kDistPosTolerance = 2; // UNIT: inches
     public static final double kDistVelTolerance = kDistPosTolerance; // UNIT: inches/s
     public static final double kDistMaxSpeed = 0.4; // Traction is priority
     public static final TunableNumber
-      kDistP = new TunableNumber("P", 0.04, "DriveDistance"),
-      kDistI = new TunableNumber("I", 0.00003, "DriveDistance"),
-      kDistD = new TunableNumber("D", 0.007, "DriveDistance");
+      kDistP = new TunableNumber("P", PhysConstants.kDrivetrainGearbox * 0.338, "DriveDistance"),
+      kDistI = new TunableNumber("I", PhysConstants.kDrivetrainGearbox * 0.000253, "DriveDistance"),
+      kDistD = new TunableNumber("D", PhysConstants.kDrivetrainGearbox * 0.0592, "DriveDistance");
 
     // Charge station balancing
     public static final double kBalanceTolerance = 2; // UNIT: degrees
