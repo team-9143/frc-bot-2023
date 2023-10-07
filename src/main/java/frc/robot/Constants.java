@@ -62,7 +62,7 @@ public final class Constants {
 
     // Charge station balancing
     public static final double kBalanceTolerance = 2; // UNIT: degrees
-    public static final TunableNumber kBalanceSpeed = new TunableNumber("BalanceSpeed", 0.07);
+    public static final TunableNumber kBalanceSpeed = new TunableNumber("BalanceSpeed", 0.06);
   }
 
   public static class IntakeConstants {

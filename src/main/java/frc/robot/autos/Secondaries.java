@@ -70,7 +70,7 @@ public class Secondaries {
 
       new WaitCommand(2),
 
-      new RunCommand(() -> sDrivetrain.moveStraight(0.39), sDrivetrain).withTimeout(1.5)
+      new RunCommand(() -> sDrivetrain.moveStraight(0.39), sDrivetrain).withTimeout(1.25)
     );
   }
 }
