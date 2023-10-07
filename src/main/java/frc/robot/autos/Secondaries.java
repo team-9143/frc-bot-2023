@@ -6,6 +6,7 @@ import frc.robot.OI;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 import frc.robot.commands.DriveDistance;
@@ -65,7 +66,9 @@ public class Secondaries {
         sDrivetrain
       ),
 
-      new RunCommand(() -> sDrivetrain.moveStraight(-0.39), sDrivetrain).withTimeout(0.1),
+      new RunCommand(() -> sDrivetrain.moveStraight(-0.39), sDrivetrain).withTimeout(0.2),
+
+      new WaitCommand(2),
 
       new RunCommand(() -> sDrivetrain.moveStraight(0.39), sDrivetrain).withTimeout(1.5)
     );
