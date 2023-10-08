@@ -46,7 +46,7 @@ public class RobotContainer {
   /** The container for the robot. Intializes subsystems, teleop command bindings, and OI devices. */
   private RobotContainer() {
     // Configure Pigeon - make sure to update pitch and roll offsets
-    OI.pigeon.configMountPose(0, -0.24665457, -179.574783);
+    OI.pigeon.configMountPose(0, -1.04809546, -178.827454);
     OI.pigeon.setYaw(0);
 
     configureBindings();
