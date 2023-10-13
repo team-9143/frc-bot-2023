@@ -11,8 +11,8 @@ import java.util.Map;
 
 import frc.robot.subsystems.IntakeTilt;
 import frc.robot.subsystems.IntakeWheels;
+import frc.robot.util.FollowPath;
 import frc.robot.autos.AutoSelector;
-import frc.robot.commands.FollowPath;
 import frc.robot.commands.TurnToAngle;
 
 import frc.robot.OI;
