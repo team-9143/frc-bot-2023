@@ -16,6 +16,9 @@ import frc.robot.subsystems.IntakeTilt;
 import frc.robot.commands.TurnToAngle;
 import frc.robot.shuffleboard.ShuffleboardManager;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+
+import frc.robot.util.TunableNumber;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -74,12 +77,29 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testInit() {
-    // Cancels all running commands at the start of test mode.
-    CommandScheduler.getInstance().cancelAll();
+    // Enable command scheduling in test mode
+    CommandScheduler.getInstance().enable();
+
+    for (var elem : TunableNumber.getAllInstances()) {
+      // Make all tunables mutable and add them to shuffleboard
+      elem.setMutable(true);
+
+      if (!elem.hasEntry()) {
+        elem.setEntry(
+          Shuffleboard.getTab("Tunables").add(elem.m_group + "-" + elem.m_name, elem.getAsDouble())
+            .withWidget(BuiltInWidgets.kTextView)
+            .withSize(2, 2)
+            .getEntry()
+        );
+      }
+    }
   }
 
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+    // Update all tunable numbers
+    TunableNumber.updateAll();
+  }
 
   @Override
   public void simulationInit() {}

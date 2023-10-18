@@ -66,8 +66,8 @@ public class ShuffleboardManager {
       m_tabs.add(new TestTab());
     }
 
-    m_checklists.add(new MatchChecklist());
-    m_checklists.add(new PitChecklist());
+    // m_checklists.add(new MatchChecklist());
+    // m_checklists.add(new PitChecklist());
     m_tabs.addAll(m_checklists);
 
     m_tabs.forEach(e -> e.initialize());

@@ -13,8 +13,11 @@ public class IntakeUp extends CommandBase {
   private static final IntakeTilt sIntakeTilt = IntakeTilt.getInstance();
   private static final Set<Subsystem> m_requirements = Set.of(sIntakeTilt);
 
-  public static final PIDController m_controller = new PIDController(IntakeConstants.kUpP, IntakeConstants.kUpI, IntakeConstants.kUpD);
+  public static final PIDController m_controller = new PIDController(IntakeConstants.kUpP.getAsDouble(), IntakeConstants.kUpI.getAsDouble(), IntakeConstants.kUpD.getAsDouble());
   static {
+    IntakeConstants.kUpP.bindTo(m_controller::setP);
+    IntakeConstants.kUpI.bindTo(m_controller::setI);
+    IntakeConstants.kUpD.bindTo(m_controller::setD);
     m_controller.setIntegratorRange(-IntakeConstants.kTiltMaxSpeed, IntakeConstants.kTiltMaxSpeed);
     m_controller.setSetpoint(IntakeConstants.kUpPos);
   }

@@ -14,8 +14,11 @@ public class DriveDistance extends CommandBase {
   private static final Set<Subsystem> m_requirements = Set.of(sDrivetrain);
   private static boolean isRunning = false;
 
-  public static final PIDController m_controller = new PIDController(DrivetrainConstants.kDistP, DrivetrainConstants.kDistI, DrivetrainConstants.kDistD);
+  public static final PIDController m_controller = new PIDController(DrivetrainConstants.kDistP.getAsDouble(), DrivetrainConstants.kDistI.getAsDouble(), DrivetrainConstants.kDistD.getAsDouble());
   static {
+    DrivetrainConstants.kDistP.bindTo(m_controller::setP);
+    DrivetrainConstants.kDistI.bindTo(m_controller::setI);
+    DrivetrainConstants.kDistD.bindTo(m_controller::setD);
     m_controller.setIntegratorRange(-DrivetrainConstants.kDistMaxSpeed, DrivetrainConstants.kDistMaxSpeed);
     m_controller.setTolerance(DrivetrainConstants.kDistPosTolerance, DrivetrainConstants.kDistVelTolerance);
     m_controller.setSetpoint(0);

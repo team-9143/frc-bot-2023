@@ -24,9 +24,9 @@ public class AimMid extends CommandBase {
   public void execute() {
     sIntakeTilt.set(
       (Math.abs(sIntakeTilt.getPosition() - IntakeConstants.kMidPos) < IntakeConstants.kMidPosTolerance) ?
-        IntakeConstants.kSteadySpeed :
+        IntakeConstants.kSteadySpeed.getAsDouble() :
       (sIntakeTilt.getPosition() < IntakeConstants.kMidPos) ?
-        IntakeConstants.kDownSpeed : IntakeConstants.kUpSpeed
+        IntakeConstants.kDownSpeed.getAsDouble() : IntakeConstants.kUpSpeed.getAsDouble()
     );
   }
 

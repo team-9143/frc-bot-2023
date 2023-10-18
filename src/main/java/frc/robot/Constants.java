@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import frc.robot.util.TunableNumber;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -44,36 +46,42 @@ public final class Constants {
     public static final double kTurnPosTolerance = 0.75; // UNIT: degrees
     public static final double kTurnVelTolerance = kTurnPosTolerance; // UNIT: degrees/s
     public static final double kTurnMaxSpeed = 0.3;
-    public static final double
-      kTurnP = 0.018,
-      kTurnI = 0.0006,
-      kTurnD = 0.0045;
+    public static final TunableNumber
+      kTurnP = new TunableNumber("P", PhysConstants.kDrivetrainGearbox * 0.153, "TurnToAngle"),
+      kTurnI = new TunableNumber("I", PhysConstants.kDrivetrainGearbox * 0.00507, "TurnToAngle"),
+      kTurnD = new TunableNumber("D", PhysConstants.kDrivetrainGearbox * 0.0381, "TurnToAngle");
 
     // DriveDistance
     public static final double kDistPosTolerance = 2; // UNIT: inches
     public static final double kDistVelTolerance = kDistPosTolerance; // UNIT: inches/s
     public static final double kDistMaxSpeed = 0.4; // Traction is priority
-    public static final double
-      kDistP = 0.04,
-      kDistI = 0.00003,
-      kDistD = 0.007;
+    public static final TunableNumber
+      kDistP = new TunableNumber("P", PhysConstants.kDrivetrainGearbox * 0.338, "DriveDistance"),
+      kDistI = new TunableNumber("I", PhysConstants.kDrivetrainGearbox * 0.000253, "DriveDistance"),
+      kDistD = new TunableNumber("D", PhysConstants.kDrivetrainGearbox * 0.0592, "DriveDistance");
 
     // Charge station balancing
     public static final double kBalanceTolerance = 2; // UNIT: degrees
-    public static final double kBalanceSpeed = 0.08;
+    public static final TunableNumber kBalanceSpeed = new TunableNumber("BalanceSpeed", 0.06);
   }
 
   public static class IntakeConstants {
     public static final double kTiltMaxSpeed = 0.45;
 
-    // Delay to shoot/spit a game piece
+    // Intake wheel speeds
+    public static final double kIntakeSpeed = 0.3;
+    public static final double kShootSpeed = -1;
+    public static final double kSpitSpeed = -0.35;
+    public static final double kHoldSpeed = -0.05; // Only for cones, never inverted
+
+    // Runtime to shoot/spit a game piece
     public static final double kShootTimer = 0.5;
 
     // Non-PID intake movement
-    public static final double
-      kUpSpeed = PhysConstants.kTiltGearbox * -3.5,
-      kDownSpeed = PhysConstants.kTiltGearbox * 2.8,
-      kSteadySpeed = PhysConstants.kTiltGearbox * -0.35;
+    public static final TunableNumber
+      kUpSpeed = new TunableNumber("Up", PhysConstants.kTiltGearbox * -3.5, "IntakeAim"),
+      kDownSpeed = new TunableNumber("Down", PhysConstants.kTiltGearbox * 3, "IntakeAim"),
+      kSteadySpeed = new TunableNumber("Steady", PhysConstants.kTiltGearbox * -0.35, "IntakeAim");
 
     // Preset positions and tolerances (UNIT: degrees)
     public static final double
@@ -82,21 +90,21 @@ public final class Constants {
       kDownPos = 104.4;
     public static final double
       kUpPosTolerance = -9, // Check as error > tolerance
-      kMidPosTolerance = 1.5, // Check as abs(error) > tolerance
+      kMidPosTolerance = 15, // Check as abs(error) > tolerance
       kDownPosTolerance = 2; // Check as error < tolerance
 
     // Intake tilt PID gains
-    public static final double
-      kDownP = PhysConstants.kTiltGearbox * 0.0806,
-      kDownI = PhysConstants.kTiltGearbox * 0.0612,
-      kDownD = PhysConstants.kTiltGearbox * 0.0305;
-    public static final double
-      kUpP = PhysConstants.kTiltGearbox * 0.0862,
-      kUpI = PhysConstants.kTiltGearbox * 0.0584,
-      kUpD = PhysConstants.kTiltGearbox * 0.0277;
-    public static final double
-      kSteadyP = PhysConstants.kTiltGearbox * 0.0917,
-      kSteadyI = PhysConstants.kTiltGearbox * 0.0639,
-      kSteadyD = PhysConstants.kTiltGearbox * 0.0194;
+    public static final TunableNumber
+      kDownP = new TunableNumber("P", PhysConstants.kTiltGearbox * 0.0806, "IntakeDown"),
+      kDownI = new TunableNumber("I", PhysConstants.kTiltGearbox * 0.0612, "IntakeDown"),
+      kDownD = new TunableNumber("D", PhysConstants.kTiltGearbox * 0.0305, "IntakeDown");
+    public static final TunableNumber
+      kUpP = new TunableNumber("P", PhysConstants.kTiltGearbox * 0.0862, "IntakeUp"),
+      kUpI = new TunableNumber("I", PhysConstants.kTiltGearbox * 0.0584, "IntakeUp"),
+      kUpD = new TunableNumber("D", PhysConstants.kTiltGearbox * 0.0277, "IntakeUp");
+    public static final TunableNumber
+      kSteadyP = new TunableNumber("P", PhysConstants.kTiltGearbox * 0.0917, "IntakeSteady"),
+      kSteadyI = new TunableNumber("I", PhysConstants.kTiltGearbox * 0.0639, "IntakeSteady"),
+      kSteadyD = new TunableNumber("D", PhysConstants.kTiltGearbox * 0.0194, "IntakeSteady");
   }
 }

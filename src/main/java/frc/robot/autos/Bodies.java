@@ -73,13 +73,13 @@ public class Bodies {
       // Move back until pitch is greater than 10
       new FunctionalCommand(
         () -> {},
-        () -> sDrivetrain.moveStraight(-0.45),
+        () -> sDrivetrain.moveStraight(-0.39),
         interrupted -> {},
         () -> OI.pigeon.getPitch() > 10,
         sDrivetrain
       ),
 
-      new RunCommand(() -> sDrivetrain.moveStraight(-0.35), sDrivetrain).withTimeout(1)
+      new RunCommand(() -> sDrivetrain.moveStraight(-0.3), sDrivetrain).withTimeout(1)
     );
   }
 }

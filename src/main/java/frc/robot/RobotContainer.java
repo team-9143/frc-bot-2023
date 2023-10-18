@@ -46,7 +46,7 @@ public class RobotContainer {
   /** The container for the robot. Intializes subsystems, teleop command bindings, and OI devices. */
   private RobotContainer() {
     // Configure Pigeon - make sure to update pitch and roll offsets
-    OI.pigeon.configMountPose(0, -0.24665457, -179.574783);
+    OI.pigeon.configMountPose(0, -0.6781826, -178.0756);
     OI.pigeon.setYaw(0);
 
     configureBindings();
@@ -134,7 +134,9 @@ public class RobotContainer {
         IntakeTilt::disableSteady,
         () -> {
           double triggers = OI.operator_cntlr.getTriggers();
-          IntakeTilt.getInstance().set(triggers * triggers * ((triggers < 0) ? Constants.IntakeConstants.kUpSpeed : Constants.IntakeConstants.kDownSpeed));
+          IntakeTilt.getInstance().set(triggers * triggers *
+            ((triggers < 0) ? Constants.IntakeConstants.kUpSpeed.getAsDouble() : Constants.IntakeConstants.kDownSpeed.getAsDouble())
+          );
         },
         interrupted -> IntakeTilt.disableSteady(),
         () -> false,

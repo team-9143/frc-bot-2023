@@ -6,6 +6,7 @@ import frc.robot.OI;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 import frc.robot.commands.DriveDistance;
@@ -50,7 +51,7 @@ public class Secondaries {
       // Move back until pitch is less than -10
       new FunctionalCommand(
         () -> {},
-        () -> sDrivetrain.moveStraight(-0.3),
+        () -> sDrivetrain.moveStraight(-0.26),
         interrupted -> {},
         () -> OI.pigeon.getPitch() < -10,
         sDrivetrain
@@ -59,15 +60,17 @@ public class Secondaries {
       // Move back until pitch is close to flat
       new FunctionalCommand(
         () -> {},
-        () -> sDrivetrain.moveStraight(-0.3),
+        () -> sDrivetrain.moveStraight(-0.26),
         interrupted -> {},
         () -> Math.abs(OI.pigeon.getPitch()) < 2,
         sDrivetrain
       ),
 
-      new RunCommand(() -> sDrivetrain.moveStraight(-0.45), sDrivetrain).withTimeout(0.1),
+      new RunCommand(() -> sDrivetrain.moveStraight(-0.39), sDrivetrain).withTimeout(0.2),
 
-      new RunCommand(() -> sDrivetrain.moveStraight(0.45), sDrivetrain).withTimeout(1.5)
+      new WaitCommand(1),
+
+      new RunCommand(() -> sDrivetrain.moveStraight(0.39), sDrivetrain).withTimeout(1.25)
     );
   }
 }
