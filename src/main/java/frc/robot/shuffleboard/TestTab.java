@@ -115,8 +115,9 @@ public class TestTab implements ShuffleboardTabBase {
       .withPosition(4, 4)
       .withSize(3, 4);
 
-    layout_3.addBoolean("Inverted", IntakeWheels::isInverted)
-      .withWidget(BuiltInWidgets.kBooleanBox);
+    layout_3.addBoolean("Inverted", IntakeWheels::isCone)
+      .withWidget(BuiltInWidgets.kBooleanBox)
+      .withProperties(Map.of("color when true", 0xf5a800ff, "color when false", 0x31006fff));
 
     layout_3.add("Speed", new Sendable() {
       @Override

@@ -165,13 +165,14 @@ public class SimulationTab implements ShuffleboardTabBase {
       .withPosition(9, 0)
       .withSize(2, 8);
 
-    layout_4.addBoolean("Inverted", IntakeWheels::isInverted)
+    layout_4.addBoolean("Inverted", IntakeWheels::isCone)
+      .withWidget(BuiltInWidgets.kBooleanBox)
+      .withProperties(Map.of("color when true", 0xf5a800ff, "color when false", 0x31006fff));
+
+    layout_4.addBoolean("Intaking", () -> (Math.signum(sIntakeWheels.getSpeed()) == (IntakeWheels.isCone() ? -1.0 : 1.0)))
       .withWidget(BuiltInWidgets.kBooleanBox);
 
-    layout_4.addBoolean("Intaking", () -> (Math.signum(sIntakeWheels.getSpeed()) == (IntakeWheels.isInverted() ? -1.0 : 1.0)))
-      .withWidget(BuiltInWidgets.kBooleanBox);
-
-    layout_4.addBoolean("Shooting", () -> (Math.signum(sIntakeWheels.getSpeed()) == (IntakeWheels.isInverted() ? 1.0 : -1.0)))
+    layout_4.addBoolean("Shooting", () -> (Math.signum(sIntakeWheels.getSpeed()) == (IntakeWheels.isCone() ? 1.0 : -1.0)))
       .withWidget(BuiltInWidgets.kBooleanBox);
 
     layout_4.add("Speed", new Sendable() {
