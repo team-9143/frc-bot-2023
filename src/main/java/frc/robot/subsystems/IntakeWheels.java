@@ -58,15 +58,16 @@ public class IntakeWheels extends SubsystemBase {
     m_inverted ^= true;
   }
 
-  public static boolean isInverted() {
+  /** @return {@code true} if the wheel speeds are inverted for cones */
+  public static boolean isCone() {
     return m_inverted;
   }
 
   /** Invert to cubes. */
-  public static void toCube() {if (isInverted()) {invert();}}
+  public static void toCube() {if (isCone()) {invert();}}
 
   /** Invert to cones. */
-  public static void toCone() {if (!isInverted()) {invert();}}
+  public static void toCone() {if (!isCone()) {invert();}}
 
   public static void stop() {
     m_motor.stopMotor();
